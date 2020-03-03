@@ -13,4 +13,4 @@ Welcome to Group1's README page. Here are the contributers of the repository :
 - [Ufuk KARAGÖZ](https://github.com/bounswe/bounswe2020group1/wiki/Ufuk-Karag%C3%B6z)
 - [Yağız ÇOLAK](https://github.com/bounswe/bounswe2020group1/wiki/Ya%C4%9F%C4%B1z-%C3%87olak)
 ----
-For more information, our [Wiki Page](https://github.com/bounswe/bounswe2020group1/wiki)!
+For more information, visit our [Wiki Page](https://github.com/bounswe/bounswe2020group1/wiki)!
