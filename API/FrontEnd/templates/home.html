@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Home Page</title>
+	</head>
+    
+    <body>
+    	<h1>Home Page</h1>
+        <h2>Available Products</h2>
+        {% for product in products %}
+        	<h3>{{product.name}}</h3>
+            <p>Offered by {{product.seller}} for {{product.price}}</p>
+			<p>Product Details: {{product.description}}</p>
+			<a href="{{ './comment/{}'.format(product.id) }}"> Product Comments...</a>
+		{% endfor %}
+		<br><br>	
+    	<nav>
+    		<a href="./createproduct">Create Product</a>
+  		</nav>
+    
+    </body>
+    
+<html>    
