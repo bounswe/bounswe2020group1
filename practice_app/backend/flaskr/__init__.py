@@ -7,6 +7,7 @@ Created on Mon May 11 13:21:17 2020
 
 import os
 from flask import Flask
+from . import db
 
 def create_app(test_config = None):
     
@@ -35,5 +36,7 @@ def create_app(test_config = None):
     def hello():
         return 'Welcome to Tursu!'
     
+    
+    db.init_app(app)
     
     return app
