@@ -46,11 +46,11 @@ def home():
 
 @app.route("/createproduct")
 def create():
-    return redirect("/")
+    return render_template("create_product.html")
 
 @app.route("/comment/<int:id>")
 def comment(id):
-    return render_template("commentpage.html",product = products[id])
+    return render_template("comment_page.html",product = products[id])
 
 if __name__ == "__main__":
     app.run(debug=True)

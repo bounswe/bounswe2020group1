@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Product Page</title>
+	</head>
+    
+    <body>
+    	<h1>Product Page</h1>
+
+        <h2>{{product.name}}</h2>
+        <p>Offered by {{product.seller}} for {{product.price}}</p>
+        <p>Product Details: {{product.description}}</p>
+      
+      
+        {% for comment in product.comments %}
+      		<p>Comment by {{ comment.name }} : {{ comment.comment }}</p>
+        {% endfor %}
+
+    	<nav>
+    		<a href="./addacomment.html">Add a Comment</a>
+  		</nav>
+    
+    </body>
+    
+<html>    
