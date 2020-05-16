@@ -1,23 +1,31 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en" dir="ltr">
 	<head>
+    	<meta charset="utf-8">
 		<title>Home Page</title>
 	</head>
     
     <body>
     	<h1>Home Page</h1>
+        <form action="/search" method="GET">
+        <section class="searching">
+          <label for="keyword">What are you looking for?</label>
+    			<input type="text" name="keyword" id="keyword">
+        </section>
+        <section class="submission">
+          <input type="submit" value="Search">
+        </section>
+        </form>
         <h2>Available Products</h2>
         {% for product in products %}
         	<h3>{{product.name}}</h3>
             <p>Offered by {{product.seller}} for {{product.price}}</p>
-			<p>Product Details: {{product.description}}</p>
-			<a href="{{ './comment/{}'.format(product.id) }}"> Product Comments...</a>
-		{% endfor %}
-		<br><br>	
+            <p>Product Details: {{product.description}}</p>
+        {% endfor %}
     	<nav>
-    		<a href="./createproduct">Create Product</a>
+    		<a href="./createproduct.html">Create Product</a>
   		</nav>
     
     </body>
     
-<html>    
+</html>       
