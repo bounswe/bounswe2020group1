@@ -1,27 +1,53 @@
+{% extends "layout.html" %}
+
+    {% block body %}
 <!DOCTYPE HTML>
 <html lang = "en">
   <head>
     <style>
-    p {
-    font-family: verdana;
-    font-size: 20px;
+    label {
+    width:100px;
+    font-size:22px;
+    clear:left;
+    text-align:right;
+    padding-right:10px;
+    float:left;
     }
-    h2 {
-        color: navy;
-        margin-left: 20px;
-        text-align: center;
+    input {
+      padding: 8px 16px;
+      margin: 4px 20px;
+      background-color: #3CBC8D;
+      color: white;
+      float:left;
     }
+      .button {
+      border: none;
+      border-radius: 12px;
+      color: white;
+      padding: 20px 100px;
+      text-align: right;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    textarea {
+      color: white;
+      background-color: #3CBC8D;
+      padding: 10px 15px;
+      margin: 4px 20px;
+    }
+    .button1 {background-color: green;} 
     </style>
     <title>createProduct.html</title>
     <meta charset = "UTF-8" />
   </head>
   <body>
-    <h1>New Product</h1>
-    <form action="/createProduct" method="post">
-      <fieldset>
-        <legend>Properties</legend>
+    <br><h1>New Product</h1> <br>
+    <form action="/createProduct" method="post" >
+      <fieldset >
         <p>
-          <label>Name</label>
+          <label >Name</label>
           <input type = "text"
                  id = "Name"
                  value = "text here" />
@@ -41,10 +67,16 @@
         <p>
           <label>Product Description</label>
           <textarea id = "text"
-                  rows = "3"
-                  cols = "80">Description</textarea>
+                  rows = "5"
+                  cols = "100">Description</textarea>
+        </p>
+        <p>
+          <button class="button button1">Create Product</button>
         </p>
       </fieldset>
+      
+        
     </form>
   </body>
 </html>
+{% endblock body %}

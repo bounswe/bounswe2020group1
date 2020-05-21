@@ -1,0 +1,5 @@
+{% extends "layout.html" %}
+{% block body %}
+{% from "includes/cards.html" import  comments %}
+{{ comments(product= product, comments= product.comments) }}
+{% endblock body %}

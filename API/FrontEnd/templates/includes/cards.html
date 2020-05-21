@@ -1,0 +1,75 @@
+{% macro cards_w_img(products) %}
+<div class="card-deck row-cols-md-3">
+    
+    {% for product in products %}
+        
+    <div class="mb-3">
+        <div class="card text-center"  style="background-color: #10D48E;">
+            <img src= "{{product.url}}" class="card-img-top" height=400 width=400 alt="...">
+            <div class="card-body">
+              <h2 class="card-title">{{product.name}}</h2>
+              <hr>
+              <h5 class="card-title">Offered by {{product.seller}} </h5>
+              <h5 class="card-title">for {{product.price.try}}₺  {{product.price.usd}}$  {{product.price.eur}}€</h5>
+              <p class="card-body" style="color: #132A3A; font-weight: 500; font-size: large;"> Product Details: {{product.description}}</p>
+              <a href="/product/{{ product.id }}" class="btn btn-warning">Go to product pages</a>
+            </div>
+          </div>    
+          </div>
+    {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro comments(product, comments) %}
+
+<div class="card mb-3" style="background-color: #10D48E; max-width: 1000px;">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img src="{{product.url}}" class="card-img" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h2 class="card-title">{{product.name}}</h2>
+        <hr>
+        <h3 class="card-title">Offered by {{product.seller}} </h3>
+        <h3 class="card-title">for {{product.price.try}}₺  {{product.price.usd}}$  {{product.price.eur}}€</h3>
+        <p class="card-body" style="color: #132A3A; font-weight: 500; font-size: x-large;"> Product Details: {{product.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card-deck row-cols-md-3">
+    
+    {% for comment in comments %}
+        
+    <div class="mb-3">
+        <div class="card bg-warning">
+            <div class="card-body">
+              <h5 class="card-title" style="font-weight: 750; font-size: large;">{{comment.name}}</h5>
+              <hr>
+              <p class="card-body">{{comment.comment}}</p>
+            </div>
+          </div>    
+          </div>
+    {% endfor %}
+
+    </div>
+    <form>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="Name">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <textarea rows="6" class="form-control" placeholder="Comment"></textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+         <button class="btn btn-outline-success btn-lg bg-warning  " style="background-color: #10D48E; color: #132A3A; font-weight: 750; font-size: large;" type=""> New Comment </button>
+        </div>
+      </div>
+    </form>
+    {% endmacro %}
