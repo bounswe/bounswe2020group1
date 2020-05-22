@@ -6,11 +6,11 @@ routes_product.py
 
 """
 
-from flask import Blueprint, abort, jsonify, request, render_template
+from flask import Blueprint, abort, jsonify, request, render_template, url_for
 
 from .db import get_db
 
-bp = Blueprint('Product Page', __name__, url_prefix='/product', template_folder="../frontend")
+bp = Blueprint('Product Page API', __name__, url_prefix='/product', template_folder="../frontend")
 
 def query_db(query, args=(), one=False):
     cur = get_db().execute(query, args)
@@ -19,7 +19,7 @@ def query_db(query, args=(), one=False):
     return (rv[0] if rv else None) if one else rv
 
 @bp.route('/product/<productId>', methods=["GET","POST"])
-def product_page(productId):
+def product_page (productId):
     
     if request.method == "GET":
 
@@ -58,4 +58,4 @@ def product_page(productId):
         db.execute("insert into Comments values(\'" + author + "\', " + str(productId) + "," + "\'" + commentText + "\')")
         db.commit()
 
-        return redirect('/product/' + productId)
+        return redirect(url_for('product_page', productId = productId))
