@@ -19,7 +19,7 @@ def query_db(query, args=(), one=False):
     return (rv[0] if rv else None) if one else rv
 
 @bp.route('/product/<productId>', methods=["GET","POST"])
-def product(productId):
+def product_page(productId):
     
     if request.method == "GET":
 
