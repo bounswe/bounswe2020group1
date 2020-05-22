@@ -1,31 +1,12 @@
-<!DOCTYPE HTML>
-<html lang="en" dir="ltr">
-	<head>
-    	<meta charset="utf-8">
-		<title>Home Page</title>
-	</head>
-    
-    <body>
-    	<h1>Home Page</h1>
-        <form action="/search" method="GET">
-        <section class="searching">
-          <label for="keyword">What are you looking for?</label>
-    			<input type="text" name="keyword" id="keyword">
-        </section>
-        <section class="submission">
-          <input type="submit" value="Search">
-        </section>
-        </form>
-        <h2>Available Products</h2>
-        {% for product in products %}
-        	<h3>{{product.name}}</h3>
-            <p>Offered by {{product.seller}} for {{product.price}}</p>
-            <p>Product Details: {{product.description}}</p>
-        {% endfor %}
+  
+{% extends "layout.html" %}
+
+		{% block body %}
+    	<h2 style="color: #132A3A;" >Available Products</h2>
+        {% from "includes/cards.html" import  cards_w_img %}
+        {{ cards_w_img(products= products) }}
     	<nav>
-    		<a href="./createproduct.html">Create Product</a>
+			<a class="btn btn-outline-success btn-lg" style="color: #132A3A; font-weight: 750; font-size: large; background-color: #10D48E; " href="./createproduct" type=""> Create Product </a>
   		</nav>
-    
-    </body>
-    
-</html>    
+    {% endblock body %}
+	  
