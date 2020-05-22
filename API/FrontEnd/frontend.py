@@ -6,6 +6,7 @@ products = [
             "seller": "nike",
             "price": {"try": 30, "usd": 210, "eur": 225},
             "description": "nike ayakkabı",
+            "location": "Istanbul, Turkey",
             "id":0,
             "url":"https://images.unsplash.com/photo-1580232942837-906fc331cd99?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80",
             "comments":[
@@ -24,6 +25,7 @@ products = [
             "seller": "adidas",
             "price": {"try": 40, "usd": 280, "eur": 300},
             "description": "adidas ayakkabı",
+            "location": "Istanbul, Turkey",
             "id":1,
             "url":"https://images.unsplash.com/photo-1581327512014-619407b6a116?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=829&q=80",
             "comments":[
@@ -42,6 +44,7 @@ products = [
             "seller": "Pear Company",
             "price": {"try": 9999, "usd": 1499, "eur": 1349},
             "description": "A great Pear-Book by Pear-Company",
+            "location": "Istanbul, Turkey",
             "id":2,
             "url":"http://www.pxleyes.com/images/contests/eaten-pear/fullsize/Laptop-4cbb25ed1f437_hires.jpg",
             "comments":[
@@ -60,6 +63,7 @@ products = [
             "seller": "Book Shop",
             "price": {"try": 30, "usd": 6, "eur": 5},
             "description": "A must-read book that is Winner of the Nobel Prize for Literature in 1957, by the existentialist Albert Camus",
+            "location": "Istanbul, Turkey",
             "id":3,
             "url":"https://thebadbread.files.wordpress.com/2015/05/img_0357.jpg",
             "comments":[
@@ -78,6 +82,7 @@ products = [
             "seller": "Book Shop",
             "price": {"try": 42, "usd": 7, "eur": 6},
             "description": "A well-written allegorical story about communism.",
+            "location": "Istanbul, Turkey",
             "id":4,
             "url":"https://thegirlsguidetoreading.files.wordpress.com/2016/08/animal-farm.jpg?w=620",
             "comments":[
@@ -96,6 +101,7 @@ products = [
             "seller": "Gamer PC Company",
             "price": {"try": 7999, "usd": 1399, "eur": 1199},
             "description": "The best notebook for true gamers.",
+            "location": "Istanbul, Turkey",
             "id":5,
             "url":"https://productimages.hepsiburada.net/s/21/460/9915438825522.jpg",
             "comments":[
@@ -114,6 +120,7 @@ products = [
             "seller": "Lamp Shop",
             "price": {"try": 200, "usd": 40, "eur": 30},
             "description": "A high-quality black lamp for studying.",
+            "location": "Istanbul, Turkey",
             "id":6,
             "url":"https://images-na.ssl-images-amazon.com/images/I/71XHyGiUx8L._SL1500_.jpg",
             "comments":[
@@ -132,6 +139,7 @@ products = [
             "seller": "Lamp Shop",
             "price": {"try": 260, "usd": 45, "eur": 32},
             "description": "A high-quality blue lamp for studying.",
+            "location": "Istanbul, Turkey",
             "id":7,
             "url":"https://www.ulcdn.net/images/products/157429/original/Otto_Study_Lamp_Naturals_LP.jpg?1508734517",
             "comments":[
@@ -150,6 +158,7 @@ products = [
             "seller": "Towel Shop",
             "price": {"try": 84, "usd": 14, "eur": 12},
             "description": "Soft, blue bath towels.",
+            "location": "Istanbul, Turkey",
             "id":8,
             "url":"https://productimages.hepsiburada.net/s/27/460/10183423295538.jpg",
             "comments":[
@@ -168,6 +177,7 @@ products = [
             "seller": "Towel Shop",
             "price": {"try": 120, "usd": 20, "eur": 18},
             "description": "Soft, black and white bath towels.",
+            "location": "Istanbul, Turkey",
             "id":9,
             "url":"https://cb2.scene7.com/is/image/CB2/LenaBathTowelGroupFHF19",
             "comments":[
