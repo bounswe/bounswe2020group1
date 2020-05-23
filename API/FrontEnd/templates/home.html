@@ -1,0 +1,12 @@
+  
+{% extends "layout.html" %}
+
+		{% block body %}
+    	<h2 style="color: #132A3A;" >Available Products</h2>
+        {% from "includes/cards.html" import  cards_w_img %}
+        {{ cards_w_img(products= products) }}
+    	<nav>
+			<a class="btn btn-outline-success btn-lg" style="color: #132A3A; font-weight: 750; font-size: large; background-color: #10D48E; " href="./createproduct" type=""> Create Product </a>
+  		</nav>
+    {% endblock body %}
+	

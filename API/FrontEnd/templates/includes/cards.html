@@ -11,6 +11,7 @@
               <hr>
               <h5 class="card-title">Offered by {{product.seller}} </h5>
               <h5 class="card-title">for {{product.price.try}}₺  {{product.price.usd}}$  {{product.price.eur}}€</h5>
+              <h6 class="card-title">from {{product.location}}</h6>
               <p class="card-body" style="color: #132A3A; font-weight: 500; font-size: large;"> Product Details: {{product.description}}</p>
               <a href="/product/{{ product.id }}" class="btn btn-warning">Go to product pages</a>
             </div>
@@ -33,6 +34,7 @@
         <hr>
         <h3 class="card-title">Offered by {{product.seller}} </h3>
         <h3 class="card-title">for {{product.price.try}}₺  {{product.price.usd}}$  {{product.price.eur}}€</h3>
+        <h6 class="card-title">from {{product.location}}</h6>
         <p class="card-body" style="color: #132A3A; font-weight: 500; font-size: x-large;"> Product Details: {{product.description}}</p>
       </div>
     </div>
