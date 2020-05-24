@@ -49,6 +49,8 @@ def USD_to_EUR(USD, rates):
 
 def prices_in_currencies(TRY):
 	rates = get_currency_rates()
+	if(rates is None):
+		rates = {}
 	USD = TRY_to_USD(TRY, rates)
 	EUR = USD_to_EUR(USD, rates)
 	return {"TRY": TRY, "USD":USD, "EUR":EUR}
