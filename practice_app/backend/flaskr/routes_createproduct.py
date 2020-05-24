@@ -52,3 +52,4 @@ def createproduct():
 
 	return render_template("create_product.html")
 
+
