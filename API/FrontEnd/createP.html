@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+  <head>
+    <style>
+    p {
+    font-family: verdana;
+    font-size: 20px;
+    }
+    h2 {
+        color: navy;
+        margin-left: 20px;
+        text-align: center;
+    }
+    </style>
+    <title>createProduct.html</title>
+    <meta charset = "UTF-8" />
+  </head>
+  <body>
+    <h1>New Product</h1>
+    <form action="/createProduct" method="post">
+      <fieldset>
+        <legend>Properties</legend>
+        <p>
+          <label>Name</label>
+          <input type = "text"
+                 id = "Name"
+                 value = "text here" />
+        </p>
+        <p>
+          <label>Location</label>
+          <input type = "Location"
+                 id = "seller"
+                 value = "text here" />
+        </p>
+        <p>
+          <label>Price</label>
+          <input type = "number"
+                  id = "price"
+                  value = "secret" />
+        </p>
+        <p>
+          <label>Product Description</label>
+          <textarea id = "text"
+                  rows = "3"
+                  cols = "80">Description</textarea>
+        </p>
+      </fieldset>
+    </form>
+  </body>
+</html>
