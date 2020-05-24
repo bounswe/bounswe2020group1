@@ -4,14 +4,17 @@ DROP TABLE IF EXISTS comment;
 CREATE TABLE Product (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
+  seller TEXT NOT NULL,
   price FLOAT NOT NULL,
   description TEXT NOT NULL,
-  location TEXT NOT NULL
+  location TEXT NOT NULL,
+  url TEXT NOT NULL
 );
 
 CREATE TABLE Comment (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   author TEXT UNIQUE NOT NULL,
-  FOREIGN KEY (productID) REFERENCES Product (id),
-  commentText TEXT NOT NULL
+  productID INTEGER,
+  commentText TEXT NOT NULL,
+  FOREIGN KEY (productID) REFERENCES Product (id)
 );
