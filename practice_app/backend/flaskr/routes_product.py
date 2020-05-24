@@ -11,7 +11,7 @@ from . import db
 from . import exchange_rate_api as currency
 from . import bad_word_filter
 
-product_bp = Blueprint('Product API Search', __name__)
+product_bp = Blueprint('Product Routes', __name__)
 
 def query_db(query, args=(), one=False):
     cur = db.get_db().execute(query, args)
