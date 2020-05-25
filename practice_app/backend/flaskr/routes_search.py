@@ -3,7 +3,7 @@ import json
 
 from .db import query_db
 from .find_similar_words_API import get_words_with_similar_meaning
-
+from . import exchange_rate_api as currency
 
 bp = Blueprint('Product API Search', __name__, url_prefix='/', template_folder="templates")
 
@@ -20,14 +20,23 @@ def search():
         for product in all_products:
         	for word in search_words:
         		if(word in product["name"] or word in product["description"]):
-        			product_dict = {"id": product["id"],
-        							"name": product["name"],
+                    prices = currency.prices_in_currencies(product["price"])
+                    price_try = round(prices["TRY"], 1)
+                    price_usd = round(prices["USD"], 1)
+                    price_eur = round(prices["EUR"], 1) 
+                    product_dict = {"id": product["id"],
+                                    "name": product["name"],
+                                    "price": {
+                                            "try": price_try,
+                                            "usd": price_usd,
+                                            "eur": price_eur
+                                            },
                                     "seller": product["seller"],
-        							"price": product["price"],
-        							"description": product["description"],
-        							"location": product["location"],
+                                    "description": product["description"],
+                                    "location": product["location"],
                                     "url": product["url"]
-        							}
+                                    }
+        			
         			product_list.append(product_dict)
         			break
     else:
