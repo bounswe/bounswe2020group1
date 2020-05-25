@@ -10,12 +10,6 @@ from . import bad_word_filter
 
 product_bp = Blueprint('Product Routes', __name__)
 
-def query_db(query, args=(), one=False):
-    cur = db.get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
-
 @product_bp.route('/product/<productId>', methods=["GET","POST"])
 def get_product(productId):
         
@@ -40,11 +34,11 @@ def get_product(productId):
         cur.execute("insert into Comment (author, productID, commentText) values(?, ?, ?)", (author, productId, commentText))
         cur.commit()
    
-    products = query_db('select * from Product where id=?', productId)
+    products = db.query_db('select * from Product where id=?', productId)
 
     product_list = []
     for product in products:
-        comments = query_db('select * from Comment where productID=?', productId)
+        comments = db.query_db('select * from Comment where productID=?', productId)
         comment_list = []
         for comment in comments:
             comment_list.append({
