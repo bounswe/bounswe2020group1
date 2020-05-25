@@ -25,6 +25,11 @@ def get_db():
 
     return g.db
 
+def query_db(query, args=(), one=False):
+    cur = get_db().execute(query, args)
+    rv = cur.fetchall()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
 
 def close_db(e=None):
     db = g.pop('db', None)
