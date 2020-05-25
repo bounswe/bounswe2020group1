@@ -6,7 +6,7 @@ routes_product.py
 from flask import Blueprint, abort, jsonify, request, render_template
 from . import db
 from . import exchange_rate_api as currency
-from . import bad_word_filter_api
+from . import bad_word_filter_api as bad_word_filter
 
 product_bp = Blueprint('Product Routes', __name__)
 
@@ -70,4 +70,4 @@ def get_product(productId):
     if len(product_list) != 1:
         return abort(400)
 
-    return render_template("product.html", product=product_list[0])
+    return render_template("product_page.html", product=product_list[0])

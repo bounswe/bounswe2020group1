@@ -5,7 +5,7 @@ routes_addproduct.py
 
 from flask import redirect, Blueprint, abort, jsonify, request, render_template
 from . import db
-from . import bad_word_filter_api
+from . import bad_word_filter_api as bad_word_filter
 from . import location_api
 
 createproduct_bp = Blueprint('Create Product Routes', __name__)
