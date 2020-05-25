@@ -13,7 +13,7 @@ CREATE TABLE Product (
 
 CREATE TABLE Comment (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author TEXT UNIQUE NOT NULL,
+  author TEXT NOT NULL,
   productID INTEGER,
   commentText TEXT NOT NULL,
   FOREIGN KEY (productID) REFERENCES Product (id)
