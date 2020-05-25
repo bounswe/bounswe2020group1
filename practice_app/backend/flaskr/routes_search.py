@@ -13,13 +13,14 @@ def search():
     keyword = request.args.get('keyword')
     if(keyword is not None and keyword !=""):
         keyword.replace("+"," ")
+        keyword = keyword.lower()
         semantically_close = get_words_with_similar_meaning(keyword)[:20] # Getting 20 most semantically related words for search
         search_words = [keyword] + semantically_close
         all_products = query_db('select * from product')
         product_list = []
         for product in all_products:
             for word in search_words:
-                if(word in product["name"] or word in product["description"]):
+                if(word in product["name"].lower() or word in product["description"].lower()):
                     prices = currency.prices_in_currencies(product["price"])
                     price_try = round(prices["TRY"], 1)
                     price_usd = round(prices["USD"], 1)
