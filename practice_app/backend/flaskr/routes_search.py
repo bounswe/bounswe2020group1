@@ -18,8 +18,8 @@ def search():
         all_products = query_db('select * from product')
         product_list = []
         for product in all_products:
-        	for word in search_words:
-        		if(word in product["name"] or word in product["description"]):
+            for word in search_words:
+                if(word in product["name"] or word in product["description"]):
                     prices = currency.prices_in_currencies(product["price"])
                     price_try = round(prices["TRY"], 1)
                     price_usd = round(prices["USD"], 1)
@@ -36,9 +36,9 @@ def search():
                                     "location": product["location"],
                                     "url": product["url"]
                                     }
-        			
-        			product_list.append(product_dict)
-        			break
+                    
+                    product_list.append(product_dict)
+                    break
     else:
         product_list = []
 

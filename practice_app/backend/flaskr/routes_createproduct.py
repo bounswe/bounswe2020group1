@@ -5,7 +5,7 @@ routes_addproduct.py
 
 from flask import redirect, Blueprint, abort, jsonify, request, render_template
 from . import db
-from . import bad_word_filter
+from . import bad_word_filter_api
 from . import location_api
 
 createproduct_bp = Blueprint('Create Product Routes', __name__)
@@ -22,7 +22,7 @@ def createproduct():
 		form_values = dict(request.form)
 
 		if 'name' not in form_values or 'seller' not in form_values or 'price' not in form_values or 'description' not in form_values or 'url' not in form_values:
-		    return "invalid or missing information"
+			return "invalid or missing information"
 
 		name = form_values['name']
 		seller = form_values['seller']

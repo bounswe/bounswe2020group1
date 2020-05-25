@@ -6,7 +6,7 @@ routes_product.py
 from flask import Blueprint, abort, jsonify, request, render_template
 from . import db
 from . import exchange_rate_api as currency
-from . import bad_word_filter
+from . import bad_word_filter_api
 
 product_bp = Blueprint('Product Routes', __name__)
 
