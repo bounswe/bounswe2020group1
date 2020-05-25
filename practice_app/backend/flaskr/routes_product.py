@@ -16,8 +16,7 @@ def get_product(productId):
     if request.method == "POST":
 
         form_values = dict(request.form)
-        print(form_values)
-
+        
         if 'name' not in form_values or 'comment' not in form_values:
             abort(400)
 
@@ -34,11 +33,11 @@ def get_product(productId):
         cur.execute("insert into Comment (author, productID, commentText) values(?, ?, ?)", (author, productId, commentText))
         cur.commit()
    
-    products = db.query_db('select * from Product where id=?', productId)
+    products = db.query_db('select * from Product where id=?', (productId))
 
     product_list = []
     for product in products:
-        comments = db.query_db('select * from Comment where productID=?', productId)
+        comments = db.query_db('select * from Comment where productID=?', (productId))
         comment_list = []
         for comment in comments:
             comment_list.append({
