@@ -10,6 +10,7 @@ from flask import Flask, render_template
 from . import db
 from . import routes_product
 from . import routes_createproduct
+from . import routes_search
 from . import exchange_rate_api as currency
 
 
@@ -18,7 +19,7 @@ def create_app(test_config = None):
     app = Flask(__name__, instance_relative_config=True)
     app.register_blueprint(routes_product.product_bp)
     app.register_blueprint(routes_createproduct.createproduct_bp)
-
+    app.register_blueprint(routes_search.bp)
     try:
         os.makedirs(app.instance_path)
     except OSError:
