@@ -1,9 +1,6 @@
 """
-
 @author:muratekici
-
 routes_product.py
-
 """
 
 from flask import Blueprint, abort, jsonify, request, render_template
@@ -60,7 +57,7 @@ def get_product(productId):
         price_try = round(prices["TRY"], 1)
         price_usd = round(prices["USD"], 1)
         price_eur = round(prices["EUR"], 1) 
-        
+
         product_dict = {"id": product["id"],
                         "name": product["name"],
                         "price": {
@@ -71,7 +68,8 @@ def get_product(productId):
                         "seller": product["seller"],
                         "description": product["description"],
                         "location": product["location"],
-                        "comments": comment_list
+                        "comments": comment_list,
+                        "url": product["url"]
                         }
         product_list.append(product_dict)
 
