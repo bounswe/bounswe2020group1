@@ -1,19 +1,12 @@
 from flask import Blueprint, abort, jsonify, request, render_template
 import json
 
-from .db import get_db
+from .db import query_db
 from .find_similar_words_API import get_words_with_similar_meaning
 
-#TODO Change template folder after decision
-bp = Blueprint('Product API Search', __name__, url_prefix='/', template_folder="../frontend")
 
+bp = Blueprint('Product API Search', __name__, url_prefix='/', template_folder="templates")
 
-
-def query_db(query, args=(), one=False):
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
 
 @bp.route('/search/', methods=['GET'])
 def search():
