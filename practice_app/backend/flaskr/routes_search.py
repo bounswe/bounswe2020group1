@@ -3,7 +3,6 @@ import json
 
 from .db import query_db
 from .find_similar_words_API import get_words_with_similar_meaning
-from . import exchange_rate_api as currency
 
 bp = Blueprint('Product API Search', __name__, url_prefix='/', template_folder="templates")
 
@@ -21,16 +20,11 @@ def search():
         for product in all_products:
             for word in search_words:
                 if(word in product["name"].lower() or word in product["description"].lower()):
-                    prices = currency.prices_in_currencies(product["price"])
-                    price_try = round(prices["TRY"], 1)
-                    price_usd = round(prices["USD"], 1)
-                    price_eur = round(prices["EUR"], 1) 
+                    price_try = product["price"]
                     product_dict = {"id": product["id"],
                                     "name": product["name"],
                                     "price": {
-                                            "try": price_try,
-                                            "usd": price_usd,
-                                            "eur": price_eur
+                                            "try": price_try
                                             },
                                     "seller": product["seller"],
                                     "description": product["description"],
