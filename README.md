@@ -1,4 +1,4 @@
-## Boğaziçi University CMPE352 - GROUP1
+## Boğaziçi University CMPE352 & CMPE451 - GROUP1
 
 Welcome to Group1's README page.
 
