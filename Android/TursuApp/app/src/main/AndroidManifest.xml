@@ -9,12 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TursuApp">
-        <activity android:name=".LoginActivity">
+        <activity android:name="com.example.tursuapp.authentication.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name="com.example.tursuapp.authentication.signup.SignUpActivity">
+
+        </activity>
+        <activity android:name="com.example.tursuapp.authentication.forgotpassword.ForgotPasswordActivity">
+
         </activity>
         <meta-data
             android:name="preloaded_fonts"

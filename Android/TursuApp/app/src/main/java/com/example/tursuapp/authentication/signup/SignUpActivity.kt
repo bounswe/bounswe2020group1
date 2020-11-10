@@ -7,6 +7,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tursuapp.R
+import com.example.tursuapp.authentication.forgotpassword.ForgotPasswordActivity
+import com.example.tursuapp.authentication.login.LoginActivity
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var userName : EditText
@@ -33,10 +35,10 @@ class SignUpActivity : AppCompatActivity() {
                 signUpUser(this)
             }
         }
-        /*
+
         findViewById<TextView>(R.id.signup_login_text).let { view ->
             view.setOnClickListener {
-                startActivity(Intent(this, loginActivity::class.java))
+                startActivity(Intent(this, LoginActivity::class.java))
             }
         }
 
@@ -45,7 +47,7 @@ class SignUpActivity : AppCompatActivity() {
                 startActivity(Intent(this, ForgotPasswordActivity::class.java))
             }
         }
-        */
+
     }
 
     private fun signUpUser(button: Button){
