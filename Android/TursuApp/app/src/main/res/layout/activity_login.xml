@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/TursuGreen"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -61,6 +61,7 @@
         android:background="@drawable/enter_password"
         android:gravity="center|left"
         android:hint="Your Password"
+        android:inputType="textPassword"
         android:paddingLeft="50dp"
         android:textColorHint="@color/TursuGreen"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -91,7 +92,7 @@
         android:layout_marginRight="50dp"
         android:background="#E0E0E0"
         android:backgroundTint="#E0E0E0"
-        android:text="Button"
+        android:text="Sign In"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
