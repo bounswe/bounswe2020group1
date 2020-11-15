@@ -2,10 +2,12 @@ package com.example.tursuapp.authentication.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tursuapp.R
 import com.example.tursuapp.authentication.forgotpassword.ForgotPasswordActivity
+import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.signup.SignUpActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -17,6 +19,9 @@ class LoginActivity : AppCompatActivity() {
         }
         findViewById<TextView>(R.id.forgot_password_button).setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }
+        findViewById<Button>(R.id.sign_in_button).setOnClickListener {
+            startActivity(Intent(this, HomePageActivity::class.java))
         }
 
     }
