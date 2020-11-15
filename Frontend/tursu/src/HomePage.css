@@ -1,0 +1,21 @@
+.container{
+    display: grid;
+    /*TODO: revise and change the below line.*/
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 10px;
+}
+
+.responsiveImage{
+    width: 50%;
+    height: auto;
+}
+
+.Navbar{
+    display: block;
+    background-color: #282c34;
+}
+
+.logo{
+    width: 10%;
+    height: auto;
+}
