@@ -2,6 +2,7 @@ import React, { Component} from 'react';
 import "./sign_components.css";
 import logo from './rsz_11logo.png';
 import Customer from "./customer_registration";
+import Vendor from "./vendor_registration";
 
 export default class Registration extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ export default class Registration extends Component {
     render() {
         if (this.state.user_type === "customer"){
             return(
-                <div className="registration">
+                <div className="customerRegistration">
                     <br></br>
 
                     <div className="radio">
@@ -56,7 +57,7 @@ export default class Registration extends Component {
         }
         else if (this.state.user_type === "vendor"){
             return(
-                <div className="registration">
+                <div className="vendorRegistration">
                     <br></br>
 
                     <div className="radio">
@@ -71,7 +72,7 @@ export default class Registration extends Component {
                         <img src={logo} alt="Tursu Logo"></img>
                         <h1>Sign Up for Vendors</h1>
                     </div>
-                    <Customer />
+                    <Vendor />
                     <button type="button" onClick={this.goToLogin} className="smallButton">Already have an account? Sign in.</button>
 
 

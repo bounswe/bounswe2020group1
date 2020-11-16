@@ -6,8 +6,19 @@
     justify-content: space-around;
     align-items: center;
 }
-.registration {
+.customerRegistration {
     height: 550px;
+    width: 600px;
+    background: rgb(154, 199, 192);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+.vendorRegistration {
+    height: 600px;
     width: 600px;
     background: rgb(154, 199, 192);
     border-radius: 30px;
