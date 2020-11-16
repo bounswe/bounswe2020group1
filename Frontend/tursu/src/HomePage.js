@@ -1,17 +1,42 @@
 import React from 'react';
 import './HomePage.css'
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import AppBar from './AppBar';
+import Stepper from './Stepper'
+import ProductGrid from './ProductGrid'
+//import HomeGrid from "./HomeGrid";
 
+
+// put each div into a grid
+// bunu da Product gibi farklı bi js dosyasına(HomeGrid) atıp importlamayı denedim ama beceremedim, ona bi bakmak lazım
 class HomePage extends React.Component{
     render(){
         return(
             <div>
-                <Navbar />
-                <Product name="telefon" price="3600" imageUrl="blbalba"/>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Navbar />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Stepper />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Product name="telefon" price="3600" imageUrl="blbalba"/>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </div>
         );
     }
 }
 
+// import and use AppBar.js here, can be changed tho
 class Navbar extends React.Component{
     render(){
         return(
@@ -20,39 +45,31 @@ class Navbar extends React.Component{
                      alt ="logo"
                      className = "logo"
                      />
+                <AppBar />
             </div>
         );
     }
 }
 
+
+// import and use productGrid
 class Product extends React.Component {
+
     render() {
         return(
             <div className="container">
-                <div className="ProductInfo">
-                    <img
-                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.manufactum.de%2Fis%2Fimage%2FManufactum%2F1000s_shop%2Ftelefon-w-48--67326_01.jpg&f=1&nofb=1"
-                        alt={this.props.name}
-                        className="responsiveImage"/>
-                    <text>
-                        <br/>
-                        {this.props.name} <br/>
-                        {this.props.price}
-                    </text>
-            </div>
-            <div className="ProductInfo">
-                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.manufactum.de%2Fis%2Fimage%2FManufactum%2F1000s_shop%2Ftelefon-w-48--67326_01.jpg&f=1&nofb=1"
-                     alt={this.props.name}
-                     class="responsiveImage"/>
-                <text>
-                    <br/>
-                    {this.props.name} <br/>
-                    {this.props.price}
-                </text>
-            </div>
+                <ProductGrid name={this.props.name} price={this.props.price} imageUrl={this.props.imageUrl}/>
             </div>
         );
     }
 }
 
+//module.exports = {Navbar, Product}
+
 export default HomePage;
+
+/*
+export {
+    Navbar,
+    Product,
+}*/
