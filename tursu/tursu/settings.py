@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'registered_user',
     'product',
 ]
@@ -77,12 +79,12 @@ WSGI_APPLICATION = 'tursu.wsgi.application'
 
 DATABASES = {
     'default': {
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'tursu_db',
             'USER': 'dbadmin',
             'PASSWORD': 'tursu123',
             'HOST': 'localhost',
-            'PORT': '3306',
+            'PORT': '5432',
         }
 }
 
@@ -103,6 +105,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+# Authentication backends
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'registered_user.auth_backend.EmailBackend'
 ]
 
 
