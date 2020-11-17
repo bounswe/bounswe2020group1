@@ -6,7 +6,7 @@ import io.reactivex.Single
 import retrofit2.http.*
 
 
-interface TursuApiInterface {
+interface RequestService {
     @POST(ApiEndpoints.LOGIN)
     fun login(@Body loginRequest: LoginRequest): Single<TokenResponse>
 }
