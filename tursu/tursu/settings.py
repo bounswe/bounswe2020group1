@@ -77,12 +77,12 @@ WSGI_APPLICATION = 'tursu.wsgi.application'
 
 DATABASES = {
     'default': {
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'tursu_db',
             'USER': 'dbadmin',
             'PASSWORD': 'tursu123',
             'HOST': 'localhost',
-            'PORT': '3306',
+            'PORT': '5432',
         }
 }
 
