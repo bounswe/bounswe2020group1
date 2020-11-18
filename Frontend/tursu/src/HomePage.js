@@ -2,9 +2,9 @@ import React from 'react';
 import './HomePage.css'
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import AppBar from './AppBar';
 import Stepper from './Stepper'
 import ProductGrid from './ProductGrid'
+import Navbar from "./NavBar";
 //import HomeGrid from "./HomeGrid";
 
 
@@ -13,7 +13,7 @@ import ProductGrid from './ProductGrid'
 class HomePage extends React.Component{
     render(){
         return(
-            <div>
+            <div className="HomePage">
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Paper>
@@ -36,22 +36,6 @@ class HomePage extends React.Component{
     }
 }
 
-// import and use AppBar.js here, can be changed tho
-class Navbar extends React.Component{
-    render(){
-        return(
-            <div className="Navbar">
-                <img src = "https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG"
-                     alt ="logo"
-                     className = "logo"
-                     />
-                <AppBar />
-            </div>
-        );
-    }
-}
-
-
 // import and use productGrid
 class Product extends React.Component {
 
@@ -64,12 +48,4 @@ class Product extends React.Component {
     }
 }
 
-//module.exports = {Navbar, Product}
-
 export default HomePage;
-
-/*
-export {
-    Navbar,
-    Product,
-}*/
