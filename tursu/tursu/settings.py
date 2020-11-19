@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'registered_user',
     'product',
     'search',
-    'category',
     'home',
 ]
 
