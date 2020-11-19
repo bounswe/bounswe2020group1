@@ -11,6 +11,8 @@ import Typography from "@material-ui/core/Typography";
 import SearchIcon from '@material-ui/icons/Search';
 import Avatar from "@material-ui/core/Avatar";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import Paper from "@material-ui/core/Paper";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 
 const useStyles = makeStyles((theme)=> ({
@@ -29,25 +31,27 @@ const useStyles = makeStyles((theme)=> ({
         height: theme.spacing(13),
     },
     category: {
-        marginTop: theme.spacing(3),
         marginLeft: theme.spacing(3),
         justifyContent: "center",
-        alignSelf: "flex-center"
+        alignSelf: "center"
     },
-    search: {
-        borderRadius: theme.shape.borderRadius,
-        //TODO: Center the search bar without using marginLeft.
+    searchGrid: {
+        alignSelf: "center"
+    },
+    search:{
+        color: "inherit",
+        paddingLeft: `calc(1em + ${theme.spacing(1)}px)`,
         backgroundColor: fade(theme.palette.common.white, 0.15),
         '&:hover': {
             backgroundColor: fade(theme.palette.common.white, 0.25),
         },
-
+        borderRadius: theme.shape.borderRadius,
     },
     searchIcon: {
         display: 'flex',
         position: 'absolute',
         padding: theme.spacing(0, 3),
-        height: '100%',
+        height: '75%',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -60,8 +64,9 @@ const useStyles = makeStyles((theme)=> ({
     upperLeft: {
         position: 'relative',
         justifyContent: "center",
-    }
+    },
 }))
+
 
 export default function Navbar(){
     const classes = useStyles();
@@ -72,16 +77,28 @@ export default function Navbar(){
                 <Toolbar className={classes.toolbar}>
                     <Avatar variant="square" className={classes.logo}>
                         <img src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG"
-                             alt="logo"
-                             />
+                             alt="logo"/>
                     </Avatar>
-                    <Grid container className={classes.leftSide} direction="column">
-                        <Grid container className={classes.upperLeft}>
-                            <Grid item className={classes.search}>
-                                <div className={classes.searchIcon}>
+                    <Grid container className={classes.leftSide} direction="column" spacing={3}>
+                        <Grid item xs sm className={classes.upperLeft} container direction="row">
+                            <Grid item className={classes.searchGrid}>
+                                <InputBase placeholder="Search" className={classes.search} />
+                            </Grid>
+                            <Grid item>
+                                <IconButton>
                                     <SearchIcon/>
-                                </div>
-                                <InputBase placeholder="Search"/>
+                                </IconButton>
+                            </Grid>
+                            <Grid item>
+                                <Paper variant="outlined" elevation={3} >
+                                    <AccountCircleIcon />
+                                    <Button variant="text">
+                                        Sign in
+                                    </Button>
+                                    <Button variant="text">
+                                        Sign up
+                                    </Button>
+                                </Paper>
                             </Grid>
                             <Grid item>
                                 <IconButton>
