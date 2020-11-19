@@ -11,6 +11,7 @@ import Navbar from "./NavBar";
 // put each div into a grid
 // bunu da Product gibi farklı bi js dosyasına(HomeGrid) atıp importlamayı denedim ama beceremedim, ona bi bakmak lazım
 class HomePage extends React.Component{
+    //TODO: understand the below structure.
     render(){
         return(
             <div className="HomePage">
