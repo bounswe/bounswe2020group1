@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'registered_user',
     'product',
     'home',
+    'search',
 ]
 
 MIDDLEWARE = [
