@@ -1,6 +1,6 @@
 .sign-component {
     height: 100vh;
-    background: rgb(103, 171, 158);
+    background: #519657;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -9,7 +9,7 @@
 .customerRegistration {
     height: 550px;
     width: 600px;
-    background: rgb(154, 199, 192);
+    background: #b2fab4;
     border-radius: 30px;
     display: flex;
     flex-direction: column;
@@ -20,7 +20,7 @@
 .vendorRegistration {
     height: 600px;
     width: 600px;
-    background: rgb(154, 199, 192);
+    background: #b2fab4;
     border-radius: 30px;
     display: flex;
     flex-direction: column;
@@ -31,7 +31,7 @@
 .login{
     height: 500px;
     width: 300px;
-    background: rgb(154, 199, 192);
+    background: #b2fab4;
     border-radius: 30px;
     display: flex;
     flex-direction: column;
@@ -40,7 +40,7 @@
     text-align: center;
 }
 .smallButton{
-    background-color: rgb(154, 199, 192);
+    background-color: #b2fab4;
     color: black;
     border: transparent;
     height: 20px;
