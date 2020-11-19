@@ -30,25 +30,23 @@ class HomePage extends React.Component{
     render(){
         return(
             <ThemeProvider theme={theme} >
-                <div className="HomePage">
-                    <Grid container spacing={6} direction="column">
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Navbar />
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Stepper />
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Product name="telefon" price="3600" imageUrl="blbalba"/>
-                            </Paper>
-                        </Grid>
+                <Grid container spacing={15} direction="column" className="HomePage">
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Navbar />
+                        </Paper>
                     </Grid>
-                </div>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Stepper />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Product name="telefon" price="3600" imageUrl="blbalba"/>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </ThemeProvider>
         );
     }

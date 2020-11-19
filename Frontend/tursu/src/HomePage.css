@@ -1,5 +1,6 @@
 .HomePage{
-    margin-top: 120px;
+    margin-top: 170px;
+    align-items: center;
 }
 .container{
     display: grid;
