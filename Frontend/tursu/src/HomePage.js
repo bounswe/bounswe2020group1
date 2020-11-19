@@ -6,7 +6,22 @@ import Stepper from './Stepper'
 import ProductGrid from './ProductGrid'
 import Navbar from "./NavBar";
 //import HomeGrid from "./HomeGrid";
+import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
+const theme = createMuiTheme({
+    palette:{
+        primary:{
+            main: "#388e3c",
+        },
+        secondary:{
+            main: "#81c784",
+        }
+    }
+})
+
+const style = {
+
+}
 
 // put each div into a grid
 // bunu da Product gibi farklı bi js dosyasına(HomeGrid) atıp importlamayı denedim ama beceremedim, ona bi bakmak lazım
@@ -14,25 +29,27 @@ class HomePage extends React.Component{
     //TODO: understand the below structure.
     render(){
         return(
-            <div className="HomePage">
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Paper>
-                            <Navbar />
-                        </Paper>
+            <ThemeProvider theme={theme} >
+                <div className="HomePage">
+                    <Grid container spacing={6} direction="column">
+                        <Grid item xs={12}>
+                            <Paper>
+                                <Navbar />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper>
+                                <Stepper />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper>
+                                <Product name="telefon" price="3600" imageUrl="blbalba"/>
+                            </Paper>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Paper>
-                            <Stepper />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Paper>
-                            <Product name="telefon" price="3600" imageUrl="blbalba"/>
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </div>
+                </div>
+            </ThemeProvider>
         );
     }
 }
