@@ -37,7 +37,7 @@ def index(request):
             query |= Q(name__icontains=word) | \
                     Q(description__icontains=word) | \
                     Q(category__name__icontains=word) | \
-                    Q(vendor__bio__icontains=word)
+                    Q(vendor__user__user__first_name__icontains=word)
         data = Product.objects.filter(query)
     elif search_type == "vendor":
         raise NotImplementedError("Vendor search is not yet implemented")
@@ -49,7 +49,7 @@ def index(request):
         product_info ={"id": product.pk,
                        "name": product.name,
                        "photo_url": "", 	#TODO ADD PHOTO URL
-                       "vendor_name": product.vendor.bio,
+                       "vendor_name": product.vendor.user.user.first_name,
                        "category": product.category.name,
                        "rating": product.rating,
                        "stock": product.stock,
