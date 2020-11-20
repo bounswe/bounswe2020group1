@@ -1,5 +1,5 @@
 // import and use AppBar.js here, can be changed tho
-import React from "react";
+import React, { useState } from "react";
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar";
 import {Button, ButtonGroup, fade, IconButton} from "@material-ui/core";
@@ -13,6 +13,9 @@ import Avatar from "@material-ui/core/Avatar";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Paper from "@material-ui/core/Paper";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 
 const useStyles = makeStyles((theme)=> ({
@@ -67,7 +70,7 @@ const useStyles = makeStyles((theme)=> ({
     },
 }))
 
-
+// TODO: implement search functionality
 export default function Navbar(){
     const classes = useStyles();
 
@@ -108,35 +111,53 @@ export default function Navbar(){
                         </Grid>
                         <Grid container spacing={2} className={classes.category}  >
                             <Grid item>
-                                <Button variant="contained" color="secondary">
-                                    Electronics
-                                </Button>
+                                <Link to='/electronics'>
+                                    <Button variant="contained" color="secondary">
+                                        Electronics
+                                    </Button>
+                                </Link>
                             </Grid>
+
                             <Grid item>
-                                <Button variant="contained" color="secondary">
-                                    Fashion
-                                </Button>
+                                <Link to='/fashion'>
+                                    <Button variant="contained" color="secondary">
+                                        Fashion
+                                    </Button>
+                                </Link>
                             </Grid>
+
                             <Grid item>
-                                <Button variant="contained" color="secondary">
-                                    Home
-                                </Button>
+                                <Link to='/home'>
+                                    <Button variant="contained" color="secondary">
+                                        Home
+                                    </Button>
+                                </Link>
                             </Grid>
+
                             <Grid item>
-                                <Button variant="contained" color="secondary">
-                                    Office
-                                </Button>
+                                <Link to='/office'>
+                                    <Button variant="contained" color="secondary">
+                                        Office
+                                    </Button>
+                                </Link>
                             </Grid>
+
                             <Grid item>
-                                <Button variant="contained" color="secondary">
-                                    Sports&Outdoors
-                                </Button>
+                                <Link to='/sports'>
+                                    <Button variant="contained" color="secondary">
+                                        Sports&Outdoors
+                                    </Button>
+                                </Link>
                             </Grid>
+
                             <Grid item>
-                                <Button variant="contained" color="secondary">
-                                    Cosmetics
-                                </Button>
+                                <Link to='/cosmetics'>
+                                    <Button variant="contained" color="secondary">
+                                        Cosmetics
+                                    </Button>
+                                </Link>
                             </Grid>
+
                         </Grid>
                     </Grid>
                 </Toolbar>
