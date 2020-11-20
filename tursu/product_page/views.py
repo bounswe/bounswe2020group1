@@ -12,7 +12,6 @@ def index(request):
     product = Product.objects.filter(Q(id=product_id))
     product = product[0]
     
-    print(product_id)
     product_info = {"id": product.pk,
                 "name": product.name,
                 "description": product.description,
