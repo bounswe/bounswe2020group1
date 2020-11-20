@@ -1,5 +1,5 @@
 from django.db import models
-from registered_user.models import RegisteredUser
+from registered_user.models import Vendor
 
 
 class Category(models.Model):
@@ -7,7 +7,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    vendor = models.ForeignKey(RegisteredUser, on_delete=models.CASCADE)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=False)
     description = models.TextField(null=True, blank=True)
