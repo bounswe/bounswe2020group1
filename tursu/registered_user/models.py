@@ -38,24 +38,3 @@ def create_registered_user(sender, instance, created, **kwargs):
 def save_registered_user(sender, instance, **kwargs):
     instance.registereduser.save()
 
-
-@receiver(post_save, sender=RegisteredUser)
-def create_vendor(sender, instance, created, **kwargs):
-    if created:
-        Vendor.objects.create(user=instance)
-
-
-@receiver(post_save, sender=RegisteredUser)
-def save_vendor(sender, instance, **kwargs):
-    instance.vendor.save()
-
-
-@receiver(post_save, sender=RegisteredUser)
-def create_vendor(sender, instance, created, **kwargs):
-    if created:
-        Customer.objects.create(user=instance)
-
-
-@receiver(post_save, sender=RegisteredUser)
-def save_vendor(sender, instance, **kwargs):
-    instance.customer.save()

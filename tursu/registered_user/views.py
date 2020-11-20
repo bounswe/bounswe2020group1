@@ -10,18 +10,18 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import RegisteredUser
+from .models import RegisteredUser, Vendor, Customer, Location
 
 
 @csrf_exempt
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def login(request):
-    username = request.POST['username']
+    username = request.POST['email']
     password = request.POST['password']
 
     if (not username) or (not password):
-        return Response({'error': 'Please provide both username and password'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Please provide both username and password.'}, status=status.HTTP_400_BAD_REQUEST)
 
     user = authenticate(request, username=username, password=password)
 
@@ -29,7 +29,7 @@ def login(request):
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
     token, _ = Token.objects.get_or_create(user=user)
-    return Response({'token': token.key}, status=status.HTTP_200_OK)
+    return Response({'auth_token': token.key}, status=status.HTTP_200_OK)
 
 
 @csrf_exempt
@@ -42,6 +42,9 @@ def signup(request):
     first_name = request.POST['first_name']
     last_name = request.POST['last_name']
     is_vendor = request.POST['is_vendor']
+    iban = request.POST['IBAN']
+    latitude = 41.0082 #dummy for now
+    longitude = 28.9784 #dummy for now
 
     try:
         user = User.objects.get(username=username)
@@ -51,12 +54,19 @@ def signup(request):
             user = RegisteredUser.objects.get(email=email)
             return Response({'error': 'Email address already exists.'}, status=status.HTTP_400_BAD_REQUEST)
         except RegisteredUser.DoesNotExist:
-            user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,
+            user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name,
                                             password=password)
             registered_user = user.registereduser
             registered_user.email = email
-            registered_user.is_vendor = is_vendor
             registered_user.save()
+            if is_vendor=='True':
+                location = Location(latitude=latitude, longitude=longitude)
+                location.save()
+                vendor = Vendor(user=registered_user, iban=iban, rating=0, location=location)
+                vendor.save()
+            elif is_vendor=='False':
+                customer = Customer(user=registered_user, money_spent=0)
+                customer.save()
 
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
+            return Response({'auth_token': token.key}, status=status.HTTP_200_OK)
