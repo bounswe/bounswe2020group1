@@ -5,7 +5,6 @@ import Navbar from "./NavBar";
 
 import ProductList from "./ProductList";
 
-
 class Category extends React.Component{
     render(){
         return(
