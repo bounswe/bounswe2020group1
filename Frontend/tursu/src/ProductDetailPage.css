@@ -1,0 +1,44 @@
+.app{
+    max-width: 1200px;
+    width: 100%;
+    box-shadow: 0 0 5px #ccc;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.details{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+}
+
+
+
+.details .box{
+
+    height: auto;
+    width: auto;
+    border-style: solid;
+    border-color: greenyellow;
+
+}
+.grid-container {
+    grid-gap: 50px;
+}
+
+
+
+
+
+
+.box .cart{
+    background: #333;
+    color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px 25px;
+    margin-top: 15px;
+}
+
