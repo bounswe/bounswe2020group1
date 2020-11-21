@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import "./sign_components.css";
-import logo from './rsz_11logo.png';
+import logo from '../rsz_11logo.png';
 
 export default class ForgotPassword extends Component {
     constructor(props) {

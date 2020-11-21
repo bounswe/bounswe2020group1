@@ -21,8 +21,6 @@ const theme = createMuiTheme({
 })
 
 
-
-
 export default function ComplexGrid() {
     return (
         <ThemeProvider theme={theme} >

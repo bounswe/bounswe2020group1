@@ -106,12 +106,11 @@ export default function Navbar(){
                                 <Grid item>
                                     <Paper variant="outlined" elevation={3} >
                                         <AccountCircleIcon />
-                                        <Button variant="text">
-                                            Sign in
-                                        </Button>
-                                        <Button variant="text">
-                                            Sign up
-                                        </Button>
+                                        <Link to='/signIn'>
+                                            <Button variant="text">
+                                                Sign In | Sign Up
+                                            </Button>
+                                        </Link>
                                     </Paper>
                                 </Grid>
                                 <Grid item>
