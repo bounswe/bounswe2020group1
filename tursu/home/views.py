@@ -21,14 +21,14 @@ def index(request):
     products = []
     for product in product_data:
         product_info = {"id": product.pk,
-                    "name": product.name,
-                    "photo_url": "",    #TODO ADD PHOTO URL
-                    "vendor_name": product.vendor.bio,
-                    "category": product.category.name,
-                    "rating": product.rating,
-                    "stock": product.stock,
-                    "price": product.price
-                }
+                       "name": product.name,
+                       "photo_url": "", 	
+                       "vendor_name": product.vendor.user.user.first_name,
+                       "category": product.category.name,
+                       "rating": product.rating,
+                       "stock": product.stock,
+                       "price": product.price
+                    }
         products.append(product_info)
 
     return JsonResponse(products, safe=False)
