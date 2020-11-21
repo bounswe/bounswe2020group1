@@ -63,7 +63,7 @@ class ProductDetail extends React.Component{
                                 </Grid>
                     <Grid item xs={8}>
                         <Typography>
-                            HERE is the description uuuuuuuuuu uuuuuuuuuuu uuuuuuuuuuu uuuuuuu uuuuuuuuuuu uuuuuuudpı wdnaıdnpqın pqıggggggg gggggggggg ggggggggggg ggggggggggg ggggggggggggg ggggggggggg ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+                            HERE is the description description  description  description  description  description  description  description  description  description  description  description  description  description  description
                         </Typography>
 
                         <Typography >
@@ -92,7 +92,7 @@ class ProductDetail extends React.Component{
                     <Grid item xs={6}>
                         <Paper>
                             <Avatar alt="Remy Sharp" src="https://www.upsieutoc.com/images/2020/06/27/img1.jpg" />
-                            <Typography variant="body3" color="textSecondary" align="left">
+                            <Typography variant="body2" color="textPrimary" align="left">
                                 I bought this sneakers and I am satisfied with it.
                             </Typography>
 
@@ -102,7 +102,7 @@ class ProductDetail extends React.Component{
                     <Grid item xs={6}>
                         <Paper >
 
-                            <Typography variant="body3" color="textSecondary" align="left">
+                            <Typography variant="body2" color="textPrimary" align="left">
                                 <Avatar alt="Al" >Al
                                 </Avatar>
                                 Some more comments
