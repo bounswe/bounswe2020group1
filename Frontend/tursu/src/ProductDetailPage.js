@@ -21,7 +21,7 @@ const theme = createMuiTheme({
 })
 
 
-export default function ComplexGrid() {
+export default function ProductDetailPage() {
     return (
         <ThemeProvider theme={theme} >
 

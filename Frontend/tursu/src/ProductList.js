@@ -61,10 +61,10 @@ export default function ProductsGrid() {
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} cols={3}>
             <GridList cellHeight={1000} className={classes.gridList}>
-                {products.map((product) => (
-                    <ProductBox product={product} />
+                {products.map((tile) => (
+                    <ProductBox />
                 ))}
             </GridList>
         </div>

@@ -5,27 +5,45 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
 import {makeStyles} from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Link from "@material-ui/core/Link";
+import {Button} from "@material-ui/core";
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        backgroundColor: "#388e3c",
+    },
+}));
 
-class ProductBox extends React.Component {
+export default function ProductBox() {
+    const classes = useStyles()
 
-    render() {
-        console.log(this.props)
-        return(
-            <GridListTile key={this.props.product.img}>
-                <img src={this.props.product.img} alt={this.props.product.title} />
-                <GridListTileBar
-                    title={this.props.product.title}
-                    subtitle={<span>by: {this.props.product.author}</span>}
-                    actionIcon=
-                        {
-                            <IconButton aria-label={`info about ${this.props.product.title}`}>
-                                <InfoIcon />
-                            </IconButton>
-                        }
-                />
-            </GridListTile>
-        );
-    }
+    return(
+        <Grid item xs={3}>
+                <Button>
+                    <Paper className={classes.paper}>
+                        <div className="ProductInfo" >
+
+                            <img
+                                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.manufactum.de%2Fis%2Fimage%2FManufactum%2F1000s_shop%2Ftelefon-w-48--67326_01.jpg&f=1&nofb=1"
+                                alt={"a"}
+                                className="responsiveImage"/>
+                            <text>
+                                <br/>
+                                {"a"}
+                                <br/>
+                                {"b"}
+                            </text>
+                        </div>
+                    </Paper>
+                </Button>
+        </Grid>
+    );
 }
-export default ProductBox;
