@@ -3,13 +3,13 @@ import Sign from "./Sign";
 import "./App.css";
 
 function App(){
-    return (
-        <div>
+  return (
+    <div>
 
 
-            <Sign />
-        </div>
-    );
+      <Sign />
+    </div>
+  );
 
 }
 export default App;
