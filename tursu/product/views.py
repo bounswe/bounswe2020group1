@@ -30,7 +30,6 @@ def category(request):
         product_data = Product.objects.all()
     else:
         category_data = Category.objects.filter(Q(name=category_name))
-        print(len(category_data))
         if len(category_data) == 1 and category_data[0].name == category_name:
             category_id = category_data[0].id
             product_data = Product.objects.filter(category=category_id)
