@@ -3,10 +3,12 @@ import './HomePage.css'
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Stepper from './Stepper'
-import ProductGrid from './ProductGrid'
 import Navbar from "./NavBar";
-//import HomeGrid from "./HomeGrid";
 import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import GridListTileBar from "@material-ui/core/GridListTileBar";
+import IconButton from "@material-ui/core/IconButton";
+import InfoIcon from "@material-ui/icons/Info";
+import GridListTile from "@material-ui/core/GridListTile";
 
 const theme = createMuiTheme({
     palette:{
@@ -41,27 +43,19 @@ class HomePage extends React.Component{
                             <Stepper />
                         </Paper>
                     </Grid>
-                    <Grid item xs={12}>
+                    {/*<Grid item xs={12}>
                         <Paper>
                             <Product name="telefon" price="3600" imageUrl="blbalba"/>
+                            <GridList cellHeight={400}>
+                                {products.map((product) => ( <Product product={product}/> ))}
+                            </GridList>
                         </Paper>
-                    </Grid>
+                    </Grid>*/}
                 </Grid>
             </ThemeProvider>
         );
     }
 }
 
-// import and use productGrid
-class Product extends React.Component {
-
-    render() {
-        return(
-            <div className="container">
-                <ProductGrid name={this.props.name} price={this.props.price} imageUrl={this.props.imageUrl}/>
-            </div>
-        );
-    }
-}
-
 export default HomePage;
+
