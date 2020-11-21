@@ -45,7 +45,6 @@ def category(request):
                        "stock": product.stock,
                        "price": product.price
                     }
-                }
         products.append(product_info)
 
     return JsonResponse(products, safe=False)
