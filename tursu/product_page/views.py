@@ -7,7 +7,7 @@ def index(request):
     try:
         product_id = request.GET["id"]
     except:
-        return JsonResponse([], safe=False)
+        return HttpResponse('There is no valid Product ID.',status=400)
         
     product = Product.objects.filter(Q(id=product_id))
     if len(product) == 0:
