@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from product.models import Product
 
@@ -10,7 +10,10 @@ def index(request):
         return JsonResponse([], safe=False)
         
     product = Product.objects.filter(Q(id=product_id))
-    product = product[0]
+    if len(product) == 0:
+        return HttpResponse('There is no such product.',status=400)
+    else:
+        product = product[0]
     
     product_info = {"id": product.pk,
                 "name": product.name,
@@ -21,8 +24,7 @@ def index(request):
                 "rating": product.rating,
                 "stock": product.stock,
                 "price": product.price,
-                "comments": ""      #WILL BE EMPTY FOR THE FIRST MILESTONE
+                "comments": []      #WILL BE EMPTY FOR THE FIRST MILESTONE
             }
                    
     return JsonResponse(product_info, safe=False)
-    
