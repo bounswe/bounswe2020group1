@@ -4,7 +4,6 @@ import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar";
 import {Button, ButtonGroup, fade, IconButton} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
 import InputBase from "@material-ui/core/InputBase";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -13,8 +12,8 @@ import Avatar from "@material-ui/core/Avatar";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Paper from "@material-ui/core/Paper";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Category from "./Category";
 
 
 
@@ -111,7 +110,7 @@ export default function Navbar(){
                         </Grid>
                         <Grid container spacing={2} className={classes.category}  >
                             <Grid item>
-                                <Link to='/electronics'>
+                                <Link to='/categories/electronics'>
                                     <Button variant="contained" color="secondary">
                                         Electronics
                                     </Button>
@@ -119,7 +118,7 @@ export default function Navbar(){
                             </Grid>
 
                             <Grid item>
-                                <Link to='/fashion'>
+                                <Link to='/categories/fashion'>
                                     <Button variant="contained" color="secondary">
                                         Fashion
                                     </Button>
@@ -135,7 +134,7 @@ export default function Navbar(){
                             </Grid>
 
                             <Grid item>
-                                <Link to='/office'>
+                                <Link to='/categories/office'>
                                     <Button variant="contained" color="secondary">
                                         Office
                                     </Button>
@@ -143,7 +142,7 @@ export default function Navbar(){
                             </Grid>
 
                             <Grid item>
-                                <Link to='/sports'>
+                                <Link to='/categories/sports'>
                                     <Button variant="contained" color="secondary">
                                         Sports&Outdoors
                                     </Button>
@@ -151,7 +150,7 @@ export default function Navbar(){
                             </Grid>
 
                             <Grid item>
-                                <Link to='/cosmetics'>
+                                <Link to='/categories/cosmetics'>
                                     <Button variant="contained" color="secondary">
                                         Cosmetics
                                     </Button>
