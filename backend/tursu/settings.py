@@ -23,12 +23,12 @@ ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ze&rha=atvhkget6lrr&9dd7(tntqr1e1pc=p2m$#hqx*1sy8i'
+SECRET_KEY = os.environ.get("SECRET_KEY", 'ze&rha=atvhkget6lrr&9dd7(tntqr1e1pc=p2m$#hqx*1sy8i')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1").split(" ")
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    # setting cors policy is needed to make calls from ui to api
+    'corsheaders',
     'registered_user',
     'product',
     'home',
@@ -51,6 +53,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Cors middleware (the order is important!)
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -84,12 +88,12 @@ WSGI_APPLICATION = 'tursu.wsgi.application'
 
 DATABASES = {
     'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'tursu_db',
-            'USER': 'dbadmin',
-            'PASSWORD': 'tursu123',
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'ENGINE': os.environ.get("SQL_ENGINE", "django.db.backends.postgresql_psycopg2"),
+            'NAME': os.environ.get("SQL_DATABASE", "tursu_db"),
+            'USER': os.environ.get("SQL_USER", "dbadmin"),
+            'PASSWORD': os.environ.get("SQL_PASSWORD", "tursu123"),
+            'HOST': os.environ.get("SQL_HOST", "localhost"),
+            'PORT': os.environ.get("SQL_PORT", "5432"),
         }
 }
 
@@ -146,3 +150,8 @@ MEDIA_ROOT = ROOT_PATH + '/static/images'
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = '/'
+
+#################################################################
+    ##  (CORS) Cross-Origin Resource Sharing Settings ##
+#################################################################
+CORS_ORIGIN_ALLOW_ALL = True
