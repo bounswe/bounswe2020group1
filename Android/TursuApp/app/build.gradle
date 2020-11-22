@@ -32,6 +32,13 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.navigation:navigation-fragment:2.2.2'
+    implementation 'androidx.navigation:navigation-ui:2.2.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
+
     //noinspection GradleCompatible
     implementation 'com.android.support:design:24.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
