@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme)=> ({
         paddingBottom: theme.spacing(3)
     },
     logo: {
-        width: theme.spacing(13),
         height: theme.spacing(13),
+        width: theme.spacing(13),
     },
     category: {
         marginLeft: theme.spacing(3),
@@ -89,10 +89,17 @@ export default function Navbar(){
             <div className={classes.root}>
                 <AppBar>
                     <Toolbar className={classes.toolbar}>
-                        <Avatar variant="square" className={classes.logo}>
-                            <img src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG"
-                                 alt="logo"/>
-                        </Avatar>
+                        <Link to='/'>
+                            <Button>
+                                <Paper elevation={5}>
+                                    <Avatar variant="square" className={classes.logo}>
+                                        <img src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG"
+                                             alt="logo"
+                                             className={classes.logo}/>
+                                    </Avatar>
+                                </Paper>
+                            </Button>
+                        </Link>
                         <Grid container className={classes.leftSide} direction="column" spacing={3}>
                             <Grid item xs sm className={classes.upperLeft} container direction="row">
                                 <Grid item className={classes.searchGrid}>
