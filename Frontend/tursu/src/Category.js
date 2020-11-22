@@ -23,6 +23,19 @@ class Category extends React.Component{
     state = {
         products : []
     }
+    
+    componentDidMount() {
+        Axios.get('http://3.232.20.250/product/category/',{
+            params: {
+                name:  this.props.match.params.category
+            }
+        })
+            .then(res => {
+                console.log(res)
+                this.setState({products: res.data})
+            })
+    }
+
     componentDidUpdate() {
         Axios.get('http://3.232.20.250/product/category/',{
             params: {
