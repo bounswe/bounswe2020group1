@@ -1,5 +1,6 @@
 package com.example.tursuapp.authentication.homepage.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.media.Image
 import android.os.Bundle
@@ -98,14 +99,16 @@ class HomeFragment : Fragment() {
             return position.toLong()
         }
 
+        @SuppressLint("SetTextI18n")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             //val food = this.productList[position]
 
             val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val foodView = inflator.inflate(R.layout.product_layout, null)
-            foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
-            foodView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
-            return foodView
+            val productView = inflator.inflate(R.layout.product_layout, null)
+            //foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
+            productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
+            productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
+            return productView
         }
     }
 }
