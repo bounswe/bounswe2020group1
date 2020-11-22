@@ -2,10 +2,7 @@ package com.example.tursuapp.authentication.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tursuapp.MainActivity
 import com.example.tursuapp.R
@@ -22,6 +19,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 
 
 class LoginActivity : AppCompatActivity() {
@@ -50,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-/**
+
     private fun login(button: Button){
 
 
@@ -62,30 +61,29 @@ class LoginActivity : AppCompatActivity() {
         val userInfo = LoginRequest(email = email.text.toString(),
                                     password = password.text.toString())
 
-        requestService.login(userInfo).enqueue(
-                object: Callback<TokenResponse>{
-                    override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                        if (response.code()==200){
-                            startActivity(
-                                    Intent(
-                                            this@LoginActivity,
-                                            MainActivity::class.java
+        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.login(userInfo).enqueue(object:retrofit2.Callback<TokenResponse>{
+            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                if(response.code()==200){
+                    startActivity(
+                            Intent(this@LoginActivity,
+                                    MainActivity::class.java
                                     )
-                            )
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(),"Status Code == " + response.code().toString(),Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                        Toast.makeText(getApplicationContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-
-                    }
+                    )
                 }
-        )
+                else{
+                    Log.i("LoginActivity","error: Status Code is "+ response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                Log.i("LoginActivity","error"+ t.message.toString())
+            }
+
+
+        })
 
 
     }
-*/
+
 }
