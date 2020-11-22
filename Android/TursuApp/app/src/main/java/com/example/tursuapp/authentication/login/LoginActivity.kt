@@ -44,15 +44,15 @@ class LoginActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.forgot_password_button).setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
-        findViewById<Button>(R.id.login_button).setOnClickListener {
-            startActivity(Intent(this, HomePageActivity::class.java))
+        findViewById<Button>(R.id.login_button).apply {
+            this.setOnClickListener {
+                login(this)
+            }
         }
 
     }
 
     private fun login(button: Button){
-
-
         when{
             !AuthenticationValidator.validateEmail(email = email.text.toString()) ->
                 Toast.makeText(getApplicationContext(),"Invalid Email!",Toast.LENGTH_SHORT).show()
@@ -79,7 +79,6 @@ class LoginActivity : AppCompatActivity() {
             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                 Log.i("LoginActivity","error"+ t.message.toString())
             }
-
 
         })
 
