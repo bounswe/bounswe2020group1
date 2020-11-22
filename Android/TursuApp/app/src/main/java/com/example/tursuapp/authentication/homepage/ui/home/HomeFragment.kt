@@ -2,7 +2,6 @@ package com.example.tursuapp.authentication.homepage.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.GridView
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,8 +17,7 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductResponse
-import com.example.tursuapp.authentication.Product
-import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import retrofit2.Call
 import retrofit2.Response
 
@@ -32,9 +29,9 @@ class HomeFragment : Fragment() {
     var productList = ArrayList<ProductResponse>()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
@@ -48,20 +45,30 @@ class HomeFragment : Fragment() {
     }
     fun listAllProducts(){
         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.getProducts().enqueue(object:retrofit2.Callback<List<ProductResponse>>{
+        apiinterface.getProducts().enqueue(object : retrofit2.Callback<List<ProductResponse>> {
             override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
-                Log.i("MainFragment","error"+ p1?.message.toString())
+                Log.i("MainFragment", "error" + p1?.message.toString())
             }
 
-            override fun onResponse(p0: Call<List<ProductResponse>>?, response: Response<List<ProductResponse>>?) {
+            override fun onResponse(
+                p0: Call<List<ProductResponse>>?,
+                response: Response<List<ProductResponse>>?
+            ) {
                 Log.i("MainFragment", productList.joinToString())
-                Log.i("MainFragment","inside onResponse")
+                Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
                     productList = ArrayList(response.body()!!)
                     adapter = context?.let { ProductAdapter(it, productList) }
                     val gridView = view?.findViewById<GridView>(R.id.gridView)
                     if (gridView != null) {
                         gridView.adapter = adapter
+                        gridView.setOnItemClickListener { parent, view, position, id ->
+                            val clicked_id = view.findViewById<TextView>(R.id.product_id).text
+                            val bundle = Bundle()
+                            bundle.putString(clicked_id as String?, "From Activity")
+                            val fragobj = ProductPageFragment()
+                            fragobj.arguments = bundle
+                        }
                     }
                 }
                 //urecyclerView.adapter = ItemAdapter(userList,context)
@@ -106,6 +113,7 @@ class HomeFragment : Fragment() {
             val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val productView = inflator.inflate(R.layout.product_layout, null)
             //foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
+            productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
             productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
             productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
             return productView
