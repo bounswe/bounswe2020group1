@@ -1,8 +1,7 @@
 package com.example.tursuapp.authentication.homepage
 
-import android.app.Activity
-import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ExpandableListView
@@ -11,10 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.ui.AppBarConfiguration
 import com.example.tursuapp.R
+import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.authentication.ExpandableListAdapter
 import com.google.android.material.navigation.NavigationView
+import retrofit2.Call
+import retrofit2.Response
+import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.ProductResponse
 
 
 class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -22,8 +25,10 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     var expListView: ExpandableListView? = null
     var listDataHeader: MutableList<String>? = null
     var listDataChild: HashMap<String, List<String>>? = null
+
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
@@ -83,4 +88,5 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         listDataChild!![(listDataHeader as ArrayList<String>).get(1)] = category_names
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
     }
+
 }

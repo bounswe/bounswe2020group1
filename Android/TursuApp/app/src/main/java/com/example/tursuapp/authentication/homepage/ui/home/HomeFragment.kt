@@ -3,6 +3,7 @@ package com.example.tursuapp.authentication.homepage.ui.home
 import android.content.Context
 import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +15,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
+import com.example.tursuapp.api.ApiService
+import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.authentication.Product
+import com.example.tursuapp.authentication.homepage.HomePageActivity
+import retrofit2.Call
+import retrofit2.Response
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     var adapter: ProductAdapter? = null
-    var productList = ArrayList<Product>()
+    var productList = ArrayList<ProductResponse>()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -35,34 +42,48 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
+        listAllProducts()
         return root
     }
+    fun listAllProducts(){
+        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getProducts().enqueue(object:retrofit2.Callback<List<ProductResponse>>{
+            override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                Log.i("MainFragment","error"+ p1?.message.toString())
+            }
+
+            override fun onResponse(p0: Call<List<ProductResponse>>?, response: Response<List<ProductResponse>>?) {
+                Log.i("MainFragment", productList.joinToString())
+                Log.i("MainFragment","inside onResponse")
+                if (response != null) {
+                    productList = ArrayList(response.body()!!)
+                    adapter = context?.let { ProductAdapter(it, productList) }
+                    val gridView = view?.findViewById<GridView>(R.id.gridView)
+                    if (gridView != null) {
+                        gridView.adapter = adapter
+                    }
+                }
+                //urecyclerView.adapter = ItemAdapter(userList,context)
+                //adapter!!.notifyDataSetChanged()
+
+            }
 
 
+        })
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // load foods
-        productList.add(Product("Product1", R.drawable.tursu_logo))
-        productList.add(Product("Product2", R.drawable.tursu_logo))
-        productList.add(Product("Product3", R.drawable.tursu_logo))
-        productList.add(Product("Product4",R.drawable.tursu_logo))
-        productList.add(Product("Product5", R.drawable.tursu_logo))
-        productList.add(Product("Product6", R.drawable.tursu_logo))
-        productList.add(Product("Product7", R.drawable.tursu_logo))
-        productList.add(Product("Product8", R.drawable.tursu_logo))
-        adapter = context?.let { ProductAdapter(it, productList) }
-        val gridView = view.findViewById<GridView>(R.id.gridView)
-        gridView.adapter = adapter
+
     }
 
     class ProductAdapter : BaseAdapter {
-        var productList = ArrayList<Product>()
+        var productList = ArrayList<ProductResponse>()
         var context: Context? = null
 
-        constructor(context: Context, foodsList: ArrayList<Product>) : super() {
+        constructor(context: Context, productList: ArrayList<ProductResponse>) : super() {
             this.context = context
-            this.productList = foodsList
+            this.productList = productList
         }
 
         override fun getCount(): Int {
@@ -78,12 +99,12 @@ class HomeFragment : Fragment() {
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val food = this.productList[position]
+            //val food = this.productList[position]
 
             val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val foodView = inflator.inflate(R.layout.product_layout, null)
             foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
-            foodView.findViewById<TextView>(R.id.text_product).text = "deneme"
+            foodView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
             return foodView
         }
     }

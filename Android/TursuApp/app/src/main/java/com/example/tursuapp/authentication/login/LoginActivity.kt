@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tursuapp.MainActivity
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
-import com.example.tursuapp.api.RequestService
+//import com.example.tursuapp.api.RequestService
 import com.example.tursuapp.api.requests.LoginRequest
 import com.example.tursuapp.api.responses.TokenResponse
 import com.example.tursuapp.authentication.AuthenticationValidator
@@ -28,7 +27,7 @@ import com.example.tursuapp.api.RetrofitClient
 class LoginActivity : AppCompatActivity() {
     private lateinit var email : EditText
     private lateinit var password: EditText
-    private lateinit var requestService : RequestService
+    //private lateinit var requestService : RequestService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         email = findViewById(R.id.login_email)
         password = findViewById(R.id.login_password)
 
-        requestService = ApiService.getInstance()
+        //requestService = ApiService.getInstance()
 
         findViewById<TextView>(R.id.register_button).setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
@@ -46,18 +45,12 @@ class LoginActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.forgot_password_button).setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
-        findViewById<Button>(R.id.sign_in_button).setOnClickListener {
+        findViewById<Button>(R.id.login_button).setOnClickListener {
             startActivity(Intent(this, HomePageActivity::class.java))
         }
 
-        findViewById<Button>(R.id.login_button).apply {
-            this.setOnClickListener {
-                login(this)
-            }
-        }
-
     }
-
+/**
     private fun login(button: Button){
 
 
@@ -94,5 +87,5 @@ class LoginActivity : AppCompatActivity() {
 
 
     }
-
+*/
 }
