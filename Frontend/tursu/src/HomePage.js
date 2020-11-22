@@ -93,7 +93,7 @@ class HomePage extends React.Component{
                             <Stepper />
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} container spacing={10}>
+                    <Grid item xs={12} container spacing={6}>
                         {products.map((products) => ( <ProductBox/>))}
                     </Grid>
                 </Grid>

@@ -1,9 +1,4 @@
-// import and use productGrid
 import React from "react";
-import GridListTile from "@material-ui/core/GridListTile";
-import GridListTileBar from "@material-ui/core/GridListTileBar";
-import IconButton from "@material-ui/core/IconButton";
-import InfoIcon from "@material-ui/icons/Info";
 import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -27,23 +22,22 @@ export default function ProductBox() {
 
     return(
         <Grid item xs={3}>
-                <Button>
-                    <Paper className={classes.paper}>
-                        <div className="ProductInfo" >
-
-                            <img
-                                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.manufactum.de%2Fis%2Fimage%2FManufactum%2F1000s_shop%2Ftelefon-w-48--67326_01.jpg&f=1&nofb=1"
-                                alt={"a"}
-                                className="responsiveImage"/>
-                            <text>
-                                <br/>
-                                {"a"}
-                                <br/>
-                                {"b"}
-                            </text>
-                        </div>
-                    </Paper>
-                </Button>
+            <Button>
+                <Paper className={classes.paper}>
+                    <div className="ProductInfo" >
+                        <img
+                            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.manufactum.de%2Fis%2Fimage%2FManufactum%2F1000s_shop%2Ftelefon-w-48--67326_01.jpg&f=1&nofb=1"
+                            alt={"a"}
+                            className="responsiveImage"/>
+                        <text>
+                            <br/>
+                            {"a"}
+                            <br/>
+                            {"b"}
+                        </text>
+                    </div>
+                </Paper>
+            </Button>
         </Grid>
     );
 }
