@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
+    android:id="@+id/fragment_home"
     tools:context=".authentication.homepage.ui.home.HomeFragment">
 
     <GridView
@@ -13,6 +14,7 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:background="#FFFFFF"
+        android:clickable="true"
         android:horizontalSpacing="15dp"
         android:numColumns="2"
         android:verticalSpacing="10dp"

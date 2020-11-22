@@ -11,6 +11,8 @@ import android.widget.BaseAdapter
 import android.widget.GridView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
@@ -65,9 +67,14 @@ class HomeFragment : Fragment() {
                         gridView.setOnItemClickListener { parent, view, position, id ->
                             val clicked_id = view.findViewById<TextView>(R.id.product_id).text
                             val bundle = Bundle()
-                            bundle.putString(clicked_id as String?, "From Activity")
-                            val fragobj = ProductPageFragment()
-                            fragobj.arguments = bundle
+                            bundle.putString("id", clicked_id.toString())
+                            val newFragment = ProductPageFragment()
+                            newFragment.setArguments(bundle);
+                            val fragmentManager: FragmentManager? = fragmentManager
+                            val fragmentTransaction: FragmentTransaction =
+                                fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.fragment_home, newFragment)
+                            fragmentTransaction.commit()
                         }
                     }
                 }

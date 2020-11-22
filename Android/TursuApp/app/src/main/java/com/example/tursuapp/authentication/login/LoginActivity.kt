@@ -44,10 +44,10 @@ class LoginActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.forgot_password_button).setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
-        findViewById<Button>(R.id.login_button).apply {
-            this.setOnClickListener {
-                login(this)
-            }
+        findViewById<Button>(R.id.login_button).setOnClickListener {
+            startActivity(Intent(this, HomePageActivity::class.java))
+                //login(this)
+
         }
 
     }
