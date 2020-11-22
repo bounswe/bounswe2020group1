@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class TokenResponse (
     @SerializedName("auth_token")
-    val token : String
+    val auth_token : String
 )

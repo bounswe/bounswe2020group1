@@ -2,26 +2,32 @@ package com.example.tursuapp.authentication.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tursuapp.MainActivity
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RequestService
 import com.example.tursuapp.api.requests.LoginRequest
+import com.example.tursuapp.api.responses.TokenResponse
 import com.example.tursuapp.authentication.AuthenticationValidator
 import com.example.tursuapp.authentication.forgotpassword.ForgotPasswordActivity
 import com.example.tursuapp.authentication.signup.SignUpActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import com.example.tursuapp.api.RetrofitClient
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var email : EditText
     private lateinit var password: EditText
     private lateinit var requestService : RequestService
-    private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,25 +55,39 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login(button: Button){
+
+
         when{
             !AuthenticationValidator.validateEmail(email = email.text.toString()) ->
-                print("Please enter a valid email!") // TO-DO: Warning Layout
+                Toast.makeText(getApplicationContext(),"Invalid Email!",Toast.LENGTH_SHORT).show()
         }
 
-        disposable.add(
-                requestService.login(
-                        LoginRequest(
-                                email = email.text.toString(),
-                                password = password.text.toString()
-                        )
-                ).observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            startActivity(Intent(this,MainActivity::class.java))
-                        }, {
-                            // Set warning!
-                        })
+        val userInfo = LoginRequest(email = email.text.toString(),
+                                    password = password.text.toString())
 
+        requestService.login(userInfo).enqueue(
+                object: Callback<TokenResponse>{
+                    override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                        if (response.code()==200){
+                            startActivity(
+                                    Intent(
+                                            this@LoginActivity,
+                                            MainActivity::class.java
+                                    )
+                            )
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"Status Code == " + response.code().toString(),Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                        Toast.makeText(getApplicationContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+
+                    }
+                }
         )
+
 
     }
 
