@@ -17,23 +17,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ProductBox() {
+export default function ProductBox(props) {
     const classes = useStyles()
-
+    console.log(props.product.photo_url)
     return(
         <Grid item xs={3}>
             <Button>
                 <Paper className={classes.paper}>
                     <div className="ProductInfo" >
                         <img
+                            src={props.product.photo_url}
                             src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.manufactum.de%2Fis%2Fimage%2FManufactum%2F1000s_shop%2Ftelefon-w-48--67326_01.jpg&f=1&nofb=1"
-                            alt={"a"}
+                            alt={props.product.name}
                             className="responsiveImage"/>
                         <text>
                             <br/>
-                            {"a"}
+                            {props.product.name}
                             <br/>
-                            {"b"}
+                            {props.product.price} ₺
+                            <br />
+                            {props.product.vendor_name}
                         </text>
                     </div>
                 </Paper>

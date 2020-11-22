@@ -128,7 +128,7 @@ export default function Navbar(){
                             </Grid>
                             <Grid container spacing={2} className={classes.category}  >
                                 <Grid item>
-                                    <Link to='/categories/electronics'>
+                                    <Link to='/categories/Electronics'>
                                         <Button variant="contained" color="secondary">
                                             Electronics
                                         </Button>
@@ -136,7 +136,7 @@ export default function Navbar(){
                                 </Grid>
 
                                 <Grid item>
-                                    <Link to='/categories/fashion'>
+                                    <Link to='/categories/Fashion'>
                                         <Button variant="contained" color="secondary">
                                             Fashion
                                         </Button>
@@ -144,7 +144,7 @@ export default function Navbar(){
                                 </Grid>
 
                                 <Grid item>
-                                    <Link to='/home'>
+                                    <Link to='/categories/Home'>
                                         <Button variant="contained" color="secondary">
                                             Home
                                         </Button>
@@ -152,15 +152,7 @@ export default function Navbar(){
                                 </Grid>
 
                                 <Grid item>
-                                    <Link to='/categories/office'>
-                                        <Button variant="contained" color="secondary">
-                                            Office
-                                        </Button>
-                                    </Link>
-                                </Grid>
-
-                                <Grid item>
-                                    <Link to='/categories/sports'>
+                                    <Link to='/categories/Sports'>
                                         <Button variant="contained" color="secondary">
                                             Sports&Outdoors
                                         </Button>
@@ -168,7 +160,7 @@ export default function Navbar(){
                                 </Grid>
 
                                 <Grid item>
-                                    <Link to='/categories/cosmetics'>
+                                    <Link to='/categories/Cosmetics'>
                                         <Button variant="contained" color="secondary">
                                             Cosmetics
                                         </Button>
