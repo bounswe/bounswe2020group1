@@ -80,7 +80,7 @@ class ProductDetail extends React.Component{
                 <Grid container spacing={3}>
                     <Grid item xs={6}>
                         <ButtonBase >
-                            <img  alt="complex" src="https://www.upsieutoc.com/images/2020/06/27/img1.jpg" />
+                            <img  alt="complex" src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG" />
                         </ButtonBase>
                     </Grid>
                     <Grid container  xs={6} alignItems="center" justify="center">
@@ -113,7 +113,7 @@ class ProductDetail extends React.Component{
 
                     <Grid item xs={6}>
                         <Paper>
-                            <Avatar alt="Remy Sharp" src="https://www.upsieutoc.com/images/2020/06/27/img1.jpg" />
+                            <Avatar alt="Remy Sharp" src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG" />
                             <Typography variant="body2" color="textPrimary" align="left">
                                 I bought this sneakers and I am satisfied with it.
                             </Typography>
