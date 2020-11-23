@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.EditText
 import android.widget.GridView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -39,15 +40,23 @@ class HomeFragment : Fragment() {
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         val args = getArguments()
         var type = ""
+        var id = ""
         if(args!=null) {
             type = args.getString("type").toString()
+            id=args.getString("id").toString()
         }
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        if(type!=""){
+
+    //    val searchRoot = inflater.inflate(R.layout.app_bar_main, container, false)
+
+
+        if(id=="2"){
+            search(type)
+        }else if(id=="1" && type!=""){
             if (type != null) {
                 displayCategory(type)
             }
@@ -56,6 +65,50 @@ class HomeFragment : Fragment() {
             listAllProducts()
         }
         return root
+    }
+
+    fun search(search_string:String){
+
+        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getSearchedProducts( "product",
+            search_string).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+            override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                p0: Call<List<ProductResponse>>?,
+                response: Response<List<ProductResponse>>?
+            ) {
+                Log.i("MainFragment", productList.joinToString())
+                Log.i("MainFragment", "inside onResponse")
+                if (response != null) {
+                    productList = ArrayList(response.body()!!)
+                    adapter = context?.let { ProductAdapter(it, productList) }
+                    val gridView = view?.findViewById<GridView>(R.id.gridView)
+                    if (gridView != null) {
+                        gridView.adapter = adapter
+                        gridView.setOnItemClickListener { parent, view, position, id ->
+                            val clicked_id = view.findViewById<TextView>(R.id.product_id).text
+                            val bundle = Bundle()
+                            bundle.putString("id", clicked_id.toString())
+                            val newFragment = ProductPageFragment()
+                            newFragment.arguments = bundle;
+                            val fragmentManager: FragmentManager? = fragmentManager
+                            val fragmentTransaction: FragmentTransaction =
+                                fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
+                        }
+                    }
+                }
+                //urecyclerView.adapter = ItemAdapter(userList,context)
+                //adapter!!.notifyDataSetChanged()
+
+            }
+
+
+        })
     }
     fun displayCategory(type:String){
         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)

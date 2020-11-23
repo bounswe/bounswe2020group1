@@ -37,6 +37,15 @@
                     android:importantForAutofill="no"
                     android:inputType="text" />
 
+                <Button
+                    android:id="@+id/search_button"
+                    android:layout_width="87dp"
+                    android:layout_height="39dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:text="Search"
+                    android:textSize="12sp" />
+
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="24dp"

@@ -1,8 +1,11 @@
 package com.example.tursuapp.authentication.homepage
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ExpandableListView
 import android.widget.ExpandableListView.OnGroupClickListener
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -11,6 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.tursuapp.R
 import com.example.tursuapp.authentication.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
@@ -71,7 +75,17 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
             false
         })
+
+        this.findViewById<Button>(R.id.search_button).setOnClickListener {
+            val editText: EditText? = findViewById(R.id.editMobileNo)
+            if (editText != null) {
+                val searchText=editText.text
+                search(searchText.toString())
+            }
+        }
+
         expListView!!.setSelectedGroup(0)
+
 
     }
     override fun onBackPressed() {
@@ -82,6 +96,19 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             fragmentManager.popBackStack()
         }
     }
+    fun search(type: String){
+        lateinit var fragment: Fragment
+            fragment = HomeFragment()
+            val bundle = Bundle()
+            bundle.putString("type", type)
+            bundle.putString("id", "2")
+            fragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment, fragment)
+            .commit()
+        this.drawer.closeDrawer(GravityCompat.START)
+    }
     fun displayFragment(id: Int,type:String){
         lateinit var fragment: Fragment
         when (id) {
@@ -90,6 +117,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         if(type!="") {
             val bundle = Bundle()
             bundle.putString("type", type)
+            bundle.putString("id", "1")
             fragment.arguments = bundle
         }
         supportFragmentManager.beginTransaction()
