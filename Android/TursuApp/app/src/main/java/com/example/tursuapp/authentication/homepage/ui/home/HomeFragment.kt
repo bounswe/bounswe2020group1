@@ -45,6 +45,7 @@ class HomeFragment : Fragment() {
         listAllProducts()
         return root
     }
+
     fun listAllProducts(){
         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProducts().enqueue(object : retrofit2.Callback<List<ProductResponse>> {
@@ -69,7 +70,7 @@ class HomeFragment : Fragment() {
                             val bundle = Bundle()
                             bundle.putString("id", clicked_id.toString())
                             val newFragment = ProductPageFragment()
-                            newFragment.setArguments(bundle);
+                            newFragment.arguments = bundle;
                             val fragmentManager: FragmentManager? = fragmentManager
                             val fragmentTransaction: FragmentTransaction =
                                 fragmentManager!!.beginTransaction()
@@ -89,7 +90,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // load foods
-
+        Log.i("HomeFragment","here")
     }
 
     class ProductAdapter : BaseAdapter {

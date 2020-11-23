@@ -83,13 +83,13 @@ class ProductPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val spinner = view?.findViewById<Spinner>(R.id.ColorDropdown)
-        val spinner2 = view?.findViewById<Spinner>(R.id.SizeDropdown)
+        val spinner = view.findViewById<Spinner>(R.id.ColorDropdown)
+        val spinner2 = view.findViewById<Spinner>(R.id.SizeDropdown)
         val id_str = requireArguments().getString("id")
-        view?.let { getDetails(id_str!!.toInt(), it) }
+        getDetails(id_str!!.toInt(), view)
     }
     fun getDetails(id: Int, view: View){
-        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProductDetails(id).enqueue(object :
             retrofit2.Callback<ProductDetailsResponse> {
             override fun onFailure(p0: Call<ProductDetailsResponse>?, p1: Throwable?) {
@@ -112,6 +112,7 @@ class ProductPageFragment : Fragment() {
 
         })
     }
+
     fun displayProductInfo(view: View){
         view.findViewById<TextView>(R.id.product_name).text = product.name
         view.findViewById<TextView>(R.id.product_description).text = product.description
