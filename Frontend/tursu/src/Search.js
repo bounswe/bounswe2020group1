@@ -37,6 +37,19 @@ class SearchPage extends React.Component{
             })
     }
 
+    componentDidUpdate() {
+        Axios.get('http://3.232.20.250/search/',{
+            params: {
+                search_string:  window.sessionStorage.getItem("searched"),
+                search_type: "product"
+            }
+        })
+            .then(res => {
+                console.log(res)
+                this.setState({products: res.data})
+            })
+    }
+
 
 
     render(){

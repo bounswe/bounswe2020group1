@@ -22,8 +22,6 @@ const theme = createMuiTheme({
 })
 
 
-
-
 export default function ProductDetailPage() {
     return (
         <ThemeProvider theme={theme} >
@@ -46,8 +44,8 @@ export default function ProductDetailPage() {
         </ThemeProvider>
     );
 }
-
 class ProductDetail extends React.Component{
+
     state = {
         product: [],
     };
@@ -78,9 +76,9 @@ class ProductDetail extends React.Component{
         return(
             <div >
                 <Grid container spacing={3}>
-                    <Grid item xs={6}>
+                    <Grid id="photo" item xs={6}>
                         <ButtonBase >
-                            <img  alt="complex" src="https://www.upsieutoc.com/images/2020/06/27/img1.jpg" />
+                            <img  alt="complex" src="https://lh3.googleusercontent.com/proxy/mPIEPUHrmQ9UEA8mUBjx34Y3SNJFTIYcxxCX_uM9jCuwhBvv4lX4n1w7QBX629OPCVV0GWHRUAWrhv-JZ9xCseTv6pcgmNZ6LQpaq2md1JHWb0mMNNggnp1iAA" />
                         </ButtonBase>
                     </Grid>
                     <Grid container  xs={6} alignItems="center" justify="center">
@@ -113,7 +111,7 @@ class ProductDetail extends React.Component{
 
                     <Grid item xs={6}>
                         <Paper>
-                            <Avatar alt="Remy Sharp" src="https://www.upsieutoc.com/images/2020/06/27/img1.jpg" />
+                            <Avatar alt="Remy Sharp" src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG" />
                             <Typography variant="body2" color="textPrimary" align="left">
                                 I bought this sneakers and I am satisfied with it.
                             </Typography>
