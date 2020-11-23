@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
 import "./Sign/sign_components.css";
+import axios from "axios";
 
 
 export default class Vendor extends Component {
@@ -23,8 +24,32 @@ export default class Vendor extends Component {
     }
     handleSubmit(event){
         console.log("form submitted");
-        //password confirmation goes here
-        //API request goes here
+        if (this.state.password === this.state.password_confirmation){
+            const user = {
+                email: this.state.email,
+                is_vendor: 'True',
+                first_name: this.state.name,
+                last_name: this.state.surname,
+                username: this.state.username,
+                password: this.state.password,
+                IBAN: this.state.iban,
+                location: this.state.location
+            };
+            axios.post('http://3.232.20.250/user/signup', { user })
+                .then(res => {
+                    console.log(res);
+                    console.log(res.status);
+                    if(res.status!=200){
+                        alert("There has been an error, please try again.");
+                    }
+                    else{
+                        //redirect
+                    }
+                })
+        }
+        else{
+            alert("Password confirmation does not match password. Please type passwords again.");
+        }
         event.preventDefault();
     }
     handleChange(event){

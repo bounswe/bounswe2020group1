@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import "./sign_components.css";
 import logo from '../rsz_11logo.png';
+import axios from 'axios';
 
 export default class Login extends Component {
     constructor(props) {
@@ -19,7 +20,26 @@ export default class Login extends Component {
         console.log("form submitted");
         console.log(this.state.email);
         console.log(this.state.password);
-        //API request goes here
+        const user = {
+            email: this.state.email,
+            password: this.state.password
+        };
+        axios.post('http://3.232.20.250/user/login', { user })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+                if(res.status!=200){
+                    if(res.status==401){
+                        alert("The email or password you have entered are incorrect, please try again.");
+                    }
+                    else {
+                        alert("There has been an error, please try again.");
+                    }
+                }
+                else{
+                    //redirect
+                }
+            })
         event.preventDefault();
     }
     handleChange(event){

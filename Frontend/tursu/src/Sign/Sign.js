@@ -45,7 +45,7 @@ export default class Sign extends Component {
                 </div>
             )
         }
-        else if (this.state.sign == "forgot_password"){
+        else if (this.state.sign === "forgot_password"){
             return(
                 <div className="sign-component">
                     <ForgotPassword onLoginChange={this.handleLoginChange}/>
