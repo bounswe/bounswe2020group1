@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import "./Sign/sign_components.css";
+import "./sign_components.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 
@@ -85,6 +85,7 @@ export default class Vendor extends Component {
             )
         }
         else if (this.state.redirect === "True"){
+            window.sessionStorage.setItem("isLogged", "true");
             return (<Redirect to={".."} />)
         }
     }

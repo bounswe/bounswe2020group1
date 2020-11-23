@@ -80,6 +80,7 @@ export default class Customer extends Component {
             )
         }
         else if (this.state.redirect === "True"){
+            window.sessionStorage.setItem("isLogged", "true");
             return (<Redirect to={".."} />)
         }
     }

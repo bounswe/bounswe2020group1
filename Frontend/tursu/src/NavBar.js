@@ -83,6 +83,13 @@ const theme = createMuiTheme({
 // TODO: implement search functionality
 export default function Navbar(){
     const classes = useStyles();
+    var option;
+    if (window.sessionStorage.getItem("isLogged") === "true" ){
+        option = "Log Out"
+    }
+    else {
+        option = "Sign In | Sign Up"
+    }
 
     return(
         <ThemeProvider theme={theme} >
@@ -119,7 +126,7 @@ export default function Navbar(){
                                         <AccountCircleIcon />
                                         <Link to='/signIn'>
                                             <Button variant="text">
-                                                Sign In | Sign Up
+                                                {option}
                                             </Button>
                                         </Link>
                                     </Paper>
