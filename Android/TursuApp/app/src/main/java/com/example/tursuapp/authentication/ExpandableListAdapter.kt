@@ -82,7 +82,6 @@ class ExpandableListAdapter(context: Context, listDataHeader: List<String>,
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
         return true
     }
-
     init {
         _context = context
         _listDataHeader = listDataHeader

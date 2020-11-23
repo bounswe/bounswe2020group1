@@ -11,6 +11,8 @@ import android.widget.BaseAdapter
 import android.widget.GridView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
@@ -43,6 +45,7 @@ class HomeFragment : Fragment() {
         listAllProducts()
         return root
     }
+
     fun listAllProducts(){
         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProducts().enqueue(object : retrofit2.Callback<List<ProductResponse>> {
@@ -65,9 +68,14 @@ class HomeFragment : Fragment() {
                         gridView.setOnItemClickListener { parent, view, position, id ->
                             val clicked_id = view.findViewById<TextView>(R.id.product_id).text
                             val bundle = Bundle()
-                            bundle.putString(clicked_id as String?, "From Activity")
-                            val fragobj = ProductPageFragment()
-                            fragobj.arguments = bundle
+                            bundle.putString("id", clicked_id.toString())
+                            val newFragment = ProductPageFragment()
+                            newFragment.arguments = bundle;
+                            val fragmentManager: FragmentManager? = fragmentManager
+                            val fragmentTransaction: FragmentTransaction =
+                                fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
                         }
                     }
                 }
@@ -82,7 +90,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // load foods
-
+        Log.i("HomeFragment","here")
     }
 
     class ProductAdapter : BaseAdapter {

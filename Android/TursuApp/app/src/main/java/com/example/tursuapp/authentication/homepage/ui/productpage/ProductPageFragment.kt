@@ -1,31 +1,33 @@
 package com.example.tursuapp.authentication.homepage.ui.productpage
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
-import com.example.tursuapp.authentication.Product
+import com.example.tursuapp.api.ApiService
+import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.ProductDetailsResponse
+import retrofit2.Call
+import retrofit2.Response
 
 
 class ProductPageFragment : Fragment() {
 
     private lateinit var productPageViewModel: ProductPageModel
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private lateinit var product: ProductDetailsResponse
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         productPageViewModel = ViewModelProvider(this).get(ProductPageModel::class.java)
         val root = inflater.inflate(R.layout.fragment_productpage, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        productPageViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        val spinner = view?.findViewById<Spinner>(R.id.ColorDropdown)
-        val spinner2 = view?.findViewById<Spinner>(R.id.SizeDropdown)
+        /*
         val list: MutableList<String> = ArrayList()
         list.add("RANJITH")
         list.add("ARUN")
@@ -42,8 +44,10 @@ class ProductPageFragment : Fragment() {
 
             spinner.onItemSelectedListener = object :
                 AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>,
-                                            view: View, position: Int, id: Long) {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View, position: Int, id: Long
+                ) {
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -62,8 +66,10 @@ class ProductPageFragment : Fragment() {
 
             spinner2.onItemSelectedListener = object :
                 AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>,
-                                            view: View, position: Int, id: Long) {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View, position: Int, id: Long
+                ) {
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -71,10 +77,45 @@ class ProductPageFragment : Fragment() {
                 }
             }
         }
-
+*/
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val spinner = view.findViewById<Spinner>(R.id.ColorDropdown)
+        val spinner2 = view.findViewById<Spinner>(R.id.SizeDropdown)
+        val id_str = requireArguments().getString("id")
+        getDetails(id_str!!.toInt(), view)
+    }
+    fun getDetails(id: Int, view: View){
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getProductDetails(id).enqueue(object :
+            retrofit2.Callback<ProductDetailsResponse> {
+            override fun onFailure(p0: Call<ProductDetailsResponse>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                p0: Call<ProductDetailsResponse>?,
+                response: Response<ProductDetailsResponse>?
+            ) {
+                if (response != null) {
+                    product = response.body()!!
+                    displayProductInfo(view)
+                }
+                //urecyclerView.adapter = ItemAdapter(userList,context)
+                //adapter!!.notifyDataSetChanged()
+
+            }
 
 
+        })
+    }
+
+    fun displayProductInfo(view: View){
+        view.findViewById<TextView>(R.id.product_name).text = product.name
+        view.findViewById<TextView>(R.id.product_description).text = product.description
+        view.findViewById<RatingBar>(R.id.ratingBar).rating = product.rating.toFloat()
+    }
 }
