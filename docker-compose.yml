@@ -25,6 +25,13 @@ services:
       - POSTGRES_USER=dbadmin
       - POSTGRES_PASSWORD=tursu123
       - POSTGRES_DB=tursu_db
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - backend
 volumes:
   db:
   # frontend:
