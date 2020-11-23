@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import "./Sign/sign_components.css";
 import axios from "axios";
-
+import { Redirect } from "react-router-dom";
 
 export default class Vendor extends Component {
     constructor(props) {
@@ -16,7 +16,8 @@ export default class Vendor extends Component {
             surname: "",
             username: "",
             iban: "",
-            location:""
+            location:"",
+            redirect: "False",
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,26 +26,23 @@ export default class Vendor extends Component {
     handleSubmit(event){
         console.log("form submitted");
         if (this.state.password === this.state.password_confirmation){
-            const user = {
-                email: this.state.email,
-                is_vendor: 'True',
-                first_name: this.state.name,
-                last_name: this.state.surname,
-                username: this.state.username,
-                password: this.state.password,
-                IBAN: this.state.iban,
-                location: this.state.location
-            };
-            axios.post('http://3.232.20.250/user/signup', { user })
-                .then(res => {
+            const formData = new FormData();
+            formData.append("email", this.state.email);
+            formData.append("is_vendor", "True");
+            formData.append("first_name", this.state.name);
+            formData.append("last_name", this.state.surname);
+            formData.append("username", this.state.username);
+            formData.append("password", this.state.password);
+            formData.append("IBAN", this.state.iban);
+            formData.append("location", this.state.location);
+            axios.post('http://3.232.20.250/user/signup', formData)
+                .then(res =>{
                     console.log(res);
-                    console.log(res.status);
-                    if(res.status!=200){
-                        alert("There has been an error, please try again.");
-                    }
-                    else{
-                        //redirect
-                    }
+                    console.log(res.data)
+                    this.setState({ redirect: "True" });
+                })
+                .catch(error =>{
+                    alert ("There has been an error. Please try again.");
                 })
         }
         else{
@@ -58,31 +56,36 @@ export default class Vendor extends Component {
         });
     }
     render() {
-        return(
-            <div className="registration">
+        if(this.state.redirect === "False"){
+            return(
+                <div className="registration">
 
-                <form onSubmit={this.handleSubmit}>
-                    <input className="tursu_input" type="text" name="name" id="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} required />
-                    <input className="tursu_input" type="text" name="surname" id="surname" placeholder="Surname" value={this.state.surname} onChange={this.handleChange} required />
-                    <br/>
-                    <input className="tursu_input" type="text" name="iban" id="iban" placeholder="IBAN" value={this.state.iban} onChange={this.handleChange} required />
-                    <input className="tursu_input" type="text" name="location" id="location" placeholder="Location" value={this.state.location} onChange={this.handleChange} required />
-                    <br/>
-                    <input className="tursu_input" type="text" name="username" id="username" placeholder="Username" value={this.state.username} onChange={this.handleChange} required />
+                    <form onSubmit={this.handleSubmit}>
+                        <input className="tursu_input" type="text" name="name" id="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} required />
+                        <input className="tursu_input" type="text" name="surname" id="surname" placeholder="Surname" value={this.state.surname} onChange={this.handleChange} required />
+                        <br/>
+                        <input className="tursu_input" type="text" name="iban" id="iban" placeholder="IBAN" value={this.state.iban} onChange={this.handleChange} required />
+                        <input className="tursu_input" type="text" name="location" id="location" placeholder="Location" value={this.state.location} onChange={this.handleChange} required />
+                        <br/>
+                        <input className="tursu_input" type="text" name="username" id="username" placeholder="Username" value={this.state.username} onChange={this.handleChange} required />
 
-                    <input className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
-                    <br/>
+                        <input className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
+                        <br/>
 
-                    <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
+                        <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
 
 
-                    <input className="tursu_input" type="password" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation" value={this.state.password_confirmation} onChange={this.handleChange} required />
-                    <br/>
+                        <input className="tursu_input" type="password" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation" value={this.state.password_confirmation} onChange={this.handleChange} required />
+                        <br/>
 
-                    <button type="submit" className="tursu_button">Sign Up</button>
-                </form>
+                        <button type="submit" className="tursu_button">Sign Up</button>
+                    </form>
 
-            </div>
-        )
+                </div>
+            )
+        }
+        else if (this.state.redirect === "True"){
+            return (<Redirect to={".."} />)
+        }
     }
 }
