@@ -17,8 +17,8 @@ from .models import RegisteredUser, Vendor, Customer, Location
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def login(request):
-    username = request.POST['email']
-    password = request.POST['password']
+    username = request.POST.get('email')
+    password = request.POST.get('password')
 
     if (not username) or (not password):
         return Response({'error': 'Please provide both username and password.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -36,13 +36,13 @@ def login(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def signup(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    email = request.POST['email']
-    first_name = request.POST['first_name']
-    last_name = request.POST['last_name']
-    is_vendor = request.POST['is_vendor']
-    iban = request.POST['IBAN']
+    username = request.POSTget('username')
+    password = request.get('password')
+    email = request.get('email')
+    first_name = request.get('first_name')
+    last_name = request.get('last_name')
+    is_vendor = request.get('is_vendor')
+    iban = request.get('IBAN')
     latitude = 41.0082 #dummy for now
     longitude = 28.9784 #dummy for now
 
