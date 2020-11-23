@@ -19,15 +19,16 @@ const theme = createMuiTheme({
 })
 
 
-class Category extends React.Component{
+class SearchPage extends React.Component{
     state = {
         products : []
     }
 
     componentDidMount() {
-        Axios.get('http://3.232.20.250/product/category/',{
+        Axios.get('http://3.232.20.250/search/',{
             params: {
-                name:  this.props.match.params.category
+                search_string:  window.sessionStorage.getItem("searched"),
+                search_type: "product"
             }
         })
             .then(res => {
@@ -36,17 +37,6 @@ class Category extends React.Component{
             })
     }
 
-    componentDidUpdate() {
-        Axios.get('http://3.232.20.250/product/category/',{
-            params: {
-                name:  this.props.match.params.category
-            }
-        })
-            .then(res => {
-                console.log(res)
-                this.setState({products: res.data})
-            })
-    }
 
 
     render(){
@@ -68,4 +58,4 @@ class Category extends React.Component{
     }
 }
 
-export default Category;
+export default SearchPage;

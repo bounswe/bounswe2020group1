@@ -103,12 +103,16 @@ export default function Navbar(){
                         <Grid container className={classes.leftSide} direction="column" spacing={3}>
                             <Grid item xs sm className={classes.upperLeft} container direction="row">
                                 <Grid item className={classes.searchGrid}>
-                                    <InputBase placeholder="Search" className={classes.search} />
+                                    <InputBase placeholder="Search" id="search"/>
                                 </Grid>
                                 <Grid item>
-                                    <IconButton>
-                                        <SearchIcon/>
-                                    </IconButton>
+                                    <Link to='/search'>
+                                        <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
+                                         }}>
+                                            <SearchIcon/>
+                                        </IconButton>
+                                    </Link>
+
                                 </Grid>
                                 <Grid item>
                                     <Paper variant="outlined" elevation={3} >

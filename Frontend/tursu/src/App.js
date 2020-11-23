@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Category from "./Category";
 import Sign from "./Sign/Sign";
 import ProductDetailPage from "./ProductDetailPage";
+import SearchPage from "./Search";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Route path="/categories/:category" exact component={Category} />
                 <Route path="/signIn" exact component={Sign} />
                 <Route path="/product" exact component={ProductDetailPage} />
+                <Route path="/search" exact component={SearchPage} />
             </div>
         </Router>
     );

@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import Avatar from "@material-ui/core/Avatar";
 import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Navbar from "./NavBar";
+import axios from 'axios'
 
 const theme = createMuiTheme({
     palette:{
@@ -19,6 +20,8 @@ const theme = createMuiTheme({
         }
     }
 })
+
+
 
 
 export default function ProductDetailPage() {
@@ -45,47 +48,68 @@ export default function ProductDetailPage() {
 }
 
 class ProductDetail extends React.Component{
+    state = {
+        product: [],
+    };
 
+    componentDidMount() {
+        axios.get("http://3.232.20.250/product/", {
+            params: {
+                id: window.sessionStorage.getItem("product_id")
+            }
+        }).then(res =>{
+            console.log(res);
+            this.setState({product: res.data})
+        })
+    }
+    componentDidUpdate() {
+        axios.get("http://3.232.20.250/product/", {
+            params: {
+                id: window.sessionStorage.getItem("product_id")
+            }
+        }).then(res =>{
+            console.log(res);
+            this.setState({product: res.data})
+        })
+    }
 
 
     render(){
         return(
             <div >
-                <Grid container  item xs={24} spacing={3}>
+                <Grid container spacing={3}>
+                    <Grid item xs={6}>
+                        <ButtonBase >
+                            <img  alt="complex" src="https://www.upsieutoc.com/images/2020/06/27/img1.jpg" />
+                        </ButtonBase>
+                    </Grid>
+                    <Grid container  xs={6} alignItems="center" justify="center">
 
-
-                            <Grid item xs={8   }>
-                                <ButtonBase >
-                                    <img  alt="complex" src="https://www.upsieutoc.com/images/2020/06/27/img1.jpg" />
-                                </ButtonBase>
-                                </Grid>
-                    <Grid item xs={8}>
                         <Typography>
-                            HERE is the description description  description  description  description  description  description  description  description  description  description  description  description  description  description
+                            <h1>{this.state.product.name}</h1>
+                            <b> Vendor: </b> {this.state.product.vendor_name}<br></br>
+                            <b> Description: </b> {this.state.product.description}<br></br>
                         </Typography>
 
-                        <Typography >
-                            Product Name
-                        </Typography>
-                        <Typography >
-                            Vendor
-                        </Typography>
+
                     </Grid>
 
-                            <Grid item xs={4} >
-                                <Grid item xs container direction="column" spacing={2}>
-                                    <Grid item>
-                                        <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                            <Button variant="contained" color="primary">
-                                                Add To Cart
-                                            </Button>
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="subtitle1">$23.00</Typography>
-                                </Grid>
+                    <Grid item xs={4} >
+                        <Grid item xs container direction="column" spacing={2}>
+                            <Grid item>
+                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                                    <Button variant="contained" color="primary">
+                                        Add To Cart
+                                    </Button>
+                                </Typography>
                             </Grid>
+                        </Grid>
+                        <Grid item>
+                            <Typography variant="subtitle1">${this.state.product.price}</Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={8} >
+                    </Grid>
 
                     <Grid item xs={6}>
                         <Paper>
@@ -113,5 +137,4 @@ class ProductDetail extends React.Component{
         )
     }
 }
-
 
