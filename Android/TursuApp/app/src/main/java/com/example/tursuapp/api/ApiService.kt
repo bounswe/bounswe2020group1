@@ -28,4 +28,7 @@ interface ApiService {
 
     @GET("/product/category")
     fun getProductsOfCategory(@Query("name") name: String): Call<List<ProductResponse>>
+
+    @GET("/search")
+    fun getSearchedProducts(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<ProductResponse>>
 }
