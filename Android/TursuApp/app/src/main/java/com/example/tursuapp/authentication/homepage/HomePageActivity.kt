@@ -53,14 +53,25 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setAdapter(listAdapter)
         expListView!!.setOnGroupClickListener(OnGroupClickListener { parent, v, groupPosition, id ->
             when (groupPosition) {
-                0 -> displayFragment(R.id.nav_home)
+                0 -> displayFragment(R.id.nav_home,"")
             }
             false
         })
         expListView!!.setOnChildClickListener(ExpandableListView.OnChildClickListener { parent, v, groupPosition, childPosition, id ->
             // Kategoriye basılınca olacakları ayarla
+            if(groupPosition == 1){
+                when (childPosition) {
+                    0 -> displayFragment(R.id.nav_home,"Electronics")
+                    1 -> displayFragment(R.id.nav_home, "Fashion")
+                    2 -> displayFragment(R.id.nav_home, "Home")
+                    3 -> displayFragment(R.id.nav_home, "Cosmetics")
+                    4 -> displayFragment(R.id.nav_home, "Sports")
+                }
+            }
+
             false
         })
+        expListView!!.setSelectedGroup(0)
 
     }
     override fun onBackPressed() {
@@ -71,10 +82,15 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             fragmentManager.popBackStack()
         }
     }
-    fun displayFragment(id: Int){
+    fun displayFragment(id: Int,type:String){
         lateinit var fragment: Fragment
         when (id) {
             R.id.nav_home -> fragment = HomeFragment()
+        }
+        if(type!="") {
+            val bundle = Bundle()
+            bundle.putString("type", type)
+            fragment.arguments = bundle
         }
         supportFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment, fragment)
