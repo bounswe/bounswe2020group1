@@ -1,5 +1,5 @@
 # Step 1
-FROM node:latest as build-step
+FROM node:10-alpine as build-step
 RUN mkdir /app
 WORKDIR /app
 COPY package.json /app
