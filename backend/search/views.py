@@ -1,9 +1,6 @@
-#from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-#from django.contrib.auth.models import User
-#from django.core import serializers
 from django.db.models import Q
-from product.models import Product
+from product.models import Product, Image
 
 def index(request):
     """Returns searched products when GET request is made.
@@ -45,10 +42,16 @@ def index(request):
         return HttpResponse('Select search_type as vendor or product to search',status=400)
 
     products = []
+    static_url = "http://http://3.232.20.250/static/" # TODO Move this to conf
     for product in data:
+        images = Image.objects.filter(product=product)
+        if(len(photos) > 0):
+            photo_url = f"{static_url}{images[0].photo}"
+        else:
+            photo_url = ""
         product_info ={"id": product.pk,
                        "name": product.name,
-                       "photo_url": "", 	#TODO ADD PHOTO URL
+                       "photo_url": photo_url,
                        "vendor_name": product.vendor.user.user.first_name,
                        "category": product.category.name,
                        "rating": product.rating,
