@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from product.models import Product
+from product.models import Product, Image
 
 
 def index(request):
@@ -19,10 +19,16 @@ def index(request):
     """
     product_data = Product.objects.all()
     products = []
+    static_url = "http://3.232.20.250/static/" # TODO Move this to conf
     for product in product_data:
+        images = Image.objects.filter(product=product)
+        if(len(images) > 0):
+            photo_url = f"{static_url}{images[0].photo}"
+        else:
+            photo_url = ""
         product_info = {"id": product.pk,
                        "name": product.name,
-                       "photo_url": "", 	
+                       "photo_url": photo_url, 	
                        "vendor_name": product.vendor.user.user.first_name,
                        "category": product.category.name,
                        "rating": product.rating,
