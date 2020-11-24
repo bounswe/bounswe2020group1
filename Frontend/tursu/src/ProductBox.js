@@ -28,8 +28,8 @@ export default function ProductBox(props) {
                     <Paper className={classes.paper}>
                         <div className="ProductInfo" >
                             <img
-                                //src={props.product.photo_url}
-                                src="https://grandstream.pl/wp-content/uploads/2016/03/left-e1456834177965.png"
+                                src={props.product.photo_url}
+                                //src="https://grandstream.pl/wp-content/uploads/2016/03/left-e1456834177965.png"
                                 alt={props.product.name}
                                 className="responsiveImage"/>
                             <text>
