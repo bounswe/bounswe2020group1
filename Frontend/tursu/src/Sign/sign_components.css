@@ -1,0 +1,66 @@
+.sign-component {
+    height: 100vh;
+    background: #519657;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.customerRegistration {
+    height: 550px;
+    width: 600px;
+    background: #b2fab4;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+.vendorRegistration {
+    height: 600px;
+    width: 600px;
+    background: #b2fab4;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+.login{
+    height: 500px;
+    width: 300px;
+    background: #b2fab4;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+.smallButton{
+    background-color: #b2fab4;
+    color: black;
+    border: transparent;
+    height: 20px;
+    width: 220px;
+    margin: 5px;
+}
+.tursu_input {
+    background-color: #3CBC8D;
+    color: white;
+    height: 30px;
+    margin: 10px;
+}
+
+.tursu_button {
+    background-color: #3CBC8D;
+    color: white;
+    height: 35px;
+    width: 75px;
+}
+.radio {
+    display: inline;
+    margin: 5px;
+}
