@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
-from product.models import Product
+from product.models import Product, Image
 
 def index(request):
     try:
@@ -15,10 +15,16 @@ def index(request):
     else:
         product = product[0]
     
+    static_url = "http://3.232.20.250/static/"
+    images = Image.objects.filter(product=product)
+    if(len(images) > 0):
+        photo_url = f"{static_url}{images[0].photo}"
+    else:
+        photo_url = ""
     product_info = {"id": product.pk,
                 "name": product.name,
                 "description": product.description,
-                "photo_url": "",    #TODO ADD PHOTO URL
+                "photo_url": photo_url,    #TODO ADD PHOTO URL
                 "vendor_name": product.vendor.user.user.first_name,
                 "category": product.category.name,
                 "rating": product.rating,
