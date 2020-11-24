@@ -110,7 +110,7 @@ export default function Navbar(){
                         <Grid container className={classes.leftSide} direction="column" spacing={3}>
                             <Grid item xs sm className={classes.upperLeft} container direction="row">
                                 <Grid item className={classes.searchGrid}>
-                                    <InputBase placeholder="Search" id="search"/>
+                                    <InputBase placeholder="Search" id="search" className={classes.search}/>
                                 </Grid>
                                 <Grid item>
                                     <Link to='/search'>

@@ -3,7 +3,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import {Button} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -12,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(1),
         textAlign: 'center',
-        color: theme.palette.text.secondary,
-        backgroundColor: "#388e3c",
+        color: theme.palette.text.secondary
+        // backgroundColor: "#388e3c",
     },
 }));
 
@@ -28,16 +29,22 @@ export default function ProductBox(props) {
                         <div className="ProductInfo" >
                             <img
                                 src={props.product.photo_url}
-                                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.manufactum.de%2Fis%2Fimage%2FManufactum%2F1000s_shop%2Ftelefon-w-48--67326_01.jpg&f=1&nofb=1"
+                                //src="https://grandstream.pl/wp-content/uploads/2016/03/left-e1456834177965.png"
                                 alt={props.product.name}
                                 className="responsiveImage"/>
                             <text>
                                 <br/>
-                                {props.product.name}
-                                <br/>
-                                {props.product.price} ₺
-                                <br />
-                                {props.product.vendor_name}
+                                <Typography variant="subtitle2">
+                                    {props.product.name}
+                                </Typography>
+                                <Typography variant="body2">
+                                    <Box fontWeight="fontWeightBold">
+                                        {props.product.price} ₺
+                                    </Box>
+                                </Typography>
+                                <Typography variant="caption">
+                                    {props.product.vendor_name}
+                                </Typography>
                             </text>
                         </div>
                     </Paper>

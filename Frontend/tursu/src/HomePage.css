@@ -1,6 +1,10 @@
 .HomePage{
-    margin-top: 170px;
+    margin-top: 180px;
     align-items: center;
+}
+
+.stepper{
+    margin-top: 145px;
 }
 .container{
     display: grid;
