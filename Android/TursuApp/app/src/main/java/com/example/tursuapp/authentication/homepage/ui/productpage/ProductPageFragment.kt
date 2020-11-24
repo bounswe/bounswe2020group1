@@ -12,6 +12,7 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
 
@@ -117,5 +118,10 @@ class ProductPageFragment : Fragment() {
         view.findViewById<TextView>(R.id.product_name).text = product.name
         view.findViewById<TextView>(R.id.product_description).text = product.description
         view.findViewById<RatingBar>(R.id.ratingBar).rating = product.rating.toFloat()
+        val image  = view.findViewById<ImageView>(R.id.productImage)
+        Picasso
+            .get() // give it the context
+            .load(product.photo_url) // load the image
+            .into(image)
     }
 }

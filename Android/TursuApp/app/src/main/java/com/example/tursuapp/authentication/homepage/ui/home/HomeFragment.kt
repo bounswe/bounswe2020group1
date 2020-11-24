@@ -2,14 +2,16 @@ package com.example.tursuapp.authentication.homepage.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.EditText
 import android.widget.GridView
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -21,8 +23,10 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
+import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
+import java.net.URL
 
 
 class HomeFragment : Fragment() {
@@ -30,11 +34,11 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     var adapter: ProductAdapter? = null
     var productList = ArrayList<ProductResponse>()
-
+    var productImages = ArrayList<ImageView>()
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
@@ -67,18 +71,18 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    fun search(search_string:String){
+    fun search(search_string: String){
 
         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.getSearchedProducts( "product",
-            search_string).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+        apiinterface.getSearchedProducts("product",
+                search_string).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
             override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
             }
 
             override fun onResponse(
-                p0: Call<List<ProductResponse>>?,
-                response: Response<List<ProductResponse>>?
+                    p0: Call<List<ProductResponse>>?,
+                    response: Response<List<ProductResponse>>?
             ) {
                 Log.i("MainFragment", productList.joinToString())
                 Log.i("MainFragment", "inside onResponse")
@@ -96,7 +100,7 @@ class HomeFragment : Fragment() {
                             newFragment.arguments = bundle;
                             val fragmentManager: FragmentManager? = fragmentManager
                             val fragmentTransaction: FragmentTransaction =
-                                fragmentManager!!.beginTransaction()
+                                    fragmentManager!!.beginTransaction()
                             fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
                             fragmentTransaction.commit()
                         }
@@ -110,7 +114,10 @@ class HomeFragment : Fragment() {
 
         })
     }
-    fun displayCategory(type:String){
+    fun loadImages(){
+
+    }
+    fun displayCategory(type: String){
         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProductsOfCategory(type).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
             override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
@@ -159,8 +166,8 @@ class HomeFragment : Fragment() {
             }
 
             override fun onResponse(
-                p0: Call<List<ProductResponse>>?,
-                response: Response<List<ProductResponse>>?
+                    p0: Call<List<ProductResponse>>?,
+                    response: Response<List<ProductResponse>>?
             ) {
                 Log.i("MainFragment", productList.joinToString())
                 Log.i("MainFragment", "inside onResponse")
@@ -178,7 +185,7 @@ class HomeFragment : Fragment() {
                             newFragment.arguments = bundle;
                             val fragmentManager: FragmentManager? = fragmentManager
                             val fragmentTransaction: FragmentTransaction =
-                                fragmentManager!!.beginTransaction()
+                                    fragmentManager!!.beginTransaction()
                             fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
                             fragmentTransaction.commit()
                         }
@@ -195,11 +202,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // load foods
-        Log.i("HomeFragment","here")
+        Log.i("HomeFragment", "here")
     }
 
     class ProductAdapter : BaseAdapter {
         var productList = ArrayList<ProductResponse>()
+        var productImages = ArrayList<ImageView>()
         var context: Context? = null
 
         constructor(context: Context, productList: ArrayList<ProductResponse>) : super() {
@@ -229,6 +237,14 @@ class HomeFragment : Fragment() {
             productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
             productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
             productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
+            val image  = productView.findViewById<ImageView>(R.id.img_product)
+            Picasso
+                    .get() // give it the context
+                    .load(productList[position].photo_url) // load the image
+                    .into(image)
+            //val url = URL(productList[position].photo_url)
+            //val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            //productView.findViewById<ImageView>(R.id.img_product).setImageBitmap(bmp)
             return productView
         }
     }
