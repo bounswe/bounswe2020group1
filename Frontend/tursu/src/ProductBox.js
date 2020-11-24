@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import {Button} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(1),
         textAlign: 'center',
-        color: theme.palette.text.secondary,
-        backgroundColor: "#388e3c",
+        color: theme.palette.text.secondary
+        // backgroundColor: "#388e3c",
     },
 }));
 
@@ -27,13 +27,13 @@ export default function ProductBox(props) {
                     <Paper className={classes.paper}>
                         <div className="ProductInfo" >
                             <img
-                                src={props.product.photo_url}
-                                //src="https://grandstream.pl/wp-content/uploads/2016/03/left-e1456834177965.png"
+                                //src={props.product.photo_url}
+                                src="https://grandstream.pl/wp-content/uploads/2016/03/left-e1456834177965.png"
                                 alt={props.product.name}
                                 className="responsiveImage"/>
                             <text>
                                 <br/>
-                                {props.product.name}
+                                    {props.product.name}
                                 <br/>
                                 {props.product.price} ₺
                                 <br />
