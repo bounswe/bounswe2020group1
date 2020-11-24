@@ -42,10 +42,10 @@ def index(request):
         return HttpResponse('Select search_type as vendor or product to search',status=400)
 
     products = []
-    static_url = "http://http://3.232.20.250/static/" # TODO Move this to conf
+    static_url = "http://3.232.20.250/static/" # TODO Move this to conf
     for product in data:
         images = Image.objects.filter(product=product)
-        if(len(photos) > 0):
+        if(len(images) > 0):
             photo_url = f"{static_url}{images[0].photo}"
         else:
             photo_url = ""
