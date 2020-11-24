@@ -28,7 +28,7 @@ export default function ProductBox(props) {
                         <div className="ProductInfo" >
                             <img
                                 src={props.product.photo_url}
-                                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.manufactum.de%2Fis%2Fimage%2FManufactum%2F1000s_shop%2Ftelefon-w-48--67326_01.jpg&f=1&nofb=1"
+                                //src="https://grandstream.pl/wp-content/uploads/2016/03/left-e1456834177965.png"
                                 alt={props.product.name}
                                 className="responsiveImage"/>
                             <text>
