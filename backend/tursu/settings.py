@@ -145,9 +145,13 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.abspath(os.path.dirname(__file__) + os.sep + '..')
 
-STATICFILES_DIRS = (
-    STATIC_ROOT + STATIC_URL,
-)
+#STATICFILES_DIRS = (
+#    STATIC_ROOT + STATIC_URL,
+#)
+STATICFILES_DIRS = [
+       os.path.join(BASE_DIR, "static"),
+       ROOT_PATH + '/images',
+]
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
