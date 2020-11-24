@@ -11,31 +11,31 @@ import { autoPlay } from 'react-swipeable-views-utils';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const tutorialSteps = [
+const products = [
     {
-        label: 'Laptop',
+        label: 'Apple Macbook Pro Touch Bar',
         imgPath:
-            'https://images-na.ssl-images-amazon.com/images/I/71h6PpGaz9L._AC_SL1500_.jpg',
+            'https://productimages.hepsiburada.net/s/32/375/10354045517874.jpg',
     },
     {
-        label: 'Bird',
+        label: 'Samsung Galaxy S10',
         imgPath:
-            'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
+            'https://productimages.hepsiburada.net/s/25/500/10107307622450.jpg',
     },
     {
-        label: 'Bali, Indonesia',
+        label: 'Nike Air Max 270 Unisex',
         imgPath:
-            'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250&q=80',
+            'https://cdn-ss.akinon.net/products/2019/11/22/176133/5f94a5dd-c875-4858-8f9a-fed16b5e74fb_size1400x1400_quality85_cropCenter.jpg',
     },
     {
-        label: 'NeONBRAND Digital Marketing, Las Vegas, United States',
+        label: 'Ironing Table',
         imgPath:
-            'https://images.unsplash.com/photo-1518732714860-b62714ce0c59?auto=format&fit=crop&w=400&h=250&q=60',
+            'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.singeryetkilisatici.com%2Fimages_buyuk%2Ff48%2FSinger-SB2040-Rezistansli-Fanli-_48_1.jpg&f=1&nofb=1',
     },
     {
-        label: 'Goč, Serbia',
+        label: 'Voit Pilates Ball',
         imgPath:
-            'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
+            'https://aknbarcin.b-cdn.net/products/2020/01/13/86119/5cb857d7-523b-4f21-976c-26997c4863e2.jpg',
     },
 ];
 
@@ -47,16 +47,19 @@ const useStyles = makeStyles((theme) => ({
     header: {
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'center',
         height: 50,
-        paddingLeft: theme.spacing(4),
         backgroundColor: theme.palette.background.default,
     },
     img: {
-        height: 255,
-        display: 'block',
-        maxWidth: 400,
-        overflow: 'hidden',
-        width: '100%',
+        // height: 255,
+        // display: 'block',
+        // maxWidth: 400,
+        // overflow: 'hidden',
+        // width: '100%',
+        width: "auto",
+        height: "130px",
+        marginTop: "7px"
     },
 }));
 
@@ -64,7 +67,7 @@ function SwipeableTextMobileStepper() {
     const classes = useStyles();
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
-    const maxSteps = tutorialSteps.length;
+    const maxSteps = products.length;
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -80,8 +83,8 @@ function SwipeableTextMobileStepper() {
 
     return (
         <div className={classes.root}>
-            <Paper square elevation={0} className={classes.header}>
-                <Typography>{tutorialSteps[activeStep].label}</Typography>
+            <Paper square elevation={2} className={classes.header}>
+                <Typography align="center">{products[activeStep].label}</Typography>
             </Paper>
             <AutoPlaySwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -89,7 +92,7 @@ function SwipeableTextMobileStepper() {
                 onChangeIndex={handleStepChange}
                 enableMouseEvents
             >
-                {tutorialSteps.map((step, index) => (
+                {products.map((step, index) => (
                     <div key={step.label}>
                         {Math.abs(activeStep - index) <= 2 ? (
                             <img className={classes.img} src={step.imgPath} alt={step.label} />

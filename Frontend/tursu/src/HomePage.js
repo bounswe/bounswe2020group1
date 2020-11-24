@@ -38,14 +38,14 @@ class HomePage extends React.Component{
     render(){
         return(
             <ThemeProvider theme={theme} >
-                <Grid container direction="column" className="HomePage">
+                <Grid container direction="column" className="HomePage" spacing={4}>
                     <Grid item xs={12}>
                         <Paper>
                             <Navbar />
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
-                        <Paper>
+                        <Paper className="stepper">
                             <Stepper />
                         </Paper>
                     </Grid>
