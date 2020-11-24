@@ -1,11 +1,13 @@
 package com.example.tursuapp.api.requests
 
 import com.google.gson.annotations.SerializedName
+import retrofit2.http.Headers
 
-data class LoginRequest (
+class LoginRequest (email:String, password:String){
+
     @SerializedName(value = "email")
-    val email : String,
+    val email : String = email
 
     @SerializedName(value = "password")
-    val password : String
-)
+    val password : String = password
+}
