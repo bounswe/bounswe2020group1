@@ -21,8 +21,6 @@ const theme = createMuiTheme({
 })
 
 
-// put each div into a grid
-// bunu da Product gibi farklı bi js dosyasına(HomeGrid) atıp importlamayı denedim ama beceremedim, ona bi bakmak lazım
 class HomePage extends React.Component{
     state = {
         products: []

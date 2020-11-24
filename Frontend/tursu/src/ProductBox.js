@@ -4,6 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import {Button, Typography} from "@material-ui/core";
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,11 +34,17 @@ export default function ProductBox(props) {
                                 className="responsiveImage"/>
                             <text>
                                 <br/>
+                                <Typography variant="subtitle2">
                                     {props.product.name}
-                                <br/>
-                                {props.product.price} ₺
-                                <br />
-                                {props.product.vendor_name}
+                                </Typography>
+                                <Typography variant="body2">
+                                    <Box fontWeight="fontWeightBold">
+                                        {props.product.price} ₺
+                                    </Box>
+                                </Typography>
+                                <Typography variant="caption">
+                                    {props.product.vendor_name}
+                                </Typography>
                             </text>
                         </div>
                     </Paper>
