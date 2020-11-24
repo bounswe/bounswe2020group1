@@ -75,10 +75,21 @@ class ProductDetail extends React.Component{
     render(){
         return(
             <div >
-                <Grid container spacing={3}>
-                    <Grid id="photo" item xs={6}>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <Grid id="photo" container spacing={3}>
+                    <Grid  item xs={6}>
                         <ButtonBase >
-                            <img  alt="complex" src="https://lh3.googleusercontent.com/proxy/mPIEPUHrmQ9UEA8mUBjx34Y3SNJFTIYcxxCX_uM9jCuwhBvv4lX4n1w7QBX629OPCVV0GWHRUAWrhv-JZ9xCseTv6pcgmNZ6LQpaq2md1JHWb0mMNNggnp1iAA" />
+                            <img  alt="complex" src={this.state.product.photo_url}  width="300" height="300"/>
+                            {/*<img  alt="complex" src="https://lh3.googleusercontent.com/proxy/mPIEPUHrmQ9UEA8mUBjx34Y3SNJFTIYcxxCX_uM9jCuwhBvv4lX4n1w7QBX629OPCVV0GWHRUAWrhv-JZ9xCseTv6pcgmNZ6LQpaq2md1JHWb0mMNNggnp1iAA" />*/}
                         </ButtonBase>
                     </Grid>
                     <Grid container  xs={6} alignItems="center" justify="center">
