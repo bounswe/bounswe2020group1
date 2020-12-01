@@ -10,6 +10,7 @@ class Product(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=False)
+    brand = models.CharField(max_length=100, default="")
     description = models.TextField(null=True, blank=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     number_of_raters = models.PositiveIntegerField(default=0)
