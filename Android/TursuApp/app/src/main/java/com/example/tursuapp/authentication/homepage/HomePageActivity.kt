@@ -78,6 +78,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         this.findViewById<Button>(R.id.search_button).setOnClickListener {
             val editText: EditText? = findViewById(R.id.editMobileNo)
+            editText?.text?.clear();
             if (editText != null) {
                 val searchText=editText.text
                 search(searchText.toString())

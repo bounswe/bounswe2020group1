@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.tursuapp.R
 
@@ -63,6 +64,9 @@ class ExpandableListAdapter(context: Context, listDataHeader: List<String>,
                               convertView: View?, parent: ViewGroup?): View? {
         var convertView: View? = convertView
         val headerTitle = getGroup(groupPosition) as String
+
+        if (getChildrenCount(groupPosition)==0){
+        }
         if (convertView == null) {
             val infalInflater = _context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
