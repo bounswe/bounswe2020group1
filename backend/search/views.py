@@ -1,5 +1,6 @@
 """ Search endpoint and helper functions """
 import string
+import requests
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 import nltk
@@ -14,12 +15,27 @@ nltk.download("stopwords")
 
 class SearchHelper:
     """ Helper class for search functionalities """
+
+    @staticmethod
+    def get_semantically_similar_words(words):
+        """ Returns semantically similar keywords for given words """
+        query = "+".join(words)
+        url = f"https://api.datamuse.com/words?ml={query}"
+        response = requests.get(url).json()
+        nouns_in_response = [word for word in response if "tags" in word and word["tags"] == ["n"]]
+        keywords = [word["word"] for word in nouns_in_response[:10]]
+        return keywords
+
     @staticmethod
     def keyword_extractor(query):
         """ Keyword extractor function with stopword and punctuation removal """
         stop = set(stopwords.words('english') + list(string.punctuation))
         words = word_tokenize(query)
         keywords = [word for word in words if len(word)>1 and word not in stop]
+        try:
+            keywords += SearchHelper.get_semantically_similar_words(keywords)
+        except (ConnectionError, KeyError):
+            pass
         return keywords
 
     @staticmethod
