@@ -19,7 +19,7 @@ class Vendor(models.Model):
     user = models.OneToOneField(RegisteredUser, on_delete=models.CASCADE)
     is_verified = models.BooleanField(default=False)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
-    iban = models.CharField(max_length=26, null=True)
+    iban = models.CharField(max_length=60, null=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
 
 
