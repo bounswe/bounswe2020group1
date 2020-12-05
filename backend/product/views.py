@@ -71,7 +71,7 @@ class ImageUploadForm(forms.Form):
 def add_product(request):
     """Adds product with given parameters when POST request is made."""
     vendor = get_vendor_from_request(request)
-    if(vendor is None):
+    if(vendor is None or not vendor.is_verified):
         return HttpResponse("Vendor authentication failed", status=401)
     try:
         category = Category.objects.get(name=request.POST["category"])
