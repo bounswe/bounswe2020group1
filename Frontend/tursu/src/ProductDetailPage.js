@@ -60,15 +60,19 @@ class ProductDetail extends React.Component{
             this.setState({product: res.data})
         })
     }
-    componentDidUpdate() {
-        axios.get("http://3.232.20.250/product/", {
-            params: {
-                id: window.sessionStorage.getItem("product_id")
-            }
-        }).then(res =>{
-            console.log(res);
-            this.setState({product: res.data})
-        })
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // TODO: it will fail if two different products have the same name. Resolve this.
+        if(this.state.product.name !== prevState.product.name)
+        {
+            axios.get("http://3.232.20.250/product/", {
+                params: {
+                    id: window.sessionStorage.getItem("product_id")
+                }
+            }).then(res =>{
+                console.log(res);
+                this.setState({product: res.data})
+            })
+        }
     }
 
 

@@ -36,18 +36,20 @@ class Category extends React.Component{
             })
     }
 
-    componentDidUpdate() {
-        Axios.get('http://3.232.20.250/product/category/',{
-            params: {
-                name:  this.props.match.params.category
-            }
-        })
-            .then(res => {
-                console.log(res)
-                this.setState({products: res.data})
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(prevProps.match.params.category !== this.props.match.params.category )
+        {
+            Axios.get('http://3.232.20.250/product/category/',{
+                params: {
+                    name:  this.props.match.params.category
+                }
             })
+                .then(res => {
+                    console.log(res)
+                    this.setState({products: res.data})
+                })
+        }
     }
-
 
     render(){
         return(
@@ -58,7 +60,9 @@ class Category extends React.Component{
                             <Navbar />
                         </Paper>
                     </Grid>
-                    <h1>{this.props.match.params.category}</h1>
+                    <h1>
+                        {this.props.match.params.category}
+                    </h1>
                     <Grid item xs={12} container>
                         <ProductList products={this.state.products}/>
                     </Grid>
