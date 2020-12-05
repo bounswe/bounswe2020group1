@@ -43,27 +43,30 @@ class HomeFragment : Fragment() {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         val args = getArguments()
-        var type = ""
-        var id = ""
+        var type = 0
+        var keys = "";
         if(args!=null) {
-            type = args.getString("type").toString()
-            id=args.getString("id").toString()
+            type = args.getInt("type")
+            if(type!=0) {
+                keys = args.getString("keys").toString()
+            }
         }
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-
-    //    val searchRoot = inflater.inflate(R.layout.app_bar_main, container, false)
-
-
-        if(id=="2"){
-            search(type)
-        }else if(id=="1" && type!=""){
-            if (type != null) {
-                displayCategory(type)
-            }
+        if(type == 0){
+            //all products
+            listAllProducts()
+        }
+        else if(type == 1){
+            //category
+            displayCategory(keys)
+        }
+        else if(type == 2){
+            //search
+            search(keys)
         }
         else {
             listAllProducts()
