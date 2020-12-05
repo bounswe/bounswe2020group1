@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProductBox(props) {
     const classes = useStyles()
-    console.log(props.product.photo_url)
+    //console.log(props.product.photo_url)
     return(
         <Grid item xs={3}>
             <Link to='/product'>
