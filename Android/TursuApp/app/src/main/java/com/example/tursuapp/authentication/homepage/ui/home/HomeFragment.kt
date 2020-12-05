@@ -2,8 +2,6 @@ package com.example.tursuapp.authentication.homepage.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +14,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
@@ -26,15 +23,14 @@ import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFr
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
-import java.net.URL
 
 
+@Suppress("DEPRECATION")
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     var adapter: ProductAdapter? = null
     var productList = ArrayList<ProductResponse>()
-    var productImages = ArrayList<ImageView>()
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -42,9 +38,9 @@ class HomeFragment : Fragment() {
     ): View? {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
-        val args = getArguments()
+        val args = arguments
         var type = 0
-        var keys = "";
+        var keys = ""
         if(args!=null) {
             type = args.getInt("type")
             if(type!=0) {
@@ -53,30 +49,32 @@ class HomeFragment : Fragment() {
         }
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        homeViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })
-        if(type == 0){
-            //all products
-            listAllProducts()
-        }
-        else if(type == 1){
-            //category
-            displayCategory(keys)
-        }
-        else if(type == 2){
-            //search
-            search(keys)
-        }
-        else {
-            listAllProducts()
+        when (type) {
+            0 -> {
+                //all products
+                listAllProducts()
+            }
+            1 -> {
+                //category
+                displayCategory(keys)
+            }
+            2 -> {
+                //search
+                search(keys)
+            }
+            else -> {
+                listAllProducts()
+            }
         }
         return root
     }
 
-    fun search(search_string: String){
+    private fun search(search_string: String){
 
-        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getSearchedProducts("product",
                 search_string).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
             override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
@@ -95,12 +93,12 @@ class HomeFragment : Fragment() {
                     val gridView = view?.findViewById<GridView>(R.id.gridView)
                     if (gridView != null) {
                         gridView.adapter = adapter
-                        gridView.setOnItemClickListener { parent, view, position, id ->
-                            val clicked_id = view.findViewById<TextView>(R.id.product_id).text
+                        gridView.setOnItemClickListener { _, view, position, id ->
+                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
                             val bundle = Bundle()
-                            bundle.putString("id", clicked_id.toString())
+                            bundle.putString("id", clickedId.toString())
                             val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle;
+                            newFragment.arguments = bundle
                             val fragmentManager: FragmentManager? = fragmentManager
                             val fragmentTransaction: FragmentTransaction =
                                     fragmentManager!!.beginTransaction()
@@ -117,11 +115,8 @@ class HomeFragment : Fragment() {
 
         })
     }
-    fun loadImages(){
-
-    }
-    fun displayCategory(type: String){
-        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+    private fun displayCategory(type: String){
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProductsOfCategory(type).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
             override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
@@ -140,11 +135,11 @@ class HomeFragment : Fragment() {
                     if (gridView != null) {
                         gridView.adapter = adapter
                         gridView.setOnItemClickListener { parent, view, position, id ->
-                            val clicked_id = view.findViewById<TextView>(R.id.product_id).text
+                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
                             val bundle = Bundle()
-                            bundle.putString("id", clicked_id.toString())
+                            bundle.putString("id", clickedId.toString())
                             val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle;
+                            newFragment.arguments = bundle
                             val fragmentManager: FragmentManager? = fragmentManager
                             val fragmentTransaction: FragmentTransaction =
                                     fragmentManager!!.beginTransaction()
@@ -161,8 +156,8 @@ class HomeFragment : Fragment() {
 
         })
     }
-    fun listAllProducts(){
-        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+    private fun listAllProducts(){
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProducts().enqueue(object : retrofit2.Callback<List<ProductResponse>> {
             override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
@@ -181,11 +176,11 @@ class HomeFragment : Fragment() {
                     if (gridView != null) {
                         gridView.adapter = adapter
                         gridView.setOnItemClickListener { parent, view, position, id ->
-                            val clicked_id = view.findViewById<TextView>(R.id.product_id).text
+                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
                             val bundle = Bundle()
-                            bundle.putString("id", clicked_id.toString())
+                            bundle.putString("id", clickedId.toString())
                             val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle;
+                            newFragment.arguments = bundle
                             val fragmentManager: FragmentManager? = fragmentManager
                             val fragmentTransaction: FragmentTransaction =
                                     fragmentManager!!.beginTransaction()
@@ -208,15 +203,8 @@ class HomeFragment : Fragment() {
         Log.i("HomeFragment", "here")
     }
 
-    class ProductAdapter : BaseAdapter {
-        var productList = ArrayList<ProductResponse>()
-        var productImages = ArrayList<ImageView>()
-        var context: Context? = null
-
-        constructor(context: Context, productList: ArrayList<ProductResponse>) : super() {
-            this.context = context
-            this.productList = productList
-        }
+    class ProductAdapter(context: Context, var productList: ArrayList<ProductResponse>) : BaseAdapter() {
+        var context: Context? = context
 
         override fun getCount(): Int {
             return productList.size
@@ -230,7 +218,7 @@ class HomeFragment : Fragment() {
             return position.toLong()
         }
 
-        @SuppressLint("SetTextI18n")
+        @SuppressLint("SetTextI18n", "ViewHolder", "InflateParams")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             //val food = this.productList[position]
 

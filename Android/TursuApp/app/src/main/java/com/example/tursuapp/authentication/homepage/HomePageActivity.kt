@@ -1,12 +1,13 @@
 package com.example.tursuapp.authentication.homepage
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import android.widget.ExpandableListView.OnGroupClickListener
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -18,15 +19,6 @@ import com.example.tursuapp.authentication.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.google.android.material.navigation.NavigationView
 
-
-class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    var listAdapter: ExpandableListAdapter? = null
-    var expListView: ExpandableListView? = null
-    var listDataHeader: MutableList<String>? = null
-    var listDataChild: HashMap<String, List<String>>? = null
-    private lateinit var drawer: DrawerLayout
-    private lateinit var toggle: ActionBarDrawerToggle
-
 /*
 Type 0 -> all products
 Type 1 -> category
@@ -34,6 +26,15 @@ Type 2 -> search
 Type 3 -> filter
 Type 4 -> sort
  */
+@Suppress("DEPRECATION")
+class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private var listAdapter: ExpandableListAdapter? = null
+    private var expListView: ExpandableListView? = null
+    private var listDataHeader: MutableList<String>? = null
+    private var listDataChild: HashMap<String, List<String>>? = null
+    private lateinit var drawer: DrawerLayout
+    private lateinit var toggle: ActionBarDrawerToggle
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
         drawer.closeDrawer(GravityCompat.START)
@@ -53,17 +54,17 @@ Type 4 -> sort
         toolbar.setNavigationIcon(R.drawable.hamburger)
         supportActionBar?.setHomeButtonEnabled(true)
     }
-    private fun setExpandablesSideMenu(){
+    private fun setExpandableSideMenu(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
         listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
         expListView!!.setAdapter(listAdapter)
-        expListView!!.setOnGroupClickListener(OnGroupClickListener { parent, v, groupPosition, id ->
+        expListView!!.setOnGroupClickListener { _, _, groupPosition, id ->
             when (groupPosition) {
                 0 -> displayFragment(R.id.nav_home, 0, "")
             }
             false
-        })
+        }
         expListView!!.setOnChildClickListener(ExpandableListView.OnChildClickListener { parent, v, groupPosition, childPosition, id ->
             // Kategoriye basılınca olacakları ayarla
             if (groupPosition == 1) {
@@ -102,7 +103,7 @@ Type 4 -> sort
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
         setAppBar()
-        setExpandablesSideMenu()
+        setExpandableSideMenu()
         setSearchFunction()
         setFilterFunction()
     }
@@ -114,7 +115,7 @@ Type 4 -> sort
             fragmentManager.popBackStack()
         }
     }
-    private fun setVendorRadioButtons(view:View){
+    private fun setVendorRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVendors)
         val btn1 = RadioButton(this)
         btn1.text = "vendor 1"
@@ -127,7 +128,7 @@ Type 4 -> sort
         radioGroup.addView(btn3)
 
     }
-    private fun setBrandRadioButtons(view:View){
+    private fun setBrandRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupBrands)
         val btn1 = RadioButton(this)
         btn1.text = "brand 1"
@@ -139,7 +140,7 @@ Type 4 -> sort
         radioGroup.addView(btn2)
         radioGroup.addView(btn3)
     }
-    private fun setCategoryRadioButtons(view:View){
+    private fun setCategoryRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
         val btn1 = RadioButton(this)
         btn1.text = "category 1"
@@ -151,6 +152,7 @@ Type 4 -> sort
         radioGroup.addView(btn2)
         radioGroup.addView(btn3)
     }
+    @SuppressLint("InflateParams")
     private fun showPopupWindow(view: View) {
         //Create a View object yourself through inflater
         val inflater = view.context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -161,7 +163,6 @@ Type 4 -> sort
         //Specify the length and width through constants
         val width = LinearLayout.LayoutParams.MATCH_PARENT
         val height = LinearLayout.LayoutParams.MATCH_PARENT
-
         //Make Inactive Items Outside Of PopupWindow
         val focusable = true
 
@@ -170,7 +171,37 @@ Type 4 -> sort
 
         //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-
+        popupView.findViewById<ImageView>(R.id.dismiss_popup).setOnClickListener {
+            popupWindow.dismiss()
+        }
+        popupView.findViewById<Button>(R.id.apply_filters).setOnClickListener {
+            applyFilters(popupView)
+            popupWindow.dismiss()
+        }
+    }
+    private fun applyFilters(view: View){
+        val filters = mutableMapOf<String,String>()
+        val selectedId = view.findViewById<RadioGroup>(R.id.radioGroupSortby).checkedRadioButtonId
+        if(selectedId!=-1){
+            val radioButton = view.findViewById<RadioButton>(selectedId)
+            filters["sortby"] = radioButton.text.toString()
+        }
+        val selectedId2 = view.findViewById<RadioGroup>(R.id.radioGroupVendors).checkedRadioButtonId
+        if(selectedId2!=-1){
+            val radioButton2 = view.findViewById<RadioButton>(selectedId2)
+            filters["vendor"] = radioButton2.text.toString()
+        }
+        val selectedId3 = view.findViewById<RadioGroup>(R.id.radioGroupCategory).checkedRadioButtonId
+        if(selectedId3!=-1){
+            val radioButton3 = view.findViewById<RadioButton>(selectedId3)
+            filters["category"] = radioButton3.text.toString()
+        }
+        val selectedId4 = view.findViewById<RadioGroup>(R.id.radioGroupBrands).checkedRadioButtonId
+        if (selectedId4!=-1){
+            val radioButton4 = view.findViewById<RadioButton>(selectedId4)
+            filters["brand"] = radioButton4.text.toString()
+        }
+        Log.i("FilterActivity",filters.toString())
     }
     private fun displayFragment(id: Int, type: Int, keys: String){
         lateinit var fragment: Fragment
@@ -198,20 +229,15 @@ Type 4 -> sort
         (listDataHeader as ArrayList<String>).add("Categories")
 
         // Adding child data
-        val category_names: MutableList<String> = ArrayList()
-        /*# category1 --> Electronics
-    # category2 --> Fashion
-    # category3 --> Home
-    # category4 --> Cosmetics
-    # category5 --> Sports
-*/
-        category_names.add("Electronics")
-        category_names.add("Fashion")
-        category_names.add("Home")
-        category_names.add("Cosmetics")
-        category_names.add("Sports")
-        listDataChild!![(listDataHeader as ArrayList<String>).get(0)] = ArrayList()
-        listDataChild!![(listDataHeader as ArrayList<String>).get(1)] = category_names
+        val categoryNames: MutableList<String> = ArrayList()
+
+        categoryNames.add("Electronics")
+        categoryNames.add("Fashion")
+        categoryNames.add("Home")
+        categoryNames.add("Cosmetics")
+        categoryNames.add("Sports")
+        listDataChild!![(listDataHeader as ArrayList<String>)[0]] = ArrayList()
+        listDataChild!![(listDataHeader as ArrayList<String>)[1]] = categoryNames
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
     }
 }
