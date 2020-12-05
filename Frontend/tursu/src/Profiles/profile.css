@@ -1,0 +1,15 @@
+.sidebar-link {
+    textDecoration: 'none';
+    color: black;
+}
+.sidebar{
+    margin-top: 155px;
+}
+.ProfilePage{
+    margin-top: 180px;
+    align-items: center;
+}
+
+.stepper{
+    margin-top: 145px;
+}
