@@ -37,3 +37,25 @@ def create_registered_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_registered_user(sender, instance, **kwargs):
     instance.registereduser.save()
+
+def get_vendor_from_request(request):
+    """Returns vendor from the request"""
+    if(str(request.user) == "AnonymousUser"):
+        return None
+    ruser = RegisteredUser.objects.get(user=request.user)
+    try:
+        vendor = Vendor.objects.get(user=ruser)
+    except Exception:
+        vendor = None
+    return vendor
+
+def get_customer_from_request(request):
+    """Returns customer from the request"""
+    if(str(request.user) == "AnonymousUser"):
+        return None
+    ruser = RegisteredUser.objects.get(user=request.user)
+    try:
+        customer = Customer.objects.get(user=ruser)
+    except Exception:
+        customer = None
+    return customer
