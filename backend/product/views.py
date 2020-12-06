@@ -112,3 +112,88 @@ def add_product(request):
     except Exception:
         pass
     return HttpResponse("success")
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['POST'])
+def edit_product(request):
+    """Edits product with given parameters when POST request is made."""
+    vendor = get_vendor_from_request(request)
+    if(vendor is None or not vendor.is_verified):
+        return HttpResponse("Vendor authentication failed", status=401)
+    try:
+        product_id = request.POST["id"]
+    except Exception:
+        return HttpResponse("Product id not specified", status=400)
+    try:
+        product = Product.objects.get(id=product_id)
+    except Exception:
+        return HttpResponse("There is no such product with the id", status=400)
+    if(vendor != product.vendor):
+        return HttpResponse("You cannot edit products of other vendors", status=401)
+    try:
+        category = Category.objects.get(name=request.POST["category"])
+        product.category = category
+    except Exception:
+        pass
+    try:
+        name = request.POST["name"]
+        product.name = name
+    except KeyError:
+        pass
+    try:
+        brand = request.POST["brand"]
+        product.brand = brand
+    except KeyError:
+        pass
+    try:
+        description = request.POST["description"]
+        product.description = description
+    except KeyError:
+        pass
+
+    try:
+        stock = int(request.POST["stock"])
+        product.stock = stock
+    except (KeyError, ValueError):
+        pass
+    try:
+        price = float(request.POST["price"])
+        product.price = price
+    except (KeyError, ValueError):
+        return HttpResponse("Stock or price Invalid", status=400)
+    try:
+        product.save()
+    except Exception:
+        return HttpResponse("Product couldn't be created with current params", status=400)
+    try:
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = Image.objects.create(product=product)
+            image.photo = form.cleaned_data["photo"]
+            image.save()
+    except Exception:
+        pass
+    return HttpResponse("success")
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['POST'])
+def delete_product(request):
+    """Delete product with given parameters when POST request is made."""
+    vendor = get_vendor_from_request(request)
+    if(vendor is None or not vendor.is_verified):
+        return HttpResponse("Vendor authentication failed", status=401)
+    try:
+        product_id = request.POST["id"]
+    except KeyError:
+        return HttpResponse("Product id not specified", status=400)
+    try:
+        product = Product.objects.get(id=product_id)
+    except Exception:
+        return HttpResponse("There is no such product with the id", status=400)
+    if(vendor != product.vendor):
+        return HttpResponse("You cannot delete products of other vendors", status=401)
+    else:
+        product.delete()
+    return HttpResponse("success")
