@@ -36,7 +36,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private lateinit var toggle: ActionBarDrawerToggle
     var isFilterAvailable = false
     var searchString = ""
-    lateinit var filterImage: ImageView
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
@@ -65,8 +64,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setOnGroupClickListener { _, _, groupPosition, id ->
             if (groupPosition == 0) {
                 displayFragment(R.id.nav_home, 0, "",null)
-                isFilterAvailable = false
-                filterImage.visibility = View.GONE
+                //isFilterAvailable = false
+                //filterImage.visibility = View.GONE
             }
             false
         }
@@ -80,20 +79,23 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                     3 -> displayFragment(R.id.nav_home, 1, "Cosmetics",null)
                     4 -> displayFragment(R.id.nav_home, 1, "Sports",null)
                 }
-                isFilterAvailable = true
-                filterImage.visibility = View.VISIBLE
+                //isFilterAvailable = true
+                //filterImage.visibility = View.VISIBLE
             }
 
             false
         })
         expListView!!.setSelectedGroup(0)
     }
+    /*
     private fun setFilterFunction(){
         val filter = findViewById<ImageView>(R.id.filter_image)
         filter.setOnClickListener {
             showPopupWindow(it)
         }
     }
+    */
+
     private fun setSearchFunction(){
         this.findViewById<Button>(R.id.search_button).setOnClickListener {
             val editText: EditText? = findViewById(R.id.editMobileNo)
@@ -103,8 +105,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             if (editText != null) {
                 searchString=editText.text.toString()
                 displayFragment(R.id.nav_home, 2, searchString,null)
-                isFilterAvailable = true
-                filterImage.visibility = View.VISIBLE
+                //isFilterAvailable = true
+                //filterImage.visibility = View.VISIBLE
                 //search(searchText.toString())
             }
 
@@ -114,14 +116,14 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_home_page)
-        filterImage = findViewById(R.id.filter_image)
-        if(!isFilterAvailable) {
-            filterImage.visibility = View.GONE
-        }
+        //filterImage = findViewById(R.id.filter_image)
+        //if(!isFilterAvailable) {
+        //    filterImage.visibility = View.GONE
+        //}
         setAppBar()
         setExpandableSideMenu()
         setSearchFunction()
-        setFilterFunction()
+        //setFilterFunction()
     }
     override fun onBackPressed() {
         val count = fragmentManager.backStackEntryCount
@@ -131,7 +133,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             fragmentManager.popBackStack()
         }
     }
-    private fun setVendorRadioButtons(view: View){
+    fun setVendorRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVendors)
         val btn1 = RadioButton(this)
         btn1.text = "vendor 1"
@@ -144,7 +146,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn3)
 
     }
-    private fun setBrandRadioButtons(view: View){
+    fun setBrandRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupBrands)
         val btn1 = RadioButton(this)
         btn1.text = "brand 1"
@@ -156,7 +158,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn2)
         radioGroup.addView(btn3)
     }
-    private fun setCategoryRadioButtons(view: View){
+    fun setCategoryRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
         val btn1 = RadioButton(this)
         btn1.text = "category 1"
@@ -168,7 +170,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn2)
         radioGroup.addView(btn3)
     }
-    private fun setRatingRadioButtons(view:View){
+    fun setRatingRadioButtons(view:View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupRating)
         val btn1 = RadioButton(this)
         btn1.text = "1+"
@@ -183,7 +185,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn3)
         radioGroup.addView(btn4)
     }
-    
+    /*
     @SuppressLint("InflateParams")
     private fun showPopupWindow(view: View) {
         //Create a View object yourself through inflater
@@ -210,6 +212,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             popupWindow.dismiss()
         }
     }
+
+     */
+    /*
     private fun applyFilters(view: View){
         val filters = hashMapOf<String,String>()
 
@@ -249,6 +254,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         displayFragment(R.id.nav_home,2,searchString,filters)
         Log.i("FilterActivity",filters.toString())
     }
+
+     */
     private fun displayFragment(id: Int, type: Int, keys: String, filters:HashMap<String,String>?){
         lateinit var fragment: Fragment
         if(id == R.id.nav_home){

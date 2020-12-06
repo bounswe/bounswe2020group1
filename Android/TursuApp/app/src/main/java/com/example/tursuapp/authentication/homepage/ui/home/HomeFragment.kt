@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -16,6 +18,7 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
@@ -36,32 +39,27 @@ class HomeFragment : Fragment() {
     var adapter: ProductAdapter? = null
     var productList = ArrayList<ProductResponse>()
     var filters:HashMap<String,String> ?= null
+    var type = 0
+    var keys = ""
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.VISIBLE
-        activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.VISIBLE
-        activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.VISIBLE
+        setFilterFunction()
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         val args = arguments
-        var type = 0
-        var keys = ""
         if(args!=null) {
             type = args.getInt("type")
+            setButtonVisibilities(type)
             if(type!=0) {
                 keys = args.getString("keys").toString()
-                if(args.containsKey("filters")){
-                    filters = args.getSerializable("filters") as HashMap<String, String>
-                    Log.i("serial",filters.toString())
-                }
-                if(type==1){
-                    activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
-                    activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
-                }
             }
+        }
+        else{
+            //if args is null (firstly opening main screen), then filter image is invisible
+            activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
         }
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
@@ -87,7 +85,105 @@ class HomeFragment : Fragment() {
         }
         return root
     }
-
+    private fun setButtonVisibilities(type:Int){
+        val filterImage = activity?.findViewById<ImageView>(R.id.filter_image)
+        val searchBar = activity?.findViewById<EditText>(R.id.editMobileNo)
+        val searchButton = activity?.findViewById<Button>(R.id.search_button)
+        //listing all products
+        if(type==0){
+            filterImage!!.visibility = View.INVISIBLE
+            searchBar!!.visibility = View.VISIBLE
+            searchButton!!.visibility = View.VISIBLE
+        }
+        //category screen
+        else if(type==1){
+            filterImage!!.visibility = View.VISIBLE
+            searchBar!!.visibility = View.INVISIBLE
+            searchButton!!.visibility = View.INVISIBLE
+        }
+        //search screen
+        else if(type==2){
+            filterImage!!.visibility = View.VISIBLE
+            searchBar!!.visibility = View.VISIBLE
+            searchButton!!.visibility = View.VISIBLE
+        }
+    }
+    private fun setFilterFunction(){
+        val filter = activity?.findViewById<ImageView>(R.id.filter_image)
+        filter?.setOnClickListener {
+            showPopupWindow(it)
+        }
+    }
+    @SuppressLint("InflateParams")
+    private fun showPopupWindow(view: View) {
+        //Create a View object yourself through inflater
+        val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView: View = inflater.inflate(R.layout.filter_popup_layout, null)
+        (activity as HomePageActivity).setVendorRadioButtons(popupView)
+        (activity as HomePageActivity).setBrandRadioButtons(popupView)
+        (activity as HomePageActivity).setCategoryRadioButtons(popupView)
+        (activity as HomePageActivity).setRatingRadioButtons(popupView)
+        //Specify the length and width through constants
+        val width = LinearLayout.LayoutParams.MATCH_PARENT
+        val height = LinearLayout.LayoutParams.MATCH_PARENT
+        //Make Inactive Items Outside Of PopupWindow
+        val focusable = true
+        //Create a window with our parameters
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+        popupView.findViewById<ImageView>(R.id.dismiss_popup).setOnClickListener {
+            popupWindow.dismiss()
+        }
+        popupView.findViewById<Button>(R.id.apply_filters).setOnClickListener {
+            applyFilters(popupView)
+            popupWindow.dismiss()
+        }
+    }
+    private fun applyFilters(view: View){
+        val filters = hashMapOf<String,String>()
+        if(view.findViewById<EditText>(R.id.editminPrice).text.isNotEmpty()){
+            val minPrice = view.findViewById<EditText>(R.id.editminPrice).text.toString()
+            filters["minprice"] = minPrice
+        }
+        if(view.findViewById<EditText>(R.id.editmaxPrice).text.isNotEmpty()){
+            val maxPrice = view.findViewById<EditText>(R.id.editmaxPrice).text.toString()
+            filters["maxprice"] = maxPrice
+        }
+        val selectedId = view.findViewById<RadioGroup>(R.id.radioGroupSortby).checkedRadioButtonId
+        if(selectedId!=-1){
+            val radioButton = view.findViewById<RadioButton>(selectedId)
+            filters["sortby"] = radioButton.text.toString()
+        }
+        val selectedId2 = view.findViewById<RadioGroup>(R.id.radioGroupVendors).checkedRadioButtonId
+        if(selectedId2!=-1){
+            val radioButton2 = view.findViewById<RadioButton>(selectedId2)
+            filters["vendor"] = radioButton2.text.toString()
+        }
+        val selectedId3 = view.findViewById<RadioGroup>(R.id.radioGroupCategory).checkedRadioButtonId
+        if(selectedId3!=-1){
+            val radioButton3 = view.findViewById<RadioButton>(selectedId3)
+            filters["category"] = radioButton3.text.toString()
+        }
+        val selectedId4 = view.findViewById<RadioGroup>(R.id.radioGroupBrands).checkedRadioButtonId
+        if (selectedId4!=-1){
+            val radioButton4 = view.findViewById<RadioButton>(selectedId4)
+            filters["brand"] = radioButton4.text.toString()
+        }
+        val selectedId5 = view.findViewById<RadioGroup>(R.id.radioGroupRating).checkedRadioButtonId
+        if(selectedId5!=-1){
+            val radioButton5 = view.findViewById<RadioButton>(selectedId5)
+            filters["rating"] = radioButton5.text.toString()
+        }
+        //displayFragment(R.id.nav_home,2,searchString,filters)
+        if(type==2){
+            search(keys)
+        }
+        else if(type==1){
+            displayCategory(keys)
+        }
+        Log.i("FilterActivity",filters.toString())
+    }
     private fun search(search_string: String){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         if(filters!=null){
