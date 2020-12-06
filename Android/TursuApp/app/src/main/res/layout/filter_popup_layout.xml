@@ -135,41 +135,25 @@
                     android:layout_height="50dp"
                     android:background="@drawable/edit_text_background"
                     android:ems="10"
-                    android:hint="min price"
+                    android:hint="min price TL"
                     android:inputType="number"
                     android:padding="10dp"
                     android:textColor="#777777"
                     android:textColorHint="#7777" />
-
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TL"
-                    android:textColor="#5E5E5E"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/editmaxPrice"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_text_background"
                     android:ems="10"
-                    android:hint="max price"
+                    android:hint="max price TL"
                     android:inputType="number"
                     android:padding="10dp"
                     android:textColor="#777777"
                     android:textColorHint="#7777" />
 
-                <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TL"
-                    android:textColor="#5E5E5E"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -178,6 +162,36 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@+id/linear1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupRating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textView13" />
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="#4FBABABA"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Rating"
+                        android:textColor="@color/TursuGreen"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/relative1"

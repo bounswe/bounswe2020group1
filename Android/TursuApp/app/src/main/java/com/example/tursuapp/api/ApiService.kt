@@ -21,6 +21,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/user/login")
     fun login(@Field("email") email: String,@Field("password") password:String): Call<TokenResponse>
+
     @GET("/")
     fun getProducts(): Call<List<ProductResponse>>
 
@@ -30,6 +31,12 @@ interface ApiService {
     @GET("/product/category")
     fun getProductsOfCategory(@Query("name") name: String): Call<List<ProductResponse>>
 
+    @GET("/product/category")
+    fun getProductsOfCategoryFiltered(@QueryMap params: HashMap<String,String>): Call<List<ProductResponse>>
+
     @GET("/search")
     fun getSearchedProducts(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<ProductResponse>>
+
+    @GET("/search")
+    fun getSearchedProductsFiltered(@QueryMap params: HashMap<String, String>): Call<List<ProductResponse>>
 }

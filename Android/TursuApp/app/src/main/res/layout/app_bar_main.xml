@@ -28,7 +28,7 @@
 
                 <EditText
                     android:id="@+id/editMobileNo"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_margin="5dp"
                     android:background="@color/TursuGreen"
@@ -41,6 +41,7 @@
                     android:id="@+id/search_button"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
+                    android:layout_margin="5dp"
                     android:text="Search"
                     android:textSize="12sp" />
 
@@ -48,12 +49,13 @@
                     android:id="@+id/filter_image"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_margin="10dp"
+                    android:layout_margin="5dp"
                     app:srcCompat="@drawable/filter_icon" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_margin="5dp"
                     android:background="#00FFFFFF"
                     app:cardBackgroundColor="#673AB7"
                     app:cardCornerRadius="4dp">

@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.GridView
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -21,21 +18,32 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.squareup.picasso.Picasso
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
+/*
+Type 0 -> all products
+Type 1 -> category
+Type 2 -> search
+Type 3 -> filter
+Type 4 -> sort
+ */
 
-
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "UNCHECKED_CAST")
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     var adapter: ProductAdapter? = null
     var productList = ArrayList<ProductResponse>()
+    var filters:HashMap<String,String> ?= null
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.VISIBLE
+        activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.VISIBLE
+        activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.VISIBLE
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         val args = arguments
@@ -45,6 +53,14 @@ class HomeFragment : Fragment() {
             type = args.getInt("type")
             if(type!=0) {
                 keys = args.getString("keys").toString()
+                if(args.containsKey("filters")){
+                    filters = args.getSerializable("filters") as HashMap<String, String>
+                    Log.i("serial",filters.toString())
+                }
+                if(type==1){
+                    activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
+                    activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
+                }
             }
         }
         val root = inflater.inflate(R.layout.fragment_home, container, false)
@@ -73,88 +89,166 @@ class HomeFragment : Fragment() {
     }
 
     private fun search(search_string: String){
-
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.getSearchedProducts("product",
-                search_string).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
-            override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
-                Log.i("MainFragment", "error" + p1?.message.toString())
-            }
+        if(filters!=null){
+            filters!!.put("search_type","product")
+            filters!!.put("search_string",search_string)
+            apiinterface.getSearchedProductsFiltered(filters!!).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+                override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
 
-            override fun onResponse(
-                    p0: Call<List<ProductResponse>>?,
-                    response: Response<List<ProductResponse>>?
-            ) {
-                Log.i("MainFragment", productList.joinToString())
-                Log.i("MainFragment", "inside onResponse")
-                if (response != null) {
-                    productList = ArrayList(response.body()!!)
-                    adapter = context?.let { ProductAdapter(it, productList) }
-                    val gridView = view?.findViewById<GridView>(R.id.gridView)
-                    if (gridView != null) {
-                        gridView.adapter = adapter
-                        gridView.setOnItemClickListener { _, view, position, id ->
-                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                            val bundle = Bundle()
-                            bundle.putString("id", clickedId.toString())
-                            val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle
-                            val fragmentManager: FragmentManager? = fragmentManager
-                            val fragmentTransaction: FragmentTransaction =
-                                    fragmentManager!!.beginTransaction()
-                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                            fragmentTransaction.commit()
+                override fun onResponse(
+                        p0: Call<List<ProductResponse>>?,
+                        response: Response<List<ProductResponse>>?
+                ) {
+                    Log.i("MainFragment", productList.joinToString())
+                    Log.i("MainFragment", "inside onResponse")
+                    if (response != null) {
+                        productList = ArrayList(response.body()!!)
+                        adapter = context?.let { ProductAdapter(it, productList) }
+                        val gridView = view?.findViewById<GridView>(R.id.gridView)
+                        if (gridView != null) {
+                            gridView.adapter = adapter
+                            gridView.setOnItemClickListener { _, view, position, id ->
+                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                                val bundle = Bundle()
+                                bundle.putString("id", clickedId.toString())
+                                val newFragment = ProductPageFragment()
+                                newFragment.arguments = bundle
+                                val fragmentManager: FragmentManager? = fragmentManager
+                                val fragmentTransaction: FragmentTransaction =
+                                        fragmentManager!!.beginTransaction()
+                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                                fragmentTransaction.commit()
+                            }
                         }
                     }
                 }
-                //urecyclerView.adapter = ItemAdapter(userList,context)
-                //adapter!!.notifyDataSetChanged()
+            })
+        }
+        else{
+            apiinterface.getSearchedProducts("product",
+                    search_string).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+                override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
 
-            }
+                override fun onResponse(
+                        p0: Call<List<ProductResponse>>?,
+                        response: Response<List<ProductResponse>>?
+                ) {
+                    Log.i("MainFragment", productList.joinToString())
+                    Log.i("MainFragment", "inside onResponse")
+                    if (response != null) {
+                        productList = ArrayList(response.body()!!)
+                        adapter = context?.let { ProductAdapter(it, productList) }
+                        val gridView = view?.findViewById<GridView>(R.id.gridView)
+                        if (gridView != null) {
+                            gridView.adapter = adapter
+                            gridView.setOnItemClickListener { _, view, position, id ->
+                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                                val bundle = Bundle()
+                                bundle.putString("id", clickedId.toString())
+                                val newFragment = ProductPageFragment()
+                                newFragment.arguments = bundle
+                                val fragmentManager: FragmentManager? = fragmentManager
+                                val fragmentTransaction: FragmentTransaction =
+                                        fragmentManager!!.beginTransaction()
+                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                                fragmentTransaction.commit()
+                            }
+                        }
+                    }
+                }
+            })
+        }
 
 
-        })
     }
     private fun displayCategory(type: String){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.getProductsOfCategory(type).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
-            override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
-                Log.i("MainFragment", "error" + p1?.message.toString())
-            }
+        if(filters!=null){
+            filters!!["name"] = type
+            apiinterface.getProductsOfCategoryFiltered(filters!!).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+                override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
 
-            override fun onResponse(
-                    p0: Call<List<ProductResponse>>?,
-                    response: Response<List<ProductResponse>>?
-            ) {
-                Log.i("MainFragment", productList.joinToString())
-                Log.i("MainFragment", "inside onResponse")
-                if (response != null) {
-                    productList = ArrayList(response.body()!!)
-                    adapter = context?.let { ProductAdapter(it, productList) }
-                    val gridView = view?.findViewById<GridView>(R.id.gridView)
-                    if (gridView != null) {
-                        gridView.adapter = adapter
-                        gridView.setOnItemClickListener { parent, view, position, id ->
-                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                            val bundle = Bundle()
-                            bundle.putString("id", clickedId.toString())
-                            val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle
-                            val fragmentManager: FragmentManager? = fragmentManager
-                            val fragmentTransaction: FragmentTransaction =
-                                    fragmentManager!!.beginTransaction()
-                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                            fragmentTransaction.commit()
+                override fun onResponse(
+                        p0: Call<List<ProductResponse>>?,
+                        response: Response<List<ProductResponse>>?
+                ) {
+                    Log.i("MainFragment", productList.joinToString())
+                    Log.i("MainFragment", "inside onResponse")
+                    if (response != null) {
+                        productList = ArrayList(response.body()!!)
+                        adapter = context?.let { ProductAdapter(it, productList) }
+                        val gridView = view?.findViewById<GridView>(R.id.gridView)
+                        if (gridView != null) {
+                            gridView.adapter = adapter
+                            gridView.setOnItemClickListener { parent, view, position, id ->
+                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                                val bundle = Bundle()
+                                bundle.putString("id", clickedId.toString())
+                                val newFragment = ProductPageFragment()
+                                newFragment.arguments = bundle
+                                val fragmentManager: FragmentManager? = fragmentManager
+                                val fragmentTransaction: FragmentTransaction =
+                                        fragmentManager!!.beginTransaction()
+                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                                fragmentTransaction.commit()
+                            }
                         }
                     }
+                    //urecyclerView.adapter = ItemAdapter(userList,context)
+                    //adapter!!.notifyDataSetChanged()
+
                 }
-                //urecyclerView.adapter = ItemAdapter(userList,context)
-                //adapter!!.notifyDataSetChanged()
-
-            }
 
 
-        })
+            })
+        }
+        else {
+            apiinterface.getProductsOfCategory(type).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+                override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
+
+                override fun onResponse(
+                        p0: Call<List<ProductResponse>>?,
+                        response: Response<List<ProductResponse>>?
+                ) {
+                    Log.i("MainFragment", productList.joinToString())
+                    Log.i("MainFragment", "inside onResponse")
+                    if (response != null) {
+                        productList = ArrayList(response.body()!!)
+                        adapter = context?.let { ProductAdapter(it, productList) }
+                        val gridView = view?.findViewById<GridView>(R.id.gridView)
+                        if (gridView != null) {
+                            gridView.adapter = adapter
+                            gridView.setOnItemClickListener { parent, view, position, id ->
+                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                                val bundle = Bundle()
+                                bundle.putString("id", clickedId.toString())
+                                val newFragment = ProductPageFragment()
+                                newFragment.arguments = bundle
+                                val fragmentManager: FragmentManager? = fragmentManager
+                                val fragmentTransaction: FragmentTransaction =
+                                        fragmentManager!!.beginTransaction()
+                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                                fragmentTransaction.commit()
+                            }
+                        }
+                    }
+                    //urecyclerView.adapter = ItemAdapter(userList,context)
+                    //adapter!!.notifyDataSetChanged()
+
+                }
+
+
+            })
+        }
     }
     private fun listAllProducts(){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)

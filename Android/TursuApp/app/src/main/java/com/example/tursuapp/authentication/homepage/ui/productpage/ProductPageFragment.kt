@@ -12,6 +12,7 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.squareup.picasso.Picasso
 import org.w3c.dom.Text
 import retrofit2.Call
@@ -27,20 +28,13 @@ class ProductPageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
+        activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
+        activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
         productPageViewModel = ViewModelProvider(this).get(ProductPageModel::class.java)
         val root = inflater.inflate(R.layout.fragment_productpage, container, false)
-
-        /*
-
-        val list: MutableList<String> = ArrayList()
-        list.add("RANJITH")
-        list.add("ARUN")
-        list.add("JEESMON")
-        val languages = list
-*/
         return root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id_str = requireArguments().getString("id")
