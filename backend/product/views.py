@@ -121,6 +121,7 @@ def edit_product(request):
     vendor = get_vendor_from_request(request)
     if(vendor is None or not vendor.is_verified):
         return HttpResponse("Vendor authentication failed", status=401)
+    message = ""
     try:
         product_id = request.POST["id"]
     except Exception:
@@ -134,36 +135,43 @@ def edit_product(request):
     try:
         category = Category.objects.get(name=request.POST["category"])
         product.category = category
+        message += "Category, "
     except Exception:
         pass
     try:
         name = request.POST["name"]
         product.name = name
+        message += "name, "
     except KeyError:
         pass
     try:
         brand = request.POST["brand"]
         product.brand = brand
+        message += "brand, "
     except KeyError:
         pass
     try:
         description = request.POST["description"]
         product.description = description
+        message += "description, "
     except KeyError:
         pass
 
     try:
         stock = int(request.POST["stock"])
         product.stock = stock
+        message += "stock, "
     except (KeyError, ValueError):
         pass
     try:
         price = float(request.POST["price"])
         product.price = price
+        message += "price "
     except (KeyError, ValueError):
-        return HttpResponse("Stock or price Invalid", status=400)
+        pass
     try:
         product.save()
+        message += "fields updated."
     except Exception:
         return HttpResponse("Product couldn't be created with current params", status=400)
     try:
@@ -174,13 +182,13 @@ def edit_product(request):
             image.save()
     except Exception:
         pass
-    return HttpResponse("success")
+    return HttpResponse(message)
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['POST'])
+@api_view(['DELETE'])
 def delete_product(request):
-    """Delete product with given parameters when POST request is made."""
+    """Delete product with given parameters when DELETE request is made."""
     vendor = get_vendor_from_request(request)
     if(vendor is None or not vendor.is_verified):
         return HttpResponse("Vendor authentication failed", status=401)
