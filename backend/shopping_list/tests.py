@@ -128,7 +128,7 @@ class ShoppingListViewTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token}')
         name = "mylist"
         ProductLists.objects.create(customer=self.customer,name=name).save()
-        response = self.client.post('/shoppinglist/deletelist/', {'list_name': name})
+        response = self.client.delete('/shoppinglist/deletelist/', {'list_name': name})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(ProductLists.objects.filter(name=name,customer=self.customer)), 0)
 
@@ -154,7 +154,7 @@ class ShoppingListViewTests(TestCase):
         product_list = ProductLists.objects.create(customer=self.customer,name=name)
         product_list.save()
         ListedProducts.objects.create(product_list=product_list, product=product)
-        response = self.client.post('/shoppinglist/deletefromlist/',
+        response = self.client.delete('/shoppinglist/deletefromlist/',
             {'list_name': name, 'product_id': product_id})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(ListedProducts.objects.filter(product_list=product_list,
@@ -196,10 +196,10 @@ class ShoppingListViewTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token}')
         response = self.client.post('/shoppinglist/products/')
         self.assertEqual(response.status_code, 400)
-        response = self.client.post('/shoppinglist/deletefromlist/',
+        response = self.client.delete('/shoppinglist/deletefromlist/',
             {'list_name': "mylist"})
         self.assertEqual(response.status_code, 400)
-        response = self.client.post('/shoppinglist/deletefromlist/',
+        response = self.client.delete('/shoppinglist/deletefromlist/',
             {'product_id': product_id})
         self.assertEqual(response.status_code, 400)
         response = self.client.post('/shoppinglist/addtolist/',
