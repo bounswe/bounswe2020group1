@@ -125,7 +125,7 @@ def get_shopping_lists_of_customer(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['GET'])
+@api_view(['POST'])
 def get_products_from_shopping_list(request):
     """Get products from shopping list with given name"""
     customer = get_customer_from_request(request)
