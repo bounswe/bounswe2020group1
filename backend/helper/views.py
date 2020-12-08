@@ -21,7 +21,7 @@ def allvendors(request):
     allVendors = Vendor.objects.all()
 
     for item in allVendors:
-        vendors.append(item.user.user.username)
+        vendors.append(item.user.user.first_name)
 
     return JsonResponse(vendors, safe=False)
 
