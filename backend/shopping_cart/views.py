@@ -38,7 +38,6 @@ def add(request):
             item.save()
         else:
             items[0].quantity = quantity
-            print("selam ben buraya geldim")
             items[0].save()
     except Exception:
         return HttpResponse("Product can not be added to the shopping cart of current user", status=400)
