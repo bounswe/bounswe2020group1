@@ -260,3 +260,36 @@ def delete_all_photos_of_product(request):
         os.remove(f)
     images.delete()
     return HttpResponse("Successfully deleted all photos")
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['DELETE'])
+def delete_photo_of_product_with_name(request):
+    """Delete photo of product with given parameters when DELETE request is made."""
+    vendor = get_vendor_from_request(request)
+    if(vendor is None or not vendor.is_verified):
+        return HttpResponse("Vendor authentication failed", status=401)
+    try:
+        product_id = request.POST["id"]
+    except KeyError:
+        return HttpResponse("Product id not specified", status=400)
+    try:
+        product = Product.objects.get(id=product_id)
+    except Exception:
+        return HttpResponse("There is no such product with the id", status=400)
+    if(vendor != product.vendor):
+        return HttpResponse("You cannot delete products of other vendors", status=401)
+    try:
+        img_url = request.POST["photo_url"]
+        img_name = img_url.split("/")[-1]
+    except KeyError:
+        return HttpResponse("Photo url not given.", status=400)
+
+    images = Image.objects.filter(product=product,photo=f"products/{img_name}")
+    if len(images) == 0:
+        return HttpResponse("Photo with given link is not in the system", status=400) 
+    files = [os.path.join("static/images",str(image.photo)) for image in images]
+    for f in files:
+        os.remove(f)
+    images.delete()
+    return HttpResponse("Successfully removed the photos")
