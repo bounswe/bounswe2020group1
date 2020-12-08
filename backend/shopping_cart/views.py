@@ -4,7 +4,7 @@ from django import forms
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from product.models import Product
+from product.models import Product, Image
 from shopping_cart.models import ShoppingCarts
 from registered_user.models import get_customer_from_request
 
@@ -16,14 +16,19 @@ def add(request):
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
         
-    product_id = request.POST.get('product_id')
-    quantity = request.POST.get('quantity')
-    
-    if (not product_id):
-        return HttpResponse("Please provide a product_id and quantity", status=400)
+    try:
+        product_id = int(request.POST["product_id"])
+    except (KeyError, ValueError):
+        return HttpResponse("Product id (product_id) not given or invalid", status=400)
 
+    quantity = request.POST.get('quantity') 
     if (not quantity):
         quantity = 1
+    else:
+        try:
+            quantity = int(quantity)
+        except (KeyError, ValueError):
+            return HttpResponse("Given quantity is not an integer", status=400)
 
     product = Product.objects.filter(Q(id=product_id))
     if len(product) == 0:
@@ -53,10 +58,10 @@ def delete(request):
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
         
-    product_id = request.POST.get('product_id')
-    
-    if (not product_id):
-        return HttpResponse("Please provide a product_id", status=400)
+    try:
+        product_id = int(request.POST["product_id"])
+    except (KeyError, ValueError):
+        return HttpResponse("Product id (product_id) not given or invalid", status=400)
 
     product = Product.objects.filter(Q(id=product_id))
     ShoppingCarts.objects.filter(Q(product=product_id, customer=customer)).delete()
@@ -70,17 +75,32 @@ def all(request):
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
         
-    try:
-        items = ShoppingCarts.objects.filter(Q(customer=customer))
-       
-        cart = []
-        for item in items:
-            cart_info = {"product": item.product.pk,
-                         "quantity": item.quantity
-                        }
-            cart.append(cart_info)
-    
-    except Exception:
-        return HttpResponse("Could not fetch the items from shopping cart", status=400)
+    items = ShoppingCarts.objects.filter(Q(customer=customer))
+    static_url = "http://3.232.20.250/static/" # TODO Move this to conf
+    cart = []
+
+    for item in items:
+        images = Image.objects.filter(product=item.product)
+        if len(images) > 0:
+            photo_url = f"{static_url}{images[0].photo}"
+        else:
+            photo_url = ""
+        
+        product_info ={"id": item.product.pk,
+                    "name": item.product.name,
+                    "photo_url": photo_url,
+                    "vendor_name": item.product.vendor.user.user.first_name,
+                    "category": item.product.category.name,
+                    "rating": item.product.rating,
+                    "stock": item.product.stock,
+                    "price": item.product.price,
+                    "brand": item.product.brand
+                    }
+        
+        cart_info = {"product": product_info,
+                        "quantity": item.quantity
+                    }
+        cart.append(cart_info)
+
     
     return JsonResponse(cart, safe=False)
