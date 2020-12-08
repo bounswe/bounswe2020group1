@@ -1,4 +1,5 @@
 """Views related to product"""
+import os
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from django import forms
@@ -180,6 +181,7 @@ def edit_product(request):
             image = Image.objects.create(product=product)
             image.photo = form.cleaned_data["photo"]
             image.save()
+            message += " Photo uploaded."
     except Exception:
         pass
     return HttpResponse(message)
@@ -205,3 +207,56 @@ def delete_product(request):
     else:
         product.delete()
     return HttpResponse("success")
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['POST'])
+def add_photo_to_product(request):
+    """Adds photo to product with given parameters when POST request is made."""
+    vendor = get_vendor_from_request(request)
+    if(vendor is None or not vendor.is_verified):
+        return HttpResponse("Vendor authentication failed", status=401)
+    try:
+        product_id = request.POST["id"]
+    except KeyError:
+        return HttpResponse("Product id not specified", status=400)
+    try:
+        product = Product.objects.get(id=product_id)
+    except Exception:
+        return HttpResponse("There is no such product with the id", status=400)
+    if(vendor != product.vendor):
+        return HttpResponse("You cannot delete products of other vendors", status=401)
+    try:
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = Image.objects.create(product=product)
+            image.photo = form.cleaned_data["photo"]
+            image.save()
+    except Exception:
+        return HttpResponse("Photo upload failed.", status=400) 
+    return HttpResponse("success")
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['DELETE'])
+def delete_all_photos_of_product(request):
+    """Delete photos of product with given parameters when DELETE request is made."""
+    vendor = get_vendor_from_request(request)
+    if(vendor is None or not vendor.is_verified):
+        return HttpResponse("Vendor authentication failed", status=401)
+    try:
+        product_id = request.POST["id"]
+    except KeyError:
+        return HttpResponse("Product id not specified", status=400)
+    try:
+        product = Product.objects.get(id=product_id)
+    except Exception:
+        return HttpResponse("There is no such product with the id", status=400)
+    if(vendor != product.vendor):
+        return HttpResponse("You cannot delete products of other vendors", status=401)
+    images = Image.objects.filter(product=product)
+    files = [os.path.join("static/images",str(image.photo)) for image in images]
+    for f in files:
+        os.remove(f)
+    images.delete()
+    return HttpResponse("Successfully deleted all photos")
