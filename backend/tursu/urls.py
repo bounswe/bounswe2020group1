@@ -29,4 +29,5 @@ urlpatterns = [
     path('', include('home.urls')),
     path('shoppinglist/', include('shopping_list.urls')),
     path('activity/', include('actstream.urls')),
+    path('as/', include('activity_streams.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
