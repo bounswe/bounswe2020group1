@@ -2,7 +2,13 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from product.models import Product, Image
 from registered_user.models import get_customer_from_request
-from helper.utils import *
+from helper.utils import (
+    recommend_based_on_orders,
+    bestseller_products,
+    top_rated_products,
+    newest_arrival_products,
+    product_list_serializer
+)
 
 def index(request):
     """Returns all products.
