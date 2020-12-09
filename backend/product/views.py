@@ -42,7 +42,7 @@ def category(request):
             product_data = Product.objects.filter(category=category_id)
 
     products = []
-    static_url = "http://3.232.20.250/static/" # TODO Move this to conf
+    static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
     for product in product_data:
         images = Image.objects.filter(product=product)
         if(len(images) > 0):

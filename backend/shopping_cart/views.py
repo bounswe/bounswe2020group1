@@ -76,7 +76,7 @@ def all(request):
         return HttpResponse("Customer authentication failed", status=401)
         
     items = ShoppingCarts.objects.filter(Q(customer=customer))
-    static_url = "http://3.232.20.250/static/" # TODO Move this to conf
+    static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
     cart = []
 
     for item in items:

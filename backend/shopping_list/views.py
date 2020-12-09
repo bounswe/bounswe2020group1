@@ -142,7 +142,7 @@ def get_products_from_shopping_list(request):
     list_products =[listing.product for listing in
                      ListedProducts.objects.filter(product_list=product_list)]
     products = []
-    static_url = "http://3.232.20.250/static/" # TODO Move this to conf
+    static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
     for product in list_products:
         images = Image.objects.filter(product=product)
         if len(images) > 0:

@@ -58,7 +58,7 @@ class SearchHelper:
     def prepare_products(data):
         """ Function to prepare the response for product search """
         products = []
-        static_url = "http://3.232.20.250/static/" # TODO Move this to conf
+        static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
         for product in data:
             images = Image.objects.filter(product=product)
             if len(images) > 0:
@@ -95,6 +95,7 @@ class SearchHelper:
             else:
                 location = ""
             vendor_info ={"name": vendor.user.user.first_name,
+                          "username": vendor.user.user.username,
                           "location": location,
                           "is_verified": vendor.is_verified,
                           "rating": vendor.rating
