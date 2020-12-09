@@ -204,8 +204,12 @@ def delete_product(request):
         return HttpResponse("There is no such product with the id", status=400)
     if(vendor != product.vendor):
         return HttpResponse("You cannot delete products of other vendors", status=401)
-    else:
-        product.delete()
+    images = Image.objects.filter(product=product)
+    if len(images) > 0:
+        files = [os.path.join("static/images",str(image.photo)) for image in images]
+        for f in files:
+            os.remove(f)
+    product.delete()
     return HttpResponse("success")
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
