@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from product.models import Product, Category
+from order.models import Order
 from registered_user.models import Vendor, Location, Customer
 from messaging.models import (
     MessageFlowAdmin,
@@ -105,7 +106,17 @@ class ShoppingListViewTests(TestCase):
                 )
         self.admin.save()
         self.admin_token = Token.objects.create(user=self.admin)
-
+        order = Order.objects.create(
+            customer=self.customer,
+            vendor=self.vendor,
+            product=self.product,
+            status="delivered",
+            #cargoID="cargoID",
+            #orderDate=orderDate,
+            estimatedArrivalDate=datetime.datetime(2021, 6, 1),
+            arrivalDate=datetime.datetime(2021, 6, 1)
+        )
+        order.save()
     def test_create_flow_customer(self):
         """Test case for customer creating a flow"""
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.customer_token}')

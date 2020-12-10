@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from shopping_list.models import ProductLists, ListedProducts
 from product.models import Product, Image
+from order.models import Order
 from registered_user.models import(
     Vendor,
     Customer,
@@ -140,26 +141,26 @@ def admin_message_to_vendor(request):
     return HttpResponse("Message sent successfully!")
 
 
-@authentication_classes([SessionAuthentication, BasicAuthentication])
-@permission_classes((IsAuthenticated,))
-@api_view(['POST'])
-def create_flow_vendor_customer(request):
-    vendor = get_vendor_from_request(request)
-    if(vendor is None):
-        return HttpResponse("Vendor authentication failed", status=401)
-    username = request.POST.get("username")
-    if username is None:
-        return HttpResponse("Username is not given", status=400)
-    try:
-        customer = Customer.objects.get(user__user__username=username)
-    except:
-        return HttpResponse("Customer does not exist", status=400)
-    flow, _ = MessageFlowCustomer.objects.get_or_create(
-            customer=customer,
-            vendor=vendor
-        )
-    flow.save()
-    return HttpResponse("Flow created successfully")
+#@authentication_classes([SessionAuthentication, BasicAuthentication])
+#@permission_classes((IsAuthenticated,))
+#@api_view(['POST'])
+#def create_flow_vendor_customer(request):
+#    vendor = get_vendor_from_request(request)
+#    if(vendor is None):
+#        return HttpResponse("Vendor authentication failed", status=401)
+#    username = request.POST.get("username")
+#    if username is None:
+#        return HttpResponse("Username is not given", status=400)
+#    try:
+#        customer = Customer.objects.get(user__user__username=username)
+#    except:
+#        return HttpResponse("Customer does not exist", status=400)
+#    flow, _ = MessageFlowCustomer.objects.get_or_create(
+#            customer=customer,
+#            vendor=vendor
+#        )
+#    flow.save()
+#    return HttpResponse("Flow created successfully")
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
@@ -175,6 +176,9 @@ def create_flow_customer_vendor(request):
         vendor = Vendor.objects.get(user__user__first_name=vendor_name)
     except:
         return HttpResponse("Vendor does not exist", status=400)
+    orders = Order.objects.filter(customer=customer, vendor=vendor)
+    if len(orders) == 0:
+        return HttpResponse("You can't message vendors that you haven't ordered from", status=400)
     flow, _ = MessageFlowCustomer.objects.get_or_create(
             customer=customer,
             vendor=vendor
