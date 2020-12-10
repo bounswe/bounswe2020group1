@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
@@ -9,6 +9,7 @@ import Axios from "axios";
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import 'fontsource-roboto';
+import axios from "axios";
 
 const theme = createMuiTheme({
     palette:{
@@ -40,7 +41,7 @@ const styles = makeStyles((theme) => ({
     }
 }));
 
-const products = [
+const ahmet = [
     {
         name: "Iphone 6",
         photo_url: "http://3.232.20.250/static/product/product_1.jpg",
@@ -65,6 +66,23 @@ export default function ShoppingCart(props){
     // var products = React.useState([])
     const classes = styles()
 
+    const [products,setProducts] = useState([]);
+    const [totalSum, setTotalSum] = useState(0);
+
+    //ComponentDidMount
+    useEffect(() => {
+        axios.get("http://3.232.20.250/shoppingcart/all",{
+            headers: {
+                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            }
+        }).then(res =>{
+            console.log("PRODUCTS IN THE SHOPPING CART")
+            console.log(res.data);
+            setProducts(res.data)
+            setTotalSum(calculateTotalSum(res.data))
+        })
+    }, [])
+
     return(
         <ThemeProvider theme={theme} >
             <Grid container spacing={15} direction="column" className="HomePage">
@@ -84,7 +102,7 @@ export default function ShoppingCart(props){
                                     AMOUNT TO BE PAID
                                 </Typography>
                                 <Typography variant="h3" gutterBottom align={"left"}>
-                                    599,90 ₺
+                                    {totalSum} ₺
                                 </Typography>
                                 <Button variant={"contained"} color="primary" size={"large"}>
                                     Complete Order
@@ -95,4 +113,14 @@ export default function ShoppingCart(props){
             </Grid>
         </ThemeProvider>
     );
+}
+
+function calculateTotalSum(products){
+    var total_sum = 0;
+
+    for(let i=0; i<products.length; i++){
+        total_sum += parseInt(products[i].product.price)
+    }
+
+    return total_sum;
 }
