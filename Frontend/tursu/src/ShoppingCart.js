@@ -4,8 +4,11 @@ import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
 
 import ProductList, {ProductListHorizontal} from "./ProductList";
-import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
+import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
+import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import 'fontsource-roboto';
 
 const theme = createMuiTheme({
     palette:{
@@ -17,6 +20,25 @@ const theme = createMuiTheme({
         }
     }
 })
+
+const styles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    summaryGrid: {
+        padding: 30
+    },
+    summaryPaper:{
+        height: 200,
+        // marginLeft: 100,
+        marginTop: 35,
+        // marginBottom: 1,
+        // width: 60,
+    },
+    text: {
+
+    }
+}));
 
 const products = [
     {
@@ -39,30 +61,38 @@ const products = [
     }
 ];
 
-class Category extends React.Component{
-    state = {
-        products : []
-    }
+export default function ShoppingCart(props){
+    // var products = React.useState([])
+    const classes = styles()
 
-    render(){
-        return(
-            <ThemeProvider theme={theme} >
-                <Grid container spacing={15} direction="column" className="HomePage">
-                    <Grid item xs={12}>
-                        <Paper>
-                            <Navbar />
-                        </Paper>
-                    </Grid>
-                    <h1>
-                        Shopping Cart
-                    </h1>
-                    <Grid item xs={12} container>
-                        {<ProductListHorizontal products={products}/>}
-                    </Grid>
+    return(
+        <ThemeProvider theme={theme} >
+            <Grid container spacing={15} direction="column" className="HomePage">
+                <Grid item xs={12}>
+                    <Paper>
+                        <Navbar />
+                    </Paper>
                 </Grid>
-            </ThemeProvider>
-        );
-    }
+                <h1>
+                    Shopping Cart
+                </h1>
+                <Grid item container direction="row">
+                    {<ProductListHorizontal products={products}/>}
+                    <Paper className={classes.summaryPaper}>
+                        <Grid item className={classes.summaryGrid}>
+                                <Typography variant="body2" gutterBottom align={"left"}>
+                                    AMOUNT TO BE PAID
+                                </Typography>
+                                <Typography variant="h3" gutterBottom align={"left"}>
+                                    599,90 ₺
+                                </Typography>
+                                <Button variant={"contained"} color="primary" size={"large"}>
+                                    Complete Order
+                                </Button>
+                        </Grid>
+                    </Paper>
+                </Grid>
+            </Grid>
+        </ThemeProvider>
+    );
 }
-
-export default Category;
