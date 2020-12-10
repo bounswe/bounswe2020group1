@@ -154,7 +154,7 @@ def create_flow_vendor_customer(request):
         customer = Customer.objects.get(user__user__username=username)
     except:
         return HttpResponse("Customer does not exist", status=400)
-    flow = MessageFlowCustomer.objects.create(
+    flow, _ = MessageFlowCustomer.objects.get_or_create(
             customer=customer,
             vendor=vendor
         )
@@ -175,7 +175,7 @@ def create_flow_customer_vendor(request):
         vendor = Vendor.objects.get(user__user__first_name=vendor_name)
     except:
         return HttpResponse("Vendor does not exist", status=400)
-    flow = MessageFlowCustomer.objects.create(
+    flow, _ = MessageFlowCustomer.objects.get_or_create(
             customer=customer,
             vendor=vendor
         )
@@ -204,7 +204,7 @@ def create_flow_vendor_admin(request):
         if product.vendor != vendor:
             return HttpResponse("Cannot create a message flow with other vendors' product",
                 status=400)
-        flow = MessageFlowAdmin.objects.create(
+        flow, _ = MessageFlowAdmin.objects.get_or_create(
                 vendor=vendor,
                 admin=admin,
                 product=product,
@@ -219,7 +219,7 @@ def create_flow_vendor_admin(request):
         if order.vendor != vendor:
             return HttpResponse("Cannot create a message flow with other vendors' order",
                 status=400)
-        flow = MessageFlowAdmin.objects.create(
+        flow, _ = MessageFlowAdmin.objects.get_or_create(
                 vendor=vendor,
                 admin=admin,
                 order=order,

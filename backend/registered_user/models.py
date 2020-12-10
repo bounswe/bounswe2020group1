@@ -69,7 +69,7 @@ def get_admin_from_request(request):
     else:
         return None
 
-def get_admin(request):
+def get_admin():
     """Returns admin"""
     admins = User.objects.filter(is_superuser=True)
     if len(admins)==0:
