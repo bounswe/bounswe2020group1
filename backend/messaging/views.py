@@ -291,7 +291,7 @@ def get_admin_flows(request):
     admin = get_admin_from_request(request)
     if(admin is None):
         return HttpResponse("Admin authentication failed", status=401)
-    flows = MessageFlowAdmin.objects.filter(vendor=vendor)
+    flows = MessageFlowAdmin.objects.filter(admin=admin)
     info = []
     for flow in flows:
         if(flow.product is None):
@@ -316,7 +316,7 @@ def get_messages_from_flow_customer(request):
     customer = get_customer_from_request(request)
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
-    flow_id = request.POST.get("flow_id")
+    flow_id = request.GET.get("flow_id")
     if flow_id is None:
         return HttpResponse("Flow id not given", status=400)
     try:
@@ -344,7 +344,7 @@ def get_messages_from_admin_flow_vendor(request):
     vendor = get_vendor_from_request(request)
     if(vendor is None):
         return HttpResponse("Vendor authentication failed", status=401)
-    flow_id = request.POST.get("flow_id")
+    flow_id = request.GET.get("flow_id")
     if flow_id is None:
         return HttpResponse("Flow id not given", status=400)
     try:
@@ -358,7 +358,7 @@ def get_messages_from_admin_flow_vendor(request):
     for message in messages:
         data.append({
             "sender": "self" if not message.from_admin else "other",
-            "admin": flow.admin.user.user.username,
+            "admin": flow.admin.username,
             "vendor_name": flow.vendor.user.user.first_name,
             "message": message.message,
             "date_sent": message.date_sent,
@@ -372,7 +372,7 @@ def get_messages_from_customer_flow_vendor(request):
     vendor = get_vendor_from_request(request)
     if(vendor is None):
         return HttpResponse("Vendor authentication failed", status=401)
-    flow_id = request.POST.get("flow_id")
+    flow_id = request.GET.get("flow_id")
     if flow_id is None:
         return HttpResponse("Flow id not given", status=400)
     try:
@@ -400,7 +400,7 @@ def get_messages_from_flow_admin(request):
     admin = get_admin_from_request(request)
     if(admin is None):
         return HttpResponse("Admin authentication failed", status=401)    
-    flow_id = request.POST.get("flow_id")
+    flow_id = request.GET.get("flow_id")
     if flow_id is None:
         return HttpResponse("Flow id not given", status=400)
     try:
@@ -414,7 +414,7 @@ def get_messages_from_flow_admin(request):
     for message in messages:
         data.append({
             "sender": "self" if message.from_admin else "other",
-            "admin": flow.admin.user.user.username,
+            "admin": flow.admin.username,
             "vendor_name": flow.vendor.user.user.first_name,
             "message": message.message,
             "date_sent": message.date_sent,
