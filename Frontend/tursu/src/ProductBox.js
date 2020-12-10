@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {palette} from "@material-ui/system";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -72,7 +73,7 @@ const horizontalStyles = makeStyles((theme) => ({
         marginLeft: 100,
         marginTop: 50,
         marginBottom: 1,
-        width: 600,
+        width: 700,
     },
     grid: {
         paddingLeft: theme.spacing(1),
@@ -102,7 +103,30 @@ const horizontalStyles = makeStyles((theme) => ({
 
 export function ProductBoxHorizontal(props) {
     const classes = horizontalStyles()
-    const [count, setCount] = React.useState(1);
+    const [count, setCount] = React.useState(props.quantity);
+
+    function handleDelete(){
+        console.log(props.product.id)
+        const formData = new FormData();
+        formData.append("product_id", props.product.id);
+        console.log("Token " + window.sessionStorage.getItem("authToken"))
+        axios.delete('http://3.232.20.250/shoppingcart/delete',{
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                },
+                params: {
+                    "product_id" : parseInt(props.product.id)
+                },
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+            })
+            .catch(error =>{
+                console.log(error)
+                alert ("There has been an error. Please try again.");
+            })
+    }
 
     return(
         <div className={classes.root}>
@@ -160,13 +184,13 @@ export function ProductBoxHorizontal(props) {
                                     setCount(Math.max(count - 1, 0));
                                 }}
                             >
-                                <RemoveIcon fontSize="small" />
+                                <RemoveIcon fontSize="small"/>
                             </IconButton>
                         </ButtonGroup>
                     </Grid>
                     <Grid className={classes.marginInsideGrid}>
                         <IconButton size="small">
-                            <DeleteOutlineIcon color="error"/>
+                            <DeleteOutlineIcon color="error" onClick={handleDelete}/>
                         </IconButton>
                     </Grid>
                 </Grid>
@@ -174,3 +198,4 @@ export function ProductBoxHorizontal(props) {
         </div>
     );
 }
+
