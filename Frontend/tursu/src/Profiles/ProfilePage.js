@@ -34,7 +34,10 @@ export default class ProfilePage extends Component {
                     <div>
                         <h1 className="stepper">My Profile</h1>
                     </div>
-                    <Sidebar/>
+                    <Grid container item direction="row" spacing={1}>
+                        <Sidebar/>
+                        {this.SelectPage()}
+                    </Grid>
                     {/*<List>*/}
                     {/*    <Link to={this.props.location.pathname} className="sidebar-link">*/}
                     {/*        <ListItem button>*/}

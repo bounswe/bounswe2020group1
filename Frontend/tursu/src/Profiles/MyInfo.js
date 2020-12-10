@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import Grid from "@material-ui/core/Grid";
 
 
 export default class myInfo extends Component {
@@ -11,7 +12,14 @@ export default class myInfo extends Component {
 
     render() {
             return(
-                <a>INFO</a>
+                <Grid item>
+                    <div>
+                        <a>My Info</a> <br/>
+                        <a>My Info</a> <br/>
+                        <a>My Info</a> <br/><a>My Info</a> <br/><a>My Info</a> <br/><a>My Info</a> <br/><a>My Info</a> <br/><a>My Info</a> <br/>
+
+                    </div>
+                </Grid>
             )
     }
 }
