@@ -36,13 +36,13 @@ def login(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def signup(request):
-    username = request.POSTget('username')
-    password = request.get('password')
-    email = request.get('email')
-    first_name = request.get('first_name')
-    last_name = request.get('last_name')
-    is_vendor = request.get('is_vendor')
-    iban = request.get('IBAN')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    email = request.POST.get('email')
+    first_name = request.POST.get('first_name')
+    last_name = request.POST.get('last_name')
+    is_vendor = request.POST.get('is_vendor')
+    iban = request.POST.get('IBAN')
     latitude = 41.0082 #dummy for now
     longitude = 28.9784 #dummy for now
 
