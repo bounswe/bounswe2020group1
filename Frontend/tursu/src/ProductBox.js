@@ -9,6 +9,10 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import {palette} from "@material-ui/system";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -87,13 +91,14 @@ const horizontalStyles = makeStyles((theme) => ({
     productCountBox: {
         width: 45,
         height: 64,
-        
+    },
+    productCountNumber:{
+        // marginBottom: 10
     },
     marginInsideGrid: {
         marginBottom:  20,
     }
 }));
-
 
 export function ProductBoxHorizontal(props) {
     const classes = horizontalStyles()
@@ -128,29 +133,41 @@ export function ProductBoxHorizontal(props) {
                         </Typography>
                     </Grid>
                     <Grid item >
+
                         <ButtonGroup orientation={"vertical"} size={"small"}>
-                            <Button
+                            <IconButton
                                 aria-label="increase"
                                 onClick={() => {
                                     setCount(count + 1);
                                 }}
+                                variant
                             >
-                                <AddIcon fontSize="small" />
-                            </Button>
-                            <Button
+                                <AddIcon fontSize="small"/>
+                            </IconButton>
+                            {/*<TextField value={count}*/}
+                            {/*           placeholder="number"*/}
+                            {/*           // label = "Items"*/}
+                            {/*           variant="standard"*/}
+                            {/*           className={classes.productCountBox}/>*/}
+                            <Typography className={classes.productCountNumber}>
+                                <Box fontWeight="fontWeightBold">
+                                    {count}
+                                </Box>
+                            </Typography>
+                            <IconButton
                                 aria-label="reduce"
                                 onClick={() => {
                                     setCount(Math.max(count - 1, 0));
                                 }}
                             >
                                 <RemoveIcon fontSize="small" />
-                            </Button>
+                            </IconButton>
                         </ButtonGroup>
-                        <TextField value={count}
-                                   placeholder="number"
-                                   label = "Items"
-                                   variant="outlined"
-                                   className={classes.productCountBox}/>
+                    </Grid>
+                    <Grid className={classes.marginInsideGrid}>
+                        <IconButton size="small">
+                            <DeleteOutlineIcon color="error"/>
+                        </IconButton>
                     </Grid>
                 </Grid>
             </Paper>
