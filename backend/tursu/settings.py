@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'shopping_cart',
     'shopping_list',
     'helper',
+    'messaging'
 ]
 
 MIDDLEWARE = [
