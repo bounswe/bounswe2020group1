@@ -27,6 +27,7 @@ export default class Login extends Component {
                 console.log(res);
                 console.log(res.status);
                 this.setState({ redirect: "True" });
+                window.sessionStorage.setItem("authToken", res.data.auth_token.text);
             })
             .catch(error =>{
                 if (error.response){
@@ -76,8 +77,8 @@ export default class Login extends Component {
             )
         }
             else if (this.state.redirect === "True"){
-            window.sessionStorage.setItem("isLogged", "true");
-            return (<Redirect to={".."} />)
+                window.sessionStorage.setItem("isLogged", "true");
+                return (<Redirect to={".."} />)
             }
         }
     }
