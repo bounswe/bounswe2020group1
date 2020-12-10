@@ -46,9 +46,15 @@ export default function ProductDetailPage() {
 }
 class ProductDetail extends React.Component{
 
-    state = {
-        product: [],
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            product: [],
+        }
+
+        this.addToShoppingCart = this.addToShoppingCart.bind(this);
+    }
 
     componentDidMount() {
         axios.get("http://3.232.20.250/product/", {
@@ -75,6 +81,26 @@ class ProductDetail extends React.Component{
         }
     }
 
+    addToShoppingCart(){
+        console.log(this.state.product.id)
+        const formData = new FormData();
+        formData.append("product_id", this.state.product.id);
+        console.log("Token " + window.sessionStorage.getItem("authToken"))
+        axios.post('http://3.232.20.250/shoppingcart/add',
+                    formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+            })
+            .catch(error =>{
+                    console.log(error)
+                    alert ("There has been an error. Please try again.");
+            })
+    }
 
     render(){
         return(
@@ -111,7 +137,7 @@ class ProductDetail extends React.Component{
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid item>
                                 <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    <Button variant="contained" color="primary">
+                                    <Button variant="contained" color="primary" onClick={this.addToShoppingCart}>
                                         Add To Cart
                                     </Button>
                                 </Typography>
