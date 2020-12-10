@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
 
-import ProductListVertical from "./ProductList";
+import ProductList, {ProductListHorizontal} from "./ProductList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 
@@ -18,37 +18,30 @@ const theme = createMuiTheme({
     }
 })
 
+const products = [
+    {
+        name: "aa",
+        photo_url: "http://3.232.20.250/static/product/product_1.jpg",
+        vendor_name: "Apple",
+        price: "7999.99"
+    },
+    {
+        name: "aa",
+        photo_url: "http://3.232.20.250/static/product/product_1.jpg",
+        vendor_name: "Apple",
+        price: "7999.99"
+    },
+    {
+        name: "aa",
+        photo_url: "http://3.232.20.250/static/product/product_1.jpg",
+        vendor_name: "Apple",
+        price: "7999.99"
+    }
+];
 
 class Category extends React.Component{
     state = {
         products : []
-    }
-
-    componentDidMount() {
-        Axios.get('http://3.232.20.250/product/category/',{
-            params: {
-                name:  this.props.match.params.category
-            }
-        })
-            .then(res => {
-                console.log(res)
-                this.setState({products: res.data})
-            })
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.match.params.category !== this.props.match.params.category )
-        {
-            Axios.get('http://3.232.20.250/product/category/',{
-                params: {
-                    name:  this.props.match.params.category
-                }
-            })
-                .then(res => {
-                    console.log(res)
-                    this.setState({products: res.data})
-                })
-        }
     }
 
     render(){
@@ -61,10 +54,10 @@ class Category extends React.Component{
                         </Paper>
                     </Grid>
                     <h1>
-                        {this.props.match.params.category}
+                        Shopping Cart
                     </h1>
                     <Grid item xs={12} container>
-                        <ProductListVertical products={this.state.products}/>
+                        {<ProductListHorizontal products={products}/>}
                     </Grid>
                 </Grid>
             </ThemeProvider>

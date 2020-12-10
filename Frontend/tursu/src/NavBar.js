@@ -132,9 +132,11 @@ export default function Navbar(){
                                     </Paper>
                                 </Grid>
                                 <Grid item>
-                                    <IconButton>
-                                        <ShoppingCartIcon className={classes.shoppingCartIcon} />
-                                    </IconButton>
+                                    <Link to='/shoppingCart'>
+                                        <IconButton>
+                                            <ShoppingCartIcon className={classes.shoppingCartIcon} />
+                                        </IconButton>
+                                    </Link>
                                 </Grid>
                             </Grid>
                             <Grid container spacing={2} className={classes.category}  >
