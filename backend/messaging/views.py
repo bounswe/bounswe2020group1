@@ -1,4 +1,4 @@
-"""Views related to shopping list"""
+"""Views related to messaging"""
 from django.http import JsonResponse, HttpResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -14,23 +14,29 @@ from registered_user.models import(
     get_admin_from_request,
     get_admin
 )
-from messaging.models import MessageFlowAdmin, MessageFlowCustomer, MessageHistoryAdmin, MessageHistoryCustomer
+from messaging.models import (
+    MessageFlowAdmin,
+    MessageFlowCustomer,
+    MessageHistoryAdmin,
+    MessageHistoryCustomer
+)
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def customer_message_to_vendor(request):
+    """Customer sending message to vendor"""
     customer = get_customer_from_request(request)
-    if(customer is None):
+    if customer is None:
         return HttpResponse("Customer authentication failed", status=401)
     flow_id = request.POST.get("flow_id")
-    if(flow_id is None):
+    if flow_id is None:
         return HttpResponse("Flow id is not given", status=400)
     try:
         flow = MessageFlowCustomer.objects.get(id=flow_id)
     except:
         return HttpResponse("Flow does not exist", status=400)
-    if(flow.customer != customer):
+    if flow.customer != customer:
         return HttpResponse("Customer authentication failed", status=401)
     message_text = request.POST.get("message")
     if message_text is None:
@@ -51,11 +57,12 @@ def customer_message_to_vendor(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def vendor_message_to_customer(request):
+    """Vendor sending message to customer"""
     vendor = get_vendor_from_request(request)
-    if(vendor is None):
+    if vendor is None:
         return HttpResponse("Vendor authentication failed", status=401)
     flow_id = request.POST.get("flow_id")
-    if(flow_id is None):
+    if flow_id is None:
         return HttpResponse("Flow id is not given", status=400)
     try:
         flow = MessageFlowCustomer.objects.get(id=flow_id)
@@ -82,11 +89,12 @@ def vendor_message_to_customer(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def vendor_message_to_admin(request):
+    """Vendor sending message to admin"""
     vendor = get_vendor_from_request(request)
-    if(vendor is None):
+    if vendor is None:
         return HttpResponse("Vendor authentication failed", status=401)
     flow_id = request.POST.get("flow_id")
-    if(flow_id is None):
+    if flow_id is None:
         return HttpResponse("Flow id is not given", status=400)
     try:
         flow = MessageFlowAdmin.objects.get(id=flow_id)
@@ -113,11 +121,12 @@ def vendor_message_to_admin(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def admin_message_to_vendor(request):
+    """Admin sending message to vendor"""
     admin = get_admin_from_request(request)
-    if(admin is None):
+    if admin is None:
         return HttpResponse("Admin authentication failed", status=401)
     flow_id = request.POST.get("flow_id")
-    if(flow_id is None):
+    if flow_id is None:
         return HttpResponse("Flow id is not given", status=400)
     try:
         flow = MessageFlowAdmin.objects.get(id=flow_id)
@@ -166,8 +175,9 @@ def admin_message_to_vendor(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def create_flow_customer_vendor(request):
+    """Customer creating message flow to message vendor"""
     customer = get_customer_from_request(request)
-    if(customer is None):
+    if customer is None:
         return HttpResponse("Customer authentication failed", status=401)
     vendor_name = request.POST.get("vendor_name")
     if vendor_name is None:
@@ -190,9 +200,10 @@ def create_flow_customer_vendor(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def create_flow_vendor_admin(request):
+    """Vendor creating message flow to message admin"""
     admin = get_admin()
     vendor = get_vendor_from_request(request)
-    if(vendor is None):
+    if vendor is None:
         return HttpResponse("Vendor authentication failed", status=401)
     context = request.POST.get("context")
     object_id = request.POST.get("object_id")
@@ -238,8 +249,9 @@ def create_flow_vendor_admin(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_customer_flows(request):
+    """GET requests to get MessageFlows of Customer requestsing"""
     customer = get_customer_from_request(request)
-    if(customer is None):
+    if customer is None:
         return HttpResponse("Customer authentication failed", status=401)
     flows = MessageFlowCustomer.objects.filter(customer=customer)
     info = []
@@ -255,8 +267,9 @@ def get_customer_flows(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_vendor_flows(request):
+    """GET requests to get MessageFlows of Vendor requestsing"""
     vendor = get_vendor_from_request(request)
-    if(vendor is None):
+    if vendor is None:
         return HttpResponse("Vendor authentication failed", status=401)
     flow_dict = {}
     flows = MessageFlowCustomer.objects.filter(vendor=vendor)
@@ -272,7 +285,7 @@ def get_vendor_flows(request):
     flows = MessageFlowAdmin.objects.filter(vendor=vendor)
     ainfo = []
     for flow in flows:
-        if(flow.product is None):
+        if flow.product is None:
             context = "order"
             object_id = flow.order.pk
         else:
@@ -292,13 +305,14 @@ def get_vendor_flows(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_admin_flows(request):
+    """GET requests to get MessageFlows of Admin requestsing"""
     admin = get_admin_from_request(request)
-    if(admin is None):
+    if admin is None:
         return HttpResponse("Admin authentication failed", status=401)
     flows = MessageFlowAdmin.objects.filter(admin=admin)
     info = []
     for flow in flows:
-        if(flow.product is None):
+        if flow.product is None:
             context = "order"
             object_id = flow.order.pk
         else:
@@ -317,8 +331,9 @@ def get_admin_flows(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_messages_from_flow_customer(request):
+    """GET requests for customer to get messages from message flow"""
     customer = get_customer_from_request(request)
-    if(customer is None):
+    if customer is None:
         return HttpResponse("Customer authentication failed", status=401)
     flow_id = request.GET.get("flow_id")
     if flow_id is None:
@@ -345,8 +360,9 @@ def get_messages_from_flow_customer(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_messages_from_admin_flow_vendor(request):
+    """GET requests for vendor to get messages from admin message flow"""
     vendor = get_vendor_from_request(request)
-    if(vendor is None):
+    if vendor is None:
         return HttpResponse("Vendor authentication failed", status=401)
     flow_id = request.GET.get("flow_id")
     if flow_id is None:
@@ -373,8 +389,9 @@ def get_messages_from_admin_flow_vendor(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_messages_from_customer_flow_vendor(request):
+    """GET requests for vendor to get messages from customer message flow"""
     vendor = get_vendor_from_request(request)
-    if(vendor is None):
+    if vendor is None:
         return HttpResponse("Vendor authentication failed", status=401)
     flow_id = request.GET.get("flow_id")
     if flow_id is None:
@@ -401,9 +418,10 @@ def get_messages_from_customer_flow_vendor(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_messages_from_flow_admin(request):
+    """GET requests for admin to get messages from message flow"""
     admin = get_admin_from_request(request)
-    if(admin is None):
-        return HttpResponse("Admin authentication failed", status=401)    
+    if admin is None:
+        return HttpResponse("Admin authentication failed", status=401)
     flow_id = request.GET.get("flow_id")
     if flow_id is None:
         return HttpResponse("Flow id not given", status=400)
@@ -424,11 +442,3 @@ def get_messages_from_flow_admin(request):
             "date_sent": message.date_sent,
         })
     return JsonResponse(data, safe=False)
-
-
-
-
-
-
-
-

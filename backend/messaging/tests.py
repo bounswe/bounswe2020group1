@@ -128,7 +128,7 @@ class ShoppingListViewTests(TestCase):
     def test_create_flow_vendor(self):
         """Test case for vendor creating flow list"""
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.vendor_token}')
-        response = self.client.post('/message/startflow/vendor/', 
+        response = self.client.post('/message/startflow/vendor/',
                 {
                     "context": "product",
                     "object_id": self.product.id,
@@ -138,11 +138,11 @@ class ShoppingListViewTests(TestCase):
         self.assertEqual(MessageFlowAdmin.objects.latest("vendor").vendor, self.vendor)
         self.assertEqual(MessageFlowAdmin.objects.latest("vendor").admin, self.admin)
         self.assertEqual(MessageFlowAdmin.objects.latest("vendor").product, self.product)
-    
+
     def test_get_flow_vendor(self):
         """Test case for vendor getting flow lists"""
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.vendor_token}')
-        response = self.client.post('/message/startflow/vendor/', 
+        response = self.client.post('/message/startflow/vendor/',
                 {
                     "context": "product",
                     "object_id": self.product.id,
@@ -164,7 +164,7 @@ class ShoppingListViewTests(TestCase):
     def test_get_flow_admin(self):
         """Test case for admin getting flow list"""
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.vendor_token}')
-        response = self.client.post('/message/startflow/vendor/', 
+        response = self.client.post('/message/startflow/vendor/',
                 {
                     "context": "product",
                     "object_id": self.product.id,
@@ -177,7 +177,7 @@ class ShoppingListViewTests(TestCase):
     def test_send_message_admin(self):
         """Test case for admin sending a message """
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.vendor_token}')
-        response = self.client.post('/message/startflow/vendor/', 
+        response = self.client.post('/message/startflow/vendor/',
                 {
                     "context": "product",
                     "object_id": self.product.id,
@@ -203,7 +203,7 @@ class ShoppingListViewTests(TestCase):
         response = self.client.post('/message/startflow/customer/', {'vendor_name': 'Apple'})
 
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.vendor_token}')
-        response = self.client.post('/message/startflow/vendor/', 
+        response = self.client.post('/message/startflow/vendor/',
                 {
                     "context": "product",
                     "object_id": self.product.id,
@@ -250,4 +250,3 @@ class ShoppingListViewTests(TestCase):
         self.assertEqual(len(response), 1)
         self.assertEqual(response[0]["message"], "This is a test message")
         self.assertEqual(response[0]["sender"], "self")
-
