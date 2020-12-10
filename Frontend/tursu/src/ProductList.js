@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'flex-start',
         overflow: 'hidden',
         backgroundColor: theme.palette.background.paper,
+        paddingBottom: 100,
     },
 }));
 

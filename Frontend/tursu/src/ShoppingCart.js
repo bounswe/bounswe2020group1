@@ -20,19 +20,19 @@ const theme = createMuiTheme({
 
 const products = [
     {
-        name: "aa",
+        name: "Iphone 6",
         photo_url: "http://3.232.20.250/static/product/product_1.jpg",
         vendor_name: "Apple",
         price: "7999.99"
     },
     {
-        name: "aa",
+        name: "Iphone 6",
         photo_url: "http://3.232.20.250/static/product/product_1.jpg",
         vendor_name: "Apple",
         price: "7999.99"
     },
     {
-        name: "aa",
+        name: "Iphone 6",
         photo_url: "http://3.232.20.250/static/product/product_1.jpg",
         vendor_name: "Apple",
         price: "7999.99"
