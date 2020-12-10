@@ -6,8 +6,8 @@ import Category from "./Category";
 import Sign from "./Sign/Sign";
 import ProductDetailPage from "./ProductDetailPage";
 import SearchPage from "./Search";
-import Sidebar from "./Profiles/Sidebar";
-import ProfilePage from "./Profiles/ProfilePage";
+import Sidebar from "./Profiles/VendorSidebar";
+import ProfilePage from "./Profiles/VendorProfilePage";
 
 function App() {
     return (

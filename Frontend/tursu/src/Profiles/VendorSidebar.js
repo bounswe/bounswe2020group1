@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import myInfo from "./MyInfo";
-import myProducts from "./my_products";
-import myOrders from "./my_orders";
+import myProducts from "./MyProducts";
+import myOrders from "./MyOrders";
 import Stepper from '../Stepper';
 import Navbar from "../NavBar";
 import "./profile.css";
@@ -27,6 +27,8 @@ const useStyles = makeStyles((theme)=> ({
     },
 }))
 
+
+
 export default function Sidebar(props){
     const classes = useStyles();
 
@@ -34,7 +36,7 @@ export default function Sidebar(props){
         <Grid container item direction="column" spacing="1" className={classes.root}>
             <Grid item className="sidebar">
                 <Paper elevation="4">
-                    <IconButton>
+                    <IconButton onClick={props.info}>
                         <InfoIcon/>
                         <Typography>My Information</Typography>
                     </IconButton>
@@ -42,7 +44,7 @@ export default function Sidebar(props){
             </Grid>
             <Grid item className="sidebar">
                 <Paper elevation="4">
-                    <IconButton>
+                    <IconButton onClick={props.products}>
                         <StorefrontIcon/>
                         <Typography>My Products</Typography>
                     </IconButton>
@@ -50,7 +52,7 @@ export default function Sidebar(props){
             </Grid>
             <Grid item className="sidebar">
                 <Paper elevation="4">
-                    <IconButton>
+                    <IconButton onClick={props.orders}>
                         <ShoppingCartIcon/>
                         <Typography>My Orders</Typography>
                     </IconButton>
