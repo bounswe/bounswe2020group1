@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -85,11 +84,10 @@ class ProductDetail extends React.Component{
                 <br/>
                 <br/>
                 <br/>
-                <Grid id="photo" container spacing={3}>
+                <Grid className="product-page"  id="photo" container spacing={3}>
                     <Grid  item xs={6}>
                         <ButtonBase >
                             <img  alt="complex" src={this.state.product.photo_url}  width="300" height="300"/>
-                            {/*<img  alt="complex" src="https://lh3.googleusercontent.com/proxy/mPIEPUHrmQ9UEA8mUBjx34Y3SNJFTIYcxxCX_uM9jCuwhBvv4lX4n1w7QBX629OPCVV0GWHRUAWrhv-JZ9xCseTv6pcgmNZ6LQpaq2md1JHWb0mMNNggnp1iAA" />*/}
                         </ButtonBase>
                     </Grid>
                     <Grid container  xs={6} alignItems="center" justify="center">

@@ -39,3 +39,9 @@
     margin-top: 15px;
 }
 
+.product-page{
+    margin: 200px;
+    padding: 100px;
+    grid-gap: 100px;
+    align-content: space-around;
+}
