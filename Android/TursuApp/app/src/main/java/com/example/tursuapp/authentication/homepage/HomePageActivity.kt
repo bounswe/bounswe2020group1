@@ -14,10 +14,18 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.tursuapp.R
+import com.example.tursuapp.api.ApiService
+import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.authentication.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
+import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.google.android.material.navigation.NavigationView
+import retrofit2.Call
+import retrofit2.Response
 
 /*
 Type 0 -> all products
@@ -36,6 +44,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private lateinit var toggle: ActionBarDrawerToggle
     var isFilterAvailable = false
     var searchString = ""
+    var allVendors = listOf<String>()
+    var allBrands = listOf<String>()
+    var allCategories = listOf<String>()
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
@@ -87,14 +98,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         })
         expListView!!.setSelectedGroup(0)
     }
-    /*
-    private fun setFilterFunction(){
-        val filter = findViewById<ImageView>(R.id.filter_image)
-        filter.setOnClickListener {
-            showPopupWindow(it)
-        }
-    }
-    */
 
     private fun setSearchFunction(){
         this.findViewById<Button>(R.id.search_button).setOnClickListener {
@@ -105,25 +108,76 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             if (editText != null) {
                 searchString=editText.text.toString()
                 displayFragment(R.id.nav_home, 2, searchString,null)
-                //isFilterAvailable = true
-                //filterImage.visibility = View.VISIBLE
-                //search(searchText.toString())
             }
 
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        getAllBrands()
+        getAllCategories()
+        getAllVendors()
         setContentView(R.layout.activity_home_page)
-        //filterImage = findViewById(R.id.filter_image)
-        //if(!isFilterAvailable) {
-        //    filterImage.visibility = View.GONE
-        //}
         setAppBar()
         setExpandableSideMenu()
         setSearchFunction()
-        //setFilterFunction()
+    }
+    fun getAllVendors(){
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getAllVendors().enqueue(object : retrofit2.Callback<List<String>> {
+            override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                p0: Call<List<String>>?,
+                response: Response<List<String>>?
+            ) {
+                if(response!=null){
+                    allVendors = response.body()!!
+                }
+
+            }
+
+        })
+    }
+    fun getAllBrands(){
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getAllBrands().enqueue(object : retrofit2.Callback<List<String>> {
+            override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                p0: Call<List<String>>?,
+                response: Response<List<String>>?
+            ) {
+                if(response!=null){
+                    allBrands = response.body()!!
+                }
+
+            }
+
+        })
+    }
+    fun getAllCategories(){
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getAllCategories().enqueue(object : retrofit2.Callback<List<String>> {
+            override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                p0: Call<List<String>>?,
+                response: Response<List<String>>?
+            ) {
+                if(response!=null){
+                    allCategories = response.body()!!
+                }
+
+            }
+
+        })
     }
     override fun onBackPressed() {
         val count = fragmentManager.backStackEntryCount
@@ -135,40 +189,27 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     }
     fun setVendorRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVendors)
-        val btn1 = RadioButton(this)
-        btn1.text = "vendor 1"
-        radioGroup.addView(btn1)
-        val btn2 = RadioButton(this)
-        btn2.text = "vendor 2"
-        radioGroup.addView(btn2)
-        val btn3 = RadioButton(this)
-        btn3.text = "vendor 3"
-        radioGroup.addView(btn3)
-
+        for(vendor in allVendors){
+            val btn1 = RadioButton(this)
+            btn1.text = vendor
+            radioGroup.addView(btn1)
+        }
     }
     fun setBrandRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupBrands)
-        val btn1 = RadioButton(this)
-        btn1.text = "brand 1"
-        val btn2 = RadioButton(this)
-        btn2.text = "brand 2"
-        val btn3 = RadioButton(this)
-        btn3.text = "brand 3"
-        radioGroup.addView(btn1)
-        radioGroup.addView(btn2)
-        radioGroup.addView(btn3)
+        for(brand in allBrands){
+            val btn1 = RadioButton(this)
+            btn1.text = brand
+            radioGroup.addView(btn1)
+        }
     }
     fun setCategoryRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
-        val btn1 = RadioButton(this)
-        btn1.text = "category 1"
-        val btn2 = RadioButton(this)
-        btn2.text = "category 2"
-        val btn3 = RadioButton(this)
-        btn3.text = "category 3"
-        radioGroup.addView(btn1)
-        radioGroup.addView(btn2)
-        radioGroup.addView(btn3)
+        for(cat in allCategories){
+            val btn1 = RadioButton(this)
+            btn1.text = cat
+            radioGroup.addView(btn1)
+        }
     }
     fun setRatingRadioButtons(view:View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupRating)

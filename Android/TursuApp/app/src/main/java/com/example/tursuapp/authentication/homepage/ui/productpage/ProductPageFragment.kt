@@ -79,9 +79,14 @@ class ProductPageFragment : Fragment() {
         view.findViewById<TextView>(R.id.vendor).text = "Vendor: "+product.vendor_name
 
         val image  = view.findViewById<ImageView>(R.id.productImage)
-        Picasso
-            .get() // give it the context
-            .load(product.photo_url) // load the image
-            .into(image)
+        if(product.photo_url!="") {
+            Picasso
+                .get() // give it the context
+                .load(product.photo_url) // load the image
+                .into(image)
+        }
+        else{
+            image.setImageResource(R.drawable.ic_menu_camera)
+        }
     }
 }

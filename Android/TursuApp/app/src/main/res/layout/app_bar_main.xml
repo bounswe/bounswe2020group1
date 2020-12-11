@@ -31,18 +31,18 @@
                     android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_margin="5dp"
-                    android:background="@color/TursuGreen"
-                    android:drawableLeft="@drawable/search_bar_3"
+                    android:background="@drawable/edit_text_background"
                     android:ems="10"
+                    android:hint="search"
                     android:importantForAutofill="no"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:padding="10dp" />
 
                 <Button
                     android:id="@+id/search_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:text="Search"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:drawableLeft="@drawable/search_bar_3"
                     android:textSize="12sp" />
 
                 <ImageView
