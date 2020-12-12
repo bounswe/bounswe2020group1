@@ -21,6 +21,7 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.authentication.ExpandableListAdapter
+import com.example.tursuapp.authentication.homepage.ui.account.AccountFragment
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.google.android.material.navigation.NavigationView
@@ -40,7 +41,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private var expListView: ExpandableListView? = null
     private var listDataHeader: MutableList<String>? = null
     private var listDataChild: HashMap<String, List<String>>? = null
-    private lateinit var drawer: DrawerLayout
+    lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     var isFilterAvailable = false
     var searchString = ""
@@ -74,6 +75,11 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setAdapter(listAdapter)
         expListView!!.setOnGroupClickListener { _, _, groupPosition, id ->
             if (groupPosition == 0) {
+                displayStandardFragment(R.id.nav_account)
+                //isFilterAvailable = false
+                //filterImage.visibility = View.GONE
+            }
+            if (groupPosition == 1) {
                 displayFragment(R.id.nav_home, 0, "",null)
                 //isFilterAvailable = false
                 //filterImage.visibility = View.GONE
@@ -82,7 +88,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
         expListView!!.setOnChildClickListener(ExpandableListView.OnChildClickListener { parent, v, groupPosition, childPosition, id ->
             // Kategoriye basılınca olacakları ayarla
-            if (groupPosition == 1) {
+            if (groupPosition == 2) {
                 when (childPosition) {
                     0 -> displayFragment(R.id.nav_home, 1, "Electronics",null)
                     1 -> displayFragment(R.id.nav_home, 1, "Fashion",null)
@@ -226,77 +232,16 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn3)
         radioGroup.addView(btn4)
     }
-    /*
-    @SuppressLint("InflateParams")
-    private fun showPopupWindow(view: View) {
-        //Create a View object yourself through inflater
-        val inflater = view.context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView: View = inflater.inflate(R.layout.filter_popup_layout, null)
-        setVendorRadioButtons(popupView)
-        setBrandRadioButtons(popupView)
-        setCategoryRadioButtons(popupView)
-        setRatingRadioButtons(popupView)
-        //Specify the length and width through constants
-        val width = LinearLayout.LayoutParams.MATCH_PARENT
-        val height = LinearLayout.LayoutParams.MATCH_PARENT
-        //Make Inactive Items Outside Of PopupWindow
-        val focusable = true
-        //Create a window with our parameters
-        val popupWindow = PopupWindow(popupView, width, height, focusable)
-        //Set the location of the window on the screen
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-        popupView.findViewById<ImageView>(R.id.dismiss_popup).setOnClickListener {
-            popupWindow.dismiss()
+    fun displayStandardFragment(id:Int){
+        lateinit var fragment: Fragment
+        if(id == R.id.nav_account){
+            fragment = AccountFragment()
         }
-        popupView.findViewById<Button>(R.id.apply_filters).setOnClickListener {
-            applyFilters(popupView)
-            popupWindow.dismiss()
-        }
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
+        this.drawer.closeDrawer(GravityCompat.START)
     }
-
-     */
-    /*
-    private fun applyFilters(view: View){
-        val filters = hashMapOf<String,String>()
-
-        if(view.findViewById<EditText>(R.id.editminPrice).text.isNotEmpty()){
-            val minPrice = view.findViewById<EditText>(R.id.editminPrice).text.toString()
-            filters["minprice"] = minPrice
-        }
-        if(view.findViewById<EditText>(R.id.editmaxPrice).text.isNotEmpty()){
-            val maxPrice = view.findViewById<EditText>(R.id.editmaxPrice).text.toString()
-            filters["maxprice"] = maxPrice
-        }
-        val selectedId = view.findViewById<RadioGroup>(R.id.radioGroupSortby).checkedRadioButtonId
-        if(selectedId!=-1){
-            val radioButton = view.findViewById<RadioButton>(selectedId)
-            filters["sortby"] = radioButton.text.toString()
-        }
-        val selectedId2 = view.findViewById<RadioGroup>(R.id.radioGroupVendors).checkedRadioButtonId
-        if(selectedId2!=-1){
-            val radioButton2 = view.findViewById<RadioButton>(selectedId2)
-            filters["vendor"] = radioButton2.text.toString()
-        }
-        val selectedId3 = view.findViewById<RadioGroup>(R.id.radioGroupCategory).checkedRadioButtonId
-        if(selectedId3!=-1){
-            val radioButton3 = view.findViewById<RadioButton>(selectedId3)
-            filters["category"] = radioButton3.text.toString()
-        }
-        val selectedId4 = view.findViewById<RadioGroup>(R.id.radioGroupBrands).checkedRadioButtonId
-        if (selectedId4!=-1){
-            val radioButton4 = view.findViewById<RadioButton>(selectedId4)
-            filters["brand"] = radioButton4.text.toString()
-        }
-        val selectedId5 = view.findViewById<RadioGroup>(R.id.radioGroupRating).checkedRadioButtonId
-        if(selectedId5!=-1){
-            val radioButton5 = view.findViewById<RadioButton>(selectedId5)
-            filters["rating"] = radioButton5.text.toString()
-        }
-        displayFragment(R.id.nav_home,2,searchString,filters)
-        Log.i("FilterActivity",filters.toString())
-    }
-
-     */
     private fun displayFragment(id: Int, type: Int, keys: String, filters:HashMap<String,String>?){
         lateinit var fragment: Fragment
         if(id == R.id.nav_home){
@@ -323,7 +268,10 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         listDataChild = HashMap()
 
         // Adding child data
+        (listDataHeader as ArrayList<String>).add("My Account")
+
         (listDataHeader as ArrayList<String>).add("Home")
+
         (listDataHeader as ArrayList<String>).add("Categories")
 
         // Adding child data
@@ -335,7 +283,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         categoryNames.add("Cosmetics")
         categoryNames.add("Sports")
         listDataChild!![(listDataHeader as ArrayList<String>)[0]] = ArrayList()
-        listDataChild!![(listDataHeader as ArrayList<String>)[1]] = categoryNames
+        listDataChild!![(listDataHeader as ArrayList<String>)[1]] = ArrayList()
+        listDataChild!![(listDataHeader as ArrayList<String>)[2]] = categoryNames
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
     }
 }
