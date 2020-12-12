@@ -1,12 +1,11 @@
 package com.example.tursuapp.authentication.homepage
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -14,19 +13,16 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.authentication.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.account.AccountFragment
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
-import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Response
+
 
 /*
 Type 0 -> all products
@@ -68,6 +64,12 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         toolbar.setNavigationIcon(R.drawable.hamburger)
         supportActionBar?.setHomeButtonEnabled(true)
     }
+    fun hideSoftKeyboard(activity: Activity) {
+        val inputMethodManager: InputMethodManager = activity.getSystemService(
+                INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.currentFocus!!.windowToken, 0)
+    }
     private fun setExpandableSideMenu(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
@@ -80,7 +82,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 //filterImage.visibility = View.GONE
             }
             if (groupPosition == 1) {
-                displayFragment(R.id.nav_home, 0, "",null)
+                displayFragment(R.id.nav_home, 0, "", null)
                 //isFilterAvailable = false
                 //filterImage.visibility = View.GONE
             }
@@ -90,11 +92,11 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             // Kategoriye basılınca olacakları ayarla
             if (groupPosition == 2) {
                 when (childPosition) {
-                    0 -> displayFragment(R.id.nav_home, 1, "Electronics",null)
-                    1 -> displayFragment(R.id.nav_home, 1, "Fashion",null)
-                    2 -> displayFragment(R.id.nav_home, 1, "Home",null)
-                    3 -> displayFragment(R.id.nav_home, 1, "Cosmetics",null)
-                    4 -> displayFragment(R.id.nav_home, 1, "Sports",null)
+                    0 -> displayFragment(R.id.nav_home, 1, "Electronics", null)
+                    1 -> displayFragment(R.id.nav_home, 1, "Fashion", null)
+                    2 -> displayFragment(R.id.nav_home, 1, "Home", null)
+                    3 -> displayFragment(R.id.nav_home, 1, "Cosmetics", null)
+                    4 -> displayFragment(R.id.nav_home, 1, "Sports", null)
                 }
                 //isFilterAvailable = true
                 //filterImage.visibility = View.VISIBLE
@@ -113,9 +115,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
             if (editText != null) {
                 searchString=editText.text.toString()
-                displayFragment(R.id.nav_home, 2, searchString,null)
+                displayFragment(R.id.nav_home, 2, searchString, null)
             }
-
+            hideSoftKeyboard(this)
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,10 +138,10 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
 
             override fun onResponse(
-                p0: Call<List<String>>?,
-                response: Response<List<String>>?
+                    p0: Call<List<String>>?,
+                    response: Response<List<String>>?
             ) {
-                if(response!=null){
+                if (response != null) {
                     allVendors = response.body()!!
                 }
 
@@ -155,10 +157,10 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
 
             override fun onResponse(
-                p0: Call<List<String>>?,
-                response: Response<List<String>>?
+                    p0: Call<List<String>>?,
+                    response: Response<List<String>>?
             ) {
-                if(response!=null){
+                if (response != null) {
                     allBrands = response.body()!!
                 }
 
@@ -174,10 +176,10 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
 
             override fun onResponse(
-                p0: Call<List<String>>?,
-                response: Response<List<String>>?
+                    p0: Call<List<String>>?,
+                    response: Response<List<String>>?
             ) {
-                if(response!=null){
+                if (response != null) {
                     allCategories = response.body()!!
                 }
 
@@ -217,7 +219,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             radioGroup.addView(btn1)
         }
     }
-    fun setRatingRadioButtons(view:View){
+    fun setRatingRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupRating)
         val btn1 = RadioButton(this)
         btn1.text = "1+"
@@ -232,7 +234,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn3)
         radioGroup.addView(btn4)
     }
-    fun displayStandardFragment(id:Int){
+    fun displayStandardFragment(id: Int){
         lateinit var fragment: Fragment
         if(id == R.id.nav_account){
             fragment = AccountFragment()
@@ -242,7 +244,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 .commit()
         this.drawer.closeDrawer(GravityCompat.START)
     }
-    private fun displayFragment(id: Int, type: Int, keys: String, filters:HashMap<String,String>?){
+    private fun displayFragment(id: Int, type: Int, keys: String, filters: HashMap<String, String>?){
         lateinit var fragment: Fragment
         if(id == R.id.nav_home){
             fragment = HomeFragment()
@@ -252,7 +254,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         bundle.putInt("type", type)
         bundle.putString("keys", keys)
         if(filters!=null){
-            bundle.putSerializable("filters",filters)
+            bundle.putSerializable("filters", filters)
         }
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction()
