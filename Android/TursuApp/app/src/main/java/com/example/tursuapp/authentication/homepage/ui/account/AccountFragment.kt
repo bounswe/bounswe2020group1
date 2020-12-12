@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.authentication.homepage.HomePageActivity
@@ -26,7 +24,7 @@ class AccountFragment : Fragment() {
         galleryViewModel =
                 ViewModelProvider(this).get(AccountViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_account, container, false)
-        galleryViewModel.text.observe(viewLifecycleOwner, Observer {
+        galleryViewModel.text.observe(viewLifecycleOwner, {
 
         })
         return root
@@ -38,7 +36,7 @@ class AccountFragment : Fragment() {
             displayFragment(R.id.nav_profile_detail)
         }
     }
-    fun displayFragment(id:Int){
+    private fun displayFragment(id:Int){
         lateinit var fragment: Fragment
         if(id == R.id.nav_profile_detail){
             fragment = ProfileFragment()

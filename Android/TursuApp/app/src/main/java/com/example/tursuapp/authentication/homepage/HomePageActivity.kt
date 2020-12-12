@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.authentication.ExpandableListAdapter
+import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.account.AccountFragment
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.google.android.material.navigation.NavigationView
@@ -39,8 +39,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private var listDataChild: HashMap<String, List<String>>? = null
     lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
-    var isFilterAvailable = false
-    var searchString = ""
+    private var searchString = ""
     var allVendors = listOf<String>()
     var allBrands = listOf<String>()
     var allCategories = listOf<String>()
@@ -64,7 +63,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         toolbar.setNavigationIcon(R.drawable.hamburger)
         supportActionBar?.setHomeButtonEnabled(true)
     }
-    fun hideSoftKeyboard(activity: Activity) {
+    private fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager: InputMethodManager = activity.getSystemService(
                 INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
@@ -75,7 +74,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         prepareListData()
         listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
         expListView!!.setAdapter(listAdapter)
-        expListView!!.setOnGroupClickListener { _, _, groupPosition, id ->
+        expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
             if (groupPosition == 0) {
                 displayStandardFragment(R.id.nav_account)
                 //isFilterAvailable = false
@@ -88,7 +87,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
             false
         }
-        expListView!!.setOnChildClickListener(ExpandableListView.OnChildClickListener { parent, v, groupPosition, childPosition, id ->
+        expListView!!.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             // Kategoriye basılınca olacakları ayarla
             if (groupPosition == 2) {
                 when (childPosition) {
@@ -103,7 +102,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
 
             false
-        })
+        }
         expListView!!.setSelectedGroup(0)
     }
 
@@ -130,7 +129,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         setExpandableSideMenu()
         setSearchFunction()
     }
-    fun getAllVendors(){
+    private fun getAllVendors(){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getAllVendors().enqueue(object : retrofit2.Callback<List<String>> {
             override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
@@ -149,7 +148,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         })
     }
-    fun getAllBrands(){
+    private fun getAllBrands(){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getAllBrands().enqueue(object : retrofit2.Callback<List<String>> {
             override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
@@ -168,7 +167,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         })
     }
-    fun getAllCategories(){
+    private fun getAllCategories(){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getAllCategories().enqueue(object : retrofit2.Callback<List<String>> {
             override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
@@ -234,7 +233,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn3)
         radioGroup.addView(btn4)
     }
-    fun displayStandardFragment(id: Int){
+    private fun displayStandardFragment(id: Int){
         lateinit var fragment: Fragment
         if(id == R.id.nav_account){
             fragment = AccountFragment()

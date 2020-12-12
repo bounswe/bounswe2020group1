@@ -28,21 +28,23 @@ interface ApiService {
 
     @GET("/product")
     fun getProductDetails(@Query("id") userId: Int): Call<ProductDetailsResponse>
-
+/*
     @GET("/product/category")
     fun getProductsOfCategory(@Query("name") name: String): Call<List<ProductResponse>>
-
+*/
     @GET("/product/category")
-    fun getProductsOfCategoryFiltered(@QueryMap params: HashMap<String,String>): Call<List<ProductResponse>>
-
+    fun getProductsOfCategory(@QueryMap params: HashMap<String,String>): Call<List<ProductResponse>>
+/*
     @GET("/search")
     fun getSearchedProducts(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<ProductResponse>>
 
+
+ */
     @GET("/search")
     fun getSearchedVendors(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<VendorResponse>>
 
     @GET("/search")
-    fun getSearchedProductsFiltered(@QueryMap params: HashMap<String, String>): Call<List<ProductResponse>>
+    fun getSearchedProducts(@QueryMap params: HashMap<String, String>): Call<List<ProductResponse>>
 
     @GET("/helper/allbrands/")
     fun getAllBrands():Call<List<String>>

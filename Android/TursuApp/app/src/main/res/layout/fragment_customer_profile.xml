@@ -12,13 +12,38 @@
         android:id="@+id/imageView6"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="50dp"
         android:background="@drawable/edit_text_background"
         android:backgroundTint="@color/TursuGreen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutBack"
         app:srcCompat="@drawable/ic_profile" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/back_arrow" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:text="Profile"
+            android:textSize="24sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

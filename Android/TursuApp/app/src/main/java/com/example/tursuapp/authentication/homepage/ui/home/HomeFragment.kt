@@ -1,7 +1,6 @@
 package com.example.tursuapp.authentication.homepage.ui.home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -15,6 +14,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
+import com.example.tursuapp.adapter.ProductAdapter
+import com.example.tursuapp.adapter.VendorAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductResponse
@@ -23,8 +24,6 @@ import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
-import com.squareup.picasso.Picasso
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 /*
@@ -42,14 +41,14 @@ class HomeFragment : Fragment() {
     //var adapter: ProductAdapter? = null
     var productList = ArrayList<ProductResponse>()
     var vendorList = ArrayList<VendorResponse>()
-    var filters:HashMap<String,String> ?= null
-    var type = 0
-    var keys = ""
-    var searchType = "product"
-    lateinit var btnVendor:MaterialButton
-    lateinit var btnProduct:MaterialButton
-    lateinit var toggleGroup:MaterialButtonToggleGroup
-    private val filterDictionary = mapOf<String,String>("Bestsellers" to "bestseller","Newest" to "newest","Ascending Price" to "priceAsc","Descending Price" to "priceDesc","Number of Comments" to "numComments")
+    private var filters:HashMap<String,String> ?= null
+    private var type = 0
+    private var keys = ""
+    private var searchType = "product"
+    private lateinit var btnVendor:MaterialButton
+    private lateinit var btnProduct:MaterialButton
+    private lateinit var toggleGroup:MaterialButtonToggleGroup
+    private val filterDictionary = mapOf("Bestsellers" to "bestseller","Newest" to "newest","Ascending Price" to "priceAsc","Descending Price" to "priceDesc","Number of Comments" to "numComments")
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -59,6 +58,7 @@ class HomeFragment : Fragment() {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         val args = arguments
+        filters = hashMapOf()
         if(args!=null) {
             type = args.getInt("type")
             setButtonVisibilities(type)
@@ -83,22 +83,24 @@ class HomeFragment : Fragment() {
         val searchBar = activity?.findViewById<EditText>(R.id.editMobileNo)
         val searchButton = activity?.findViewById<Button>(R.id.search_button)
         //listing all products
-        if(type==0){
-            filterImage!!.visibility = View.INVISIBLE
-            searchBar!!.visibility = View.VISIBLE
-            searchButton!!.visibility = View.VISIBLE
-        }
-        //category screen
-        else if(type==1){
-            filterImage!!.visibility = View.VISIBLE
-            searchBar!!.visibility = View.INVISIBLE
-            searchButton!!.visibility = View.INVISIBLE
-        }
-        //search screen
-        else if(type==2){
-            filterImage!!.visibility = View.VISIBLE
-            searchBar!!.visibility = View.VISIBLE
-            searchButton!!.visibility = View.VISIBLE
+        when (type) {
+            0 -> {
+                filterImage!!.visibility = View.INVISIBLE
+                searchBar!!.visibility = View.VISIBLE
+                searchButton!!.visibility = View.VISIBLE
+            }
+            //category screen
+            1 -> {
+                filterImage!!.visibility = View.VISIBLE
+                searchBar!!.visibility = View.INVISIBLE
+                searchButton!!.visibility = View.INVISIBLE
+            }
+            //search screen
+            2 -> {
+                filterImage!!.visibility = View.VISIBLE
+                searchBar!!.visibility = View.VISIBLE
+                searchButton!!.visibility = View.VISIBLE
+            }
         }
     }
     private fun setFilterFunction(){
@@ -134,7 +136,7 @@ class HomeFragment : Fragment() {
         }
     }
     private fun applyFilters(view: View){
-        filters = hashMapOf<String,String>()
+        filters = hashMapOf()
         if(view.findViewById<EditText>(R.id.editminPrice).text.isNotEmpty()){
             val minPrice = view.findViewById<EditText>(R.id.editminPrice).text.toString()
             filters?.set("fprice_lower", minPrice)
@@ -187,7 +189,7 @@ class HomeFragment : Fragment() {
         toggleGroup.visibility = View.VISIBLE
 
     }
-    fun searchVendor(search_string: String){
+    private fun searchVendor(search_string: String){
 
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiinterface.getSearchedVendors(searchType,search_string).enqueue(object : retrofit2.Callback<List<VendorResponse>> {
@@ -204,11 +206,11 @@ class HomeFragment : Fragment() {
                     Log.i("SearchFragment", "inside onResponse")
                     if (response != null) {
                         vendorList = ArrayList(response.body()!!)
-                        var adapter = context?.let { VendorAdapter(it, vendorList) }
-                        var gridView = view?.findViewById<GridView>(R.id.gridView)
+                        val adapter = context?.let { VendorAdapter(it, vendorList) }
+                        val gridView = view?.findViewById<GridView>(R.id.gridView)
                         if (gridView != null) {
                             gridView.adapter = adapter
-                            gridView.setOnItemClickListener { _, view, position, id ->
+                            gridView.setOnItemClickListener { _, view, _, _ ->
                                 val clickedId = view.findViewById<TextView>(R.id.product_id).text
                                 val bundle = Bundle()
                                 bundle.putString("id", clickedId.toString())
@@ -226,13 +228,11 @@ class HomeFragment : Fragment() {
             })
 
     }
-    fun searchProduct(search_string: String){
+    private fun searchProduct(search_string: String){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        if(filters!=null){
-
-            filters!!.put("search_type",searchType)
-            filters!!.put("search_string",search_string)
-            apiinterface.getSearchedProductsFiltered(filters!!).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+        filters!!["search_type"] = searchType
+        filters!!["search_string"] = search_string
+            apiinterface.getSearchedProducts(filters!!).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
                 override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
                     Log.i("SearchFragment", "error" + p1?.message.toString())
                 }
@@ -246,47 +246,11 @@ class HomeFragment : Fragment() {
                     Log.i("SearchFragment", "inside onResponse")
                     if (response != null) {
                         productList = ArrayList(response.body()!!)
-                        var adapter = context?.let { ProductAdapter(it, productList) }
-                        var gridView = view?.findViewById<GridView>(R.id.gridView)
-                        if (gridView != null) {
-                            gridView.adapter = adapter
-                            gridView.setOnItemClickListener { _, view, position, id ->
-                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                                val bundle = Bundle()
-                                bundle.putString("id", clickedId.toString())
-                                val newFragment = ProductPageFragment()
-                                newFragment.arguments = bundle
-                                val fragmentManager: FragmentManager? = fragmentManager
-                                val fragmentTransaction: FragmentTransaction =
-                                        fragmentManager!!.beginTransaction()
-                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                                fragmentTransaction.commit()
-                            }
-                        }
-                    }
-                }
-            })
-        }
-        else{
-            apiinterface.getSearchedProducts("product",
-                    search_string).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
-                override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
-                    Log.i("MainFragment", "error" + p1?.message.toString())
-                }
-
-                override fun onResponse(
-                        p0: Call<List<ProductResponse>>?,
-                        response: Response<List<ProductResponse>>?
-                ) {
-                    Log.i("MainFragment", productList.joinToString())
-                    Log.i("MainFragment", "inside onResponse")
-                    if (response != null) {
-                        productList = ArrayList(response.body()!!)
-                        var adapter = context?.let { ProductAdapter(it, productList) }
+                        val adapter = context?.let { ProductAdapter(it, productList) }
                         val gridView = view?.findViewById<GridView>(R.id.gridView)
                         if (gridView != null) {
                             gridView.adapter = adapter
-                            gridView.setOnItemClickListener { _, view, position, id ->
+                            gridView.setOnItemClickListener { _, view, _, _ ->
                                 val clickedId = view.findViewById<TextView>(R.id.product_id).text
                                 val bundle = Bundle()
                                 bundle.putString("id", clickedId.toString())
@@ -302,88 +266,47 @@ class HomeFragment : Fragment() {
                     }
                 }
             })
-        }
+
 
     }
     private fun displayCategory(type: String){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        if(filters!=null){
-            filters!!["name"] = type
-            apiinterface.getProductsOfCategoryFiltered(filters!!).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
-                override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
-                    Log.i("MainFragment", "error" + p1?.message.toString())
-                }
+        filters!!["name"] = type
+        apiinterface.getProductsOfCategory(filters!!).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+            override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
 
-                override fun onResponse(
-                        p0: Call<List<ProductResponse>>?,
-                        response: Response<List<ProductResponse>>?
-                ) {
-                    Log.i("MainFragment", productList.joinToString())
-                    Log.i("MainFragment", "inside onResponse")
-                    if (response != null) {
-                        productList = ArrayList(response.body()!!)
-                        var adapter = context?.let { ProductAdapter(it, productList) }
-                        val gridView = view?.findViewById<GridView>(R.id.gridView)
-                        if (gridView != null) {
-                            gridView.adapter = adapter
-                            gridView.setOnItemClickListener { parent, view, position, id ->
-                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                                val bundle = Bundle()
-                                bundle.putString("id", clickedId.toString())
-                                val newFragment = ProductPageFragment()
-                                newFragment.arguments = bundle
-                                val fragmentManager: FragmentManager? = fragmentManager
-                                val fragmentTransaction: FragmentTransaction =
-                                        fragmentManager!!.beginTransaction()
-                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                                fragmentTransaction.commit()
-                            }
+            override fun onResponse(
+                 p0: Call<List<ProductResponse>>?,
+                 response: Response<List<ProductResponse>>?
+            ) {
+                Log.i("MainFragment", productList.joinToString())
+                Log.i("MainFragment", "inside onResponse")
+                if (response != null) {
+                    productList = ArrayList(response.body()!!)
+                    val adapter = context?.let { ProductAdapter(it, productList) }
+                    val gridView = view?.findViewById<GridView>(R.id.gridView)
+                    if (gridView != null) {
+                        gridView.adapter = adapter
+                        gridView.setOnItemClickListener { _, view, _, _ ->
+                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                            val bundle = Bundle()
+                            bundle.putString("id", clickedId.toString())
+                            val newFragment = ProductPageFragment()
+                            newFragment.arguments = bundle
+                            val fragmentManager: FragmentManager? = fragmentManager
+                            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
                         }
                     }
-
                 }
 
-
-            })
-        }
-        else {
-            apiinterface.getProductsOfCategory(type).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
-                override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
-                    Log.i("MainFragment", "error" + p1?.message.toString())
-                }
-
-                override fun onResponse(
-                        p0: Call<List<ProductResponse>>?,
-                        response: Response<List<ProductResponse>>?
-                ) {
-                    Log.i("MainFragment", productList.joinToString())
-                    Log.i("MainFragment", "inside onResponse")
-                    if (response != null) {
-                        productList = ArrayList(response.body()!!)
-                        var adapter = context?.let { ProductAdapter(it, productList) }
-                        val gridView = view?.findViewById<GridView>(R.id.gridView)
-                        if (gridView != null) {
-                            gridView.adapter = adapter
-                            gridView.setOnItemClickListener { parent, view, position, id ->
-                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                                val bundle = Bundle()
-                                bundle.putString("id", clickedId.toString())
-                                val newFragment = ProductPageFragment()
-                                newFragment.arguments = bundle
-                                val fragmentManager: FragmentManager? = fragmentManager
-                                val fragmentTransaction: FragmentTransaction =
-                                        fragmentManager!!.beginTransaction()
-                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                                fragmentTransaction.commit()
-                            }
-                        }
-                    }
-
-                }
+            }
 
 
-            })
-        }
+        })
     }
     private fun listAllProducts(){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -400,11 +323,11 @@ class HomeFragment : Fragment() {
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
                     productList = ArrayList(response.body()!!)
-                    var adapter = context?.let { ProductAdapter(it, productList) }
+                    val adapter = context?.let { ProductAdapter(it, productList) }
                     val gridView = view?.findViewById<GridView>(R.id.gridView)
                     if (gridView != null) {
                         gridView.adapter = adapter
-                        gridView.setOnItemClickListener { parent, view, position, id ->
+                        gridView.setOnItemClickListener { _, view, _, _ ->
                             val clickedId = view.findViewById<TextView>(R.id.product_id).text
                             val bundle = Bundle()
                             bundle.putString("id", clickedId.toString())
@@ -472,70 +395,7 @@ class HomeFragment : Fragment() {
         Log.i("HomeFragment", "here")
     }
 
-    class ProductAdapter(context: Context, var productList: ArrayList<ProductResponse>) : BaseAdapter() {
-        var context: Context? = context
 
-        override fun getCount(): Int {
-            return productList.size
-        }
 
-        override fun getItem(position: Int): Any {
-            return productList[position]
-        }
 
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        @SuppressLint("SetTextI18n", "ViewHolder", "InflateParams")
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            //val food = this.productList[position]
-
-            val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val productView = inflator.inflate(R.layout.product_layout, null)
-            //foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
-            productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
-            productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
-            productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
-            val image  = productView.findViewById<ImageView>(R.id.img_product)
-            if(productList[position].photo_url!="") {
-                Picasso
-                    .get() // give it the context
-                    .load(productList[position].photo_url) // load the image
-                    .into(image)
-            }
-            else{
-                image.setImageResource(R.drawable.ic_menu_camera)
-            }
-            //val url = URL(productList[position].photo_url)
-            //val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            //productView.findViewById<ImageView>(R.id.img_product).setImageBitmap(bmp)
-            return productView
-        }
-    }
-    class VendorAdapter(context: Context, var vendorList: ArrayList<VendorResponse>) : BaseAdapter() {
-        var context: Context? = context
-
-        override fun getCount(): Int {
-            return vendorList.size
-        }
-
-        override fun getItem(position: Int): Any {
-            return vendorList[position]
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        @SuppressLint("SetTextI18n", "ViewHolder", "InflateParams")
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val productView = inflator.inflate(R.layout.vendor_layout, null)
-            productView.findViewById<TextView>(R.id.name_vendor).text = this.vendorList[position].name.toString()
-            productView.findViewById<TextView>(R.id.location_product).text = this.vendorList[position].location
-            productView.findViewById<RatingBar>(R.id.ratingBarVendor).rating = this.vendorList[position].rating.toFloat()
-            return productView
-        }
-    }
 }
