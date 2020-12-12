@@ -1,45 +1,40 @@
 import React, { Component } from "react";
-import {Button} from "@material-ui/core";
+import {Button, fade} from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
 import './FilterBar.css'
 import Select from '@material-ui/core/Select';
 import {Link} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
+import RangeSlider from "./FilterSlider";
+import RadioButtons from "./SortOptions";
+import {makeStyles} from "@material-ui/core/styles";
 
+
+// const useStyles = makeStyles((theme)=> ({
+//     root:{
+//         display: "flex",
+//         width:400,
+//     },
+// }))
 
 
 class Filter extends React.Component {
+
 
     constructor(props) {
         super(props);
         this.state = {
             checked: true,
-            sortBy: "bestseller"
+            sortBy: "bestseller",
         };
+
     }
     render(){
-
-
+        // const classes = useStyles();
         return (
-            <div className="row">
+            <div >
                 <div className="col-sm">
-
-                    <label className="filters">
-                        <Link to='/search'>
-                        <Button className="filter-button" variant="contained" color="secondary" onClick={() => {window.sessionStorage.setItem("sort_by", document.getElementById("sort_by_id").value);
-                        }}>
-                            Sort by
-                        </Button>
-                        </Link>
-                        &nbsp;
-                        <select id="sort_by_id">
-                            <option value="bestseller">Sort By</option>
-                            <option value="newest">Latest</option>
-                            <option value="priceDesc">Highest to lowest price</option>
-                            <option value="priceAsc">Lowest to highest price</option>
-                            <option value="numComments">Most commented</option>
-                        </select>
-                    </label>
+                    <RadioButtons/>
                 </div>
                 <div  className="col-sm">
                     <label className="filters">
@@ -74,6 +69,17 @@ class Filter extends React.Component {
                             inputProps={{ 'aria-label': 'primary checkbox' }}
                         />
                     </label>
+                </div>
+                <div  className="col-sm">
+                    <RangeSlider/>
+                </div>
+                <div  className="col-sm">
+                    <Link to='/search'>
+                        <Button className="filter-button" variant="contained" color="secondary" onClick={() => {window.sessionStorage.setItem("sort_by", document.getElementById("sort_by_id").value);
+                        }}>
+                            Filter
+                        </Button>
+                    </Link>
                 </div>
             </div>
         );

@@ -8,6 +8,7 @@ import Avatar from "@material-ui/core/Avatar";
 import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Navbar from "./NavBar";
 import axios from 'axios'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 const theme = createMuiTheme({
     palette:{
@@ -19,7 +20,6 @@ const theme = createMuiTheme({
         }
     }
 })
-
 
 export default function ProductDetailPage() {
     return (
@@ -50,9 +50,11 @@ class ProductDetail extends React.Component{
     };
 
     componentDidMount() {
-        axios.get("http://3.232.20.250/product/", {
+        const array = window.location.href.split("/")
+        axios.get(`http://3.232.20.250/product/`, {
+
             params: {
-                id: window.sessionStorage.getItem("product_id")
+                id: array[4]
             }
         }).then(res =>{
             console.log(res);
@@ -120,8 +122,8 @@ class ProductDetail extends React.Component{
 
                     <Grid item xs={6}>
                         <Paper>
-                            <Avatar alt="Remy Sharp" src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG" />
                             <Typography variant="body2" color="textPrimary" align="left">
+                                <Avatar alt="Remy Sharp" src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG" />
                                 I bought this sneakers and I am satisfied with it.
                             </Typography>
 
@@ -134,7 +136,8 @@ class ProductDetail extends React.Component{
                             <Typography variant="body2" color="textPrimary" align="left">
                                 <Avatar alt="Al" >Al
                                 </Avatar>
-                                Some more comments
+                                {window.location.href}
+
                             </Typography>
 
                         </Paper>

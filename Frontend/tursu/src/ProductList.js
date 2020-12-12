@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'flex-st1art',
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
         overflow: 'hidden',
         backgroundColor: theme.palette.background.paper,

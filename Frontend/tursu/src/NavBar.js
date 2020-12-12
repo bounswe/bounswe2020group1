@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme)=> ({
     },
     search:{
         color: "inherit",
-        width: 600,
+        width: 500,
         paddingLeft: `calc(1em + ${theme.spacing(1)}px)`,
         backgroundColor: fade(theme.palette.common.white, 0.15),
         '&:hover': {
@@ -76,11 +76,18 @@ const useStyles = makeStyles((theme)=> ({
 
     },
     searchType:{
-        marginLeft: 20,
+        marginLeft: 150,
         marginRight: 30
     },
     sign:{
-        marginLeft:200
+        marginLeft:10
+    },
+    sign_paper:{
+        pacity: 0.5,
+
+    },
+    cart:{
+        marginLeft:100
     },
 
 
@@ -156,8 +163,13 @@ export default function Navbar(){
                                     </Link>
 
                                 </Grid>
+                                <Grid item className={classes.cart}>
+                                    <IconButton >
+                                        <ShoppingCartIcon  />
+                                    </IconButton>
+                                </Grid>
                                 <Grid item className={classes.sign}>
-                                    <Paper variant="outlined" elevation={3} >
+                                    <Paper variant="outlined" elevation={3}  className={classes.sign_paper}>
                                         <AccountCircleIcon  />
                                         <Link to='/signIn'>
                                             <Button variant="text">
@@ -166,11 +178,7 @@ export default function Navbar(){
                                         </Link>
                                     </Paper>
                                 </Grid>
-                                <Grid item  className={classes.sign_in}>
-                                    <IconButton className={classes.sign_in}>
-                                        <ShoppingCartIcon className={classes.sign_in} />
-                                    </IconButton>
-                                </Grid>
+
 
                             </Grid>
 
