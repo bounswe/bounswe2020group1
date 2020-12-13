@@ -13,6 +13,7 @@ class RegisteredUser(models.Model):
 class Location(models.Model):
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    city = models.CharField(max_length=40, null=True)
 
 
 class Vendor(models.Model):
