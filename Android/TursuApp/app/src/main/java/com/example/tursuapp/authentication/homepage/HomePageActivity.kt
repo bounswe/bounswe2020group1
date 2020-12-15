@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ExpandableListView
+import android.widget.*
 import android.widget.ExpandableListView.OnGroupClickListener
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +16,7 @@ import androidx.navigation.findNavController
 import com.example.tursuapp.R
 import com.example.tursuapp.authentication.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
+import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
 import com.google.android.material.navigation.NavigationView
 
 
@@ -26,6 +25,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     var expListView: ExpandableListView? = null
     var listDataHeader: MutableList<String>? = null
     var listDataChild: HashMap<String, List<String>>? = null
+
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -43,6 +43,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         setSupportActionBar(toolbar)
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
+
         drawer = findViewById(R.id.drawer_layout)
         toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
@@ -75,6 +76,18 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
             false
         })
+        expListView!!.setOnChildClickListener(ExpandableListView.OnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            // Product Operations
+            if(groupPosition == 2){
+                when (childPosition) {
+                    0 -> displayOperations(R.id.nav_home,"ProductAdd")
+                    //1 -> displayOperations(R.id.nav_home, "ProductUpdate")
+                    //2 -> displayOperations(R.id.nav_home, "ProductDelete")
+                }
+            }
+
+            false
+        })
 
         this.findViewById<Button>(R.id.search_button).setOnClickListener {
             val editText: EditText? = findViewById(R.id.editMobileNo)
@@ -87,7 +100,27 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         expListView!!.setSelectedGroup(0)
 
-
+        /* Fill category spinner on the Add product page
+        // Initializing a String Array
+        val categoryList = arrayOf("Electronics","Fashion","Home","Cosmetics","Sports")
+        val mySpinner = findViewById(R.id.spinner) as Spinner
+        // Initializing an ArrayAdapter
+        val adapter = ArrayAdapter(
+                this, // Context
+                android.R.layout.simple_spinner_item, // Layout
+                categoryList // Array
+        )
+        // Set the drop down view resource
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        // Finally, data bind the spinner object with adapter
+        mySpinner.adapter=adapter
+        //LISTENER
+        mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
+                Toast.makeText(this@MainActivity, nebulae[i], Toast.LENGTH_SHORT).show()
+            }
+            override fun onNothingSelected(adapterView: AdapterView<*>) {
+            }*/
     }
     override fun onBackPressed() {
         val count = fragmentManager.backStackEntryCount
@@ -108,6 +141,16 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment, fragment)
             .commit()
+        this.drawer.closeDrawer(GravityCompat.START)
+    }
+    fun displayOperations(id: Int,type:String){
+        lateinit var fragment: Fragment
+        when (id) {
+            R.id.nav_home -> fragment = ProductAddFragment()
+        }
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
         this.drawer.closeDrawer(GravityCompat.START)
     }
     fun displayFragment(id: Int,type:String){
@@ -136,6 +179,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         // Adding child data
         (listDataHeader as ArrayList<String>).add("Home")
         (listDataHeader as ArrayList<String>).add("Categories")
+        (listDataHeader as ArrayList<String>).add("Product")
 
         // Adding child data
         val category_names: MutableList<String> = ArrayList()
@@ -150,8 +194,14 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         category_names.add("Home")
         category_names.add("Cosmetics")
         category_names.add("Sports")
+
+        val productOp_names: MutableList<String> = ArrayList()
+        productOp_names.add("Product Add")
+        productOp_names.add("Product Update")
+        productOp_names.add("Product Delete")
         listDataChild!![(listDataHeader as ArrayList<String>).get(0)] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>).get(1)] = category_names
+        listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = productOp_names
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
     }
 
