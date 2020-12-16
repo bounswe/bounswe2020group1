@@ -4,21 +4,23 @@ import "./profile.css";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import VendorSidebar from "./VendorSidebar";
+import CustomerSidebar from "./CustomerSidebar";
 import MyInfo from "./MyInfo";
-import MyProducts from "./MyProducts";
+import MyLists from "./MyLists";
 import MyOrders from "./MyOrders";
+import MyComments from "./MyComments"
 
 
-export default class VendorProfilePage extends Component {
+export default class CustomerProfilePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentTab : "info"
         }
         this.infoChange = this.infoChange.bind(this);
-        this.productsChange = this.productsChange.bind(this);
+        this.listsChange = this.listsChange.bind(this);
         this.ordersChange = this.ordersChange.bind(this);
+        this.commentsChange = this.commentsChange.bind(this);
         this.SelectPage = this.SelectPage.bind(this);
     }
 
@@ -26,10 +28,12 @@ export default class VendorProfilePage extends Component {
         switch (this.state.currentTab) {
             case "info":
                 return <MyInfo />
-            case "products":
-                return <MyProducts />
+            case "lists":
+                return <MyLists />
             case "orders":
                  return <MyOrders />
+            case "comments":
+                 return <MyComments />
         }
     }
     infoChange(){
@@ -37,14 +41,19 @@ export default class VendorProfilePage extends Component {
                 currentTab:"info"
             });
     }
-    productsChange(){
+    listsChange(){
             this.setState({
-                currentTab:"products"
+                currentTab:"lists"
             });
     }
     ordersChange(){
              this.setState({
                  currentTab:"orders"
+             });
+    }
+    commentsChange(){
+             this.setState({
+                 currentTab:"comments"
              });
     }
     render() {
@@ -60,7 +69,7 @@ export default class VendorProfilePage extends Component {
                         <h1 className="stepper">My Profile</h1>
                     </div>
                     <Grid container item direction="row" spacing={1}>
-                        <VendorSidebar info={this.infoChange} products={this.productsChange} orders={this.ordersChange}/>
+                        <CustomerSidebar info={this.infoChange} lists={this.listsChange} orders={this.ordersChange} comments={this.commentsChange}/>
                         {this.SelectPage()}
                     </Grid>
 
