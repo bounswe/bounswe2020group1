@@ -80,6 +80,10 @@ export default function ShoppingCart(props){
         })
     }, [])
 
+    function onCountChange(change, price){
+        setTotalSum(totalSum + (change*price) )
+    }
+
     return(
         <ThemeProvider theme={theme} >
             <Grid container spacing={15} direction="column" className="HomePage">
@@ -92,7 +96,7 @@ export default function ShoppingCart(props){
                     Shopping Cart
                 </h4>
                 <Grid item container direction="row">
-                    {<ProductListHorizontal products={products}/>}
+                    {<ProductListHorizontal products={products} onCountChange={onCountChange}/>}
                     <Paper className={classes.summaryPaper}>
                         <Grid item className={classes.summaryGrid}>
                                 <Typography variant="subtitle2" gutterBottom align={"left"}>
@@ -116,7 +120,7 @@ function calculateTotalSum(products){
     var total_sum = 0;
 
     for(let i=0; i<products.length; i++){
-        total_sum += parseInt(products[i].product.price)
+        total_sum += parseInt(products[i].product.price) * products[i].quantity
     }
 
     return total_sum;

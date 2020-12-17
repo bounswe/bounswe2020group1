@@ -145,7 +145,37 @@ export function ProductBoxHorizontal(props) {
             })
     }
 
+    function handleCountChange(change){
+        //TODO: Delete items when its quantity is set to zero.
+        if(props.quantity <= 0 && change < 0)
+        {
+            return;
+        }
 
+        console.log("Product Id", props.product.id)
+        console.log("Token " + window.sessionStorage.getItem("authToken"))
+
+        const formData = new FormData();
+        formData.append("product_id", props.product.id);
+        formData.append("quantity", props.quantity + change);
+
+        axios.post('http://3.232.20.250/shoppingcart/add',
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+            })
+            .catch(error =>{
+                console.log(error)
+                alert ("There has been an error. Please try again.");
+            })
+
+        props.onCountChange(change, props.product.price);
+    }
 
     return(
         <div className={classes.root}>
@@ -181,7 +211,7 @@ export function ProductBoxHorizontal(props) {
                                 aria-label="increase"
                                 onClick={() => {
                                     setCount(count + 1);
-
+                                    handleCountChange(1)
                                 }}
                                 variant
                             >
@@ -196,6 +226,7 @@ export function ProductBoxHorizontal(props) {
                                 aria-label="reduce"
                                 onClick={() => {
                                     setCount(Math.max(count - 1, 0));
+                                    handleCountChange(-1)
                                 }}
                             >
                                 <RemoveIcon fontSize="small"/>

@@ -31,12 +31,16 @@ export default function ProductListVertical(props) {
     );
 }
 
+
+
 export function ProductListHorizontal(props) {
     const classes = useStyles();
     return (
         <Grid item container className={classes.root} direction={"column"}>
             {props.products.map((product) => (
-                <ProductBoxHorizontal product={product.product} quantity={product.quantity}/>
+                <ProductBoxHorizontal product={product.product}
+                                      quantity={product.quantity}
+                                      onCountChange={props.onCountChange}/>
             ))}
         </Grid>
     );
