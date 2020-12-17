@@ -81,7 +81,7 @@ export default function ShoppingCart(props){
     }, [])
 
     function onCountChange(change, price){
-        setTotalSum(totalSum + (change*price) )
+        setTotalSum(parseInt(totalSum) + (change * parseInt(price)) )
     }
 
     return(

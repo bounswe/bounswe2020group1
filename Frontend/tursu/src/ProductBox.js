@@ -120,16 +120,17 @@ export function ProductBoxHorizontal(props) {
 
     function handleDelete(){
         console.log("Product ID:", props.product.id);
-        const formData = new FormData();
-        formData.append("product_id", props.product.id);
         console.log("Token: " + window.sessionStorage.getItem("authToken"))
 
+        const formData = new FormData();
+        formData.append("product_id", props.product.id);
+
         axios.delete('http://3.232.20.250/shoppingcart/delete', {
-                data: {
-                    product_id: props.product.id,
-                },
                 headers: {
                     'Authorization': "Token " + window.sessionStorage.getItem("authToken"),
+                },
+                data: {
+                    "product_id": props.product.id
                 },
             })
             .then(res => {
@@ -146,9 +147,12 @@ export function ProductBoxHorizontal(props) {
     }
 
     function handleCountChange(change){
-        //TODO: Delete items when its quantity is set to zero.
-        if(props.quantity <= 0 && change < 0)
+        const newCount = Math.max(count + change, 0);
+        setCount(newCount);
+
+        if(count <= 0 && change < 0)
         {
+            //TODO: Delete items when its quantity is set to zero.
             return;
         }
 
@@ -157,7 +161,7 @@ export function ProductBoxHorizontal(props) {
 
         const formData = new FormData();
         formData.append("product_id", props.product.id);
-        formData.append("quantity", props.quantity + change);
+        formData.append("quantity", newCount.toString());
 
         axios.post('http://3.232.20.250/shoppingcart/add',
             formData, {
@@ -171,7 +175,6 @@ export function ProductBoxHorizontal(props) {
             })
             .catch(error =>{
                 console.log(error)
-                alert ("There has been an error. Please try again.");
             })
 
         props.onCountChange(change, props.product.price);
@@ -210,7 +213,6 @@ export function ProductBoxHorizontal(props) {
                             <IconButton
                                 aria-label="increase"
                                 onClick={() => {
-                                    setCount(count + 1);
                                     handleCountChange(1)
                                 }}
                                 variant
@@ -225,7 +227,6 @@ export function ProductBoxHorizontal(props) {
                             <IconButton
                                 aria-label="reduce"
                                 onClick={() => {
-                                    setCount(Math.max(count - 1, 0));
                                     handleCountChange(-1)
                                 }}
                             >
