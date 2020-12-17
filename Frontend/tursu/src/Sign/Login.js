@@ -24,14 +24,15 @@ export default class Login extends Component {
         formData.append("password", this.state.password);
         axios.post('http://3.232.20.250/user/login',  formData)
             .then(res => {
-                console.log(res);
-                console.log(res.status);
+                console.log("result:", res);
+                console.log("status: ", res.status);
                 this.setState({ redirect: "True" });
-                window.sessionStorage.setItem("authToken", res.data.auth_token.text);
+                window.sessionStorage.setItem("authToken", res.data.auth_token);
+                console.log("auth_token: ", window.sessionStorage.getItem("authToken"));
             })
             .catch(error =>{
                 if (error.response){
-                    if (error.response.status == 401){
+                    if (error.response.status === 401){
                         alert ("The email or password you have entered is incorrect. Please try again.");
                     }
                     else{

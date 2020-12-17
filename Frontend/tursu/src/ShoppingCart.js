@@ -30,15 +30,12 @@ const styles = makeStyles((theme) => ({
         padding: 30
     },
     summaryPaper:{
-        height: 200,
+        height: 175,
         // marginLeft: 100,
         marginTop: 35,
         // marginBottom: 1,
         // width: 60,
     },
-    text: {
-
-    }
 }));
 
 const ahmet = [
@@ -91,17 +88,17 @@ export default function ShoppingCart(props){
                         <Navbar />
                     </Paper>
                 </Grid>
-                <h1>
+                <h4>
                     Shopping Cart
-                </h1>
+                </h4>
                 <Grid item container direction="row">
                     {<ProductListHorizontal products={products}/>}
                     <Paper className={classes.summaryPaper}>
                         <Grid item className={classes.summaryGrid}>
-                                <Typography variant="body2" gutterBottom align={"left"}>
+                                <Typography variant="subtitle2" gutterBottom align={"left"}>
                                     AMOUNT TO BE PAID
                                 </Typography>
-                                <Typography variant="h3" gutterBottom align={"left"}>
+                                <Typography variant="h5" gutterBottom align={"left"}>
                                     {totalSum} ₺
                                 </Typography>
                                 <Button variant={"contained"} color="primary" size={"large"}>

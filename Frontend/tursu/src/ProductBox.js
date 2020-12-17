@@ -83,11 +83,24 @@ const horizontalStyles = makeStyles((theme) => ({
     },
     imageContainer: {
         width: 128,
-        height: 128
+        height: 128,
     },
     image: {
         width: "50%",
         height: "auto",
+        marginTop: "12px"
+    },
+    productName: {
+        flex: "0 0 150px",
+        textAlign: "left"
+    },
+    price: {
+        flex: "0 0 100px",
+        textAlign: "left"
+    },
+    brandName: {
+        flex: "0 0 100px",
+        textAlign: "left",
     },
     productCountBox: {
         width: 45,
@@ -106,16 +119,17 @@ export function ProductBoxHorizontal(props) {
     const [count, setCount] = React.useState(props.quantity);
 
     function handleDelete(){
-        console.log(props.product.id)
+        console.log("Product ID:", props.product.id);
         const formData = new FormData();
         formData.append("product_id", props.product.id);
-        console.log("Token " + window.sessionStorage.getItem("authToken"))
-        axios.delete('http://3.232.20.250/shoppingcart/delete',{
-                headers: {
-                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+        console.log("Token: " + window.sessionStorage.getItem("authToken"))
+
+        axios.delete('http://3.232.20.250/shoppingcart/delete', {
+                data: {
+                    product_id: props.product.id,
                 },
-                params: {
-                    "product_id" : parseInt(props.product.id)
+                headers: {
+                    'Authorization': "Token " + window.sessionStorage.getItem("authToken"),
                 },
             })
             .then(res => {
@@ -123,10 +137,15 @@ export function ProductBoxHorizontal(props) {
                 console.log(res.status);
             })
             .catch(error =>{
-                console.log(error)
+                console.log(error.response)
+                console.log(error.response.request.response)
+                console.log(error.request)
+                console.log(error.message)
                 alert ("There has been an error. Please try again.");
             })
     }
+
+
 
     return(
         <div className={classes.root}>
@@ -139,40 +158,35 @@ export function ProductBoxHorizontal(props) {
                             alt={props.product.name}
                             className={classes.image}/>
                     </Grid>
-                    <Grid item className={classes.marginInsideGrid}>
+                    <Grid item className={[classes.marginInsideGrid, classes.productName].join(" ") }>
                         <Typography variant="subtitle2">
                             {props.product.name}
                         </Typography>
                     </Grid>
-                    <Grid item className={classes.marginInsideGrid}>
+                    <Grid item className={[classes.marginInsideGrid, classes.price].join(" ")}>
                         <Typography variant="body2">
                             <Box fontWeight="fontWeightBold">
                                 {props.product.price} ₺
                             </Box>
                         </Typography>
                     </Grid>
-                    <Grid item className={classes.marginInsideGrid}>
+                    <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
                         <Typography variant="caption">
                             {props.product.vendor_name}
                         </Typography>
                     </Grid>
-                    <Grid item >
-
+                    <Grid item className={classes.marginInsideGrid}>
                         <ButtonGroup orientation={"vertical"} size={"small"}>
                             <IconButton
                                 aria-label="increase"
                                 onClick={() => {
                                     setCount(count + 1);
+
                                 }}
                                 variant
                             >
                                 <AddIcon fontSize="small"/>
                             </IconButton>
-                            {/*<TextField value={count}*/}
-                            {/*           placeholder="number"*/}
-                            {/*           // label = "Items"*/}
-                            {/*           variant="standard"*/}
-                            {/*           className={classes.productCountBox}/>*/}
                             <Typography className={classes.productCountNumber}>
                                 <Box fontWeight="fontWeightBold">
                                     {count}
