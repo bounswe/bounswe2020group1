@@ -107,9 +107,15 @@ const theme = createMuiTheme({
 // TODO: implement search functionality
 export default function Navbar(){
     const [search_type, setType] = React.useState('product');
+    const [search_str, setStr] = React.useState();
+
 
     const handleChange = (event) => {
         setType(event.target.value);
+    };
+
+    const handleChangeStr = (event) => {
+        setStr(event.target.value);
     };
 
     const classes = useStyles();
@@ -151,12 +157,12 @@ export default function Navbar(){
                                     <MenuItem value={"vendor"}>Vendors</MenuItem>
                                 </Select>
                                 <Grid item className={classes.searchGrid}>
-                                    <InputBase placeholder="Search" id="search" className={classes.search}/>
+                                    <InputBase placeholder="Search" id="search" className={classes.search} onChange={handleChangeStr}/>
                                 </Grid>
                                 <Grid item>
-                                    <Link to='/search'>
+                                    <Link to={`/search/${search_str}/${search_type}`}>
                                         <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
-                                            window.sessionStorage.setItem("search_type", search_type);
+                                            window.sessionStorage.setItem("search_type", search_type)
                                         }}>
                                             <SearchIcon/>
                                         </IconButton>

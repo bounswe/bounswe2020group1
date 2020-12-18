@@ -13,13 +13,15 @@ function valuetext(value) {
     return {value};
 }
 
-export default function RangeSlider() {
+export default function RangeSlider( props ) {
     const classes = useStyles();
-    const [value, setValue] = React.useState([20, 37]);
+    const [value, setValue] = React.useState([20, 8000]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        props.parentCallback(newValue);
     };
+
 
     return (
         <div className={classes.root}>
@@ -28,11 +30,12 @@ export default function RangeSlider() {
             </Typography>
             <Slider
                 value={value}
-                onChange={handleChange}
+                onChangeCommitted={handleChange}
                 valueLabelDisplay="auto"
                 aria-labelledby="range-slider"
                 getAriaValueText={valuetext}
-                max={1000}
+                max={10000}
+
             />
         </div>
     );

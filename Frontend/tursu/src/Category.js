@@ -28,7 +28,7 @@ class Category extends React.Component{
         Axios.get('http://3.232.20.250/product/category/',{
             params: {
                 name:  this.props.match.params.category,
-                sort_by : window.sessionStorage.getItem("sort_by")
+                // sort_by : "priceAsc"
             }
         })
             .then(res => {
@@ -41,7 +41,7 @@ class Category extends React.Component{
         Axios.get('http://3.232.20.250/product/category/',{
             params: {
                 name:  this.props.match.params.category,
-                sort_by : window.sessionStorage.getItem("sort_by")
+                // sort_by : "priceAsc"
             }
         })
             .then(res => {

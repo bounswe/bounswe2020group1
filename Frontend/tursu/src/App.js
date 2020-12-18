@@ -15,7 +15,7 @@ function App() {
                 <Route path="/categories/:category" exact component={Category} />
                 <Route path="/signIn" exact component={Sign} />
                 <Route path="/product/:id"  component={ProductDetailPage} />
-                <Route path="/search" exact component={SearchPage} />
+                <Route path="/search/:search_string/:search_type/:fprice_lower?/:fprice_upper?/:fvendor_name?/:fcategory?/:sort_by?"  component={SearchPage} />
             </div>
         </Router>
     );
