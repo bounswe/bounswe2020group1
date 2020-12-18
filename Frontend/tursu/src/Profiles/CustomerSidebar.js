@@ -2,13 +2,11 @@ import React, {Component} from 'react';
 import myInfo from "./MyInfo";
 import myLists from "./MyLists";
 import myOrders from "./MyOrders";
-import myComments from "./MyComments"
 import Stepper from '../Stepper';
 import Navbar from "../NavBar";
 import "./profile.css";
 import {makeStyles} from '@material-ui/core/styles';
 import ViewListIcon from '@material-ui/icons/ViewList';
-import SmsIcon from '@material-ui/icons/Sms';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import InfoIcon from '@material-ui/icons/Info';
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
@@ -51,14 +49,6 @@ export default function CustomerSidebar(props){
                         <Typography>My Orders</Typography>
                     </IconButton>
                 </Paper>
-            </Grid>
-            <Grid item className="sidebar">
-                 <Paper elevation="4">
-                    <IconButton onClick={props.comments}>
-                        <SmsIcon/>
-                        <Typography>My Comments</Typography>
-                     </IconButton>
-                 </Paper>
             </Grid>
             <Grid item className="sidebar">
                  <Paper elevation="4">

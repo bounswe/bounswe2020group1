@@ -8,7 +8,6 @@ import CustomerSidebar from "./CustomerSidebar";
 import MyInfo from "./MyInfo";
 import MyLists from "./MyLists";
 import MyOrders from "./MyOrders";
-import MyComments from "./MyComments"
 
 
 export default class CustomerProfilePage extends Component {
@@ -20,7 +19,6 @@ export default class CustomerProfilePage extends Component {
         this.infoChange = this.infoChange.bind(this);
         this.listsChange = this.listsChange.bind(this);
         this.ordersChange = this.ordersChange.bind(this);
-        this.commentsChange = this.commentsChange.bind(this);
         this.SelectPage = this.SelectPage.bind(this);
     }
 
@@ -32,8 +30,6 @@ export default class CustomerProfilePage extends Component {
                 return <MyLists />
             case "orders":
                  return <MyOrders />
-            case "comments":
-                 return <MyComments />
         }
     }
     infoChange(){
@@ -51,11 +47,6 @@ export default class CustomerProfilePage extends Component {
                  currentTab:"orders"
              });
     }
-    commentsChange(){
-             this.setState({
-                 currentTab:"comments"
-             });
-    }
     render() {
         return (
             <ThemeProvider>
@@ -69,7 +60,7 @@ export default class CustomerProfilePage extends Component {
                         <h1 className="stepper">My Profile</h1>
                     </div>
                     <Grid container item direction="row" spacing={1}>
-                        <CustomerSidebar info={this.infoChange} lists={this.listsChange} orders={this.ordersChange} comments={this.commentsChange}/>
+                        <CustomerSidebar info={this.infoChange} lists={this.listsChange} orders={this.ordersChange}/>
                         {this.SelectPage()}
                     </Grid>
 
