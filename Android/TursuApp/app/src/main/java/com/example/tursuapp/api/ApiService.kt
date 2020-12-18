@@ -5,6 +5,7 @@ import com.example.tursuapp.api.requests.LoginRequest
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.TokenResponse
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -32,4 +33,9 @@ interface ApiService {
 
     @GET("/search")
     fun getSearchedProducts(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<ProductResponse>>
+
+    @POST("/product/add")
+    fun productadd(@Part("category") category: String, @Part("name") name:String, @Part("description") description:String,
+                   @Part("brand") brand:String, @Part("stock") stock:Integer, @Part("price") price:Float,
+                   @Part("photo") photo:MultipartBody.Part): Call<TokenResponse>
 }
