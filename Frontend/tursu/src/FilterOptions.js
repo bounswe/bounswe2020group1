@@ -19,26 +19,18 @@ const GreenRadio = withStyles({
 })((props) => <Radio color="default" {...props} />);
 
 export default function RadioButtons(props) {
-    const [SortValue, setSortValue] = React.useState();
-    const [CategoryValue, setCategoryValue] = React.useState();
-    const [VendorValue, setVendorValue] = React.useState();
 
 
 
     const handleChangeSortBy = (event) => {
-        console.log(event.target.value)
         props.parentCallbackSB(event.target.value)
-        console.log(event.target.value)
-
     };
 
     const handleChangeFilterVendor = (event) => {
-        setVendorValue(event.target.value);
         props.parentCallbackFV(event.target.value)
     };
 
     const handleChangeFilterCategory = (event) => {
-        setCategoryValue(event.target.value);
         props.parentCallbackFC(event.target.value)
     };
 
@@ -57,9 +49,10 @@ export default function RadioButtons(props) {
         {
             props.parentCallbackSC(event.target.checked)
         }
-        // parentCallbackSC
-        window.sessionStorage.setItem("isfcategory", state.FilterCategory);
-        window.sessionStorage.setItem("isfvendor", state.FilterVendors);
+        if(event.target.name === "FilterVendors")
+        {
+            props.parentCallbackSV(event.target.checked)
+        }
     };
 
     return (
@@ -110,10 +103,10 @@ export default function RadioButtons(props) {
                 inputProps={{ 'aria-label': 'primary checkbox' }}
             ></Switch> Filter Vendors
 
-            {/*{state.FilterVendors &&*/}
-            {/*<RadioGroup aria-label="anonymous" name="anonymous" onChange={handleChangeFilterVendor} row>*/}
-            {/*    <OptionList/>*/}
-            {/*</RadioGroup>}*/}
+            {state.FilterVendors &&
+            <RadioGroup aria-label="anonymous" name="anonymous" onChange={handleChangeFilterVendor} row>
+                <OptionList vendorList={props.vendorList}/>
+            </RadioGroup>}
         </div>
     );
 }

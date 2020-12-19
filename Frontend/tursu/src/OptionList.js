@@ -31,25 +31,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function OptionList() {
-    const classes = useStyles();
-    const [state, setState] = React.useState({
-        vendors: []
+export default function OptionList(props) {
 
-    });
-//  This part should be done in the parent class
-//     Axios.get('http://3.232.20.250/helper/allvendors',{
-//
-//     })
-//         .then(res => {
-//             console.log(res)
-//             setState({vendors: res.data})
-//         })
-// //
 
     return (
         <div>
-            {state.vendors.map((vendor) => (
+            {props.vendorList.map((vendor) => (
                 <FormControlLabel value= {vendor} control={<GreenRadio />} label= {vendor}/>
             ))}
         </div>

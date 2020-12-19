@@ -21,17 +21,6 @@ const theme = createMuiTheme({
     }
 })
 
-function arraysEqual(a, b) {
-    if (a === b) return true;
-    if (a == null || b == null) return false;
-    if (a.length !== b.length) return false;
-
-    for (var i = 0; i < a.length; ++i) {
-        if (a[i] !== b[i]) return false;
-    }
-    return true;
-}
-
 class SearchPage extends React.Component{
 
     state = {
@@ -42,7 +31,9 @@ class SearchPage extends React.Component{
         vendor: null,
         category: null,
         category_switch: null,
-        sort: null
+        vendor_switch: null,
+        sort: null,
+        vendor_list: []
 
     }
     handleCallbackdataRange = (childData) =>{
@@ -59,6 +50,10 @@ class SearchPage extends React.Component{
     }
     handleCallbackdataCategorySwitch= (childData) =>{
         this.setState({category_switch: childData})
+    }
+
+    handleCallbackdataVendorSwitch= (childData) =>{
+        this.setState({vendor_switch: childData})
     }
 
     componentDidMount() {
@@ -80,11 +75,18 @@ class SearchPage extends React.Component{
                 this.setState({products: res.data});
                 this.setState({search_url: array.slice(4,11)});
             })
+
+        Axios.get('http://3.232.20.250/helper/allvendors',{
+        })
+            .then(res => {
+                console.log(res)
+                this.setState({vendor_list: res.data})
+            })
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         const array = window.location.href.split("/")
-        if((this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)){
-            console.log(this.state.category)
+        if((this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
+            console.log(this.state.vendor)
             Axios.get('http://3.232.20.250/search/',{
                 params: {
                     search_string : array[4],
@@ -92,7 +94,7 @@ class SearchPage extends React.Component{
                     fprice_lower: this.state.range[0],
                     fprice_upper: this.state.range[1],
                     ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
-                    fvendor: this.state.vendor,
+                    ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
                     sort_by:this.state.sort
                 }
             })
@@ -120,7 +122,7 @@ class SearchPage extends React.Component{
                         <br/>
                         <Grid item xs={12}>
                             <Paper>
-                                <Filter callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch}/>
+                                <Filter callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list}/>
                             </Paper>
                         </Grid>
                         <Grid item xs={12} container>
