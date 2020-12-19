@@ -68,7 +68,7 @@ def get_orders(request):
                     "estimatedArrivalDate": item.estimatedArrivalDate,
                     "arrivalDate": item.arrivalDate}
 
-        orders.append(cart_info)
+        orders.append(order_info)
 
     return JsonResponse(orders, safe=False)
 
@@ -106,18 +106,14 @@ def set_delivery(request):
         return HttpResponse("Vendor authentication failed", status=401)
     try:
         order_id = request.POST["order_id"]
-    except:
-        return HttpResponse("Missing arguments", status=400)
-
-    try:
+        cargo_id = request.POST["cargo_id"]
         days = int(request.POST["days"])
     except:
         return HttpResponse("Missing arguments", status=400)
-
+    
     order = Order.objects.filter(id=order_id).first()
     if order == None:
         return HttpResponse("Invalid order_id", status=400)
-
 
     order.cargoID = cargo_id
     estimatedArrivalDate = datetime.now().timedelta(days=days)
