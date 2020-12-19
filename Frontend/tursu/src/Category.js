@@ -2,7 +2,7 @@ import React from "react";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
-import Filter from "./FilterBar";
+
 import ProductList from "./ProductList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
@@ -27,8 +27,7 @@ class Category extends React.Component{
     componentDidMount() {
         Axios.get('http://3.232.20.250/product/category/',{
             params: {
-                name:  this.props.match.params.category,
-                // sort_by : "priceAsc"
+                name:  this.props.match.params.category
             }
         })
             .then(res => {
@@ -37,19 +36,20 @@ class Category extends React.Component{
             })
     }
 
-    componentDidUpdate() {
-        Axios.get('http://3.232.20.250/product/category/',{
-            params: {
-                name:  this.props.match.params.category,
-                // sort_by : "priceAsc"
-            }
-        })
-            .then(res => {
-                console.log(res)
-                this.setState({products: res.data})
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(prevProps.match.params.category !== this.props.match.params.category )
+        {
+            Axios.get('http://3.232.20.250/product/category/',{
+                params: {
+                    name:  this.props.match.params.category
+                }
             })
+                .then(res => {
+                    console.log(res)
+                    this.setState({products: res.data})
+                })
+        }
     }
-
 
     render(){
         return(
@@ -57,15 +57,12 @@ class Category extends React.Component{
                 <Grid container spacing={15} direction="column" className="HomePage">
                     <Grid item xs={12}>
                         <Paper>
-                            <Filter />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Paper>
                             <Navbar />
                         </Paper>
                     </Grid>
-                    <h1>{this.props.match.params.category}</h1>
+                    <h1>
+                        {this.props.match.params.category}
+                    </h1>
                     <Grid item xs={12} container>
                         <ProductList products={this.state.products}/>
                     </Grid>
