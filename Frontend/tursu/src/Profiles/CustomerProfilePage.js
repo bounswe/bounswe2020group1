@@ -20,6 +20,7 @@ export default class CustomerProfilePage extends Component {
         this.listsChange = this.listsChange.bind(this);
         this.ordersChange = this.ordersChange.bind(this);
         this.SelectPage = this.SelectPage.bind(this);
+        this.SelectTitle = this.SelectTitle.bind(this);
     }
 
     SelectPage(){
@@ -30,6 +31,16 @@ export default class CustomerProfilePage extends Component {
                 return <MyLists />
             case "orders":
                  return <MyOrders />
+        }
+    }
+    SelectTitle(){
+        switch (this.state.currentTab) {
+            case "info":
+                return <h1 className="stepper">My Information</h1>
+            case "lists":
+                return <h1 className="stepper">My Lists</h1>
+            case "orders":
+                 return <h1 className="stepper">My Orders</h1>
         }
     }
     infoChange(){
@@ -57,7 +68,7 @@ export default class CustomerProfilePage extends Component {
                         </Paper>
                     </Grid>
                     <div>
-                        <h1 className="stepper">My Profile</h1>
+                        {this.SelectTitle()}
                     </div>
                     <Grid container item direction="row" spacing={1}>
                         <CustomerSidebar info={this.infoChange} lists={this.listsChange} orders={this.ordersChange}/>
