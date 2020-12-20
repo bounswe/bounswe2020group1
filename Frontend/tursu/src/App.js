@@ -6,6 +6,9 @@ import Category from "./Category";
 import Sign from "./Sign/Sign";
 import ProductDetailPage from "./ProductDetailPage";
 import SearchPage from "./Search";
+import Sidebar from "./Profiles/VendorSidebar";
+import VendorProfilePage from "./Profiles/VendorProfilePage";
+import CustomerProfilePage from "./Profiles/CustomerProfilePage";
 
 function App() {
     return (
@@ -16,6 +19,8 @@ function App() {
                 <Route path="/signIn" exact component={Sign} />
                 <Route path="/product" exact component={ProductDetailPage} />
                 <Route path="/search" exact component={SearchPage} />
+                <Route path="/vendorProfile" exact component={VendorProfilePage} />
+                <Route path="/customerProfile" exact component={CustomerProfilePage} />
             </div>
         </Router>
     );
