@@ -1,5 +1,7 @@
 package com.example.tursuapp.authentication.homepage.ui.shoppingcart
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,11 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
+import com.example.tursuapp.authentication.homepage.ui.payment.PaymentFragment
+import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartModel
 import com.squareup.picasso.Picasso
 import org.w3c.dom.Text
@@ -22,6 +30,7 @@ import retrofit2.Response
 class ShoppingCartFragment : Fragment() {
 
     private lateinit var shoppingCartViewModel: ShoppingCartModel
+    var adapter: ShoppingCartFragment.ProductAdapter? = null
     private lateinit var product: ProductDetailsResponse
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -44,6 +53,22 @@ class ShoppingCartFragment : Fragment() {
             spinner.adapter = adapter
         }
         getDetails(id_str!!.toInt(), view)*/
+        view.findViewById<Button>(R.id.continueShopping).setOnClickListener(){
+            val newFragment = HomeFragment()
+            val fragmentManager: FragmentManager? = fragmentManager
+            val fragmentTransaction: FragmentTransaction =
+                    requireFragmentManager().beginTransaction()
+            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+        view.findViewById<Button>(R.id.GoPayment).setOnClickListener(){
+            val newFragment = PaymentFragment()
+            val fragmentManager: FragmentManager? = fragmentManager
+            val fragmentTransaction: FragmentTransaction =
+                    requireFragmentManager().beginTransaction()
+            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+            fragmentTransaction.commit()
+        }
     }
     fun getDetails(id: Int, view: View){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -82,5 +107,49 @@ class ShoppingCartFragment : Fragment() {
                 .get() // give it the context
                 .load(product.photo_url) // load the image
                 .into(image)
+    }
+
+    class ProductAdapter : BaseAdapter {
+        var productList = ArrayList<ProductResponse>()
+        var productImages = ArrayList<ImageView>()
+        var context: Context? = null
+
+        constructor(context: Context, productList: ArrayList<ProductResponse>) : super() {
+            this.context = context
+            this.productList = productList
+        }
+
+        override fun getCount(): Int {
+            return productList.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return productList[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        @SuppressLint("SetTextI18n")
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            //val food = this.productList[position]
+
+            val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val productView = inflator.inflate(R.layout.product_for_shopping_cart, null)
+
+            productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
+            productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
+            productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
+            val image  = productView.findViewById<ImageView>(R.id.img_product)
+            Picasso
+                    .get() // give it the context
+                    .load(productList[position].photo_url) // load the image
+                    .into(image)
+            //val url = URL(productList[position].photo_url)
+            //val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            //productView.findViewById<ImageView>(R.id.img_product).setImageBitmap(bmp)
+            return productView
+        }
     }
 }

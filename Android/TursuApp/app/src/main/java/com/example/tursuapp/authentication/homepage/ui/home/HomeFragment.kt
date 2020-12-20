@@ -208,18 +208,7 @@ class HomeFragment : Fragment() {
         // load foods
         Log.i("HomeFragment", "here")
 
-        val shoppingCart:CardView? = view?.findViewById<CardView>(R.id.shopping_cart)
-        shoppingCart?.setOnClickListener {
-            Log.i("MainFragment", "BURDA")
-            val bundle = Bundle()
-            val newFragment = ShoppingCartFragment()
-            newFragment.arguments = bundle;
-            val fragmentManager: FragmentManager? = fragmentManager
-            val fragmentTransaction: FragmentTransaction =
-                    requireFragmentManager().beginTransaction()
-            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-            fragmentTransaction.commit()
-        }
+
     }
 
     class ProductAdapter : BaseAdapter {

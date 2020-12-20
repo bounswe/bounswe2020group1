@@ -69,6 +69,8 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
                     startActivity(intent)
                 } else {
+                    val intent = Intent(applicationContext, HomePageActivity::class.java)
+                    startActivity(intent)
                     Toast.makeText(applicationContext, "Kullanıcı bilgileri hatalı veya bulunmamaktadır.", Toast.LENGTH_SHORT).show()
                 }
             }

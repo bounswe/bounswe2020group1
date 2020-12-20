@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:clickable="true"
+    android:background="#FFFFFF">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/continueShopping"
         android:layout_width="248dp"
         android:layout_height="51dp"
         android:layout_marginTop="16dp"
@@ -20,13 +22,13 @@
         app:layout_constraintTop_toBottomOf="@+id/Products" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/GoPayment"
         android:layout_width="226dp"
         android:layout_height="45dp"
         android:text="Go To Payment Page"
-        app:layout_constraintEnd_toEndOf="@+id/button"
-        app:layout_constraintStart_toStartOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintEnd_toEndOf="@+id/continueShopping"
+        app:layout_constraintStart_toStartOf="@+id/continueShopping"
+        app:layout_constraintTop_toBottomOf="@+id/continueShopping" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -42,9 +44,9 @@
         android:id="@+id/imageView7"
         android:layout_width="50dp"
         android:layout_height="44dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="@+id/button"
-        app:layout_constraintTop_toTopOf="@+id/button"
+        app:layout_constraintBottom_toBottomOf="@+id/continueShopping"
+        app:layout_constraintEnd_toEndOf="@+id/continueShopping"
+        app:layout_constraintTop_toTopOf="@+id/continueShopping"
         app:srcCompat="@drawable/shopping_cart" />
 
     <TextView
@@ -69,7 +71,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/GoPayment" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Products"
@@ -78,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" >
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

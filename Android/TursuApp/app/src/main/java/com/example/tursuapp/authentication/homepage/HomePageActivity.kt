@@ -2,6 +2,7 @@ package com.example.tursuapp.authentication.homepage
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -11,13 +12,17 @@ import android.widget.ExpandableListView.OnGroupClickListener
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import com.example.tursuapp.R
 import com.example.tursuapp.authentication.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
+import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.google.android.material.navigation.NavigationView
 
 
@@ -83,6 +88,15 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 val searchText=editText.text
                 search(searchText.toString())
             }
+        }
+        this.findViewById<CardView>(R.id.shopping_cart).setOnClickListener {
+            lateinit var fragment: Fragment
+            fragment = ShoppingCartFragment()
+
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.nav_host_fragment, fragment)
+                    .commit()
+            this.drawer.closeDrawer(GravityCompat.START)
         }
 
         expListView!!.setSelectedGroup(0)
