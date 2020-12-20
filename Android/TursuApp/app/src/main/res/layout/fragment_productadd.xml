@@ -120,10 +120,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.252"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner2" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinner2"
         android:layout_width="311dp"
         android:layout_height="45dp"
         android:layout_gravity="center"
@@ -131,9 +131,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="56dp"
         android:background="@color/white"
-        android:entries="@array/items"
         android:spinnerMode="dropdown"
-        android:theme="@style/Spinner"
+        android:theme="@style/Spinner2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />

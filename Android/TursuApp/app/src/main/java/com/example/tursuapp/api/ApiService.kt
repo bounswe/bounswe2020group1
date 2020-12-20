@@ -34,8 +34,15 @@ interface ApiService {
     @GET("/search")
     fun getSearchedProducts(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<ProductResponse>>
 
-    @POST("/product/add")
-    fun productadd(@Part("category") category: String, @Part("name") name:String, @Part("description") description:String,
-                   @Part("brand") brand:String, @Part("stock") stock:Integer, @Part("price") price:Float,
-                   @Part("photo") photo:MultipartBody.Part): Call<TokenResponse>
+    @POST("/product/add/")
+    fun addProduct(@Part("category") category: String,
+                   @Part("name") name:String,
+                   @Part("brand") brand:String,
+                   @Part("stock") stock:Int,
+                   @Part("price") price:Float,
+                   @Part("photo") photo:String,
+                   @Part("description") description:String): Call<TokenResponse>
+    //@Part("photo") photo:MultipartBody.Part)
+    //<auth_token> must be added
+
 }

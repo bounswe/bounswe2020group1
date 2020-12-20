@@ -1,18 +1,19 @@
 package com.example.tursuapp.authentication.homepage
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ExpandableListView
 import android.widget.ExpandableListView.OnGroupClickListener
+import android.widget.Spinner
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import com.example.tursuapp.R
 import com.example.tursuapp.authentication.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
@@ -29,7 +30,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
-
+    lateinit var mView: View
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
@@ -58,15 +59,15 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setAdapter(listAdapter)
         expListView!!.setOnGroupClickListener(OnGroupClickListener { parent, v, groupPosition, id ->
             when (groupPosition) {
-                0 -> displayFragment(R.id.nav_home,"")
+                0 -> displayFragment(R.id.nav_home, "")
             }
             false
         })
         expListView!!.setOnChildClickListener(ExpandableListView.OnChildClickListener { parent, v, groupPosition, childPosition, id ->
             // Kategoriye basılınca olacakları ayarla
-            if(groupPosition == 1){
+            if (groupPosition == 1) {
                 when (childPosition) {
-                    0 -> displayFragment(R.id.nav_home,"Electronics")
+                    0 -> displayFragment(R.id.nav_home, "Electronics")
                     1 -> displayFragment(R.id.nav_home, "Fashion")
                     2 -> displayFragment(R.id.nav_home, "Home")
                     3 -> displayFragment(R.id.nav_home, "Cosmetics")
@@ -78,9 +79,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         })
         expListView!!.setOnChildClickListener(ExpandableListView.OnChildClickListener { parent, v, groupPosition, childPosition, id ->
             // Product Operations
-            if(groupPosition == 2){
+            if (groupPosition == 2) {
                 when (childPosition) {
-                    0 -> displayOperations(R.id.nav_home,"ProductAdd")
+                    0 -> displayOperations(R.id.nav_home, "ProductAdd")
                     //1 -> displayOperations(R.id.nav_home, "ProductUpdate")
                     //2 -> displayOperations(R.id.nav_home, "ProductDelete")
                 }
@@ -98,29 +99,30 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
         }
 
+            /*
+           // spinner.setSelection(-1);
+            addProductName?.text?.clear();
+            addProductBrand?.text?.clear();
+            addProductStock?.text?.clear();
+            addProductPrice?.text?.clear();
+            addProductPhoto?.text?.clear();
+            addProductDescription?.text?.clear();
+
+            if (addProductName != null && addProductBrand != null && addProductStock != null && addProductPrice != null && addProductPhoto != null && addProductDescription != null) {
+                val name=addProductName.text
+                val brand=addProductBrand.text
+                val stock=addProductStock.text
+                val price=addProductPrice.text
+                val photo=addProductPhoto.text
+                val description=addProductDescription.text
+
+               // addProduct(name.toString(),brand.toString(),stock.toString(),price.toString(),photo.toString(),description.toString())
+            }
+             */
+        //}
+
         expListView!!.setSelectedGroup(0)
 
-        /* Fill category spinner on the Add product page
-        // Initializing a String Array
-        val categoryList = arrayOf("Electronics","Fashion","Home","Cosmetics","Sports")
-        val mySpinner = findViewById(R.id.spinner) as Spinner
-        // Initializing an ArrayAdapter
-        val adapter = ArrayAdapter(
-                this, // Context
-                android.R.layout.simple_spinner_item, // Layout
-                categoryList // Array
-        )
-        // Set the drop down view resource
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        // Finally, data bind the spinner object with adapter
-        mySpinner.adapter=adapter
-        //LISTENER
-        mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
-                Toast.makeText(this@MainActivity, nebulae[i], Toast.LENGTH_SHORT).show()
-            }
-            override fun onNothingSelected(adapterView: AdapterView<*>) {
-            }*/
     }
     override fun onBackPressed() {
         val count = fragmentManager.backStackEntryCount
@@ -130,6 +132,26 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             fragmentManager.popBackStack()
         }
     }
+
+    fun addProduct(name: String, brand: String, stock: String, price: String, photo: String, description: String){
+        lateinit var fragment: Fragment
+        fragment = ProductAddFragment()
+        val bundle = Bundle()
+        bundle.putString("name", name)
+        bundle.putString("brand", brand)
+        bundle.putString("stock", stock)
+        bundle.putString("price", price)
+        bundle.putString("photo", photo)
+        bundle.putString("description", description)
+        fragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
+        this.drawer.closeDrawer(GravityCompat.START)
+
+    }
+
     fun search(type: String){
         lateinit var fragment: Fragment
             fragment = HomeFragment()
@@ -143,7 +165,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             .commit()
         this.drawer.closeDrawer(GravityCompat.START)
     }
-    fun displayOperations(id: Int,type:String){
+    fun displayOperations(id: Int, type: String){
         lateinit var fragment: Fragment
         when (id) {
             R.id.nav_home -> fragment = ProductAddFragment()
@@ -153,7 +175,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 .commit()
         this.drawer.closeDrawer(GravityCompat.START)
     }
-    fun displayFragment(id: Int,type:String){
+    fun displayFragment(id: Int, type: String){
         lateinit var fragment: Fragment
         when (id) {
             R.id.nav_home -> fragment = HomeFragment()
