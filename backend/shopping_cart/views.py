@@ -52,7 +52,7 @@ def add(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE']) 
+@api_view(['DELETE','POST']) 
 def delete(request):
     customer = get_customer_from_request(request)
     if(customer is None):

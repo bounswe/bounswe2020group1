@@ -188,7 +188,7 @@ def edit_product(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_product(request):
     """Delete product with given parameters when DELETE request is made."""
     vendor = get_vendor_from_request(request)
@@ -242,7 +242,7 @@ def add_photo_to_product(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_all_photos_of_product(request):
     """Delete photos of product with given parameters when DELETE request is made."""
     vendor = get_vendor_from_request(request)
@@ -267,7 +267,7 @@ def delete_all_photos_of_product(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_photo_of_product_with_name(request):
     """Delete photo of product with given parameters when DELETE request is made."""
     vendor = get_vendor_from_request(request)

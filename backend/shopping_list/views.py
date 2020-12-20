@@ -30,7 +30,7 @@ def create_shopping_list(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_shopping_list(request):
     """Delete shopping list with given name"""
     customer = get_customer_from_request(request)
@@ -82,7 +82,7 @@ def add_product_to_shopping_list(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_product_from_shopping_list(request):
     """Delete product with id from the shopping list with given name"""
     customer = get_customer_from_request(request)
