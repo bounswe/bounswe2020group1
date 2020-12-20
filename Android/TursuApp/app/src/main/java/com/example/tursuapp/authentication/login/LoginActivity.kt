@@ -74,6 +74,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<TokenResponse?>, t: Throwable) {
+
                 Log.i("Failure",t.message)
             }
         })

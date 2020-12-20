@@ -13,6 +13,7 @@ import android.widget.BaseAdapter
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -23,6 +24,7 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
+import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
@@ -68,6 +70,8 @@ class HomeFragment : Fragment() {
         else {
             listAllProducts()
         }
+
+
         return root
     }
 
@@ -203,6 +207,19 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // load foods
         Log.i("HomeFragment", "here")
+
+        val shoppingCart:CardView? = view?.findViewById<CardView>(R.id.shopping_cart)
+        shoppingCart?.setOnClickListener {
+            Log.i("MainFragment", "BURDA")
+            val bundle = Bundle()
+            val newFragment = ShoppingCartFragment()
+            newFragment.arguments = bundle;
+            val fragmentManager: FragmentManager? = fragmentManager
+            val fragmentTransaction: FragmentTransaction =
+                    requireFragmentManager().beginTransaction()
+            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+            fragmentTransaction.commit()
+        }
     }
 
     class ProductAdapter : BaseAdapter {
