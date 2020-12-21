@@ -14,6 +14,10 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {palette} from "@material-ui/system";
 import axios from "axios";
+import MenuItem from "@material-ui/core/MenuItem";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from "@material-ui/core/Menu";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProductBox(props) {
     const classes = useStyles()
-    //console.log(props.product.photo_url)
+    console.log("AAAA")
     return(
         <Grid item xs={3}>
             <Link to='/product'>
@@ -42,20 +46,29 @@ export default function ProductBox(props) {
                                 //src="https://grandstream.pl/wp-content/uploads/2016/03/left-e1456834177965.png"
                                 alt={props.product.name}
                                 className="responsiveImage"/>
-                            <text>
-                                <br/>
-                                <Typography variant="subtitle2">
-                                    {props.product.name}
-                                </Typography>
-                                <Typography variant="body2">
-                                    <Box fontWeight="fontWeightBold">
-                                        {props.product.price} ₺
-                                    </Box>
-                                </Typography>
-                                <Typography variant="caption">
-                                    {props.product.vendor_name}
-                                </Typography>
-                            </text>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexWrap: 'nowrap',
+                                justifyContent: 'center',
+                                marginLeft: '50px'
+                            }}>
+                                <text>
+                                    <br/>
+                                    <Typography variant="subtitle2">
+                                        {props.product.name}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        <Box fontWeight="fontWeightBold">
+                                            {props.product.price} ₺
+                                        </Box>
+                                    </Typography>
+                                    <Typography variant="caption">
+                                        {props.product.vendor_name}
+                                    </Typography>
+                                </text>
+                                {LongMenu()}
+                            </div>
                         </div>
                     </Paper>
                 </Button>
@@ -64,6 +77,56 @@ export default function ProductBox(props) {
     );
 }
 
+const options = [
+
+];
+
+const ITEM_HEIGHT = 48;
+
+function LongMenu() {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <div>
+            <IconButton
+                aria-label="more"
+                aria-controls="long-menu"
+                aria-haspopup="true"
+                onClick={handleClick}
+            >
+                <MoreVertIcon />
+            </IconButton>
+            <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                    style: {
+                        maxHeight: ITEM_HEIGHT * 4.5,
+                        width: '20ch',
+                    },
+                }}
+            >
+                {options.map((option) => (
+                    <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
+                        {option}
+                    </MenuItem>
+                ))}
+            </Menu>
+        </div>
+    );
+}
 
 const horizontalStyles = makeStyles((theme) => ({
     root: {
