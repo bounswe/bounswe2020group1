@@ -34,7 +34,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProductBox(props) {
     const classes = useStyles()
-    console.log("AAAA")
+
+    const handleClickOnOptionsIcon = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
     return(
         <Grid item xs={3}>
             <Link to='/product'>
@@ -67,7 +72,9 @@ export default function ProductBox(props) {
                                         {props.product.vendor_name}
                                     </Typography>
                                 </text>
-                                {LongMenu()}
+                                <div onClick={handleClickOnOptionsIcon}>
+                                    {LongMenu()}
+                                </div>
                             </div>
                         </div>
                     </Paper>
@@ -77,8 +84,10 @@ export default function ProductBox(props) {
     );
 }
 
-const options = [
 
+
+const options = [
+    "Add to List"
 ];
 
 const ITEM_HEIGHT = 48;
@@ -102,6 +111,7 @@ function LongMenu() {
                 aria-controls="long-menu"
                 aria-haspopup="true"
                 onClick={handleClick}
+                name="optionsButton"
             >
                 <MoreVertIcon />
             </IconButton>
