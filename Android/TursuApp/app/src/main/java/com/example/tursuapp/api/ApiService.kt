@@ -5,6 +5,7 @@ import com.example.tursuapp.api.requests.LoginRequest
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.TokenResponse
+import com.example.tursuapp.api.responses.VendorResponse
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -21,15 +22,36 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/user/login")
     fun login(@Field("email") email: String,@Field("password") password:String): Call<TokenResponse>
+
     @GET("/")
     fun getProducts(): Call<List<ProductResponse>>
 
     @GET("/product")
     fun getProductDetails(@Query("id") userId: Int): Call<ProductDetailsResponse>
-
+/*
     @GET("/product/category")
     fun getProductsOfCategory(@Query("name") name: String): Call<List<ProductResponse>>
-
+*/
+    @GET("/product/category")
+    fun getProductsOfCategory(@QueryMap params: HashMap<String,String>): Call<List<ProductResponse>>
+/*
     @GET("/search")
     fun getSearchedProducts(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<ProductResponse>>
+
+
+ */
+    @GET("/search")
+    fun getSearchedVendors(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<VendorResponse>>
+
+    @GET("/search")
+    fun getSearchedProducts(@QueryMap params: HashMap<String, String>): Call<List<ProductResponse>>
+
+    @GET("/helper/allbrands/")
+    fun getAllBrands():Call<List<String>>
+
+    @GET("/helper/allcategories/")
+    fun getAllCategories():Call<List<String>>
+
+    @GET("/helper/allvendors/")
+    fun getAllVendors():Call<List<String>>
 }

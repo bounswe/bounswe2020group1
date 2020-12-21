@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.tursuapp.authentication.homepage.ui.gallery.GalleryFragment"
+        android:name="com.example.tursuapp.authentication.homepage.ui.account.AccountFragment"
         android:label="@string/menu_categories"
         tools:layout="@layout/fragment_gallery" />
 

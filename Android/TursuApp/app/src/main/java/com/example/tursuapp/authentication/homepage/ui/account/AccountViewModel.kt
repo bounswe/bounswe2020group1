@@ -1,10 +1,10 @@
-package com.example.tursuapp.authentication.homepage.ui.gallery
+package com.example.tursuapp.authentication.homepage.ui.account
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class GalleryViewModel : ViewModel() {
+class AccountViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is gallery Fragment"
