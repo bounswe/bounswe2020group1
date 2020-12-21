@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
 
-import ProductList from "./ProductList";
+import ProductListVertical from "./ProductList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 
@@ -64,7 +64,7 @@ class Category extends React.Component{
                         {this.props.match.params.category}
                     </h1>
                     <Grid item xs={12} container>
-                        <ProductList products={this.state.products}/>
+                        <ProductListVertical products={this.state.products}/>
                     </Grid>
                 </Grid>
             </ThemeProvider>
