@@ -18,7 +18,6 @@ function App() {
                 <Route path="/" exact component={HomePage} />
                 <Route path="/categories/:category" exact component={Category} />
                 <Route path="/signIn" exact component={Sign} />
-                <Route path="/search" exact component={SearchPage} />
                 <Route path="/shoppingCart" exact component={ShoppingCart} />
                 <Route path="/product/:id"  component={ProductDetailPage} />
                 <Route path="/search/:search_string/:search_type/:fprice_lower?/:fprice_upper?/:fvendor_name?/:fcategory?/:sort_by?"  component={SearchPage} />
