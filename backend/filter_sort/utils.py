@@ -5,7 +5,7 @@ from django.db.models import Q, Count
 def product_filter(request, products):
     """ Filters products according to the request parameters """
 
-    query = Q()
+    query = Q(is_verified=True)
     try:
         rating = int(request.GET["frating_gte"])
         query &= Q(rating__gte=rating)
