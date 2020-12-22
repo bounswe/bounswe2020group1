@@ -125,13 +125,11 @@ export function ProductBoxHorizontal(props) {
         const formData = new FormData();
         formData.append("product_id", props.product.id);
 
-        axios.delete('http://3.232.20.250/shoppingcart/delete', {
+        axios.post('http://3.232.20.250/shoppingcart/delete',
+            formData,{
                 headers: {
                     'Authorization': "Token " + window.sessionStorage.getItem("authToken"),
-                },
-                data: {
-                    "product_id": props.product.id
-                },
+                }
             })
             .then(res => {
                 console.log(res);
@@ -144,6 +142,7 @@ export function ProductBoxHorizontal(props) {
                 console.log(error.message)
                 alert ("There has been an error. Please try again.");
             })
+
     }
 
     function handleCountChange(change){
