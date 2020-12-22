@@ -28,4 +28,5 @@ urlpatterns = [
     path('helper/', include('helper.urls')),
     path('', include('home.urls')),
     path('shoppinglist/', include('shopping_list.urls')),
+    path('order/', include('order.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

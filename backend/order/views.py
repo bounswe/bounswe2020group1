@@ -1,5 +1,6 @@
-"""Views related to product"""
+"""Views related to order"""
 import os
+import datetime
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
@@ -8,6 +9,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from product.models import Product, Category, Image
+from shopping_cart.models import ShoppingCarts
+from order.models import Order
 from registered_user.models import get_vendor_from_request, get_customer_from_request
 
 
@@ -20,11 +23,18 @@ def create_orders(request):
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
     items = ShoppingCarts.objects.filter(Q(customer=customer))
+    created_=datetime.datetime.now()
     for item in items:
         product = item.product
         vendor = item.product.vendor
         quantity = item.quantity
-        order = Order.objects.create(product=product, vendor=vendor, customer=customer, quantity=quantity)
+        order = Order.objects.create(product=product, 
+            vendor=vendor, customer=customer, 
+            quantity=quantity,
+            estimatedArrivalDate=datetime.date.today(), 
+            arrivalDate=datetime.date.today(),
+            created=created_)
+
         order.save()
     ShoppingCarts.objects.filter(Q(customer=customer)).delete()
     
@@ -39,10 +49,17 @@ def get_orders(request):
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
     
-    items = Order.objects.filter(Q(customer=customer))
+    items = Order.objects.filter(Q(customer=customer)).order_by('created')
     static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
     orders = []
-    for item in items:
+    group = []
+    index = 0
+    for index in range(len(items)):
+        if index > 0 and items[index - 1].created != items[index].created:
+            orders.append(group)
+            group = []
+        item = items[index]
+        print(item.created)
         images = Image.objects.filter(product=item.product)
         if len(images) > 0:
             photo_url = f"{static_url}{images[0].photo}"
@@ -67,8 +84,10 @@ def get_orders(request):
                     "cargoID": item.cargoID,
                     "estimatedArrivalDate": item.estimatedArrivalDate,
                     "arrivalDate": item.arrivalDate}
+        group.append(order_info)
 
-        orders.append(order_info)
+    if len(group) > 0:
+        orders.append(group)
 
     return JsonResponse(orders, safe=False)
 
@@ -91,7 +110,7 @@ def set_delivered(request):
         return HttpResponse("Invalid order_id", status=400)
 
     order.status = "delivered"
-    order.arrivalDate = datetime.now()
+    order.arrivalDate = datetime.date.today()
     order.save()
 
     return JsonResponse({}, safe=False)
@@ -102,7 +121,7 @@ def set_delivered(request):
 def set_delivery(request):
     """Setting the cargoId and delivery date"""
     vendor = get_vendor_from_request(request)
-    if(customer is None):
+    if(vendor is None):
         return HttpResponse("Vendor authentication failed", status=401)
     try:
         order_id = request.POST["order_id"]
@@ -116,7 +135,7 @@ def set_delivery(request):
         return HttpResponse("Invalid order_id", status=400)
 
     order.cargoID = cargo_id
-    estimatedArrivalDate = datetime.now().timedelta(days=days)
+    order.estimatedArrivalDate = datetime.date.today() + datetime.timedelta(days=days)
     order.status = "in delivery"
     order.save()
     

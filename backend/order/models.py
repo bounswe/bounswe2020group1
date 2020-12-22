@@ -15,4 +15,5 @@ class Order(models.Model):
     arrivalDate = models.DateField()
     quantity = models.IntegerField(null=False, default=1)
     comment_added = models.BooleanField(default=False)
-
+    created = models.DateTimeField(null=True)
+    
