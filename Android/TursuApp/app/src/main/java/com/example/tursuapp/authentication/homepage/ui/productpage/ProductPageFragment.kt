@@ -1,7 +1,6 @@
 package com.example.tursuapp.authentication.homepage.ui.productpage
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -15,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.AddListResponse
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -25,6 +25,7 @@ class ProductPageFragment : Fragment() {
 
     private lateinit var productPageViewModel: ProductPageModel
     private lateinit var product: ProductDetailsResponse
+    private lateinit var AddListStatus: AddListResponse
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -47,12 +48,12 @@ class ProductPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id_str = requireArguments().getString("id")
-        val spinner = view.findViewById<Spinner>(R.id.spinner)
-        val items = arrayOf("Add to favorites", "Favorites", "List 1", "List 2", "List 3")
-        val adapter = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, items) }
-        if (spinner != null) {
-            spinner.adapter = adapter
-        }
+       // val spinner = view.findViewById<Spinner>(R.id.spinner)
+       // val items = arrayOf("Add to favorites", "Favorites", "List 1", "List 2", "List 3")
+       // val adapter = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, items) }
+       // if (spinner != null) {
+         //   spinner.adapter = adapter
+        //}
         getDetails(id_str!!.toInt(), view)
     }
 
@@ -81,7 +82,33 @@ class ProductPageFragment : Fragment() {
 
     private fun addList(view: View){
         if(view.findViewById<EditText>(R.id.new_list_txt).text.isNotEmpty()){
+            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+            val empty=""
             val listName = view.findViewById<EditText>(R.id.new_list_txt).text.toString()
+            val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiinterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
+                    retrofit2.Callback<AddListResponse> {
+                override fun onFailure(p0: Call<AddListResponse>?, p1: Throwable?) {
+                   // Log.i("MainFragment", "error" + p1?.message.toString())
+                }
+
+                override fun onResponse(
+                        p0: Call<AddListResponse>?,
+                        response: Response<AddListResponse>?
+                ) {
+
+                    if (response != null) {
+                       // Log.i("Status code",response.code().toString())
+                       // AddListStatus = response.body()!!
+                        //view.findViewById<EditText>(R.id.new_list_txt).setText("")
+                        Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
+
+            })
+
         }
 
         /*

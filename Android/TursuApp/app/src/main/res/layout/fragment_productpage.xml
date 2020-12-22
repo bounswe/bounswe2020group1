@@ -227,13 +227,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/linearLayout3">
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#00FFFFFF"
-                android:visibility="invisible"
-                tools:visibility="invisible" />
+
 
         </androidx.cardview.widget.CardView>
 
