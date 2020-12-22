@@ -9,6 +9,8 @@ import Avatar from "@material-ui/core/Avatar";
 import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Navbar from "./NavBar";
 import axios from 'axios'
+import {Alert} from "@material-ui/lab";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const theme = createMuiTheme({
     palette:{
@@ -51,9 +53,11 @@ class ProductDetail extends React.Component{
 
         this.state = {
             product: [],
+            isAlertOpen: false
         }
 
         this.addToShoppingCart = this.addToShoppingCart.bind(this);
+        this.handleAlertClose = this.handleAlertClose.bind(this)
     }
 
     componentDidMount() {
@@ -95,11 +99,19 @@ class ProductDetail extends React.Component{
             .then(res => {
                 console.log(res);
                 console.log(res.status);
+                if(res.status === 200)
+                {
+                    this.setState({isAlertOpen: true})
+                }
             })
             .catch(error =>{
                     console.log(error)
                     alert ("There has been an error. Please try again.");
             })
+    }
+
+    handleAlertClose(){
+        this.setState({isAlertOpen: false})
     }
 
     render(){
@@ -172,6 +184,11 @@ class ProductDetail extends React.Component{
                         </Paper>
                     </Grid>
                 </Grid>
+                <Snackbar open={this.state.isAlertOpen} autoHideDuration={2000} onClose={this.handleAlertClose}>
+                    <Alert onClose={this.handleAlertClose} severity="success">
+                        Product is added to shopping cart.
+                    </Alert>
+                </Snackbar>
             </div>
         )
     }

@@ -29,6 +29,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Divider from "@material-ui/core/Divider";
 import CloseIcon from '@material-ui/icons/Close';
+import Snackbar from "@material-ui/core/Snackbar";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -98,6 +99,7 @@ export default function ProductBox(props) {
 function LongMenu(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [isListOpen, SetIsListOpen]  = React.useState(false);
+    const [isAlertOpen, SetIsAlertOpen]  = React.useState(false);
     // const [selectedValue, setSelectedValue] = React.useState();
 
     const open = Boolean(anchorEl);
@@ -127,7 +129,8 @@ function LongMenu(props) {
                 console.log(res);
                 console.log(res.status);
                 if(res.status === 200){
-                    alert("Product is successfully added to the shopping cart.");
+                    // alert("Product is successfully added to the shopping cart.");
+                    SetIsAlertOpen(true);
                     // <Alert severity="success">This is a success alert — check it out!</Alert>
                 }
             })
@@ -141,8 +144,12 @@ function LongMenu(props) {
         SetIsListOpen(true);
     }
 
-    const onListsClose = () => {
+    const handleListsClose = () => {
         SetIsListOpen(false)
+    }
+
+    const handleAlertClose = () => {
+        SetIsAlertOpen(false)
     }
 
     return (
@@ -180,7 +187,12 @@ function LongMenu(props) {
                     <Typography>Add to Shopping List</Typography>
                 </MenuItem>
             </Menu>
-            <ListsDialog open={isListOpen} onClose={onListsClose}/>
+            <ListsDialog open={isListOpen} onClose={handleListsClose}/>
+            <Snackbar open={isAlertOpen} autoHideDuration={2000} onClose={handleAlertClose}>
+                <Alert onClose={handleAlertClose} severity="success">
+                    Product is added to shopping cart.
+                </Alert>
+            </Snackbar>
         </div>
     );
 }
