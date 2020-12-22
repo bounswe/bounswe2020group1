@@ -136,7 +136,7 @@ export function ProductBoxHorizontal(props) {
             .then(res => {
                 console.log(res);
                 console.log(res.status);
-                
+                props.onCountChange(-count, props.product.price);
                 setRender(false);
             })
             .catch(error =>{
