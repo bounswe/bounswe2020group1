@@ -136,6 +136,7 @@ export function ProductBoxHorizontal(props) {
             .then(res => {
                 console.log(res);
                 console.log(res.status);
+                
                 setRender(false);
             })
             .catch(error =>{
@@ -230,14 +231,18 @@ export function ProductBoxHorizontal(props) {
                                     {count}
                                 </Box>
                             </Typography>
-                            <IconButton
-                                aria-label="reduce"
-                                onClick={() => {
-                                    handleCountChange(-1)
-                                }}
-                            >
-                                <RemoveIcon fontSize="small"/>
-                            </IconButton>
+                            {count<=1 ? (
+                                <div/>
+                            ) : (
+                                <IconButton
+                                    aria-label="reduce"
+                                    onClick={() => {
+                                        handleCountChange(-1)
+                                    }}
+                                >
+                                    <RemoveIcon fontSize="small"/>
+                                </IconButton>
+                            )}
                         </ButtonGroup>
                     </Grid>
                     <Grid className={classes.marginInsideGrid}>
