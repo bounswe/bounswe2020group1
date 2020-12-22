@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/signup_gray"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <ScrollView
+        android:layout_width="346dp"
+        android:layout_height="322dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.042">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/linear3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/dismiss_popup2"
+                        android:layout_width="54dp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/x" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:gravity="center"
+                        android:text="My List"
+                        android:textColor="#777777"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="354dp"
+                android:layout_height="118dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.526"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.231">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_getList"
+                    android:layout_width="296dp"
+                    android:layout_height="86dp"
+                    android:layout_margin="20dp"
+                    android:background="#FFFFFF" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/add_new_List_button"
+                android:layout_width="144dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="86dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="33dp"
+                android:text="ADD NEW LIST"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/select_btn"
+                app:layout_constraintTop_toBottomOf="@+id/new_list_txt" />
+
+            <Button
+                android:id="@+id/select_btn"
+                android:layout_width="144dp"
+                android:layout_height="40dp"
+                android:text="SELECT"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.142"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.881" />
+
+            <EditText
+                android:id="@+id/new_list_txt"
+                android:layout_width="251dp"
+                android:layout_height="54dp"
+                android:layout_marginStart="33dp"
+                android:layout_marginEnd="80dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="New List Name"
+                android:padding="10dp"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/add_new_List_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

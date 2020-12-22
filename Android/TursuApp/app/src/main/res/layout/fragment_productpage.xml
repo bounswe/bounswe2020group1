@@ -153,7 +153,31 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:background="#E8E7E7"
-                    android:src="@drawable/shopping_cart" />
+                    android:src="@drawable/shopping_cart"
+
+                    />
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView3"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="#E8E7E7"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/add_list_image"
+                    android:layout_width="43dp"
+                    android:layout_height="43dp"
+                    android:layout_gravity="center"
+                    android:background="#E8E7E7"
+                    android:src="@drawable/ic_baseline_favorite_24"
+
+                    />
+
+
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
@@ -207,7 +231,10 @@
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="#00FFFFFF" />
+                android:background="#00FFFFFF"
+                android:visibility="invisible"
+                tools:visibility="invisible" />
+
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
