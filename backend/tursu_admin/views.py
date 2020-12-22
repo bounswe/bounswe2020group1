@@ -26,8 +26,6 @@ def delete_product(request):
         product = Product.objects.get(id=product_id)
     except Exception:
         return HttpResponse("There is no such product with the id", status=400)
-    if(vendor != product.vendor):
-        return HttpResponse("You cannot delete products of other vendors", status=401)
     images = Image.objects.filter(product=product)
     if len(images) > 0:
         files = [os.path.join("static/images",str(image.photo)) for image in images]
