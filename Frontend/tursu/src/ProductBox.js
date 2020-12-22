@@ -199,15 +199,21 @@ function LongMenu(props) {
 
 function ListsDialog(props){
     const { open, onClose} = props;
+    const [isCreatingNewList, SetIsCreatingNewList] = React.useState(false);
     const lists = ["Yazlıklar", "Kışlıklar"];
 
     const handleClose = () => {
+        SetIsCreatingNewList(false)
         onClose();
     };
 
     // const handleListItemClick = (value) => {
     //     onClose(value);
     // };
+
+    const createNewList = () => {
+        SetIsCreatingNewList(true);
+    }
 
     return (
         <Dialog open={open} onClose={handleClose}>
@@ -233,17 +239,47 @@ function ListsDialog(props){
                 ))}
             </List>
             <Divider/>
-            <div style={{
-                padding: "10px",
-                paddingLeft: "15px",
-                paddingRight: "25px",
-                display: "flex",
-                flexWrap: "nowrap",
-                alignItems: "center"
-            }}>
-                <AddIcon color={"action"} style={{paddingRight:"5px"}}/>
-                <Typography variant={"body2"}>Create a new list</Typography>
-            </div>
+            {isCreatingNewList ? (
+                <div style={{
+                    marginLeft: "15px",
+                    marginTop: "10px"
+                }}>
+                    <List>
+                        <ListItem>
+                            <Typography variant={"body2"}>Name</Typography>
+                        </ListItem>
+                        <ListItem>
+                            <TextField style={{
+                                marginBottom: "10px",
+                                width:"180px",
+                                height: "30px",
+                                paddingRight:"10px"}}
+                                       placeholder={"Enter the name the list..."}
+
+                            />
+                        </ListItem>
+                        <ListItem >
+                            <Button variant={"outlined"}>
+                                <Typography>Create</Typography>
+                            </Button>
+                        </ListItem>
+                    </List>
+                </div>
+            ) : (
+                <Button style={{textTransform: "none"}} onClick={createNewList}>
+                    <div style={{
+                        padding: "5px",
+                        paddingLeft: "20px",
+                        paddingRight: "30px",
+                        display: "flex",
+                        flexWrap: "nowrap",
+                        alignItems: "center"
+                    }}>
+                        <AddIcon color={"action"} style={{paddingRight:"5px"}}/>
+                        <Typography variant={"body2"}>Create a new list</Typography>
+                    </div>
+                </Button>
+            )}
         </Dialog>
     )
 }
