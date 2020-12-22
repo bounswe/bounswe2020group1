@@ -29,7 +29,20 @@ def login(request):
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
     token, _ = Token.objects.get_or_create(user=user)
-    return Response({'auth_token': token.key}, status=status.HTTP_200_OK)
+    user=User.objects.get(username=username)
+    first_name = user.first_name
+    last_name =  user.last_name
+    user_type = 'admin'
+    
+    registered_user = RegisteredUser.objects.filter(user=User.objects.get(username=username)).first()
+    vendor = Vendor.objects.filter(user=registered_user).first()
+    customer = Customer.objects.filter(user=registered_user).first()
+    if vendor is not None:
+        user_type = 'vendor'
+    if customer is not None:
+        user_type = 'customer'
+
+    return Response({'auth_token': token.key, 'first_name': first_name, 'last_name': last_name, 'user_type': user_type}, status=status.HTTP_200_OK)
 
 
 @csrf_exempt
