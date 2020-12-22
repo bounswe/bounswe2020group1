@@ -18,7 +18,7 @@ from registered_user.models import get_vendor_from_request, get_customer_from_re
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def create_orders(request):
-    """Edits product with given parameters when POST request is made."""
+    """Crete order from cart."""
     customer = get_customer_from_request(request)
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
@@ -44,7 +44,7 @@ def create_orders(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_orders(request):
-    """Edits product with given parameters when POST request is made."""
+    """Get the list of all orders"""
     customer = get_customer_from_request(request)
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
@@ -96,7 +96,7 @@ def get_orders(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def set_delivered(request):
-    """Edits product with given parameters when POST request is made."""
+    """Sets and order as delivered."""
     customer = get_customer_from_request(request)
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
@@ -119,7 +119,7 @@ def set_delivered(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def set_delivery(request):
-    """Setting the cargoId and delivery date"""
+    """Sets and order as in delivery"""
     vendor = get_vendor_from_request(request)
     if(vendor is None):
         return HttpResponse("Vendor authentication failed", status=401)
