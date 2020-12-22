@@ -184,7 +184,13 @@ export default function Navbar(){
                                         </Link>
                                     </Paper>
                                 </Grid>
-
+                                <Grid item>
+                                    <Link to='/shoppingCart'>
+                                        <IconButton>
+                                            <ShoppingCartIcon className={classes.shoppingCartIcon} />
+                                        </IconButton>
+                                    </Link>
+                                </Grid>
 
                             </Grid>
 
