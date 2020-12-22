@@ -17,7 +17,18 @@ import axios from "axios";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from "@material-ui/core/Menu";
-
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import { Alert } from '@material-ui/lab';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from "@material-ui/core/DialogTitle";
+import List from "@material-ui/core/List";
+import ListItemText from "@material-ui/core/ListItemText";
+import Checkbox from "@material-ui/core/Checkbox";
+import Divider from "@material-ui/core/Divider";
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,7 +84,7 @@ export default function ProductBox(props) {
                                     </Typography>
                                 </text>
                                 <div onClick={handleClickOnOptionsIcon}>
-                                    {LongMenu()}
+                                    {LongMenu(props)}
                                 </div>
                             </div>
                         </div>
@@ -84,16 +95,11 @@ export default function ProductBox(props) {
     );
 }
 
-
-
-const options = [
-    "Add to List"
-];
-
-const ITEM_HEIGHT = 48;
-
-function LongMenu() {
+function LongMenu(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [isListOpen, SetIsListOpen]  = React.useState(false);
+    // const [selectedValue, setSelectedValue] = React.useState();
+
     const open = Boolean(anchorEl);
 
     const handleClick = (event) => {
@@ -104,12 +110,44 @@ function LongMenu() {
         setAnchorEl(null);
     };
 
+    const addToShoppingCart = () => {
+        handleClose()
+
+        console.log(props.product.id)
+        const formData = new FormData();
+        formData.append("product_id", props.product.id);
+        console.log("Token " + window.sessionStorage.getItem("authToken"))
+        axios.post('http://3.232.20.250/shoppingcart/add',
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+                if(res.status === 200){
+                    alert("Product is successfully added to the shopping cart.");
+                    // <Alert severity="success">This is a success alert — check it out!</Alert>
+                }
+            })
+            .catch(error =>{
+                console.log(error)
+                alert ("There has been an error. Please try again.");
+            })
+    }
+
+    const addToShoppingList = () => {
+        SetIsListOpen(true);
+    }
+
+    const onListsClose = () => {
+        SetIsListOpen(false)
+    }
+
     return (
         <div>
             <IconButton
-                aria-label="more"
-                aria-controls="long-menu"
-                aria-haspopup="true"
                 onClick={handleClick}
                 name="optionsButton"
             >
@@ -123,19 +161,79 @@ function LongMenu() {
                 onClose={handleClose}
                 PaperProps={{
                     style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                        width: '20ch',
+                        marginTop: 40,
+                        maxHeight: 45 * 4.5,
+                        width: '30ch',
                     },
                 }}
             >
-                {options.map((option) => (
-                    <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
-                        {option}
-                    </MenuItem>
-                ))}
+                <MenuItem onClick={addToShoppingCart}>
+                    <ListItemIcon>
+                        <ShoppingCartIcon> </ShoppingCartIcon>
+                    </ListItemIcon>
+                    <Typography>Add to Shopping Cart</Typography>
+                </MenuItem>
+                <MenuItem onClick={addToShoppingList}>
+                    <ListItemIcon>
+                        <PlaylistAddIcon> </PlaylistAddIcon>
+                    </ListItemIcon>
+                    <Typography>Add to Shopping List</Typography>
+                </MenuItem>
             </Menu>
+            <ListsDialog open={isListOpen} onClose={onListsClose}/>
         </div>
     );
+}
+
+function ListsDialog(props){
+    const { open, onClose} = props;
+    const lists = ["Yazlıklar", "Kışlıklar"];
+
+    const handleClose = () => {
+        onClose();
+    };
+
+    // const handleListItemClick = (value) => {
+    //     onClose(value);
+    // };
+
+    return (
+        <Dialog open={open} onClose={handleClose}>
+            <div style={{
+                display: "flex",
+                flexWrap: 'nowrap',
+                justifyContent: 'space-around'
+            }}>
+                <DialogTitle>
+                    <Typography>Save to:</Typography>
+                </DialogTitle>
+                <IconButton onClick={handleClose}>
+                    <CloseIcon/>
+                </IconButton>
+            </div>
+            <Divider/>
+            <List>
+                {lists.map((item) => (
+                  <ListItem>
+                      <Checkbox/>
+                      <Typography variant={"body2"}>{item}</Typography>
+                  </ListItem>
+                ))}
+            </List>
+            <Divider/>
+            <div style={{
+                padding: "10px",
+                paddingLeft: "15px",
+                paddingRight: "25px",
+                display: "flex",
+                flexWrap: "nowrap",
+                alignItems: "center"
+            }}>
+                <AddIcon color={"action"} style={{paddingRight:"5px"}}/>
+                <Typography variant={"body2"}>Create a new list</Typography>
+            </div>
+        </Dialog>
+    )
 }
 
 const horizontalStyles = makeStyles((theme) => ({
