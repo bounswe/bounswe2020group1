@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProductListVertical(props) {
     const classes = useStyles();
-
+    
     return (
         <Grid item container className={classes.root} spacing={6}>
             {props.products.map((product) => (

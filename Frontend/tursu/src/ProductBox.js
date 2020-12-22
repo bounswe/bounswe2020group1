@@ -29,17 +29,17 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function ProductBox(props) {
+
     const classes = useStyles()
     //console.log(props.product.photo_url)
     return(
         <Grid item xs={3}>
-            <Link to='/product'>
-                <Button variant="contained" onClick={() => { window.sessionStorage.setItem("product_id", props.product.id); }}>
+            <Link to={`/product/${props.product.id}`}>
+                <Button variant="contained">
                     <Paper className={classes.paper}>
                         <div className="ProductInfo" >
                             <img
                                 src={props.product.photo_url}
-                                //src="https://grandstream.pl/wp-content/uploads/2016/03/left-e1456834177965.png"
                                 alt={props.product.name}
                                 className="responsiveImage"/>
                             <text>

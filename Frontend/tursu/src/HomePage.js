@@ -9,6 +9,7 @@ import ProductBox from "./ProductBox";
 import Axios from "axios";
 
 
+
 const theme = createMuiTheme({
     palette:{
         primary:{
@@ -35,8 +36,11 @@ class HomePage extends React.Component{
 
     render(){
         return(
+
             <ThemeProvider theme={theme} >
+
                 <Grid container direction="column" className="HomePage" spacing={4}>
+
                     <Grid item xs={12}>
                         <Paper>
                             <Navbar />
