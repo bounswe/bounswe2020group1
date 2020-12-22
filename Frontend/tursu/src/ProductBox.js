@@ -14,6 +14,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {palette} from "@material-ui/system";
 import axios from "axios";
+import {unmountComponentAtNode} from "react-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -117,6 +118,7 @@ const horizontalStyles = makeStyles((theme) => ({
 export function ProductBoxHorizontal(props) {
     const classes = horizontalStyles()
     const [count, setCount] = React.useState(props.quantity);
+    const [render, setRender] = React.useState(true)
 
     function handleDelete(){
         console.log("Product ID:", props.product.id);
@@ -134,6 +136,7 @@ export function ProductBoxHorizontal(props) {
             .then(res => {
                 console.log(res);
                 console.log(res.status);
+                setRender(false);
             })
             .catch(error =>{
                 console.log(error.response)
@@ -179,6 +182,10 @@ export function ProductBoxHorizontal(props) {
         props.onCountChange(change, props.product.price);
     }
 
+    if(render === false)
+    {
+        return null;
+    }
     return(
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={5}>
