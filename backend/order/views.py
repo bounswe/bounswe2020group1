@@ -140,3 +140,30 @@ def set_delivery(request):
     order.save()
     
     return JsonResponse({}, safe=False)
+
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['POST'])
+def cancel_order(request):
+    """Sets and order as cancelled"""
+    vendor = get_vendor_from_request(request)
+    customer = get_customer_from_request(request)
+    if(vendor is None and customer is None):
+        return HttpResponse("Authentication failed", status=401)
+    try:
+        order_id = request.POST["order_id"]
+    except:
+        return HttpResponse("Missing arguments", status=400)
+    
+    order = Order.objects.filter(id=order_id).first()
+    if order == None:
+        return HttpResponse("Invalid order_id", status=400)
+
+    if order.customer == customer or order.vendor == vendor:
+        order.status = "cancelled"
+    else: 
+        return HttpResponse("Order doesn't belong to given user", status=400)
+    
+    order.save()
+    return JsonResponse({}, safe=False)
