@@ -23,9 +23,9 @@ def index(request):
     else:
         photo_url = ""
         
-    comments = Comment.objects.filter(Q(prouct=product))
+    comments = Comment.objects.filter(Q(product=product))
     comments_of_product = []
-    if comments != None:
+    if len(comments) > 0:
         for comment in comments:
             comment_info = {"id": comment.pk,
                 "customer": comment.customer.user.user.username,
