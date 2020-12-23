@@ -26,7 +26,7 @@ def index(request):
         else:
             comment = comment.text
         order_info = {"customer": order.customer.user.user.username,
-                "product": order.user.product.pk,
+                "product": order.product.pk,
                 "status": order.status,
                 "cargoID": order.cargoID,
                 "orderDate": order.orderDate,
