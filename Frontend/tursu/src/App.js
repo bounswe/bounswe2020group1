@@ -10,6 +10,7 @@ import ShoppingCart from "./ShoppingCart"
 import Sidebar from "./Profiles/VendorSidebar";
 import VendorProfilePage from "./Profiles/VendorProfilePage";
 import CustomerProfilePage from "./Profiles/CustomerProfilePage";
+import AdminPanel from "./AdminPanel"
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/search/:search_string/:search_type/:fprice_lower?/:fprice_upper?/:fvendor_name?/:fcategory?/:sort_by?"  component={SearchPage} />
                 <Route path="/vendorProfile" exact component={VendorProfilePage} />
                 <Route path="/customerProfile" exact component={CustomerProfilePage} />
+                <Route path="/admin" exact component={AdminPanel} />
             </div>
         </Router>
     );
