@@ -21,10 +21,10 @@ def index(request):
     my_orders = []
     for order in orders:
         comment = Comment.objects.filter(Q(order=order))
-        if comment is None:
+        if len(comment) == 0:
             comment = ""
         else:
-            comment = comment[0]
+            comment = comment.text
         order_info = {"customer": order.customer.user.user.username,
                 "product": order.user.product.pk,
                 "status": order.status,
@@ -33,7 +33,7 @@ def index(request):
                 "estimatedArrivalDate ": order.estimatedArrivalDate ,
                 "arrivalDate ": order.arrivalDate,
                 "quantity": order.quantity,
-                "comment": comment.text
+                "comment": comment
             }
         my_orders.append(order_info)
         
