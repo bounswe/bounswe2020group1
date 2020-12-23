@@ -2,6 +2,7 @@ package com.example.tursuapp.api
 
 import android.content.Context
 import com.example.tursuapp.api.requests.LoginRequest
+import com.example.tursuapp.api.responses.AddProductResponse
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.TokenResponse
@@ -34,14 +35,16 @@ interface ApiService {
     @GET("/search")
     fun getSearchedProducts(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<ProductResponse>>
 
+    @FormUrlEncoded
     @POST("/product/add/")
-    fun addProduct(@Part("category") category: String,
-                   @Part("name") name:String,
-                   @Part("brand") brand:String,
-                   @Part("stock") stock:Int,
-                   @Part("price") price:Float,
-                   @Part("photo") photo:String,
-                   @Part("description") description:String): Call<TokenResponse>
+    fun addProduct(@Header("Authorization") token: String,
+                   @Field("category") category: String,
+                   @Field("name") name:String,
+                   @Field("brand") brand:String,
+                   @Field("stock") stock:Int,
+                   @Field("price") price:Float,
+                   @Field("photo") photo:String,
+                   @Field("description") description:String): Call<AddProductResponse>
     //@Part("photo") photo:MultipartBody.Part)
     //<auth_token> must be added
 

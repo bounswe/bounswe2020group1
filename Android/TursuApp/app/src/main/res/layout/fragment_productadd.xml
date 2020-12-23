@@ -11,7 +11,7 @@
         android:layout_width="305dp"
         android:layout_height="35dp"
         android:text="Product Add"
-        android:textColor="#223263"
+        android:textColor="#FDFDFD"
         android:textSize="22sp"
         android:textStyle="bold"
         android:typeface="normal"
