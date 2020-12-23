@@ -69,7 +69,7 @@ def index(request):
                 "iban": vendor.iban,
                 "rating": vendor.rating,
                 "orders": my_orders,
-                "products": my_prducts
+                "products": my_products
             }
             
     return JsonResponse(vendor_info, safe=False)
