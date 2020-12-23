@@ -17,6 +17,7 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default=0)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     date_added = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
 
 
 class Image(models.Model):

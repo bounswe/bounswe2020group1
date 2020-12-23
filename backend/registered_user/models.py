@@ -60,3 +60,19 @@ def get_customer_from_request(request):
     except Exception:
         customer = None
     return customer
+
+def get_admin_from_request(request):
+    """Returns admin from the request"""
+    if(str(request.user) == "AnonymousUser"):
+        return None
+    elif request.user.is_superuser:
+        return request.user
+    else:
+        return None
+
+def get_admin():
+    """Returns admin"""
+    admins = User.objects.filter(is_superuser=True)
+    if len(admins)==0:
+        raise RuntimeError("!!!SYSTEM HAS NO ADMIN!!!!")
+    return admins[0]
