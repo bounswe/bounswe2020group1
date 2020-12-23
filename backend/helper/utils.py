@@ -38,8 +38,7 @@ def recommend_based_on_orders(customer):
     return random.sample(recommendation, k=sample_size)
 
 def get_all_verified_products():
-    products = Product.objects.all()
-    #products = Product.objects.filter(is_verified=True)
+    products = Product.objects.filter(is_verified=True)
     return products
 
 def bestseller_products():
