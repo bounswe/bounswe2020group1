@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from product.models import Product, Image
 from order.models import Order
 from registered_user.models import Vendor, get_vendor_from_request
+from comment.models import Comment
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
