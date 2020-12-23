@@ -58,4 +58,6 @@ interface ApiService {
     @POST("/shoppinglist/createlist/")
     fun addList(@Header("Authorization") token: String,@Field("list_name") list_name: String): Call<AddListResponse>
 
+    @GET("/shoppinglist/getlists/")
+    fun getLists(@Header("Authorization") token: String): Call<List<String>>
 }

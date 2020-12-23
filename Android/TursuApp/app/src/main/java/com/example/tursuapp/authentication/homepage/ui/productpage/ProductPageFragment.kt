@@ -26,6 +26,7 @@ class ProductPageFragment : Fragment() {
     private lateinit var productPageViewModel: ProductPageModel
     private lateinit var product: ProductDetailsResponse
     private lateinit var AddListStatus: AddListResponse
+    var allLists = listOf<String>()
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -63,14 +64,17 @@ class ProductPageFragment : Fragment() {
         val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView: View = inflater.inflate(R.layout.lists_popup_layout, null)
         //Specify the length and width through constants
-        val width = LinearLayout.LayoutParams.WRAP_CONTENT
-        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val width = LinearLayout.LayoutParams.MATCH_PARENT
+        val height = LinearLayout.LayoutParams.MATCH_PARENT
+        //val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        //val height = LinearLayout.LayoutParams.WRAP_CONTENT
         //Make Inactive Items Outside Of PopupWindow
         val focusable = true
         //Create a window with our parameters
         val popupWindow = PopupWindow(popupView, width, height, focusable)
         //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+        getLists(popupView)
         popupView.findViewById<ImageView>(R.id.dismiss_popup2).setOnClickListener {
             popupWindow.dismiss()
         }
@@ -78,6 +82,40 @@ class ProductPageFragment : Fragment() {
             addList(popupView)
             //popupWindow.dismiss()
         }
+    }
+
+    private fun getLists(view: View){
+            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+            val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiinterface.getLists("token f057f527f56398e8041a1985919317a5c0cc2e77").enqueue(object :
+                    retrofit2.Callback<List<String>> {
+                override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
+                    //Log.i("MainFragment", "error" + p1?.message.toString())
+                }
+
+                override fun onResponse(
+                        p0: Call<List<String>>?,
+                        response: Response<List<String>>?
+                ) {
+                    if (response != null) {
+                        Log.i("Status code",response.code().toString())
+                        allLists = response.body()!!
+                        val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupLists)
+                        for(list in allLists){
+                            Log.i("List:",list)
+                            val btn1 = RadioButton(activity?.applicationContext)
+                            btn1.text = list
+                            radioGroup.addView(btn1)
+                        }
+
+
+                    }
+
+
+                }
+
+            })
+
     }
 
     private fun addList(view: View){
@@ -98,10 +136,12 @@ class ProductPageFragment : Fragment() {
                 ) {
 
                     if (response != null) {
+                        //Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
+                        showPopupWindow(view)
                        // Log.i("Status code",response.code().toString())
                        // AddListStatus = response.body()!!
                         //view.findViewById<EditText>(R.id.new_list_txt).setText("")
-                        Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
+
                     }
 
                 }
