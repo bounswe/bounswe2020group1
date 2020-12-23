@@ -30,4 +30,6 @@ urlpatterns = [
     path('shoppinglist/', include('shopping_list.urls')),
     path('order/', include('order.urls')),
     path('comment/', include('comment.urls')),
+    path('customerpage/', include('customer_page.urls')),
+    path('vendorpage/', include('vendor_page.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
