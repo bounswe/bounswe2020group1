@@ -1,0 +1,56 @@
+name: Deploy backend
+
+on:
+    push:
+        branches: [cicd]
+    pull_request:
+        branches: [cicd]
+
+jobs:
+    deploy-frontend:
+        name: Build Backend
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: us-east-2
+
+            - name: Get public ip of Backend instance
+              run: echo "AWS_BACKEND_INSTANCE_IP=$(aws ec2 describe-instances --filters 'Name=tag:Name,Values=backend' --query 'Reservations[0].Instances[0].PublicDnsName' --output text)" >> $GITHUB_ENV
+
+            - name: Echo Backend public ip
+              run: echo "backend $AWS_BACKEND_INSTANCE_IP"
+
+            - name: Decrypt Key pair
+              run: gpg --batch --yes --decrypt --passphrase="$GPG_PASSWORD" --output CMPE451.pem ./secrets/CMPE451.pem.gpg
+              env:
+                  GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+
+            - name: chmod 400 to the keypair
+              run: chmod 400 tursu-key.pem
+
+            - name: Reset state
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ env.AWS_BACKEND_INSTANCE_IP }}
+                  username: ubuntu
+                  key_path: tursu-key.pem
+                  script_stop: true
+                  script: |
+                      #sudo docker container stop $(sudo docker container ls -aq) || true
+            - name: Run docker
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ env.AWS_BACKEND_INSTANCE_IP }}
+                  username: ubuntu
+                  key_path: CMPE451.pem
+                  script_stop: true
+                  script: |
+                      cd bounswe2020group1/
+                      git pull
