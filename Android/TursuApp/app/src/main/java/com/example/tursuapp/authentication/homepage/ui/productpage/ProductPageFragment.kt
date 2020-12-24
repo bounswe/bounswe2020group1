@@ -1,5 +1,7 @@
 package com.example.tursuapp.authentication.homepage.ui.productpage
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.example.tursuapp.api.responses.ProductResponse
 import com.squareup.picasso.Picasso
 import org.w3c.dom.Text
 import retrofit2.Call
@@ -89,5 +92,48 @@ class ProductPageFragment : Fragment() {
             .get() // give it the context
             .load(product.photo_url) // load the image
             .into(image)
+    }
+    class ProductAdapter : BaseAdapter {
+        var productList = ArrayList<ProductResponse>()
+        var productImages = ArrayList<ImageView>()
+        var context: Context? = null
+
+        constructor(context: Context, productList: ArrayList<ProductResponse>) : super() {
+            this.context = context
+            this.productList = productList
+        }
+
+        override fun getCount(): Int {
+            return productList.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return productList[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        @SuppressLint("SetTextI18n")
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            //val food = this.productList[position]
+
+            val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val productView = inflator.inflate(R.layout.product_for_shopping_cart, null)
+            //foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
+            productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
+            productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
+            productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
+            val image  = productView.findViewById<ImageView>(R.id.img_product)
+            Picasso
+                    .get() // give it the context
+                    .load(productList[position].photo_url) // load the image
+                    .into(image)
+            //val url = URL(productList[position].photo_url)
+            //val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            //productView.findViewById<ImageView>(R.id.img_product).setImageBitmap(bmp)
+            return productView
+        }
     }
 }

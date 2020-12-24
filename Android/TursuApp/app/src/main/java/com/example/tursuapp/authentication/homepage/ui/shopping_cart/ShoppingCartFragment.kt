@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
@@ -32,6 +33,8 @@ class ShoppingCartFragment : Fragment() {
     private lateinit var shoppingCartViewModel: ShoppingCartModel
     var adapter: ShoppingCartFragment.ProductAdapter? = null
     private lateinit var product: ProductDetailsResponse
+    var productList = ArrayList<ProductResponse>()
+    var productImages = ArrayList<ImageView>()
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -39,7 +42,7 @@ class ShoppingCartFragment : Fragment() {
     ): View? {
         shoppingCartViewModel = ViewModelProvider(this).get(ShoppingCartModel::class.java)
         val root = inflater.inflate(R.layout.fragment_shopping_cart, container, false)
-
+        listAllProducts()
         return root
     }
 
@@ -108,7 +111,47 @@ class ShoppingCartFragment : Fragment() {
                 .load(product.photo_url) // load the image
                 .into(image)
     }
+    fun listAllProducts(){
+        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getProducts().enqueue(object : retrofit2.Callback<List<ProductResponse>> {
+            override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
 
+            override fun onResponse(
+                    p0: Call<List<ProductResponse>>?,
+                    response: Response<List<ProductResponse>>?
+            ) {
+                Log.i("MainFragment", productList.joinToString())
+                Log.i("MainFragment", "inside onResponse")
+                if (response != null) {
+                    productList = ArrayList(response.body()!!)
+                    adapter = context?.let { ShoppingCartFragment.ProductAdapter(it, productList) }
+                    val gridView = view?.findViewById<GridView>(R.id.gridShoppingCart)
+                    if (gridView != null) {
+                        gridView.adapter = adapter
+                       /* gridView.setOnItemClickListener { parent, view, position, id ->
+                            val clicked_id = view.findViewById<TextView>(R.id.product_id).text
+                            val bundle = Bundle()
+                            bundle.putString("id", clicked_id.toString())
+                            val newFragment = ProductPageFragment()
+                            newFragment.arguments = bundle;
+                            val fragmentManager: FragmentManager? = fragmentManager
+                            val fragmentTransaction: FragmentTransaction =
+                                    fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
+                        }*/
+                    }
+                }
+                //urecyclerView.adapter = ItemAdapter(userList,context)
+                //adapter!!.notifyDataSetChanged()
+
+            }
+
+
+        })
+    }
     class ProductAdapter : BaseAdapter {
         var productList = ArrayList<ProductResponse>()
         var productImages = ArrayList<ImageView>()
@@ -138,10 +181,9 @@ class ShoppingCartFragment : Fragment() {
             val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val productView = inflator.inflate(R.layout.product_for_shopping_cart, null)
 
-            productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
-            productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
-            productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
-            val image  = productView.findViewById<ImageView>(R.id.img_product)
+            productView.findViewById<TextView>(R.id.shoppingcartProductPrice).text = this.productList[position].price + " TL"
+            productView.findViewById<TextView>(R.id.ProductName).text = this.productList[position].name
+            val image  = productView.findViewById<ImageView>(R.id.shoppingcartProductImage)
             Picasso
                     .get() // give it the context
                     .load(productList[position].photo_url) // load the image

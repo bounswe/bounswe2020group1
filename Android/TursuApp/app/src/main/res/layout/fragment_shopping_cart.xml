@@ -12,14 +12,14 @@
         android:id="@+id/continueShopping"
         android:layout_width="248dp"
         android:layout_height="51dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="#1B319A36"
         android:text="Continue Shopping"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.098"
+        app:layout_constraintHorizontal_bias="0.073"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Products" />
+        app:layout_constraintTop_toBottomOf="@+id/gridShoppingCart" />
 
     <Button
         android:id="@+id/GoPayment"
@@ -67,20 +67,85 @@
         android:id="@+id/textView7"
         android:layout_width="386dp"
         android:layout_height="121dp"
-        android:text="Items :"
+        android:textStyle="normal|bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/GoPayment" />
+        app:layout_constraintTop_toBottomOf="@+id/GoPayment"
+        app:layout_constraintVertical_bias="0.111" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Products"
+    <TextView
+        android:id="@+id/ItemsPrice"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="32dp"
+        android:text="399 TL"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView11"
+        app:layout_constraintEnd_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView11"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/ShippingPrice"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:text="Free"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView20"
+        app:layout_constraintStart_toStartOf="@+id/ItemsPrice"
+        app:layout_constraintTop_toTopOf="@+id/textView20" />
+
+    <TextView
+        android:id="@+id/TotalPrice"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:text="399 TL"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView23"
+        app:layout_constraintStart_toStartOf="@+id/ShippingPrice"
+        app:layout_constraintTop_toTopOf="@+id/textView23" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Total :"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textView20"
+        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Shipping :"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:text="Items :"
+        android:textSize="20dp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+    <GridView
+        android:id="@+id/gridShoppingCart"
         android:layout_width="415dp"
         android:layout_height="410dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-    </androidx.recyclerview.widget.RecyclerView>
+    </GridView>
 </androidx.constraintlayout.widget.ConstraintLayout>
