@@ -22,7 +22,6 @@ export default class Customer extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
     handleSubmit(event){
-    alert("girmiyo");
         if (this.state.password === this.state.password_confirmation){
             const formData = new FormData();
             formData.append("email", this.state.email);
@@ -32,23 +31,23 @@ export default class Customer extends Component {
             formData.append("username", this.state.username);
             formData.append("password", this.state.password);
             formData.append("IBAN", "");
-            formData.append("latitude", 1,11);
-            formData.append("longitude", 1,11);
+            formData.append("latitude", 1.11);
+            formData.append("longitude", 1.11);
             formData.append("city", "");
-            alert("deneme2");
-            /*axios.post('http://3.232.20.250/user/signup', formData)
+            axios.post('http://3.232.20.250/user/signup', formData)
                 .then(res =>{
-                    alert("deneme");
                     console.log(res);
                     console.log(res.data);
-                    //this.setState({ redirect: "True" });
                     window.sessionStorage.setItem("auth_token", res.data.auth_token);
+                    console.log(res.data.auth_token);
+                    this.setState({ redirect: "True" });
                 })
                 .catch(error =>{
                     alert ("There has been an error. Please try again.");
-                })*/
+                })
         }
         else{
+            console.log("asda")
             alert("Password confirmation does not match password. Please type passwords again.");
         }
         event.preventDefault();

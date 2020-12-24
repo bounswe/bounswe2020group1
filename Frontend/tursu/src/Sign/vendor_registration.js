@@ -34,8 +34,8 @@ export default class Vendor extends Component {
             formData.append("username", this.state.username);
             formData.append("password", this.state.password);
             formData.append("IBAN", this.state.iban);
-            formData.append("latitude", 1,11);
-            formData.append("longitude", 1,11);
+            formData.append("latitude", 1.11);
+            formData.append("longitude", 1.11);
             formData.append("city", this.state.location);
             axios.post('http://3.232.20.250/user/signup', formData)
                 .then(res =>{
