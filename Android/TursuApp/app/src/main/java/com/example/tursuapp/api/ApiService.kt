@@ -60,4 +60,8 @@ interface ApiService {
 
     @GET("/shoppinglist/getlists/")
     fun getLists(@Header("Authorization") token: String): Call<List<String>>
+
+    @FormUrlEncoded
+    @POST("/shoppinglist/addtolist/")
+    fun addtoList(@Header("Authorization") token: String,@Field("list_name") list_name: String,@Field("product_id") product_id: Int): Call<AddToListResponse>
 }
