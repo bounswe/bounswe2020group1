@@ -53,7 +53,7 @@ def add(request):
             comment.save()
             order.comment_added = True
             order.save()
-            product.rating = ((product.rating * number_of_raters) + rating) / (number_of_raters + 1)
+            product.rating = ((product.rating * product.number_of_raters) + rating) / (product.number_of_raters + 1)
             product.number_of_raters = product.number_of_raters + 1
             product.save()
         except Exception:

@@ -32,7 +32,7 @@ def index(request):
                 "text": comment.text,
                 "rating": comment.rating
             }
-    
+        comments_of_product.append(comment_info)
     
     product_info = {"id": product.pk,
                 "name": product.name,
