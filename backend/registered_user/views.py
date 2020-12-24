@@ -29,12 +29,11 @@ def login(request):
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
     token, _ = Token.objects.get_or_create(user=user)
-    user=User.objects.get(username=username)
     first_name = user.first_name
     last_name =  user.last_name
     user_type = 'admin'
     
-    registered_user = RegisteredUser.objects.filter(user=User.objects.get(username=username)).first()
+    registered_user = RegisteredUser.objects.filter(user=user).first()
     vendor = Vendor.objects.filter(user=registered_user).first()
     customer = Customer.objects.filter(user=registered_user).first()
     if vendor is not None:
