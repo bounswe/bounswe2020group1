@@ -23,7 +23,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/order_name"
+                android:id="@+id/order_product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
@@ -78,7 +78,7 @@
                     android:text="Items" />
 
                 <TextView
-                    android:id="@+id/cus_order_quantity"
+                    android:id="@+id/order_product_quantity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
