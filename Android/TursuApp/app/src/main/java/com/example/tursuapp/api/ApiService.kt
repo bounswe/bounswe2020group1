@@ -63,9 +63,13 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/shoppinglist/addtolist/")
-    fun addtoList(@Header("Authorization") token: String,@Field("list_name") list_name: String,@Field("product_id") product_id: Int): Call<AddToListResponse>
+    fun addToList(@Header("Authorization") token: String,@Field("list_name") list_name: String,@Field("product_id") product_id: Int): Call<AddToListResponse>
 
     @FormUrlEncoded
     @POST("/shoppinglist/deletelist/")
     fun deleteList(@Header("Authorization") token: String,@Field("list_name") list_name: String): Call<DeleteListResponse>
+
+    @FormUrlEncoded
+    @POST("/shoppinglist/deletefromlist/")
+    fun deleteFromList(@Header("Authorization") token: String,@Field("list_name") list_name: String,@Field("product_id") product_id: Int): Call<DeleteFromListResponse>
 }

@@ -14,10 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.api.responses.AddListResponse
-import com.example.tursuapp.api.responses.AddToListResponse
-import com.example.tursuapp.api.responses.DeleteListResponse
-import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.example.tursuapp.api.responses.*
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
@@ -92,12 +89,16 @@ class ProductPageFragment : Fragment() {
             deleteList(popupView)
             //popupWindow.dismiss()
         }
+        popupView.findViewById<Button>(R.id.delete_product_from_list).setOnClickListener {
+            deleteFromList(popupView)
+            //popupWindow.dismiss()
+        }
     }
 
     private fun getLists(view: View){
             //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
-            val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiinterface.getLists("token f057f527f56398e8041a1985919317a5c0cc2e77").enqueue(object :
+            val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.getLists("token f057f527f56398e8041a1985919317a5c0cc2e77").enqueue(object :
                     retrofit2.Callback<List<String>> {
                 override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
                     //Log.i("MainFragment", "error" + p1?.message.toString())
@@ -133,8 +134,8 @@ class ProductPageFragment : Fragment() {
             //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val empty=""
             val listName = view.findViewById<EditText>(R.id.new_list_txt).text.toString()
-            val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiinterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
+            val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiInterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
                     retrofit2.Callback<AddListResponse> {
                 override fun onFailure(p0: Call<AddListResponse>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -181,8 +182,8 @@ class ProductPageFragment : Fragment() {
         val productId=product.id
         Log.i("Product Id: ",productId.toString())
 
-        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.addtoList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName,productId).enqueue(object :
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.addToList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName,productId).enqueue(object :
                 retrofit2.Callback<AddToListResponse> {
             override fun onFailure(p0: Call<AddToListResponse>?, p1: Throwable?) {
                  Log.i("MainFragment", "error" + p1?.message.toString())
@@ -216,8 +217,8 @@ class ProductPageFragment : Fragment() {
         val listName=newRadioButton.text.toString()
 
             //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
-            val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiinterface.deleteList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
+            val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.deleteList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
                     retrofit2.Callback<DeleteListResponse> {
                 override fun onFailure(p0: Call<DeleteListResponse>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -243,9 +244,46 @@ class ProductPageFragment : Fragment() {
 
 
     }
+
+    private fun deleteFromList(view: View){
+        val selectedList = view.findViewById<RadioGroup>(R.id.radioGroupLists).checkedRadioButtonId
+        Log.i("Selected List Id: ",selectedList.toString())
+        val newRadioButton = view.findViewById<RadioButton>(selectedList)
+        Log.i("Selected List Name: ",newRadioButton.text.toString())
+        val listName=newRadioButton.text.toString()
+        val productId=product.id
+        Log.i("Product Id: ",productId.toString())
+
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.deleteFromList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName,productId).enqueue(object :
+                retrofit2.Callback<DeleteFromListResponse> {
+            override fun onFailure(p0: Call<DeleteFromListResponse>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<DeleteFromListResponse>?,
+                    response: Response<DeleteFromListResponse>?
+            ) {
+                if (response != null) {
+                    Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
+                    //showPopupWindow(view)
+                    Log.i("Status code",response.code().toString())
+                    // AddListStatus = response.body()!!
+                    //view.findViewById<EditText>(R.id.new_list_txt).setText("")
+
+                }
+
+            }
+
+
+        })
+
+    }
+
     fun getDetails(id: Int, view: View){
-        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.getProductDetails(id).enqueue(object :
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.getProductDetails(id).enqueue(object :
                 retrofit2.Callback<ProductDetailsResponse> {
             override fun onFailure(p0: Call<ProductDetailsResponse>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
