@@ -5,10 +5,13 @@ from django.contrib.auth import authenticate
 
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
+
+from registered_user.models import get_vendor_from_request, get_customer_from_request
 
 from .models import RegisteredUser, Vendor, Customer, Location
 
@@ -103,3 +106,39 @@ def signup(request):
                 return Response({'auth_token': token.key}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'All fields should be filled.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['POST'])
+def edit_profile(request):
+    """Edits user with given parameters when POST request is made."""
+    customer = get_customer_from_request(request)
+    vendor = get_vendor_from_request(request)
+    if vendor is not None:
+        if 'iban' in request.POST:
+            vendor.iban = request.POST["iban"]
+        if 'first_name' in request.POST:
+            vendor.user.user.first_name = request.POST["first_name"]
+        if 'password' in request.POST:
+            vendor.user.user.set_password(request.POST["password"])
+        vendor.user.user.save()
+        vendor.user.save()
+        vendor.save()
+    
+    elif customer is not None:
+        if 'first_name' in request.POST:
+            customer.user.user.first_name = request.POST["first_name"]
+        if 'last_name' in request.POST:
+            customer.user.user.last_name = request.POST["last_name"]
+        if 'password' in request.POST:
+            customer.user.user.set_password(request.POST["password"])
+        customer.user.user.save()
+        customer.user.save()
+        customer.save()
+    
+    else: 
+        return Response("Authentication failed", status=401)
+        
+
+    return Response({}, status=status.HTTP_200_OK)
