@@ -4,8 +4,10 @@ import android.content.Context
 import com.example.tursuapp.api.requests.LoginRequest
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.api.responses.ShoppingCartResponse
 import com.example.tursuapp.api.responses.TokenResponse
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -32,4 +34,11 @@ interface ApiService {
 
     @GET("/search")
     fun getSearchedProducts(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<ProductResponse>>
+
+    @POST("/shoppingcart/add")
+    fun addToCart(@Header("Authorization") auth_token : String, @Query("product_id") product_id: Int, @Query("quantity") quantity:Int):Call<ResponseBody>
+
+    @GET("/search")
+    fun getCartProducts(@Header("Authorization") auth_token : String): Call<ShoppingCartResponse>
+
 }

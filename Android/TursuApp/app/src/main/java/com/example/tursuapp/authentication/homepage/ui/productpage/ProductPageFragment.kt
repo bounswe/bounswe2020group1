@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
@@ -15,9 +16,12 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
 import org.w3c.dom.Text
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 
@@ -54,6 +58,17 @@ class ProductPageFragment : Fragment() {
             spinner.adapter = adapter
         }
         getDetails(id_str!!.toInt(), view)
+        view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
+            var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)
+            /*
+         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+         var response=apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)
+        if(response.code()==200){
+            Toast.makeText(context, "Ürün sepetinize eklenirken bir sorun yaşandı.", Toast.LENGTH_SHORT).show()
+        }else{ Toast.makeText(context, "Ürün sepetinize eklendi", Toast.LENGTH_SHORT).show()}*/
+        }
+
     }
     fun getDetails(id: Int, view: View){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
