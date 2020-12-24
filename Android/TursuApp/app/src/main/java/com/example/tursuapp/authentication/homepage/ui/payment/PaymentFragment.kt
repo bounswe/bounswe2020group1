@@ -14,9 +14,11 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.Exception
 
 
 class PaymentFragment : Fragment() {
@@ -36,7 +38,7 @@ class PaymentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-      /*  val id_str = requireArguments().getString("id")
+        /*  val id_str = requireArguments().getString("id")
         val spinner = view.findViewById<Spinner>(R.id.spinner)
         val items = arrayOf("Add to favorites","Favorites", "List 1", "List 2", "List 3")
         val adapter = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, items) }
@@ -44,14 +46,32 @@ class PaymentFragment : Fragment() {
             spinner.adapter = adapter
         }
         getDetails(id_str!!.toInt(), view)*/
-        view.findViewById<Button>(R.id.confirmandpay).setOnClickListener(){
-            val newFragment = PaymentSuccessFragment()
-            val fragmentManager: FragmentManager? = fragmentManager
-            val fragmentTransaction: FragmentTransaction =
-                    requireFragmentManager().beginTransaction()
-            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-            fragmentTransaction.commit()
-        }
+        view.findViewById<Button>(R.id.confirmandpay).setOnClickListener() {
+
+            if (view.findViewById<TextInputEditText>(R.id.nameinputtext).text.toString() == "") {
+                Toast.makeText(context, "Lütfen geçerli bir isim giriniz.", Toast.LENGTH_SHORT).show()
+            } else if (view.findViewById<TextInputEditText>(R.id.cardnumberinputtext).text.toString().length != 16|| !isAllNumber((view.findViewById<TextInputEditText>(R.id.cardnumberinputtext).text.toString()))) {
+                Toast.makeText(context, "Lütfen geçerli bir kart numarası giriniz.", Toast.LENGTH_SHORT).show()
+            } else if (view.findViewById<TextInputEditText>(R.id.cvcinputtext).text.toString().length != 3 || !isAllNumber(view.findViewById<TextInputEditText>(R.id.cvcinputtext).text.toString())) {
+                Toast.makeText(context, "Lütfen geçerli bir CVC numarası giriniz.", Toast.LENGTH_SHORT).show()
+            } else if (view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString()==""||view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString().length != 5 ||!isLegidDate(view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString())) {
+                Toast.makeText(context, "Lütfen geçerli bir tarih giriniz.", Toast.LENGTH_SHORT).show()
+            } else if (view.findViewById<TextInputEditText>(R.id.addressinputtext).text.toString() == "") {
+                Toast.makeText(context, "Lütfen geçerli bir adres giriniz.", Toast.LENGTH_SHORT).show()
+            } else if (view.findViewById<TextInputEditText>(R.id.cityinputtext).text.toString() == "") {
+                Toast.makeText(context, "Lütfen geçerli bir şehir giriniz.", Toast.LENGTH_SHORT).show()
+            } else if (!view.findViewById<CheckBox>(R.id.checkBox).isChecked) {
+                Toast.makeText(context, "Lütfen koşulları kabul ediniz.", Toast.LENGTH_SHORT).show()
+            } else {
+                val newFragment = PaymentSuccessFragment()
+                val fragmentManager: FragmentManager? = fragmentManager
+                val fragmentTransaction: FragmentTransaction =
+                        requireFragmentManager().beginTransaction()
+                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                fragmentTransaction.commit()
+            }
+
+    }
     }
     fun getDetails(id: Int, view: View){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -77,7 +97,43 @@ class PaymentFragment : Fragment() {
 
         })
     }
+    fun  giveMeDigitCount(number:Int):Int{
+        var count=0
+        var sayi=number
+        while(sayi>0){
+            sayi=sayi/10
+            count++
+        }
+        return count
+    }
+    fun  isAllNumber(number:String):Boolean{
+        for (item in number) {
+            try{
+               var x= item.toInt()
+            }catch(e: Exception){
+                return false;
+            }
 
+        }
+        return true;
+    }
+    fun  isLegidDate(date:String):Boolean{
+       try {
+           if(date.length!=5){
+               return false;
+           }
+           if(date.substring(0,2).toInt()>12){
+               return false;
+           }
+           if(!(date.substring(3,5).toInt()<99)){
+               return false;
+           }
+           return true;
+       }catch (e:Exception){
+           return false;
+       }
+
+    }
     fun displayProductInfo(view: View){
         view.findViewById<TextView>(R.id.product_name).text = product.name
         view.findViewById<TextView>(R.id.product_description).text = product.description
