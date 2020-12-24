@@ -10,6 +10,10 @@ import ShoppingCart from "./ShoppingCart"
 import Sidebar from "./Profiles/VendorSidebar";
 import VendorProfilePage from "./Profiles/VendorProfilePage";
 import CustomerProfilePage from "./Profiles/CustomerProfilePage";
+import AddProduct from "./AddProduct";
+import Checkout from "./Checkout";
+import EditProduct from "./EditProduct";
+import DeleteProduct from "./DeleteProduct";
 
 function App() {
     return (
@@ -23,6 +27,10 @@ function App() {
                 <Route path="/search/:search_string/:search_type/:fprice_lower?/:fprice_upper?/:fvendor_name?/:fcategory?/:sort_by?"  component={SearchPage} />
                 <Route path="/vendorProfile" exact component={VendorProfilePage} />
                 <Route path="/customerProfile" exact component={CustomerProfilePage} />
+                <Route path="/addProduct" exact component={AddProduct} />
+                <Route path="/editProduct" exact component={EditProduct} />
+                <Route path="/deleteProduct" exact component={DeleteProduct} />
+                <Route path="/checkout" exact component={Checkout} />
             </div>
         </Router>
     );
