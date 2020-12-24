@@ -40,7 +40,7 @@ export default class Vendor extends Component {
             axios.post('http://3.232.20.250/user/signup', formData)
                 .then(res =>{
                     console.log(res);
-                    console.log(res.data)
+                    console.log(res.data);
                     this.setState({ redirect: "True" });
                     window.sessionStorage.setItem("auth_token", res.data.auth_token);
                 })
