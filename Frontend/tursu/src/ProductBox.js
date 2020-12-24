@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -199,11 +199,27 @@ function LongMenu(props) {
 
 function ListsDialog(props){
     const { open, onClose} = props;
-    const [isCreatingNewList, SetIsCreatingNewList] = React.useState(false);
-    const lists = ["Yazlıklar", "Kışlıklar"];
+    const [isCreatingNewList, setIsCreatingNewList] = React.useState(false);
+    const [lists, setLists] = React.useState([])
+    const [isLoaded, setIsLoaded] = React.useState(false)
+    const [nameOfNewList, setNameOfNewList] = React.useState("")
+
+    if(open && !isLoaded)
+    {
+        setIsLoaded(true)
+        axios.get("http://3.232.20.250/shoppinglist/getlists/",{
+            headers: {
+                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            }
+        }).then(res =>{
+            console.log("SHOPPING LISTS:", res.data)
+            setLists(res.data)
+        })
+    }
 
     const handleClose = () => {
-        SetIsCreatingNewList(false)
+        setIsCreatingNewList(false)
+        setIsLoaded(false)
         onClose();
     };
 
@@ -211,8 +227,38 @@ function ListsDialog(props){
     //     onClose(value);
     // };
 
+    const ChangeStateToCreateNewList = () => {
+        setIsCreatingNewList(true);
+    }
+
     const createNewList = () => {
-        SetIsCreatingNewList(true);
+
+        const formData = new FormData();
+        formData.append("list_name", nameOfNewList);
+        setNameOfNewList("")
+
+        axios.post("http://3.232.20.250/shoppinglist/createlist/",
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            }
+        ).then(res =>{
+            console.log("New Shopping list is added:", res)
+            setIsCreatingNewList(false)
+            setIsLoaded(false)
+        }).catch( error => {
+                if(error.response){
+                    if(error.response.status === 400){
+                        alert("A list with the same name already exists.")
+                    }
+                }
+            }
+        )
+    }
+
+    function handleChangeInNameOfNewList(event){
+        setNameOfNewList(event.target.value)
     }
 
     return (
@@ -234,7 +280,7 @@ function ListsDialog(props){
                 {lists.map((item) => (
                   <ListItem>
                       <Checkbox/>
-                      <Typography variant={"body2"}>{item}</Typography>
+                      <Typography variant={"body2"}>{item.toString()}</Typography>
                   </ListItem>
                 ))}
             </List>
@@ -255,18 +301,19 @@ function ListsDialog(props){
                                 height: "30px",
                                 paddingRight:"10px"}}
                                        placeholder={"Enter the name the list..."}
-
+                                value={nameOfNewList}
+                                onChange={handleChangeInNameOfNewList}
                             />
                         </ListItem>
                         <ListItem >
-                            <Button variant={"outlined"}>
+                            <Button variant={"outlined"} onClick={createNewList}>
                                 <Typography>Create</Typography>
                             </Button>
                         </ListItem>
                     </List>
                 </div>
             ) : (
-                <Button style={{textTransform: "none"}} onClick={createNewList}>
+                <Button style={{textTransform: "none"}} onClick={ChangeStateToCreateNewList}>
                     <div style={{
                         padding: "5px",
                         paddingLeft: "20px",
