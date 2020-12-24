@@ -197,7 +197,16 @@ function LongMenu(props) {
     );
 }
 
+const listsDialogStyles =  makeStyles((theme) => ({
+    //style for font size
+    textField:{
+        fontSize:15
+    },
+}));
+
 function ListsDialog(props){
+    const classes = listsDialogStyles()
+
     const { open, onClose} = props;
     const [isCreatingNewList, setIsCreatingNewList] = React.useState(false);
     const [lists, setLists] = React.useState([])
@@ -266,7 +275,10 @@ function ListsDialog(props){
             <div style={{
                 display: "flex",
                 flexWrap: 'nowrap',
-                justifyContent: 'space-around'
+                justifyContent: 'space-around',
+                height: "auto",
+                width: "200px",
+
             }}>
                 <DialogTitle>
                     <Typography>Save to:</Typography>
@@ -296,18 +308,31 @@ function ListsDialog(props){
                         </ListItem>
                         <ListItem>
                             <TextField style={{
-                                marginBottom: "10px",
-                                width:"180px",
-                                height: "30px",
+                                marginTop: "-5px",
+                                marginBottom: "15px",
+                                width:"130px",
                                 paddingRight:"10px"}}
-                                       placeholder={"Enter the name the list..."}
+                                       placeholder={"Enter list name..."}
+                               InputProps={{
+                                   classes: {
+                                       input: classes.textField,
+                                   },
+                               }}
                                 value={nameOfNewList}
                                 onChange={handleChangeInNameOfNewList}
                             />
                         </ListItem>
-                        <ListItem >
-                            <Button variant={"outlined"} onClick={createNewList}>
-                                <Typography>Create</Typography>
+                        <ListItem>
+                            <Button variant={"outlined"}
+                                    onClick={createNewList}
+                                    size={"small"}
+                                    style={{
+                                       position: "absolute",
+                                       right: 25,
+                                       marginBottom: 10,
+                                    }}
+                            >
+                                <Typography style={{fontSize: 12}}>Create</Typography>
                             </Button>
                         </ListItem>
                     </List>
