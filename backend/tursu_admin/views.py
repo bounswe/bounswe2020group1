@@ -6,7 +6,7 @@ from django import forms
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from product.models import Product
+from product.models import Product, Image
 from registered_user.models import get_admin_from_request
 from search.views import SearchHelper
 
