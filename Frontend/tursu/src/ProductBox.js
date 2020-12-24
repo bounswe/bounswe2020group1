@@ -187,7 +187,7 @@ function LongMenu(props) {
                     <Typography>Add to Shopping List</Typography>
                 </MenuItem>
             </Menu>
-            <ListsDialog open={isListOpen} onClose={handleListsClose}/>
+            <ListsDialog open={isListOpen} productId={props.product.id} onClose={handleListsClose}/>
             <Snackbar open={isAlertOpen} autoHideDuration={2000} onClose={handleAlertClose}>
                 <Alert onClose={handleAlertClose} severity="success">
                     Product is added to shopping cart.
@@ -270,6 +270,57 @@ function ListsDialog(props){
         setNameOfNewList(event.target.value)
     }
 
+    function handleCheckboxChange(event){
+        if(event.target.checked){
+            addProductToList(event.target.name)
+        }
+        else{
+            removeProductFromList(event.target.name)
+        }
+        event.stopPropagation(event.target.name)
+    }
+
+    function addProductToList(listName){
+        const formData = new FormData();
+        formData.append("list_name", listName);
+        formData.append("product_id", props.productId);
+
+        axios.post('http://3.232.20.250/shoppinglist/addtolist/',
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+    }
+
+    function removeProductFromList(listName){
+        const formData = new FormData();
+        formData.append("list_name", listName);
+        formData.append("product_id", props.productId);
+
+        console.log("Deleting the product from the list.")
+        axios.post('http://3.232.20.250/shoppinglist/deletefromlist/',
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+    }
+
     return (
         <Dialog open={open} onClose={handleClose}>
             <div style={{
@@ -289,10 +340,10 @@ function ListsDialog(props){
             </div>
             <Divider/>
             <List>
-                {lists.map((item) => (
+                {lists.map((shoppingListName) => (
                   <ListItem>
-                      <Checkbox/>
-                      <Typography variant={"body2"}>{item.toString()}</Typography>
+                      <Checkbox onClick={handleCheckboxChange} name={shoppingListName.toString()}/>
+                      <Typography variant={"body2"}>{shoppingListName.toString()}</Typography>
                   </ListItem>
                 ))}
             </List>
