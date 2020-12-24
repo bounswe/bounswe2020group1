@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import {Button, Typography} from "@material-ui/core";
@@ -9,15 +9,38 @@ import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import {makeStyles} from "@material-ui/core/styles";
+import axios from "axios";
 
 
 
-export default function myLists(props){
+export default function MyLists(props){
+    const [lists, setLists] = React.useState([])
+
+    function getLists(){
+        axios.get("http://3.232.20.250/shoppinglist/getlists/",{
+            headers: {
+                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            }
+        }).then(res =>{
+            console.log("SHOPPING LISTS:", res.data)
+            setLists(res.data)
+        })
+    }
+
+    //ComponentDidMount
+    useEffect(() => {
+        getLists()
+    }, [])
+
+    function handleDelete(){
+        getLists()
+    }
+
     return(
         <div>
-            {aList()}
-            {aList()}
-            {aList()}
+            {lists.map((item) => (
+               <AList name={item} onDelete={handleDelete}/>
+            ))}
         </div>
     )
 }
@@ -49,10 +72,27 @@ const listStyle = makeStyles((theme) => ({
     }
 }));
 
-function aList(prop){
+export function AList(props){
     const classes = listStyle()
-    function handleDelete(){
 
+    const formData = new FormData();
+    formData.append("list_name", props.name);
+
+    function handleDelete(){
+        axios.post('http://3.232.20.250/shoppinglist/deletelist/',
+            formData,{
+                headers: {
+                    'Authorization': "Token " + window.sessionStorage.getItem("authToken"),
+                }
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(error =>{
+                console.log(error)
+                alert ("There has been an error. Please try again.");
+            })
+        props.onDelete()
     }
     return(
         <div className={classes.root}>
@@ -60,7 +100,7 @@ function aList(prop){
                 <Grid container item className={classes.grid} alignItems="center" spacing={4}>
                     <Grid item className={[classes.marginInsideGrid].join(" ") }>
                         <Typography variant="subtitle2" className={classes.listName}>
-                            List Name
+                            {props.name}
                         </Typography>
                     </Grid>
                     <Grid item className={classes.marginInsideGrid}>
