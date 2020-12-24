@@ -16,6 +16,7 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.AddListResponse
 import com.example.tursuapp.api.responses.AddToListResponse
+import com.example.tursuapp.api.responses.DeleteListResponse
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -83,8 +84,12 @@ class ProductPageFragment : Fragment() {
             addList(popupView)
             //popupWindow.dismiss()
         }
-        popupView.findViewById<Button>(R.id.select_btn).setOnClickListener {
+        popupView.findViewById<Button>(R.id.add_product_to_list).setOnClickListener {
             addToList(popupView)
+            //popupWindow.dismiss()
+        }
+        popupView.findViewById<Button>(R.id.delete_List_button).setOnClickListener {
+            deleteList(popupView)
             //popupWindow.dismiss()
         }
     }
@@ -203,6 +208,41 @@ class ProductPageFragment : Fragment() {
 
     }
 
+    private fun deleteList(view: View){
+        val selectedList = view.findViewById<RadioGroup>(R.id.radioGroupLists).checkedRadioButtonId
+        Log.i("Selected List Id: ",selectedList.toString())
+        val newRadioButton = view.findViewById<RadioButton>(selectedList)
+        Log.i("Selected List Name: ",newRadioButton.text.toString())
+        val listName=newRadioButton.text.toString()
+
+            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+            val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiinterface.deleteList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
+                    retrofit2.Callback<DeleteListResponse> {
+                override fun onFailure(p0: Call<DeleteListResponse>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
+
+                override fun onResponse(
+                        p0: Call<DeleteListResponse>?,
+                        response: Response<DeleteListResponse>?
+                ) {
+
+                    if (response != null) {
+                        Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
+                        //showPopupWindow(view)
+                         Log.i("Status code",response.code().toString())
+                        // AddListStatus = response.body()!!
+
+                    }
+
+                }
+
+            })
+
+
+
+    }
     fun getDetails(id: Int, view: View){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProductDetails(id).enqueue(object :

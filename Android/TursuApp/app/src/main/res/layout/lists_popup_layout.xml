@@ -112,27 +112,56 @@
 
 
             </LinearLayout>
+
             <Button
-                android:id="@+id/select_btn"
+                android:id="@+id/add_product_to_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="200dp"
-                android:text="SELECT"
+                android:text="ADD PRODUCT"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.072"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linear66" />
+
+            <Button
+                android:id="@+id/delete_product_from_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="68dp"
+                android:layout_marginRight="200dp"
+                android:text="DELETE PRODUCT"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.072"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear66" />
+
+            <Button
+                android:id="@+id/delete_List_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="200dp"
+                android:layout_marginTop="68dp"
+                android:layout_marginRight="10dp"
+                android:text="DELETE LIST"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.952"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear66" />
+
             <Button
                 android:id="@+id/add_new_List_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="200dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="10dp"
                 android:text="ADD NEW LIST"
-
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.923"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linear66" />
 
