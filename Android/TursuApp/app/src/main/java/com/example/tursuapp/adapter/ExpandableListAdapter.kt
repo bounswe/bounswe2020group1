@@ -1,4 +1,4 @@
-package com.example.tursuapp.authentication
+package com.example.tursuapp.adapter
 
 import android.content.Context
 import android.graphics.Typeface

@@ -28,33 +28,35 @@
 
                 <EditText
                     android:id="@+id/editMobileNo"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_margin="5dp"
-                    android:background="@color/TursuGreen"
-                    android:drawableLeft="@drawable/search_bar_3"
+                    android:background="@drawable/edit_text_background"
                     android:ems="10"
+                    android:hint="search"
                     android:importantForAutofill="no"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:padding="10dp" />
 
                 <Button
                     android:id="@+id/search_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="Search"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:drawableLeft="@drawable/search_bar_3"
                     android:textSize="12sp" />
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/filter_image"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_margin="10dp"
+                    android:layout_margin="5dp"
                     app:srcCompat="@drawable/filter_icon" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/shopping_cart"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_margin="5dp"
                     android:background="#00FFFFFF"
                     app:cardBackgroundColor="#673AB7"
                     app:cardCornerRadius="4dp">
