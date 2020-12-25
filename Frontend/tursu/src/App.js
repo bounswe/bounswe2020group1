@@ -10,7 +10,7 @@ import ShoppingCart from "./ShoppingCart"
 import Sidebar from "./Profiles/VendorSidebar";
 import VendorProfilePage from "./Profiles/VendorProfilePage";
 import CustomerProfilePage from "./Profiles/CustomerProfilePage";
-import AddProduct from "./AddProduct";
+import AddProduct from "./Profiles/AddProduct";
 import Checkout from "./Checkout";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";

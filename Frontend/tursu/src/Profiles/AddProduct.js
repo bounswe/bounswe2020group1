@@ -1,7 +1,7 @@
 import React from "react";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Navbar from "./NavBar";
+import Navbar from "../NavBar";
 import axios from "axios";
 import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import Input from '@material-ui/core/Input';
@@ -52,6 +52,9 @@ photo: Image file
 axios.post('http://3.232.20.250/product/add/', formData)
  */
 
+let token;
+token = window.sessionStorage.getItem("authToken")
+
 class AddProduct extends React.Component{
 
     constructor(props) {
@@ -88,9 +91,21 @@ class AddProduct extends React.Component{
         axios
             .post("http://3.232.20.250/product/add/", formData, {
                 headers: {
-                    'auth_token': "Token " + "<token>" //the token is a variable which holds the token
+                    'Authorization': "Token " + token //the token is a variable which holds the token
                 },
-            })
+            }).then((response) => {
+
+            if (response.status === 200) {
+                alert("Product added!");
+                console.log(response)
+            }
+        })
+            .catch((err) => {
+                if (err.response.status === 400) {
+                    alert(err.response.data);
+                }
+
+            });
 
     }
 
@@ -100,18 +115,8 @@ class AddProduct extends React.Component{
         const { category, name, description, brand, stock, price } = this.state
         return(
             <ThemeProvider theme={theme} >
-                <Grid container spacing={15} direction="column" className="HomePage">
-                    <Grid item xs={12}>
-                        <Paper>
-                            <Navbar />
-                        </Paper>
-                    </Grid>
+                <Grid item>
 
-                    <Typography variant="h2" component="h2"  gutterBottom>
-                        Add a Product
-                    </Typography>
-
-                    <div>
                         <form style={{width: '600px' }} onSubmit={this.submitHandler}>
                             <Grid item xs={12}>
                                 <Paper elevation={15} className={useStyles.paper}>
@@ -189,7 +194,7 @@ class AddProduct extends React.Component{
                             </Grid>
                             <br/><br/>
                         </form>
-                    </div>
+
                 </Grid>
             </ThemeProvider>
         );

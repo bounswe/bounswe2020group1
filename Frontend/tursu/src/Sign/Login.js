@@ -11,6 +11,7 @@ const clientId = '872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleuserc
 const responseGoogleFailure = response => {
     console.log(response)
     console.log("FAILURE")
+    alert("There has been an error with the Google Sign In")
 }
 
 export default class Login extends Component {
@@ -36,6 +37,8 @@ export default class Login extends Component {
                 console.log(res);
                 console.log(res.status);
                 this.setState({ redirect: "True" });
+                window.sessionStorage.setItem("authToken", res.data.auth_token);
+                console.log("auth_token: ", window.sessionStorage.getItem("authToken"));
             })
             .catch(error =>{
                 if (error.response){
@@ -66,7 +69,6 @@ export default class Login extends Component {
     }
     responseGoogleSuccess = response => {
         console.log(response)
-        console.log("SUCCESS")
         this.setState({ redirect: "True" });
     }
     render() {
@@ -76,7 +78,7 @@ export default class Login extends Component {
                     <img src={logo} alt="Tursu Logo"></img>
                     <h1>Sign In</h1>
                     <form onSubmit={this.handleSubmit}>
-                        <input className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
+                        <input className="tursu_input" type="text" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
                         <br/>
 
                         <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
@@ -93,7 +95,6 @@ export default class Login extends Component {
                             onSuccess={this.responseGoogleSuccess}
                             onFailure={responseGoogleFailure}
                             cookiePolicy={'single_host_origin'}
-
                         />
                     </div>
                 </div>

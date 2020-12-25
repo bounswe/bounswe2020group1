@@ -60,12 +60,19 @@ const DialogActions = withStyles((theme) => ({
 
 export default function PaymentForm(props) {
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
+    };
+    const handleClickOpen2 = () => {
+        setOpen2(true);
+    };
+    const handleClose2 = () => {
+        setOpen2(false);
     };
 
     return (
@@ -80,6 +87,7 @@ export default function PaymentForm(props) {
                 <Grid item xs={12} md={6}>
                     <TextField
                         required
+                        type="number"
                         id="cardNumber"
                         label="Card number"
                         fullWidth
@@ -93,6 +101,7 @@ export default function PaymentForm(props) {
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <TextField
                             required
+                            type="number"
                             id="month"
                             label="Month"
                             fullWidth
@@ -104,6 +113,7 @@ export default function PaymentForm(props) {
                         <div style={{ marginTop: '25px' }}>/</div>
                         <TextField
                             required
+                            type="number"
                             id="year"
                             label="Year"
                             fullWidth
@@ -117,6 +127,7 @@ export default function PaymentForm(props) {
                 <Grid item xs={12} md={6}>
                     <TextField
                         required
+                        type="number"
                         id="cvv"
                         label="CVV"
                         helperText="Last three digits on signature strip"
@@ -133,6 +144,7 @@ export default function PaymentForm(props) {
                         <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                             Distance Sale Contract
                         </Button>
+
                         <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                             <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                                 Distance Sale Contract
@@ -443,6 +455,138 @@ export default function PaymentForm(props) {
                         </Dialog>
                     </div>
                 </Grid>
+
+                <Grid item xs={12}>
+                    <div>
+                        <Button variant="outlined" color="primary" onClick={handleClickOpen2}>
+                            Pre Information Conditions
+                        </Button>
+
+                        <Dialog onClose={handleClose2} aria-labelledby="customized-dialog-title" open={open2}>
+                            <DialogTitle id="customized-dialog-title" onClose={handleClose2}>
+                                Pre Information Conditions
+                            </DialogTitle>
+                            <DialogContent dividers>
+                                <Typography gutterBottom>
+                                    ÖN BİLGİLENDİRME FORMU
+
+                                    İşbu Ön Bilgilendirme Formu, 6502 sayılı Tüketicilerin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği’ne uygun olarak düzenlenmiştir.
+
+                                    MADDE 1 SATICI BİLGİLERİ
+
+                                    Unvanı: TURŞU A.Ş.
+
+                                    Adresi: Boğaziçi Üniversitesi Sarıyer/İstanbul
+
+                                    MADDE 2 SÖZLEŞMENİN KONUSU VE KAPSAMI
+
+                                    İşbu Ön Bilgilendirme Formu'nun ("Form") konusu aşağıda nitelik ve satış fiyatı belirtilen Ürünlerin ("Ürünler") satışı ve teslimi ile ilgili olarak, Tüketici’nin, 6502 sayılı Tüketicinin Korunması Hakkında Kanun (“Kanun”) ve 27 Kasım 2014 tarihli ve 29188 sayılı Resmi Gazete'de yayımlanan Mesafeli Sözleşmeler Yönetmeliği (“Yönetmelik”) hükümleri gereğince bilgilendirilmesidir.
+
+                                    İşbu Sözleşme’nin konusunu; Tüketici’nin, Con-Teks İç ve Dış Ticaret Anonim Şirketi’ne (“Gözalan”) ait www.columbia.com.tr alan adlı web sitesinden, Satıcı’ya ait mal veya hizmetin satın alınmasına yönelik elektronik olarak sipariş verdiği, Form’da belirtilen niteliklere sahip mal veya hizmetin satışı ve teslimi ile ilgili olarak Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri gereğince tarafların hak ve yükümlülüklerinin belirlenmesi oluşturur.
+
+                                    MADDE 3 SATIŞA KONU MALIN TEMEL ÖZELLİKLERİ VE ÖDEME BİLGİLERİ
+
+                                    Ürünler'in tanımı, birim tutarı, adedi ve ödeme koşullarına ilişkin bilgiler aşağıda belirtildiği gibi olup, bu bilgiler Tüketici tarafından da onaylanmıştır.
+
+                                    MADDE 4 TAAHHÜTLERİN GEÇERLİLİK SÜRESİ
+
+                                    Madde 3'te belirtilen fiyatlar satış fiyatıdır. İlan edilen fiyatlar ve vaatler güncelleme yapılana ve değiştirilene kadar geçerlidir. Süreli olarak ilan edilen fiyatlar ise belirtilen süre sonuna kadar geçerlidir.
+
+                                    Satıcı, Sözleşme konusu mal veya hizmetin tüketici mevzuatına uygun olarak, sağlam, eksiksiz, siparişte belirtilen niteliklere uygun ve varsa garanti belgeleri ve kullanım kılavuzları ile Tüketici’ye teslim edilmesinden sorumludur.
+
+                                    Satıcı, mücbir sebepler veya nakliyeyi engelleyen olağanüstü durumlar nedeni ile sözleşme konusu mal veya hizmeti süresi içinde teslim edemez ise, durumu öğrendiği tarihten itibaren 3 (üç) gün içinde Tüketici’ye bildirmekle yükümlüdür.
+
+                                    MADDE 5 ÜRÜNLERİN TESLİMATI
+
+                                    5.1. Malın teslimatı; ödemenin gerçekleşmesinden sonra taahhüt edilen sürede yapılır. Satıcı, sipariş konusu mal veya hizmetin ediminin yerine getirilmesinin imkansızlaştığı haller saklı kalmak kaydıyla, mal veya hizmeti, Tüketici tarafından mal veya hizmetin sipariş edilmesinden itibaren 30 (otuz) gün içinde teslim eder. Bu süre tüketiciye daha önceden yazılı olarak veya bir sürekli veri taşıyıcısıyla bildirilmek koşuluyla en fazla 10 (on) gün uzatılabilir.
+
+                                    Herhangi bir nedenle Tüketici tarafından mal veya hizmetin bedeli ödenmez veya yapılan ödeme banka kayıtlarında iptal edilir ise, Satıcı mal veya hizmetin teslimi yükümlülüğünden kurtulmuş kabul edilir.
+
+                                    Malın Satıcı tarafından kargoya verilmesinden sonra ve fakat Tüketici tarafından teslim alınmasından önce Tüketici tarafından yapılan sipariş iptallerinde kargo bedelinden Tüketici sorumludur.
+
+                                    Sipariş konusu mal ya da hizmet ediminin yerine getirilmesinin imkansızlaştığı hallerde Satıcı bu durumu öğrendiği tarihten itibaren 3 (üç) gün içinde Tüketici’yi bilgilendirecek ve varsa teslimat masrafları da dâhil olmak üzere tahsil edilen tüm ödemeleri bildirim tarihinden itibaren en geç 14 (on dört) gün içinde iade edecektir.
+
+                                    5.2. Ürünler'in, Tüketici’den gösterdiği başka bir kişiye teslim edilecek ise, teslim edilecek kişi/kuruluşun teslimatı kabul etmemesinden dolayı Satıcı sorumlu tutulamaz.
+
+                                    5.3. Tüketici, Ürünler'i teslim aldığı anda kontrol etmek ve gördüğü ayıpları derhal Satıcı'ya bildirmekle yükümlüdür.
+
+                                    MADDE 6 CAYMA HAKKI
+
+                                    6.1 Tüketici, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, mal satışına ilişkin işlemlerde teslimat tarihinden itibaren, hizmet satışına ilişkin işlemlerde satın alma tarihinden itibaren 14 (on dört) gün içerisinde herhangi bir gerekçe göstermeksizin ve cezai şart ödemeksizin cayma hakkını kullanabilir. Tüketici, malın teslimine kadar olan süre içinde de cayma hakkını kullanabilir.
+
+                                    6.2 Tüketici, cayma hakkını ürün/leri iade ederken e-fatura çıktısı üzerinde yer alan iade nedenlerinden “cayma hakkı sebebiyle ürünleri iade ettiğini” içeren iade nedenini işaretlemesi ve ıslak imza ile imzalayarak ürünlerin iade yapılacak depo adresine gönderilmek üzere kargoya verir. Tüketici’nin ilgili sayfada yer alan iade talep formunu doldurup iade adres bilgilerini alarak, cayma hakkını kullandığı tarihten itibaren 10 (on) gün içinde malı geri göndermesi gerekmektedir.
+
+                                    6.3 İade edilecek Ürünler ile birlikte; faturasının, ürünün kutusunun, ambalajının, varsa standart aksesuarları, ürünle beraber hediye edilen diğer ürünlerin de eksiksiz ve hasarsız olarak iade edilmesi gerekmektedir.
+
+                                    6.4 Tüketici’nin cayma hakkını kullanmasından itibaren 14 (on dört) gün içerisinde, varsa malın teslim masrafları da dahil olmak üzere (malın Satıcı’nın iade için belirttiği taşıyıcı aracılığıyla geri gönderilmesi kaydıyla), Tüketici’nin ilgili mal veya hizmete ilişkin yaptığı tüm ödemeler Tüketici’ye satın alırken kullandığı ödeme aracına uygun bir şekilde ve tüketiciye herhangi bir masraf veya yükümlülük getirmeden ve tek seferde iade edilecektir.
+
+                                    6.5 Tüketici iade edeceği malı Satıcı’ya Ön Bilgilendirme Formu'nda belirtilen Satıcı’nın anlaşmalı kargo şirketi ile gönderdiği sürece, iade kargo bedeli Satıcı’ya aittir. Tüketici’nin iade edeceği malı Ön Bilgilendirme Formu'nda belirtilen Satıcı’nın anlaşmalı kargo şirketi dışında bir kargo şirketi ile göndermesi halinde, iade kargo bedeli ve malın kargo sürecinde uğrayacağı hasardan Satıcı sorumlu değildir.
+
+                                    6.6 Teslim alınmış olan malın değerinin azalması veya iadeyi imkânsız kılan bir nedenin varlığı cayma hakkının kullanılmasına engel değildir. Ancak değer azalması veya iadenin imkânsızlaşması tüketicinin kusurundan kaynaklanıyorsa Satıcı'ya malın değerini veya değerindeki azalmayı tazmin etmesi gerekir. Malın mutat kullanımı sebebiyle meydana gelen değişiklik ve bozulmalar değer azalması sayılmaz.
+
+                                    MADDE 7 CAYMA HAKKI KULLANILAMAYACAK ÜRÜNLER
+
+                                    Mevzuat uyarınca Tüketici aşağıdaki hallerde cayma hakkına sahip değildir:
+
+                                    Alıcı'nın istekleri veya açıkça onun kişisel ihtiyaçları doğrultusunda hazırlanan, niteliği itibariyle geri gönderilmeye elverişli olmayan ve çabuk bozulma tehlikesi olan veya son kullanma tarihi geçme ihtimali olan malların satışına ilişkin sözleşmelerde;
+                                    Tüketici tarafından ambalajının açılmış olması şartıyla, ses veya görüntü kayıtlarına, yazılım programlarına ve bilgisayar sarf malzemelerine ilişkin sözleşmelerde;
+                                    Tesliminden sonra ambalaj, bant, mühür, paket gibi koruyucu unsurları açılmış olan mallardan; iadesi sağlık ve hijyen açısından uygun olmayanların teslimine ilişkin sözleşmelerde;
+                                    Tesliminden sonra başka ürünlerle karışan ve doğası gereği ayrıştırılması mümkün olmayan mallara ilişkin sözleşmelerde;
+                                    Cayma hakkı süresi sona ermeden önce, tüketicinin onayı ile ifasına başlanan hizmetlere ilişkin sözleşmelerde; ve
+                                    Elektronik ortamda anında ifa edilen hizmetler ile tüketiciye anında teslim edilen gayri maddi mallara ilişkin sözleşmelerde (kupon gibi).
+                                    Mesafeli Sözleşmeler Yönetmeliği’nin kapsamı dışında bırakılmış olan mal veya hizmetler (Satıcı’nın düzenli teslimatları ile Tüketici’nin meskenine teslim edilen gıda maddelerinin, içeceklerin ya da diğer günlük tüketim maddeleri ile seyahat, konaklama, lokantacılık, eğlence sektörü gibi alanlarda hizmetler) bakımından cayma hakkı kullanılamayacaktır.
+
+                                    MADDE 8 GENEL HÜKÜMLER
+
+                                    8.1 Tüketici, işbu Form'da satışa konu Ürünün temel nitelikleri, satış fiyatı ve ödeme şekli ile teslimata ilişkin ön bilgileri okuyup bilgi sahibi olduğunu ve yazılı olarak gerekli teyidi verdiğini beyan eder.
+
+                                    8.2 Tüketici; işbu Form'u yazılı olarak teyit etmekle, mesafeli sözleşmelerin akdinden önce, Satıcı tarafından tüketiciye verilmesi gereken adres, siparişi verilen Ürünlere ait temel özellikler, Ürünlerin vergiler dahil fiyatı, ödeme ve teslimat bilgilerini de doğru ve eksiksiz olarak edindiğini teyit etmiş olur.
+
+                                    8.3 Kargo firmasının, Ürünler'i Tüketici’ye teslimi aşamasında karşılaşacağı her türlü sorun nedeniyle, siparişi verilen Ürünün Tüketici’ye teslim edilememesinden dolayı Satıcı sorumlu tutulamaz.
+
+                                    8.4 Satıcı, Ürünler'in sağlam, eksiksiz, siparişte belirtilen niteliklere uygun ve varsa garanti belgeleri ve kullanım kılavuzları ile teslim edilmesinden sorumludur.
+
+                                    8.5 Satıcı, Ürünler'in teslim süresinden önce haklı bir nedenle tedarik edilemeyeceğinin anlaşılması üzerine Tüketici’yi bilgilendirmek ve yazılı onayını almak suretiyle eşit kalite ve fiyatta farklı bir Ürün tedarik edebilir.
+
+                                    8.6 Satıcı, Ürünler'in teslim edilmesinin imkânsızlaşması halinde bu durumu, sözleşmeden doğan ifa yükümlülüğünün süresi dolmadan Tüketici’ye bildirir ve 14 (on dört) günlük süre içinde toplam bedeli Tüketici’ye iade eder.
+
+                                    8.7 Herhangi bir nedenle Ürün bedeli ödenmez veya banka kayıtlarında iptal edilir ise, Satıcı Ürünün teslimi yükümlülüğünden kurtulmuş kabul edilir.
+
+                                    8.8 Ürünler'in bedelinin herhangi bir sebepten dolayı Satıcı'ya ödememesi halinde, Tüketici Satıcı'nın bildiriminden itibaren en geç 3 gün içinde Ürünleri tüm masrafları kendisine ait olmak üzere Satıcı'ya iade eder. Satıcı'nın Ürün bedeli alacağını takip dahil diğer tüm akdi-kanuni hakları ayrıca ve her halükarda saklıdır.
+
+                                    8.9 İşbu Ön Bilgilendirme Formu kapsamında Tüketici’ye siparişinin detayları hakkında bilgilendirme yapılmakta olup, Tüketici’nin mal veya hizmetin elektronik olarak satın alınmasına ilişkin olarak Mesafeli Sözleşmeler Yönetmeliği gereğince mesafeli satış sözleşmesini onaylaması gerekmektedir.
+
+                                    MADDE 9 UYUŞMAZLIKLARIN ÇÖZÜMÜ
+
+                                    Tüketici, satın aldıkları mal ve hizmetlerle ilgili şikâyetlerini Satıcı'ya iletecektir. Tüketici, Satıcı'ya karşı (Gümrük ve Ticaret Bakanlığı tarafından ilan edilen değerlere bağlı olarak) ürünü satın aldığı veya ikametgâhının bulunduğu yerdeki İl veya İlçe Tüketici Hakem Heyeti'ne ya da Tüketici Mahkemesi'ne başvurabilir.
+
+                                    MADDE 10 DİĞER HÜKÜMLER
+
+                                    İşbu Ön Bilgilendirme Formu elektronik ortamda Tüketici tarafından okunarak kabul edildikten sonra Mesafeli Satış Sözleşmesi kurulması aşamasına geçilecektir. Tüketici, Mesafeli Satış Sözleşmesi’ni imzalamakla işbu Ön Bilgilendirme Formu şartlarını kabul ettiğini kabul taahhüt ve beyan eder.
+
+                                    İşbu Ön Bilgilendirme Formu'nda belirtilen ön bilgileri edindiğimi teyit ederim.
+
+                                    Satıcı : CON- TEKS İÇ VE DIŞ TİCARET A.Ş.
+
+                                    Tarih:
+                                </Typography>
+
+                            </DialogContent>
+                            <DialogActions>
+                                <Button autoFocus onClick={(e)=>{
+                                    props.setPreClicked(e.target.value)
+                                    handleClose2();
+                                }
+                                }
+                                        value={props.preClicked}
+                                        color="primary">
+                                    I Agree
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                </Grid>
+
             </Grid>
         </React.Fragment>
     );

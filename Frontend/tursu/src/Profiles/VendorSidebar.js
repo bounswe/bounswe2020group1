@@ -58,6 +58,16 @@ export default function VendorSidebar(props){
                     </IconButton>
                 </Paper>
             </Grid>
+            <Grid item className="sidebar">
+                <Paper elevation="4">
+                    <IconButton onClick={props.add}>
+                        <ShoppingCartIcon/>
+                        <Typography>Add Product</Typography>
+                    </IconButton>
+                </Paper>
+            </Grid>
+
         </Grid>
+
     );
 }

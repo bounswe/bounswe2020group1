@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
         width: theme.spacing(13),
     },
     paper: {
-        backgroundColor: '#b2fab4',
+        backgroundColor: '#ffffff', /* white or green */
         padding: theme.spacing(2),
         [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
 
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     stepper: {
-        backgroundColor: '#b2fab4',
+        backgroundColor: '#ffffff',
         padding: theme.spacing(3, 0, 5),
     },
     buttons: {
@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
-function getStepContent(step, cardNumber, setCardNumber, cvc, setCvc, expMonth, setExpMonth, expYear, setExpYear, distanceClicked, setDistanceClicked) {
+function getStepContent(step, cardNumber, setCardNumber, cvc, setCvc, expMonth, setExpMonth, expYear, setExpYear, distanceClicked, setDistanceClicked, preClicked, setPreClicked) {
     switch (step) {
         case 0:
             return <AddressForm />;
@@ -94,6 +94,7 @@ function getStepContent(step, cardNumber, setCardNumber, cvc, setCvc, expMonth, 
                                 expMonth={expMonth} setExpMonth={setExpMonth}
                                 expYear={expYear} setExpYear={setExpYear}
                                 distanceClicked={distanceClicked} setDistanceClicked={setDistanceClicked}
+                                preClicked={preClicked} setPreClicked={setPreClicked}
             />;
         case 2:
             return <Review />;
@@ -110,12 +111,9 @@ export default function Checkout() {
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [distanceClicked, setDistanceClicked] = React.useState(0);
+    const [preClicked, setPreClicked] = React.useState(0);
 
     const handleNext = () => {
-        if ( activeStep === 1 && distanceClicked == 0 ) {
-            alert("Okumadın")
-            return;
-        }
         if (activeStep === 1 && cardNumber.length !== 16){
             alert("Card number must be 16 digits!")
             return;
@@ -125,7 +123,13 @@ export default function Checkout() {
         } else if ( (activeStep === 1 && expYear == 2020 && expMonth != 12) || (activeStep === 1 && expYear < 2020) ) {
             alert("Card expired!")
             return;
-        } else
+        } else if ( activeStep === 1 && distanceClicked == 0 ) {
+            alert("You must accept the Distance Sale Contract!")
+            return;
+        } else if ( activeStep === 1 && preClicked == 0 ) {
+            alert("You must accept the Pre Information Conditions!")
+            return;
+        }
         setActiveStep(activeStep + 1);
     };
 
@@ -184,7 +188,8 @@ export default function Checkout() {
                                 </React.Fragment>
                             ) : (
                                 <React.Fragment>
-                                    {getStepContent(activeStep, cardNumber, setCardNumber, cvc, setCvc, expMonth, setExpMonth, expYear, setExpYear, distanceClicked, setDistanceClicked)}
+                                    {getStepContent(activeStep, cardNumber, setCardNumber, cvc, setCvc, expMonth, setExpMonth, expYear, setExpYear,
+                                        distanceClicked, setDistanceClicked, preClicked, setPreClicked)}
                                     <div className={classes.buttons}>
                                         {activeStep !== 0 && (
                                             <Button onClick={handleBack} className={classes.button}>
