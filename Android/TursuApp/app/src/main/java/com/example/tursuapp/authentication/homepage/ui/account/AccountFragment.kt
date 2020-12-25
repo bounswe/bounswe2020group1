@@ -36,8 +36,12 @@ class AccountFragment : Fragment() {
         view.findViewById<LinearLayout>(R.id.linearLayoutProfile).setOnClickListener {
             displayFragment(R.id.nav_profile_detail)
         }
+        view.findViewById<LinearLayout>(R.id.linearLayoutFavorites).setOnClickListener {
+            displayFragment(R.id.nav_lists_detail)
+        }
         view.findViewById<LinearLayout>(R.id.linearLayoutOrders).setOnClickListener {
             displayFragment(R.id.nav_customer_orders)
+
         }
     }
     private fun displayFragment(id:Int){

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -19,10 +20,13 @@ import com.example.tursuapp.adapter.ProductAdapter
 import com.example.tursuapp.adapter.VendorAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.AddListResponse
+import com.example.tursuapp.api.responses.DeleteListResponse
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.VendorResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
+import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.squareup.picasso.Picasso
 import com.google.android.material.button.MaterialButton
@@ -43,6 +47,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     //var adapter: ProductAdapter? = null
     var productList = ArrayList<ProductResponse>()
+    var allLists = listOf<String>()
     var vendorList = ArrayList<VendorResponse>()
     private var filters:HashMap<String,String> ?= null
     private var type = 0
@@ -115,6 +120,53 @@ class HomeFragment : Fragment() {
         return root
 
     }
+    @SuppressLint("InflateParams")
+    private fun showPopupWindowForLists(view: View) {
+        Log.i("showPopup:", "here")
+        //Create a View object yourself through inflater
+        val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView: View = inflater.inflate(R.layout.h_lists_popup_layout, null)
+        //Specify the length and width through constants
+        val width = LinearLayout.LayoutParams.MATCH_PARENT
+        val height = LinearLayout.LayoutParams.MATCH_PARENT
+        //Make Inactive Items Outside Of PopupWindow
+        val focusable = true
+        //Create a window with our parameters
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+        popupView.findViewById<ImageView>(R.id.dismiss_popup3).setOnClickListener {
+          popupWindow.dismiss()
+        }
+        //popupView.findViewById<Button>(R.id.apply_filters).setOnClickListener {
+        //  applyFilters(popupView)
+        //  popupWindow.dismiss()
+        //}
+        //get shopping lists
+        getLists(popupView)
+        //add a new list to shopping lists
+        popupView.findViewById<Button>(R.id.h_add_new_List_button).setOnClickListener {
+            addList(popupView)
+            popupWindow.dismiss()
+            showPopupWindowForLists(popupView)
+        }
+        //delete a list from shopping lists
+        popupView.findViewById<Button>(R.id.h_delete_List_button).setOnClickListener {
+            deleteList(popupView)
+            popupWindow.dismiss()
+            showPopupWindowForLists(popupView)
+        }
+        //gets products from the selected shopping list
+        popupView.findViewById<Button>(R.id.h_show_products).setOnClickListener {
+            Log.i("vi:",popupView.toString())
+            showListedProducts(popupView)
+            popupWindow.dismiss()
+            Log.i("vi2:",popupView.toString())
+
+
+        }
+    }
+
     @SuppressLint("InflateParams")
     private fun showPopupWindow(view: View) {
         //Create a View object yourself through inflater
@@ -275,6 +327,176 @@ class HomeFragment : Fragment() {
 
 
     }
+    private fun getLists(view: View){
+        //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.getLists("token f057f527f56398e8041a1985919317a5c0cc2e77").enqueue(object :
+                retrofit2.Callback<List<String>> {
+            override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
+                //Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<List<String>>?,
+                    response: Response<List<String>>?
+            ) {
+                if (response != null) {
+                    Log.i("Status code",response.code().toString())
+                    allLists = response.body()!!
+                    val radioGroup = view.findViewById<RadioGroup>(R.id.h_radioGroupLists)
+                    for(list in allLists){
+                        Log.i("List:",list)
+                        val btn1 = RadioButton(activity?.applicationContext)
+                        btn1.text = list
+                        radioGroup.addView(btn1)
+                    }
+
+
+                }
+
+
+            }
+
+        })
+
+    }
+    private fun addList(view: View){
+        if(view.findViewById<EditText>(R.id.h_new_list_txt).text.isNotEmpty()){
+            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+            val listName = view.findViewById<EditText>(R.id.h_new_list_txt).text.toString()
+            val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiInterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
+                    retrofit2.Callback<AddListResponse> {
+                override fun onFailure(p0: Call<AddListResponse>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
+
+                override fun onResponse(
+                        p0: Call<AddListResponse>?,
+                        response: Response<AddListResponse>?
+                ) {
+
+                    if (response != null) {
+                        //Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
+                        Log.i("Status code",response.code().toString())
+                        // AddListStatus = response.body()!!
+
+                    }
+
+                }
+
+
+            })
+
+        }
+
+    }
+
+    private fun deleteList(view: View){
+        var selectedList=-1
+        selectedList = view.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId
+        if(selectedList!=-1) {
+            Log.i("Selected List Id: ", selectedList.toString())
+            val newRadioButton = view.findViewById<RadioButton>(selectedList)
+            Log.i("Selected List Name: ", newRadioButton.text.toString())
+            val listName = newRadioButton.text.toString()
+
+            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+            val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiInterface.deleteList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
+                    retrofit2.Callback<DeleteListResponse> {
+                override fun onFailure(p0: Call<DeleteListResponse>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
+
+                override fun onResponse(
+                        p0: Call<DeleteListResponse>?,
+                        response: Response<DeleteListResponse>?
+                ) {
+
+                    if (response != null) {
+                        //showPopupWindow(view)
+                        Log.i("Status code", response.code().toString())
+
+                    }
+
+                }
+
+            })
+
+        }
+    }
+
+    private fun showListedProducts(root: View){
+        val selectedList = root.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId
+        Log.i("Selected List Id: ",selectedList.toString())
+        val newRadioButton = root.findViewById<RadioButton>(selectedList)
+        Log.i("Selected List Name: ",newRadioButton.text.toString())
+        val listName=newRadioButton.text.toString()
+
+        //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.getListedProducts("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
+                retrofit2.Callback<List<ProductResponse>> {
+            override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<List<ProductResponse>>?,
+                    response: Response<List<ProductResponse>>?
+            ) {
+                Log.i("MainFragment", productList.joinToString())
+                Log.i("MainFragment", "inside onResponse")
+                if (response != null) {
+                    productList = ArrayList(response.body()!!)
+
+                    val adapter = context?.let { ProductAdapter(it, productList) }
+                    val gridView = view?.findViewById<GridView>(R.id.gridView)
+                    if (gridView != null) {
+                        gridView.adapter = adapter
+                        gridView.setOnItemClickListener { _, view, _, _ ->
+                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                            val bundle = Bundle()
+                            bundle.putString("id", clickedId.toString())
+                            val newFragment = ProductPageFragment()
+                            newFragment.arguments = bundle
+                            val fragmentManager: FragmentManager? = activity?.supportFragmentManager
+                            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
+                        }
+                    }
+
+                }
+
+            }
+
+        })
+
+
+    }
+    private fun displayAccountSubItems(view: View,type: String){
+        Log.i("accountSub: ", type)
+        if(type=="Shopping Lists"){
+            showPopupWindowForLists(view)
+        }else if(type=="Profile"){
+            displayFragment(R.id.nav_profile_detail)
+        }else if(type=="Orders"){
+            displayFragment(R.id.nav_customer_orders)
+        }    
+
+    }
+    private fun displayFragment(id:Int){
+        lateinit var fragment: Fragment
+        if(id == R.id.nav_profile_detail){
+            fragment = ProfileFragment()
+        }
+        activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.nav_host_fragment, fragment)
+                ?.commit()
+        (activity as HomePageActivity).drawer.closeDrawer(GravityCompat.START)
+    }
     private fun displayCategory(type: String){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         filters!!["name"] = type
@@ -407,6 +629,11 @@ class HomeFragment : Fragment() {
             2 -> {
                 //search
                 search(keys)
+            }
+            5 -> {
+                //account
+                Log.i("Account", "here")
+                displayAccountSubItems(view,keys)
             }
             else -> {
                 listAllProducts()

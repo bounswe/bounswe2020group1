@@ -36,6 +36,7 @@ Type 1 -> category
 Type 2 -> search
 Type 3 -> filter
 Type 4 -> sort
+Type 5 -> account
  */
 @Suppress("DEPRECATION")
 class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -80,12 +81,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         prepareListData()
         listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
         expListView!!.setAdapter(listAdapter)
+
         expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
-            if (groupPosition == 0) {
-                displayStandardFragment(R.id.nav_account)
-                //isFilterAvailable = false
-                //filterImage.visibility = View.GONE
-            }
             if (groupPosition == 1) {
                 displayFragment(R.id.nav_home, 0, "", null)
                 //isFilterAvailable = false
@@ -94,8 +91,19 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             false
         }
         expListView!!.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
-            // Kategoriye basılınca olacakları ayarla
-            if (groupPosition == 2) {
+                if (groupPosition == 0) {
+                    //displayStandardFragment(R.id.nav_account)
+                    //isFilterAvailable = false
+                    //filterImage.visibility = View.GONE
+                    when (childPosition) {
+                        0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
+                        1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
+                        2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
+                        3 -> displayFragment(R.id.nav_home, 5, "Payment", null)
+                        4 -> displayFragment(R.id.nav_home, 5, "Product Add", null)
+                    }
+                }
+                if (groupPosition == 2) {
                 when (childPosition) {
                     0 -> displayFragment(R.id.nav_home, 1, "Electronics", null)
                     1 -> displayFragment(R.id.nav_home, 1, "Fashion", null)
@@ -273,6 +281,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         if(filters!=null){
             bundle.putSerializable("filters", filters)
         }
+        Log.i("Fragg", "here")
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment, fragment)
@@ -301,7 +310,17 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         categoryNames.add("Home")
         categoryNames.add("Cosmetics")
         categoryNames.add("Sports")
-        listDataChild!![(listDataHeader as ArrayList<String>)[0]] = ArrayList()
+
+        // Adding child data
+        val accountSubItems: MutableList<String> = ArrayList()
+
+        accountSubItems.add("Profile")
+        accountSubItems.add("Orders")
+        accountSubItems.add("Shopping Lists")
+        accountSubItems.add("Payment")
+        accountSubItems.add("Product Add")
+        //listDataChild!![(listDataHeader as ArrayList<String>)[0]] = ArrayList()
+        listDataChild!![(listDataHeader as ArrayList<String>)[0]] = accountSubItems
         listDataChild!![(listDataHeader as ArrayList<String>)[1]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[2]] = categoryNames
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
