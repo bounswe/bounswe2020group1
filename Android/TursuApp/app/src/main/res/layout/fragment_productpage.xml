@@ -141,7 +141,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
+                android:id="@+id/addCart"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
                 app:cardBackgroundColor="#E8E7E7"

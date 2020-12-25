@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="#FFFFFF">
+
+    <Button
+        android:id="@+id/confirmandpay"
+        android:layout_width="204dp"
+        android:layout_height="41dp"
+        android:layout_marginBottom="4dp"
+        android:text="Confirm And Pay"
+        app:layout_constraintBottom_toBottomOf="@+id/colorbg3"
+        app:layout_constraintEnd_toEndOf="@+id/colorbg3"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintStart_toStartOf="@+id/colorbg3" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="388dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:background="#9FD6A1"
+        android:text="I agree to the privacy policy and terms conditions."
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/colorbg2" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="47dp"
+        android:layout_height="66dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView19"
+        app:layout_constraintEnd_toEndOf="@+id/textView19"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.437"
+        app:srcCompat="@drawable/shopping_cart_all" />
+
+    <TextView
+        android:id="@+id/colorbg3"
+        android:layout_width="389dp"
+        android:layout_height="190dp"
+        android:layout_marginBottom="16dp"
+        android:background="#61A4C3"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox"
+        app:layout_constraintVertical_bias="0.565" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="0dp"
+        android:layout_height="82dp"
+        android:background="#92E896"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:text="Payment Page"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Items :"
+        app:layout_constraintBottom_toBottomOf="@+id/colorbg3"
+        app:layout_constraintEnd_toEndOf="@+id/colorbg3"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="@+id/colorbg3"
+        app:layout_constraintTop_toTopOf="@+id/colorbg3"
+        app:layout_constraintVertical_bias="0.07" />
+
+    <TextView
+        android:id="@+id/colorbg1"
+        android:layout_width="390dp"
+        android:layout_height="210dp"
+        android:background="#E4B3B3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19"
+        app:layout_constraintVertical_bias="0.027" />
+
+    <TextView
+        android:id="@+id/colorbg2"
+        android:layout_width="394dp"
+        android:layout_height="124dp"
+        android:layout_marginTop="16dp"
+        android:background="#F3EFCC"
+        app:layout_constraintEnd_toEndOf="@+id/colorbg1"
+        app:layout_constraintStart_toStartOf="@+id/colorbg1"
+        app:layout_constraintTop_toBottomOf="@+id/colorbg1" />
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="City/Country : "
+        app:layout_constraintStart_toStartOf="@+id/textView28"
+        app:layout_constraintTop_toBottomOf="@+id/textView28" />
+
+    <TextView
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Address : "
+        app:layout_constraintStart_toStartOf="@+id/textView27"
+        app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="128dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Shipping Adress"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/colorbg2"
+        app:layout_constraintTop_toTopOf="@+id/colorbg2" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="168dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:text="Credit Card Information"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/colorbg1"
+        app:layout_constraintTop_toTopOf="@+id/colorbg1" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Name :"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="@+id/textView21"
+        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+    <TextView
+        android:id="@+id/cardNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Card Number :"
+        app:layout_constraintStart_toStartOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <TextView
+        android:id="@+id/cvc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="CVC/CVV :"
+        app:layout_constraintStart_toStartOf="@+id/cardNumber"
+        app:layout_constraintTop_toBottomOf="@+id/cardNumber" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Expiration Date :"
+        app:layout_constraintStart_toStartOf="@+id/cvc"
+        app:layout_constraintTop_toBottomOf="@+id/cvc" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/cityinputtext"
+        android:layout_width="225dp"
+        android:layout_height="38dp"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView29"
+        app:layout_constraintEnd_toEndOf="@+id/addressinputtext"
+        app:layout_constraintStart_toStartOf="@+id/addressinputtext"
+        app:layout_constraintTop_toTopOf="@+id/textView29" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/addressinputtext"
+        android:layout_width="226dp"
+        android:layout_height="34dp"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView28"
+        app:layout_constraintEnd_toEndOf="@+id/colorbg2"
+        app:layout_constraintStart_toEndOf="@+id/textView27"
+        app:layout_constraintTop_toTopOf="@+id/textView28" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/expirationdateinputtext"
+        android:layout_width="203dp"
+        android:layout_height="38dp"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView25"
+        app:layout_constraintEnd_toEndOf="@+id/cvcinputtext"
+        app:layout_constraintStart_toStartOf="@+id/cvcinputtext"
+        app:layout_constraintTop_toTopOf="@+id/textView25" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/cvcinputtext"
+        android:layout_width="203dp"
+        android:layout_height="38dp"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cvc"
+        app:layout_constraintEnd_toEndOf="@+id/cardnumberinputtext"
+        app:layout_constraintStart_toStartOf="@+id/cardnumberinputtext"
+        app:layout_constraintTop_toTopOf="@+id/cvc" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/cardnumberinputtext"
+        android:layout_width="203dp"
+        android:layout_height="38dp"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardNumber"
+        app:layout_constraintEnd_toEndOf="@+id/nameinputtext"
+        app:layout_constraintStart_toStartOf="@+id/nameinputtext"
+        app:layout_constraintTop_toTopOf="@+id/cardNumber" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/nameinputtext"
+        android:layout_width="203dp"
+        android:layout_height="38dp"
+        android:paddingTop="0dp"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/name"
+        app:layout_constraintEnd_toEndOf="@+id/colorbg1"
+        app:layout_constraintStart_toEndOf="@+id/name"
+        app:layout_constraintTop_toTopOf="@+id/name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

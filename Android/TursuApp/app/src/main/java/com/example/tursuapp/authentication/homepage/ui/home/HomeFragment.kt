@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -22,6 +23,8 @@ import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.VendorResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
+import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
+import com.squareup.picasso.Picasso
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import retrofit2.Call
@@ -108,6 +111,9 @@ class HomeFragment : Fragment() {
         filter?.setOnClickListener {
             showPopupWindow(it)
         }
+
+        return root
+
     }
     @SuppressLint("InflateParams")
     private fun showPopupWindow(view: View) {
@@ -350,6 +356,19 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // load foods
+        Log.i("HomeFragment", "here")
+
+
+    }
+
+    class ProductAdapter : BaseAdapter {
+        var productList = ArrayList<ProductResponse>()
+        var productImages = ArrayList<ImageView>()
+        var context: Context? = null
+
+        constructor(context: Context, productList: ArrayList<ProductResponse>) : super() {
+            this.context = context
+            this.productList = productList
         toggleGroup = view.findViewById(R.id.toggle_button_group)
         btnProduct = view.findViewById(R.id.btn_product)
         btnVendor = view.findViewById(R.id.btn_vendor)
@@ -374,6 +393,7 @@ class HomeFragment : Fragment() {
                     group.check(checkedId)
                 }
             }
+
         }
         when (type) {
             0 -> {

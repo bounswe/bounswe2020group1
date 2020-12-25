@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="180dp">
+
+
+    <ImageView
+        android:id="@+id/shoppingcartProductImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.583"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/infos"
+        android:layout_width="236dp"
+        android:layout_height="143dp"
+        app:layout_constraintBottom_toBottomOf="@+id/shoppingcartProductImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.407"
+        app:layout_constraintStart_toEndOf="@+id/shoppingcartProductImage"
+        app:layout_constraintTop_toTopOf="@+id/shoppingcartProductImage"
+        app:layout_constraintVertical_bias="0.608">
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="31dp"
+            android:layout_height="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView18"
+            app:layout_constraintEnd_toStartOf="@+id/textView18"
+            app:layout_constraintTop_toTopOf="@+id/textView18"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@android:drawable/ic_menu_add" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/textView18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView18"
+            app:layout_constraintTop_toTopOf="@+id/textView18"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@android:drawable/ic_menu_add" />
+
+        <TextView
+
+            android:id="@+id/shoppingcartProductPrice"
+            android:layout_width="68dp"
+            android:layout_height="22dp"
+            android:text="399.99 TL"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ProductName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/ProductName"
+            app:layout_constraintTop_toBottomOf="@+id/ProductName"
+            app:layout_constraintVertical_bias="0.18" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="30dp"
+            android:layout_height="27dp"
+            android:layout_marginBottom="40dp"
+            android:gravity="center"
+            android:text="3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.76"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/shoppingcartProductPrice" />
+
+        <TextView
+            android:id="@+id/ProductName"
+            android:layout_width="122dp"
+            android:layout_height="50dp"
+            android:foregroundGravity="left"
+            android:gravity="center_vertical"
+            android:text="Nikea Sneakers"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.172"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.116" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="65dp"
+            android:layout_height="46dp"
+            android:background="#D0F3D1"
+            android:text="FREE SHIPPING"
+            app:layout_constraintBottom_toBottomOf="@+id/ProductName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ProductName"
+            app:layout_constraintTop_toTopOf="@+id/ProductName" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

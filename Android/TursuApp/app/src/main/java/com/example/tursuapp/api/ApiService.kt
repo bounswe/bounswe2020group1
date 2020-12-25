@@ -30,6 +30,16 @@ interface ApiService {
     @GET("/product/category")
     fun getProductsOfCategory(@QueryMap params: HashMap<String,String>): Call<List<ProductResponse>>
 
+/*
+    @POST("/shoppingcart/add")
+    fun addToCart(@Header("Authorization") auth_token : String, @Query("product_id") product_id: Int, @Query("quantity") quantity:Int):Call<ResponseBody>
+
+    @GET("/search")
+    fun getCartProducts(@Header("Authorization") auth_token : String): Call<ShoppingCartResponse>
+
+
+ */
+
     @GET("/search")
     fun getSearchedVendors(@Query("search_type") search_type: String,@Query("search_string") search_string: String): Call<List<VendorResponse>>
 
@@ -55,4 +65,5 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/order/cancel_order/")
     fun cancelOrder(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int):Call<ResponseBody>
+
 }
