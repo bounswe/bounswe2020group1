@@ -482,7 +482,9 @@ class HomeFragment : Fragment() {
             showPopupWindowForLists(view)
         }else if(type=="Profile"){
             displayFragment(R.id.nav_profile_detail)
-        }
+        }else if(type=="Orders"){
+            displayFragment(R.id.nav_customer_orders)
+        }    
 
     }
     private fun displayFragment(id:Int){
