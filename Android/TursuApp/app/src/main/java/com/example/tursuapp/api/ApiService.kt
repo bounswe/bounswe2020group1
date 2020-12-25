@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.tursuapp.api.requests.LoginRequest
 import com.example.tursuapp.api.responses.*
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -47,4 +48,11 @@ interface ApiService {
     @GET("/order/get_orders/")
     fun getOrdersOfCustomer(@Header("Authorization") auth_token :String):Call<List<List<CustomerOrderResponse>>>
 
+    @FormUrlEncoded
+    @POST("/order/set_delivered/")
+    fun orderSetDelivered(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int):Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/order/cancel_order/")
+    fun cancelOrder(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int):Call<ResponseBody>
 }

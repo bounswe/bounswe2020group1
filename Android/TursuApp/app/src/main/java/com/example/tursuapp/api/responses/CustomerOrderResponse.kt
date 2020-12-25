@@ -3,7 +3,7 @@ package com.example.tursuapp.api.responses
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class CustomerOrderResponse(product: Product,quantity:Int,id:Int,status:String,cargoID:Int,estimatedArrivalDate:String,arrivalDate:String){
+class CustomerOrderResponse(product: Product,quantity:Int,id:Int,status:String,cargoID:String,estimatedArrivalDate:String,arrivalDate:String){
 
         @SerializedName("product")
         val product : Product = product
@@ -14,7 +14,7 @@ class CustomerOrderResponse(product: Product,quantity:Int,id:Int,status:String,c
         @SerializedName("status")
         val status : String = status
         @SerializedName("cargoID")
-        val cargoID : Int = cargoID
+        val cargoID : String = cargoID
         @SerializedName("estimatedArrivalDate")
         val estimatedArrivalDate : String = estimatedArrivalDate
         @SerializedName("arrivalDate")
