@@ -53,6 +53,7 @@
                     app:srcCompat="@drawable/filter_icon" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/shopping_cart"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_margin="5dp"

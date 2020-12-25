@@ -13,6 +13,7 @@ import com.example.tursuapp.R
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.account.AccountFragment
 import com.example.tursuapp.authentication.homepage.ui.account.AccountViewModel
+import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 
 class ProfileFragment : Fragment() {
 
@@ -37,6 +38,7 @@ class ProfileFragment : Fragment() {
                     ?.replace(R.id.nav_host_fragment, AccountFragment())
                     ?.commit()
         }
+
     }
 
 }
