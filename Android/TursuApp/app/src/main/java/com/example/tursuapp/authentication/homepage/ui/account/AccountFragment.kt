@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 
 class AccountFragment : Fragment() {
@@ -35,11 +36,17 @@ class AccountFragment : Fragment() {
         view.findViewById<LinearLayout>(R.id.linearLayoutProfile).setOnClickListener {
             displayFragment(R.id.nav_profile_detail)
         }
+        view.findViewById<LinearLayout>(R.id.linearLayoutOrders).setOnClickListener {
+            displayFragment(R.id.nav_customer_orders)
+        }
     }
     private fun displayFragment(id:Int){
         lateinit var fragment: Fragment
         if(id == R.id.nav_profile_detail){
             fragment = ProfileFragment()
+        }
+        else if(id==R.id.nav_customer_orders){
+            fragment = CustomerOrdersFragment()
         }
         activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.nav_host_fragment, fragment)
