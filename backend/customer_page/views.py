@@ -22,20 +22,20 @@ def index(request):
     my_orders = []
     for order in orders:
         comment = Comment.objects.filter(Q(order=order))
-        if comment is None:
+        if len(comment) == 0:
             comment = ""
         else:
-            comment = comment[0]
+            comment = comment[0].text
             
-        order_info = {"vendor": order.vendor.user.user.username,
-                "product": order.user.product.pk,
+        order_info = {"vendor": order.vendor.user.user.first_name,
+                "product": order.product.pk,
                 "status": order.status,
                 "cargoID": order.cargoID,
                 "orderDate": order.orderDate,
-                "estimatedArrivalDate ": order.estimatedArrivalDate ,
+                "estimatedArrivalDate ": order.estimatedArrivalDate,
                 "arrivalDate ": order.arrivalDate,
                 "quantity": order.quantity,
-                "comment": comment.text
+                "comment": comment
             }
         my_orders.append(order_info)
     
