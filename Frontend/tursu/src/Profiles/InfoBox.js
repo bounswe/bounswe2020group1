@@ -6,13 +6,13 @@ import { Link } from "react-router-dom";
 import {Button, Typography} from "@material-ui/core";
 import Box from '@material-ui/core/Box';
 import ButtonGroup from "@material-ui/core/ButtonGroup";
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
-import TextField from "@material-ui/core/TextField";
+//import AddIcon from '@material-ui/icons/Add';
+//import RemoveIcon from '@material-ui/icons/Remove';
+//import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
-import ChatIcon from '@material-ui/icons/Chat';
+//import ChatIcon from '@material-ui/icons/Chat';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+//import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {palette} from "@material-ui/system";
 import axios from "axios";
@@ -75,7 +75,7 @@ function isEditable(props,classes){
     if (props.field.editable === 'True'){
         return(
             <Grid className={classes.marginInsideGrid}>
-                <IconButton size="small">
+                <IconButton size="small" onClick={props.edit}>
                     <EditIcon/>
                 </IconButton>
             </Grid>
@@ -91,6 +91,7 @@ function isEditable(props,classes){
 
 export default function InfoBox(props) {
     const classes = horizontalStyles()
+
 
 
     return(
