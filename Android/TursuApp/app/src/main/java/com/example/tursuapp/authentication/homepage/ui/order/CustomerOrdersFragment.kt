@@ -18,7 +18,7 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.CustomerOrderResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
-import com.example.tursuapp.authentication.homepage.ui.account.AccountFragment
+import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
@@ -53,7 +53,7 @@ class CustomerOrdersFragment : Fragment() {
         orderListView = view.findViewById(R.id.customerOrderListView)
         backArrow = view.findViewById(R.id.back_arrow2)
         backArrow.setOnClickListener {
-            displayFragment(R.id.nav_account)
+            (activity as HomePageActivity).displayFragment(R.id.nav_home,0,"",null)
         }
         getOrdersOfCustomer(auth_token, view)
 
@@ -83,7 +83,6 @@ class CustomerOrdersFragment : Fragment() {
                         backArrow.setOnClickListener {
                             displayFragment(R.id.nav_customer_orders)
                         }
-
                     }
 
                 }
@@ -96,15 +95,17 @@ class CustomerOrdersFragment : Fragment() {
     private fun displayFragment(id:Int){
         lateinit var fragment: Fragment
         if(id == R.id.nav_account){
-            fragment = AccountFragment()
+            (activity as HomePageActivity).displayFragment(R.id.nav_home,0,"",null)
+
         }
         else if(id == R.id.nav_customer_orders){
             fragment = CustomerOrdersFragment()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.nav_host_fragment, fragment)
+                    ?.commit()
+            (activity as HomePageActivity).drawer.closeDrawer(GravityCompat.START)
         }
-        activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.nav_host_fragment, fragment)
-                ?.commit()
-        (activity as HomePageActivity).drawer.closeDrawer(GravityCompat.START)
+
     }
     //Product(val name:String,val vendorName:String,val photoUrl:String,val quantity:Int,val status:String,val estimatedArrivalDate:String)
     fun getOrders(position: Int):List<Product>{

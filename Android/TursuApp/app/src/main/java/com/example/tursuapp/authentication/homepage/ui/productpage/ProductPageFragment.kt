@@ -64,7 +64,7 @@ class ProductPageFragment : Fragment() {
         getDetails(id_str!!.toInt(), view)
         view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
             var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)
+            //apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)
             /*
          var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
          var response=apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)

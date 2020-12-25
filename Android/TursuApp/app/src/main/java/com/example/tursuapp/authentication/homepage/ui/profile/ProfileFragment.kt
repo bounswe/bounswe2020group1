@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.authentication.homepage.HomePageActivity
-import com.example.tursuapp.authentication.homepage.ui.account.AccountFragment
-import com.example.tursuapp.authentication.homepage.ui.account.AccountViewModel
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 
 class ProfileFragment : Fragment() {
@@ -34,9 +32,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<ImageView>(R.id.back_button).setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.nav_host_fragment, AccountFragment())
-                    ?.commit()
+            (activity as HomePageActivity).displayFragment(R.id.nav_home,0,"",null)
         }
 
     }

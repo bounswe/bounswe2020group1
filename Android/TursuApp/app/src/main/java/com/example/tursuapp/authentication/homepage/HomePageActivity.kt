@@ -22,7 +22,6 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.adapter.ExpandableListAdapter
-import com.example.tursuapp.authentication.homepage.ui.account.AccountFragment
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.google.android.material.navigation.NavigationView
@@ -259,6 +258,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn3)
         radioGroup.addView(btn4)
     }
+    /*
     private fun displayStandardFragment(id: Int){
         lateinit var fragment: Fragment
         if(id == R.id.nav_account){
@@ -269,7 +269,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 .commit()
         this.drawer.closeDrawer(GravityCompat.START)
     }
-    private fun displayFragment(id: Int, type: Int, keys: String, filters: HashMap<String, String>?){
+    */
+
+    fun displayFragment(id: Int, type: Int, keys: String, filters: HashMap<String, String>?){
         lateinit var fragment: Fragment
         if(id == R.id.nav_home){
             fragment = HomeFragment()
