@@ -12,6 +12,7 @@ export default class Login extends Component {
             email: "",
             password: "",
             redirect: "False",
+            user_type: null
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -26,6 +27,8 @@ export default class Login extends Component {
             .then(res => {
                 console.log("result:", res);
                 console.log("status: ", res.status);
+                console.log("type: ", res.data.user_type);
+                this.setState({ user_type: res.data.user_type });
                 this.setState({ redirect: "True" });
                 window.sessionStorage.setItem("authToken", res.data.auth_token);
                 console.log("auth_token: ", window.sessionStorage.getItem("authToken"));
@@ -64,7 +67,7 @@ export default class Login extends Component {
                     <img src={logo} alt="Tursu Logo"></img>
                     <h1>Sign In</h1>
                     <form onSubmit={this.handleSubmit}>
-                        <input className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
+                        <input className="tursu_input" type="text" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
                         <br/>
 
                         <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
@@ -78,6 +81,9 @@ export default class Login extends Component {
             )
         }
             else if (this.state.redirect === "True"){
+                if(this.state.user_type=="admin"){
+                    return (<Redirect to={"admin/"} />)
+                }
                 window.sessionStorage.setItem("isLogged", "true");
                 return (<Redirect to={".."} />)
             }

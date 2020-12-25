@@ -59,9 +59,8 @@ class ProductDetail extends React.Component{
         console.log("eroor")
         const array = window.location.href.split("/")
         axios.get(`http://3.232.20.250/product/`, {
-
             params: {
-                id: 1
+                id: array[4]
             }
         }).then(res =>{
             console.log(res);
