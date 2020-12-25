@@ -2,6 +2,7 @@ package com.example.tursuapp.authentication.homepage
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -10,15 +11,20 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.findNavController
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.account.AccountFragment
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
+import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Response
@@ -118,6 +124,17 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
             hideSoftKeyboard(this)
         }
+
+        this.findViewById<CardView>(R.id.shopping_cart).setOnClickListener {
+            lateinit var fragment: Fragment
+            fragment = ShoppingCartFragment()
+
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.nav_host_fragment, fragment)
+                    .commit()
+            this.drawer.closeDrawer(GravityCompat.START)
+        }
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,6 +152,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
             }
+
 
             override fun onResponse(
                     p0: Call<List<String>>?,

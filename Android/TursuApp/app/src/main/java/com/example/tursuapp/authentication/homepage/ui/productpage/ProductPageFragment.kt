@@ -1,21 +1,28 @@
 package com.example.tursuapp.authentication.homepage.ui.productpage
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
 import org.w3c.dom.Text
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 
@@ -45,6 +52,17 @@ class ProductPageFragment : Fragment() {
             spinner.adapter = adapter
         }
         getDetails(id_str!!.toInt(), view)
+        view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
+            var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)
+            /*
+         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+         var response=apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)
+        if(response.code()==200){
+            Toast.makeText(context, "Ürün sepetinize eklenirken bir sorun yaşandı.", Toast.LENGTH_SHORT).show()
+        }else{ Toast.makeText(context, "Ürün sepetinize eklendi", Toast.LENGTH_SHORT).show()}*/
+        }
+
     }
     fun getDetails(id: Int, view: View){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -87,6 +105,49 @@ class ProductPageFragment : Fragment() {
         }
         else{
             image.setImageResource(R.drawable.ic_menu_camera)
+        }
+    }
+    class ProductAdapter : BaseAdapter {
+        var productList = ArrayList<ProductResponse>()
+        var productImages = ArrayList<ImageView>()
+        var context: Context? = null
+
+        constructor(context: Context, productList: ArrayList<ProductResponse>) : super() {
+            this.context = context
+            this.productList = productList
+        }
+
+        override fun getCount(): Int {
+            return productList.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return productList[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        @SuppressLint("SetTextI18n")
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            //val food = this.productList[position]
+
+            val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val productView = inflator.inflate(R.layout.product_for_shopping_cart, null)
+            //foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
+            productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
+            productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
+            productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
+            val image  = productView.findViewById<ImageView>(R.id.img_product)
+            Picasso
+                    .get() // give it the context
+                    .load(productList[position].photo_url) // load the image
+                    .into(image)
+            //val url = URL(productList[position].photo_url)
+            //val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            //productView.findViewById<ImageView>(R.id.img_product).setImageBitmap(bmp)
+            return productView
         }
     }
 }
