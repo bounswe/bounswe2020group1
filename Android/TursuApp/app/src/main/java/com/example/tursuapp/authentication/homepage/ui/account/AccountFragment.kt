@@ -35,6 +35,9 @@ class AccountFragment : Fragment() {
         view.findViewById<LinearLayout>(R.id.linearLayoutProfile).setOnClickListener {
             displayFragment(R.id.nav_profile_detail)
         }
+        view.findViewById<LinearLayout>(R.id.linearLayoutFavorites).setOnClickListener {
+            displayFragment(R.id.nav_lists_detail)
+        }
     }
     private fun displayFragment(id:Int){
         lateinit var fragment: Fragment

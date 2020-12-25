@@ -210,15 +210,17 @@ class ProductPageFragment : Fragment() {
     }
 
     private fun deleteList(view: View){
-        val selectedList = view.findViewById<RadioGroup>(R.id.radioGroupLists).checkedRadioButtonId
-        Log.i("Selected List Id: ",selectedList.toString())
-        val newRadioButton = view.findViewById<RadioButton>(selectedList)
-        Log.i("Selected List Name: ",newRadioButton.text.toString())
-        val listName=newRadioButton.text.toString()
+        var selectedList=-1
+        selectedList = view.findViewById<RadioGroup>(R.id.radioGroupLists).checkedRadioButtonId
+        if(selectedList!=-1) {
+            Log.i("Selected List Id: ", selectedList.toString())
+            val newRadioButton = view.findViewById<RadioButton>(selectedList)
+            Log.i("Selected List Name: ", newRadioButton.text.toString())
+            val listName = newRadioButton.text.toString()
 
             //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
-            val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.deleteList("token f057f527f56398e8041a1985919317a5c0cc2e77",listName).enqueue(object :
+            val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiInterface.deleteList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
                     retrofit2.Callback<DeleteListResponse> {
                 override fun onFailure(p0: Call<DeleteListResponse>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -232,7 +234,7 @@ class ProductPageFragment : Fragment() {
                     if (response != null) {
                         Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
                         //showPopupWindow(view)
-                         Log.i("Status code",response.code().toString())
+                        Log.i("Status code", response.code().toString())
                         // AddListStatus = response.body()!!
 
                     }
@@ -241,7 +243,7 @@ class ProductPageFragment : Fragment() {
 
             })
 
-
+        }
 
     }
 
