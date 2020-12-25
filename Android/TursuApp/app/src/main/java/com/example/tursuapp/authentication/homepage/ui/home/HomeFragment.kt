@@ -141,10 +141,14 @@ class HomeFragment : Fragment() {
         //add a new list to shopping lists
         popupView.findViewById<Button>(R.id.h_add_new_List_button).setOnClickListener {
             addList(popupView)
+            popupWindow.dismiss()
+            showPopupWindowForLists(popupView)
         }
         //delete a list from shopping lists
         popupView.findViewById<Button>(R.id.h_delete_List_button).setOnClickListener {
             deleteList(popupView)
+            popupWindow.dismiss()
+            showPopupWindowForLists(popupView)
         }
         //gets products from the selected shopping list
         popupView.findViewById<Button>(R.id.h_show_products).setOnClickListener {

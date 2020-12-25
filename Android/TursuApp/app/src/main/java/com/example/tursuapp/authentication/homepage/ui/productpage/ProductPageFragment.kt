@@ -79,7 +79,8 @@ class ProductPageFragment : Fragment() {
         }
         popupView.findViewById<Button>(R.id.add_new_List_button).setOnClickListener {
             addList(popupView)
-            //popupWindow.dismiss()
+            popupWindow.dismiss()
+            showPopupWindow(popupView)
         }
         popupView.findViewById<Button>(R.id.add_product_to_list).setOnClickListener {
             addToList(popupView)
@@ -87,7 +88,8 @@ class ProductPageFragment : Fragment() {
         }
         popupView.findViewById<Button>(R.id.delete_List_button).setOnClickListener {
             deleteList(popupView)
-            //popupWindow.dismiss()
+            popupWindow.dismiss()
+            showPopupWindow(popupView)
         }
         popupView.findViewById<Button>(R.id.delete_product_from_list).setOnClickListener {
             deleteFromList(popupView)
@@ -147,7 +149,7 @@ class ProductPageFragment : Fragment() {
                 ) {
 
                     if (response != null) {
-                        //Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                         showPopupWindow(view)
                        // Log.i("Status code",response.code().toString())
                        // AddListStatus = response.body()!!
