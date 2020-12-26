@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import myInfo from "./MyInfo";
 import myProducts from "./MyProducts";
 import myOrders from "./MyOrders";
-//import Stepper from '../Stepper';
-//import Navbar from "../NavBar";
+import Navbar from "../../NavBar";
 import "./profile.css";
 import {makeStyles} from '@material-ui/core/styles';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -58,6 +57,16 @@ export default function VendorSidebar(props){
                     </IconButton>
                 </Paper>
             </Grid>
+            <Grid item className="sidebar">
+                <Paper elevation="4">
+                    <IconButton onClick={props.add}>
+                        <ShoppingCartIcon/>
+                        <Typography>Add Product</Typography>
+                    </IconButton>
+                </Paper>
+            </Grid>
+
         </Grid>
+
     );
 }

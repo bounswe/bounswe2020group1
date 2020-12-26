@@ -8,6 +8,7 @@ import VendorSidebar from "./VendorSidebar";
 import MyInfo from "./MyInfo";
 import MyProducts from "./MyProducts";
 import MyOrders from "./MyOrders";
+import AddProduct from "./AddProduct";
 
 
 export default class VendorProfilePage extends Component {
@@ -21,6 +22,7 @@ export default class VendorProfilePage extends Component {
         this.ordersChange = this.ordersChange.bind(this);
         this.SelectPage = this.SelectPage.bind(this);
         this.SelectTitle = this.SelectTitle.bind(this);
+        this.addProduct = this.addProduct.bind(this);
     }
 
     SelectPage(){
@@ -30,7 +32,9 @@ export default class VendorProfilePage extends Component {
             case "products":
                 return <MyProducts />
             case "orders":
-                 return <MyOrders />
+                return <MyOrders />
+            case "add":
+                return <AddProduct />
         }
     }
     SelectTitle(){
@@ -40,23 +44,30 @@ export default class VendorProfilePage extends Component {
             case "products":
                 return <h1 className="stepper">My Products</h1>
             case "orders":
-                 return <h1 className="stepper">My Orders</h1>
+                return <h1 className="stepper">My Orders</h1>
+            case "add":
+                return <h1 className="stepper">Add Product</h1>
         }
     }
     infoChange(){
-            this.setState({
-                currentTab:"info"
-            });
+        this.setState({
+            currentTab:"info"
+        });
     }
     productsChange(){
-            this.setState({
-                currentTab:"products"
-            });
+        this.setState({
+            currentTab:"products"
+        });
     }
     ordersChange(){
-             this.setState({
-                 currentTab:"orders"
-             });
+        this.setState({
+            currentTab:"orders"
+        });
+    }
+    addProduct(){
+        this.setState({
+            currentTab:"add"
+        });
     }
     render() {
         return (
@@ -71,7 +82,7 @@ export default class VendorProfilePage extends Component {
                         {this.SelectTitle()}
                     </div>
                     <Grid container item direction="row" spacing={1}>
-                        <VendorSidebar info={this.infoChange} products={this.productsChange} orders={this.ordersChange}/>
+                        <VendorSidebar info={this.infoChange} products={this.productsChange} orders={this.ordersChange} add={this.addProduct} />
                         {this.SelectPage()}
                     </Grid>
 
