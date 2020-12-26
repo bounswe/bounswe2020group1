@@ -24,8 +24,8 @@ const horizontalStyles = makeStyles((theme) => ({
     paper:{
         marginLeft: 100,
         marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        width: 700,
+        marginBottom: theme.spacing(8),
+        width: 850,
         height: 90,
     },
     grid: {
@@ -67,36 +67,7 @@ const horizontalStyles = makeStyles((theme) => ({
     }
 }));
 
-function addComment(){
 
-}
-function viewComment(){
-
-}
-
-function commentSection(props,classes){
-
-    if (props.product.comment === ""){
-        return(
-            <Grid className={classes.marginInsideGrid}>
-                <IconButton size="small">
-                    <ChatIcon onClick={addComment}/>
-                    Add a Comment
-                </IconButton>
-            </Grid>
-        )
-    }
-    else{
-        return(
-            <Grid className={classes.marginInsideGrid}>
-                <IconButton size="small">
-                    <ChatIcon onClick={addComment}/>
-                    View your Comment
-                </IconButton>
-            </Grid>
-        )
-    }
-}
 
 export default function Product(props) {
     const classes = horizontalStyles()
@@ -108,29 +79,44 @@ export default function Product(props) {
                 <Grid container item className={classes.grid} alignItems="center" spacing={4}>
                     <Grid item className={classes.imageContainer}>
                         <img
-                            src={props.product.photo_url}
-                            alt={props.name}
+                            src={props.product_info.photo_url}
+                            alt={props.product_info.name}
                             className={classes.image}/>
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.productName].join(" ") }>
                         <Typography variant="subtitle2">
-                            {props.product.name}
+                            {props.product_info.name}
                         </Typography>
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.price].join(" ")}>
                         <Typography variant="body2">
                             <Box fontWeight="fontWeightBold">
-                                {props.product.price} ₺
+                                {props.product_info.price} ₺
                             </Box>
                         </Typography>
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
                         <Typography variant="caption">
-                            {props.product.vendor_name}
+                            {props.product.customer}
                         </Typography>
                     </Grid>
-
-                    {commentSection(props,classes)}
+                    <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
+                        <Typography variant="caption">
+                            {props.product.status}
+                        </Typography>
+                    </Grid>
+                    <Grid item className={[classes.marginInsideGrid, classes.price].join(" ")}>
+                        <Typography variant="body2">
+                            <Box fontWeight="fontWeightBold">
+                                {props.product.quantity}
+                            </Box>
+                        </Typography>
+                    </Grid>
+                    <Grid item className={[classes.marginInsideGrid, classes.productName].join(" ") }>
+                        <Typography variant="subtitle2">
+                            {props.product.orderDate}
+                        </Typography>
+                    </Grid>
                 </Grid>
             </Paper>
         </div>

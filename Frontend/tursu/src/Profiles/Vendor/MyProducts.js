@@ -1,47 +1,36 @@
 import React, { Component} from 'react';
 import OfferedProduct from "./OfferedProduct"
-
+import axios from 'axios';
 
 export default class myProducts extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-
+            product_list : []
         }
 
     }
+    componentDidMount() {
+        console.log('componentDidMount() lifecycle');
+        var token = sessionStorage.getItem("authToken");
+        axios.get('http://3.232.20.250/vendorpage', {headers: {Authorization: 'Token ' + token}})
+        .then(res => {
+            console.log(res)
+            this.setState({ product_list: res.data.products});
+
+        })
+        .catch(error =>{
+            if (error.response){
+                console.log(error.response.message);
+            }
+        })
+    }
 
     render() {
-    const products = [
-        {
-            name: "Iphone 6",
-            photo_url: "http://3.232.20.250/static/product/product_1.jpg",
-            price: "7999.99",
-            description: "The newest iPhone on the market for the lowest price!",
-            category: "Electronics",
-            stock: "15"
-        },
-       {
-            name: "Iphone 6",
-            photo_url: "http://3.232.20.250/static/product/product_1.jpg",
-            price: "7999.99",
-            description: "The newest iPhone on the market for the lowest price!",
-            category: "Electronics",
-            stock: "15"
-        },
-        {
-            name: "Iphone 6",
-            photo_url: "http://3.232.20.250/static/product/product_1.jpg",
-            price: "7999.99",
-            description: "The newest iPhone on the market for the lowest price!",
-            category: "Electronics",
-            stock: "15"
-        }
-    ];
         return(
             <div>
-                {products.map((product) => (
+                {this.state.product_list.map((product) => (
                     <OfferedProduct product={product}/>
                 ))}
             </div>
