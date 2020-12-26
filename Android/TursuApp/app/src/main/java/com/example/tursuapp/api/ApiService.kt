@@ -97,4 +97,8 @@ interface ApiService {
     @POST("/order/cancel_order/")
     fun cancelOrder(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int):Call<ResponseBody>
 
+    @GET("/vendorpage")
+    fun getProductsOfVendor(@Header("Authorization") token :String):Call<VendorDataResponse>
+
+
 }

@@ -19,12 +19,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.adapter.ProductAdapter
 import com.example.tursuapp.adapter.VendorAdapter
+import com.example.tursuapp.adapter.VendorProductAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.api.responses.AddListResponse
-import com.example.tursuapp.api.responses.DeleteListResponse
-import com.example.tursuapp.api.responses.ProductResponse
-import com.example.tursuapp.api.responses.VendorResponse
+import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
@@ -60,6 +58,7 @@ class HomeFragment : Fragment() {
     private lateinit var btnProduct: MaterialButton
     private lateinit var toggleGroup: MaterialButtonToggleGroup
     private val filterDictionary = mapOf("Bestsellers" to "bestseller", "Newest" to "newest", "Ascending Price" to "priceAsc", "Descending Price" to "priceDesc", "Number of Comments" to "numComments")
+    var vendorProductList = ArrayList<VendorProductLists>()
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -493,9 +492,53 @@ class HomeFragment : Fragment() {
             displayFragment(R.id.nav_profile_detail)
         } else if (type == "Orders") {
             displayFragment(R.id.nav_customer_orders)
+        }else if (type == "Products") {
+            listVendorProducts()
         }
 
     }
+
+    private fun listVendorProducts() {
+        Log.i("listVendorProducts", "vendor product baslangic")
+        val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.getProductsOfVendor("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b").enqueue(object : retrofit2.Callback<VendorDataResponse> {
+            override fun onFailure(p0: Call<VendorDataResponse>?, p1: Throwable?) {
+                Log.i("Vendor Product List: ", "error: " + p1?.message.toString())
+            }
+            override fun onResponse(
+                    p0: Call<VendorDataResponse>?,
+                    response: Response<VendorDataResponse>?
+            ) {
+                if (response != null) {
+                    if (response.body() != null) {
+                        Log.i("MainFragment", "inside onResponse")
+                        vendorProductList=ArrayList(response.body()!!.products)
+                        val adapter = context?.let { VendorProductAdapter(it, vendorProductList) }
+                        val gridView = view?.findViewById<GridView>(R.id.gridView)
+                        if (gridView != null) {
+                            gridView.adapter = adapter
+                            gridView.setOnItemClickListener { _, view, _, _ ->
+                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                                val bundle = Bundle()
+                                bundle.putString("id", clickedId.toString())
+                                val newFragment = ProductPageFragment()
+                                newFragment.arguments = bundle
+                                val fragmentManager: FragmentManager? = fragmentManager
+                                val fragmentTransaction: FragmentTransaction =
+                                        fragmentManager!!.beginTransaction()
+                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                                fragmentTransaction.commit()
+                            }
+                        }
+                    }else{
+                        Log.i("Vendor Products: ", "have not any product")
+                        Toast.makeText(context, "have not any product", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+    }
+
 
     private fun displayFragment(id: Int) {
         lateinit var fragment: Fragment
