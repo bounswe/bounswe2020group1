@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Navbar from "../NavBar";
+import Navbar from "../../NavBar";
 import "./profile.css";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
