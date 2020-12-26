@@ -74,7 +74,10 @@ def ban_user(request):
     admin = get_admin_from_request(request)
     if(admin is None):
         return HttpResponse("Admin authentication failed", status=401)
-    username = request.POST["username"]
+    try:
+        username = request.POST["username"]
+    except (KeyError, ValueError):
+        return HttpResponse("User name (username) not given or invalid", status=400)
     try:
         ruser = RegisteredUser.objects.get(username=username)
     except Exception:
