@@ -70,6 +70,9 @@ const listStyle = makeStyles((theme) => ({
     },
     marginInsideGrid: {
         marginBottom:  20,
+    },
+    name:{
+        flexGrow: 3
     }
 }));
 
@@ -102,15 +105,15 @@ export function AList(props){
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={5}>
                 <Grid container item className={classes.grid} alignItems="center" spacing={4}>
-                    <Grid item className={[classes.marginInsideGrid].join(" ") }>
-                        <Typography variant="subtitle2" className={classes.listName}>
+                    <Grid item className={[classes.marginInsideGrid, classes.name].join(" ") }>
+                        <Typography  className={classes.listName}>
                             {props.name}
                         </Typography>
                     </Grid>
                     <Grid item className={classes.marginInsideGrid}>
                         <Link to={gotoLink}>
-                            <Button variant={"contained"} className={classes.goToListButton}>
-                                Go to the List
+                            <Button variant={"contained"} sizeclassName={classes.goToListButton}>
+                                Go to list
                             </Button>
                         </Link>
                     </Grid>

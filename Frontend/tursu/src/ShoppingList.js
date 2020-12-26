@@ -190,6 +190,7 @@ export function ProductInShoppingList(props) {
     const classes = horizontalStyles()
     const [isProductAddedToShoppingCart, SetIsProductAddedToShoppingCart]  = React.useState(false);
     const [isAlertOpen, SetIsAlertOpen]  = React.useState(false);
+    const [isRemoveAlertOpen, SetIsRemoveAlertOpen]  = React.useState(false);
     const [isDeleteAlertOpen, SetIsDeleteAlertOpen]  = React.useState(false);
     const [render, SetRender] = React.useState(true);
 
@@ -277,6 +278,10 @@ export function ProductInShoppingList(props) {
         SetIsAlertOpen(false)
     }
 
+    function handleRemoveAlertClose(){
+        SetIsRemoveAlertOpen(false)
+    }
+
     function handleDeleteFromShoppingCart(){
         const formData = new FormData();
         formData.append("product_id", props.product.id);
@@ -291,6 +296,7 @@ export function ProductInShoppingList(props) {
                 console.log(res);
                 console.log(res.status);
                 SetIsProductAddedToShoppingCart(false)
+                SetIsRemoveAlertOpen(true)
             })
             .catch(error =>{
                 console.log(error.response)
@@ -308,7 +314,7 @@ export function ProductInShoppingList(props) {
     if(!render){
         return(
             <Snackbar open={isDeleteAlertOpen} autoHideDuration={3000} onClose={handleDeleteAlertClose}>
-                <Alert onClose={handleDeleteAlertClose} severity="success">
+                <Alert onClose={handleDeleteAlertClose} severity="warning">
                     Product is removed from the shopping list
                 </Alert>
             </Snackbar>
@@ -370,6 +376,11 @@ export function ProductInShoppingList(props) {
             <Snackbar open={isAlertOpen} autoHideDuration={3000} onClose={handleAlertClose}>
                 <Alert onClose={handleAlertClose} severity="success">
                     Product is added to shopping cart.
+                </Alert>
+            </Snackbar>
+            <Snackbar open={isRemoveAlertOpen} autoHideDuration={3000} onClose={handleRemoveAlertClose}>
+                <Alert onClose={handleRemoveAlertClose} severity="warning">
+                    Product is removed from shopping cart.
                 </Alert>
             </Snackbar>
         </div>
