@@ -148,7 +148,7 @@ def edit_profile(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def google_login(request):
-    id_token = request.POST.get('token')
+    id_token = request.POST.get('tokenId')
     response = requests.get(f"https://oauth2.googleapis.com/tokeninfo?id_token={id_token}")
     if response.status_code != 200:
         return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -176,3 +176,72 @@ def google_login(request):
         user_type = 'customer'
 
     return Response({'auth_token': token.key, 'first_name': first_name, 'last_name': last_name, 'user_type': user_type}, status=status.HTTP_200_OK)
+
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def google_signup(request):
+    id_token = request.POST.get('tokenId')
+    response = requests.get(f"https://oauth2.googleapis.com/tokeninfo?id_token={id_token}")
+    if response.status_code != 200:
+        return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
+    try:
+        response = response.json()
+        email = response.get("email")
+        username = email
+        password = response.get("at_hash")
+        first_name = response.get("given_name")
+        last_name = response.get("family_name")
+    except:
+        return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
+    is_vendor = request.POST.get('is_vendor')
+    iban = request.POST.get('IBAN')
+    latitude = request.POST.get('latitude')
+    longitude = request.POST.get('longitude')
+    city = request.POST.get('city')
+
+    # Check if all fields are provided.
+    if username and email and password and first_name and last_name:
+        # Check if the username already exists.
+        try:
+            user = User.objects.get(username=username)
+            return Response({'error': 'The account with given info already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except User.DoesNotExist:
+            # Check if the email already exists.
+            try:
+                user = RegisteredUser.objects.get(email=email)
+                return Response({'error': 'Email address already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Create the user if the username or the email does not already exist.
+            except RegisteredUser.DoesNotExist:
+                if is_vendor:
+                    # Check if the necessary fields for the vendor are provided.
+                    if latitude and longitude and city and iban:
+                        user = User.objects.create_user(username=username, email=email, first_name=first_name,
+                                                        last_name=last_name, password=password)
+                        registered_user = user.registereduser
+                        registered_user.email = email
+                        registered_user.save()
+                        location = Location(latitude=latitude, longitude=longitude, city=city)
+                        location.save()
+                        vendor = Vendor(user=registered_user, iban=iban, rating=0, location=location)
+                        vendor.save()
+                    else:
+                        return Response({'error': 'Missing fields for the vendor.'}, status=status.HTTP_400_BAD_REQUEST)
+                # is_vendor returns false: create customer
+                else:
+                    user = User.objects.create_user(username=username, email=email, first_name=first_name,
+                                                    last_name=last_name, password=password)
+                    registered_user = user.registereduser
+                    registered_user.email = email
+                    registered_user.save()
+                    customer = Customer(user=registered_user, money_spent=0)
+                    customer.save()
+
+                user = authenticate(request, username=username, password=password)
+                token, _ = Token.objects.get_or_create(user=user)
+                return Response({'auth_token': token.key}, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'All fields should be filled.'}, status=status.HTTP_400_BAD_REQUEST)
