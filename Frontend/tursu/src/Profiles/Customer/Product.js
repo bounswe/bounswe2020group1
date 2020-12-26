@@ -87,19 +87,56 @@ const theme = createMuiTheme({
     }
 })
 
+let token;
+token = window.sessionStorage.getItem("authToken")
+
 export default function Product(props) {
+
     const classes = horizontalStyles()
-    console.log(props.product)
 
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(5);
+    const [comment, setComment] = React.useState("");
 
     const handleClickOpen = () => {
         console.log(props.product.product)
+
         setOpen(true);
     };
 
     const handleClose = () => {
+        console.log("comment is ",  comment)
+        console.log("value is ",  value)
+        setOpen(false);
+    };
+
+    const handleComment = (e) => {
+        setComment(e.target.value)
+    };
+
+    const handleSubmit = (e) => {
+        const formData = new FormData();
+        formData.append("product_id", props.product.product.id)
+        formData.append("text", comment)
+        formData.append("rating", value)
+        axios
+            .post("http://3.232.20.250/comment/", formData, {
+                headers: {
+                    'Authorization': "Token " + token //the token is a variable which holds the token
+                },
+            }).then((response) => {
+
+            if (response.status === 200) {
+                alert("Comment added!");
+                console.log(response)
+            }
+        })
+            .catch((err) => {
+                if (err.response.status === 401) {
+                    alert(err.response.data);
+                }
+
+            });
         setOpen(false);
     };
 
@@ -161,6 +198,8 @@ export default function Product(props) {
                                         label="Your Comment"
                                         type="text"
                                         fullWidth
+                                        comment={comment}
+                                        onChange={event => handleComment(event)}
                                     />
                                 </DialogContent>
                                 <br/>
@@ -182,7 +221,7 @@ export default function Product(props) {
                                     <Button onClick={handleClose} color="primary">
                                         Cancel
                                     </Button>
-                                    <Button onClick={handleClose} color="primary">
+                                    <Button onClick={event => handleSubmit(event)} color="primary">
                                         Add Comment
                                     </Button>
                                 </DialogActions>
