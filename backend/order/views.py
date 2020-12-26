@@ -24,6 +24,13 @@ def create_orders(request):
         return HttpResponse("Customer authentication failed", status=401)
     items = ShoppingCarts.objects.filter(Q(customer=customer))
     created_=datetime.datetime.now()
+    
+    for item in items:
+        product = item.product
+        quantity = item.quantity
+        if product.stock < quantity:
+            return HttpResponse("Not enough stock for product {}".format(product.name), status=400)
+
     for item in items:
         product = item.product
         vendor = item.product.vendor
@@ -34,8 +41,10 @@ def create_orders(request):
             estimatedArrivalDate=datetime.date.today(), 
             arrivalDate=datetime.date.today(),
             created=created_)
-
+        product.stock -= quantity
+        product.save()
         order.save()
+
     ShoppingCarts.objects.filter(Q(customer=customer)).delete()
     
     return JsonResponse({}, safe=False)
@@ -162,8 +171,10 @@ def cancel_order(request):
 
     if order.customer == customer or order.vendor == vendor:
         order.status = "cancelled"
+        order.product.stock += order.quantity
     else: 
         return HttpResponse("Order doesn't belong to given user", status=400)
     
+    order.product.save()
     order.save()
     return JsonResponse({}, safe=False)
