@@ -16,6 +16,7 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {palette} from "@material-ui/system";
 import axios from "axios";
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 const horizontalStyles = makeStyles((theme) => ({
@@ -24,9 +25,9 @@ const horizontalStyles = makeStyles((theme) => ({
     },
     paper:{
         marginLeft: 100,
-        marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(4),
-        width: 700,
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(8),
+        width: 850,
         height: 90,
     },
     grid: {
@@ -72,23 +73,18 @@ const horizontalStyles = makeStyles((theme) => ({
         color: "red",
     }
 }));
-/*
 
-name
-description
-photo_url
+function editProduct(id){
+    console.log("Editing product " + id)
+}
+function deleteProduct(id){
 
-category
-
-stock
-price
-
-*/
+    console.log("Deleting product " + id)
+}
 
 export default function OfferedProduct(props) {
     const classes = horizontalStyles()
-
-
+    var id = props.product.id
     return(
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={5}>
@@ -96,7 +92,7 @@ export default function OfferedProduct(props) {
                     <Grid item className={classes.imageContainer}>
                         <img
                             src={props.product.photo_url}
-                            alt={props.name}
+                            alt={props.product.name}
                             className={classes.image}/>
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.productName].join(" ") }>
@@ -113,7 +109,7 @@ export default function OfferedProduct(props) {
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
                         <Typography variant="caption">
-                            {props.product.stock}
+                            Rating: {props.product.rating}
                         </Typography>
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
@@ -121,11 +117,16 @@ export default function OfferedProduct(props) {
                             {props.product.category}
                         </Typography>
                     </Grid>
-                        <Grid className={classes.marginInsideGrid}>
-                            <IconButton size="small">
-                                <EditIcon/>
-                            </IconButton>
-                        </Grid>
+                    <Grid className={classes.marginInsideGrid}>
+                        <IconButton onClick={() => editProduct(id)} size="small">
+                            <EditIcon/>
+                        </IconButton>
+                    </Grid>
+                    <Grid className={classes.marginInsideGrid}>
+                        <IconButton onClick={() => deleteProduct(id)} size="small">
+                            <DeleteIcon/>
+                        </IconButton>
+                    </Grid>
                 </Grid>
             </Paper>
         </div>
