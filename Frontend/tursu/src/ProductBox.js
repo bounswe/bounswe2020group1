@@ -187,7 +187,11 @@ function LongMenu(props) {
                     <Typography>Add to Shopping List</Typography>
                 </MenuItem>
             </Menu>
-            <ListsDialog open={isListOpen} productId={props.product.id} onClose={handleListsClose}/>
+            {isListOpen? (
+                <ListsDialog open={isListOpen} productId={props.product.id} onClose={handleListsClose}/>
+            ):(
+                <div></div>
+            )}
             <Snackbar open={isAlertOpen} autoHideDuration={2000} onClose={handleAlertClose}>
                 <Alert onClose={handleAlertClose} severity="success">
                     Product is added to shopping cart.
@@ -216,31 +220,36 @@ function ListsDialog(props){
     //[list_name, is product in the list]
     const [isInList, setIsInList] = React.useState(new Map())
 
-    if(open && !isLoaded)
-    {
-        console.log("GIRDIM")
-        setIsLoaded(true)
-        axios.get("http://3.232.20.250/shoppinglist/getlists/",{
-            headers: {
-                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
-            }
-        }).then(res =>{
-            setLists(res.data)
-            console.log("SHOPPING LISTS:", res.data)
-            console.log("SHOPPING LISTS lists:", lists)
-            fillIsInList();
-        })
-    }
+    //ComponentDidMount
+    useEffect(() => {
+        console.log("DIDMOUNT")
+        if(open && !isLoaded)
+        {
+            setIsLoaded(true)
+            axios.get("http://3.232.20.250/shoppinglist/getlists/",{
+                headers: {
+                    'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+                }
+            }).then(res =>{
+                setLists(res.data)
+                console.log("SHOPPING LISTS:", res.data)
+                console.log("SHOPPING LISTS lists:", lists)
+                fillIsInList(res.data);
+            })
+        }
+    }, [])
 
-    function fillIsInList(){
-        for(let i=0; i<lists.length; i++)
+
+    function fillIsInList(tmpList){
+        console.log("Icerideyim.", tmpList.length)
+        for(let i=0; i<tmpList.length; i++)
         {
             let productsInShoppingList = [];
 
-            console.log("List name:", lists[i])
+            console.log("List name:", tmpList[i])
 
             const formData = new FormData();
-            formData.append("list_name", lists[i])
+            formData.append("list_name", tmpList[i])
 
             axios.post("http://3.232.20.250/shoppinglist/products/",
                 formData,
@@ -257,17 +266,17 @@ function ListsDialog(props){
                     console.log("ID:", productsInShoppingList[j].id)
                     console.log("Self ID:", props.productId)
                     if(props.productId === productsInShoppingList[j].id){
-                        isInList.set(lists[i], true);
+                        setIsInList(new Map(isInList.set(tmpList[i], true)));
+                        console.log("UPDATED")
                     }
                 }
-                if(!isInList.has(lists[i])){
-                    isInList.set(lists[i], false);
+                if(!isInList.has(tmpList[i])){
+                    setIsInList(new Map(isInList.set(tmpList[i], false)));
+                    console.log("UPDATED")
                 }
-
                 console.log("IsInList", isInList)
             })
         }
-        setIsInList(isInList)
     }
 
     const handleClose = () => {
@@ -315,11 +324,14 @@ function ListsDialog(props){
     }
 
     function handleCheckboxChange(event){
+        console.log("YETER", event.target.checked)
         if(event.target.checked){
             addProductToList(event.target.name)
+            setIsInList(new Map(isInList.set(event.target.name, true)))
         }
         else{
             removeProductFromList(event.target.name)
+            setIsInList(new Map(isInList.set(event.target.name, false)))
         }
         event.stopPropagation(event.target.name)
     }
@@ -365,6 +377,7 @@ function ListsDialog(props){
             })
     }
 
+    let temp = true
     return (
         <Dialog open={open} onClose={handleClose}>
             <div style={{
@@ -386,8 +399,12 @@ function ListsDialog(props){
             <List>
                 {lists.map((shoppingListName) => (
                   <ListItem>
-                      {console.log("AAAAAAA", isInList.has(shoppingListName))}
-                      <Checkbox checked={isInList.get(shoppingListName)} onClick={handleCheckboxChange} name={shoppingListName.toString()}/>
+                      {temp = isInList.get(shoppingListName)}
+                      <Checkbox checked={temp}
+                                onClick={handleCheckboxChange}
+                                name={shoppingListName.toString()}/>
+                      {console.log("RERENsDERD")}
+                      {console.log(temp)}
                       <Typography variant={"body2"}>{shoppingListName.toString()}</Typography>
                   </ListItem>
                 ))}
