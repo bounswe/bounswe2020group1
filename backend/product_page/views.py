@@ -18,6 +18,7 @@ def index(request):
     
     static_url = "http://3.232.20.250/static/images/"
     images = Image.objects.filter(product=product)
+    all_photos = [f"{static_url}{image.photo}" for image in images]
     if(len(images) > 0):
         photo_url = f"{static_url}{images[0].photo}"
     else:
@@ -27,7 +28,8 @@ def index(request):
     comments_of_product = []
     if len(comments) > 0:
         for comment in comments:
-            comment_info = {"id": comment.pk,
+            comment_info = {
+                "id": comment.pk,
                 "customer": comment.customer.user.user.username,
                 "text": comment.text,
                 "rating": comment.rating
@@ -43,7 +45,10 @@ def index(request):
                 "rating": product.rating,
                 "stock": product.stock,
                 "price": product.price,
-                "comments": comments_of_product
+                "brand": product.brand,
+                "comments": comments_of_product,
+                "all_photos": all_photos,
+
             }
                    
     return JsonResponse(product_info, safe=False)
