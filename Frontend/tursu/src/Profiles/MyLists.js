@@ -10,6 +10,7 @@ import RemoveIcon from "@material-ui/icons/Remove";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import {makeStyles} from "@material-ui/core/styles";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 
 
@@ -95,6 +96,8 @@ export function AList(props){
             })
         props.onDelete()
     }
+
+    const gotoLink = '/shoppingList/' + props.name;
     return(
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={5}>
@@ -105,9 +108,11 @@ export function AList(props){
                         </Typography>
                     </Grid>
                     <Grid item className={classes.marginInsideGrid}>
-                        <Button variant={"contained"} className={classes.goToListButton}>
-                            Go to the List
-                        </Button>
+                        <Link to={gotoLink}>
+                            <Button variant={"contained"} className={classes.goToListButton}>
+                                Go to the List
+                            </Button>
+                        </Link>
                     </Grid>
                     <Grid item className={classes.marginInsideGrid}>
                         <IconButton size="small">

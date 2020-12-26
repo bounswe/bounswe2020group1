@@ -10,6 +10,7 @@ import ShoppingCart from "./ShoppingCart"
 import Sidebar from "./Profiles/VendorSidebar";
 import VendorProfilePage from "./Profiles/VendorProfilePage";
 import CustomerProfilePage from "./Profiles/CustomerProfilePage";
+import ShoppingList from "./ShoppingList";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/signIn" exact component={Sign} />
                 <Route path="/search" exact component={SearchPage} />
                 <Route path="/shoppingCart" exact component={ShoppingCart} />
+                <Route path="/shoppingList/:name" exact component={ShoppingList} />
                 <Route path="/product/:id"  component={ProductDetailPage} />
                 <Route path="/search/:search_string/:search_type/:fprice_lower?/:fprice_upper?/:fvendor_name?/:fcategory?/:sort_by?"  component={SearchPage} />
                 <Route path="/vendorProfile" exact component={VendorProfilePage} />
