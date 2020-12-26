@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import Order from "./Order";
 
 
 export default class myOrders extends Component {
@@ -12,9 +13,17 @@ export default class myOrders extends Component {
     }
 
     render() {
-
         return(
-            <a>ORDERS</a>
+            <div>
+            <Order />
+            <br/>
+            <Order />
+            <br/>
+            <Order />
+            <br/>
+            <Order />
+            <br/>
+            </div>
         )
 
 

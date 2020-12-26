@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import myInfo from "./MyInfo";
-import myProducts from "./MyProducts";
+import myLists from "./MyLists";
 import myOrders from "./MyOrders";
-import Stepper from '../Stepper';
-import Navbar from "../NavBar";
+//import Stepper from '../Stepper';
+//import Navbar from "../NavBar";
 import "./profile.css";
 import {makeStyles} from '@material-ui/core/styles';
+import ViewListIcon from '@material-ui/icons/ViewList';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 import InfoIcon from '@material-ui/icons/Info';
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import {Drawer, List, ListItem,
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme)=> ({
 
 
 
-export default function VendorSidebar(props){
+export default function CustomerSidebar(props){
     const classes = useStyles();
 
     return (
@@ -44,19 +44,19 @@ export default function VendorSidebar(props){
             </Grid>
             <Grid item className="sidebar">
                 <Paper elevation="4">
-                    <IconButton onClick={props.products}>
-                        <StorefrontIcon/>
-                        <Typography>My Products</Typography>
-                    </IconButton>
-                </Paper>
-            </Grid>
-            <Grid item className="sidebar">
-                <Paper elevation="4">
                     <IconButton onClick={props.orders}>
                         <ShoppingCartIcon/>
                         <Typography>My Orders</Typography>
                     </IconButton>
                 </Paper>
+            </Grid>
+            <Grid item className="sidebar">
+                 <Paper elevation="4">
+                    <IconButton onClick={props.lists}>
+                        <ViewListIcon/>
+                        <Typography>My Lists</Typography>
+                     </IconButton>
+                 </Paper>
             </Grid>
         </Grid>
     );
