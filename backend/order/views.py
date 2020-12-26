@@ -170,6 +170,8 @@ def cancel_order(request):
         return HttpResponse("Invalid order_id", status=400)
 
     if order.customer == customer or order.vendor == vendor:
+        if order.status == "cancelled":
+            return HttpResponse("Order is already cancelled", status=400)
         order.status = "cancelled"
         order.product.stock += order.quantity
     else: 
