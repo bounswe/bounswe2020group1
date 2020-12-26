@@ -27,7 +27,9 @@ def index(request):
         else:
             comment = comment[0].text
             
-        order_info = {"vendor": order.vendor.user.user.first_name,
+        order_info = {
+                "id": order.id,
+                "vendor": order.vendor.user.user.first_name,
                 "product": order.product.pk,
                 "status": order.status,
                 "cargoID": order.cargoID,
