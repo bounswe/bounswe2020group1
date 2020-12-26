@@ -17,7 +17,6 @@ import {palette} from "@material-ui/system";
 import axios from "axios";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditProduct from "./EditProduct";
 
 
 const horizontalStyles = makeStyles((theme) => ({
@@ -75,11 +74,34 @@ const horizontalStyles = makeStyles((theme) => ({
     }
 }));
 
-
+let token;
+token = window.sessionStorage.getItem("authToken")
 
 function deleteProduct(id){
 
     console.log("Deleting product " + id)
+    const formData = new FormData();
+    formData.append("id", id);
+    axios
+        .post("http://3.232.20.250/product/delete/", formData, {
+            headers: {
+                'Authorization': "Token " + token //the token is a variable which holds the token
+            },
+        }).then((response) => {
+
+        if (response.status === 200) {
+            alert("Product deleted!");
+            console.log(response)
+        }
+    })
+        .catch((err) => {
+            if (err.response.status === 400) {
+                alert(err.response.data);
+            } else if (err.response.status === 401) {
+                alert(err.response.data);
+            }
+
+        });
 }
 
 export default function OfferedProduct(props) {
