@@ -26,7 +26,7 @@ export default class myInfo extends Component {
     }
     componentDidMount() {
         console.log('componentDidMount() lifecycle');
-        var token = sessionStorage.getItem("auth_token");
+        var token = sessionStorage.getItem("authToken");
         axios.get('http://3.232.20.250/customerpage', {headers: {Authorization: 'Token ' + token}})
         .then(res => {
             console.log(res)
@@ -94,7 +94,7 @@ export default class myInfo extends Component {
         }
     }
     handleEdit(key,value){
-        var token = sessionStorage.getItem("auth_token");
+        var token = sessionStorage.getItem("authToken");
         var bodyFormData = new FormData();
         //alert(key);
         if (key==="Name"){

@@ -13,7 +13,7 @@ export default class myOrders extends Component {
     }
     componentDidMount() {
             console.log('componentDidMount() lifecycle');
-            var token = sessionStorage.getItem("auth_token");
+            var token = sessionStorage.getItem("authToken");
             axios.get('http://3.232.20.250/order/get_orders', {headers: {Authorization: 'Token ' + token}})
             .then(res => {
                 console.log(res)
