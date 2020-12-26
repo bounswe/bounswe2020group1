@@ -30,6 +30,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Divider from "@material-ui/core/Divider";
 import CloseIcon from '@material-ui/icons/Close';
 import Snackbar from "@material-ui/core/Snackbar";
+import {unmountComponentAtNode} from "react-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -521,6 +523,7 @@ const horizontalStyles = makeStyles((theme) => ({
 export function ProductBoxHorizontal(props) {
     const classes = horizontalStyles()
     const [count, setCount] = React.useState(props.quantity);
+    const [render, setRender] = React.useState(true)
 
     function handleDelete(){
         console.log("Product ID:", props.product.id);
@@ -529,17 +532,17 @@ export function ProductBoxHorizontal(props) {
         const formData = new FormData();
         formData.append("product_id", props.product.id);
 
-        axios.delete('http://3.232.20.250/shoppingcart/delete', {
+        axios.post('http://3.232.20.250/shoppingcart/delete',
+            formData,{
                 headers: {
                     'Authorization': "Token " + window.sessionStorage.getItem("authToken"),
-                },
-                data: {
-                    "product_id": props.product.id
-                },
+                }
             })
             .then(res => {
                 console.log(res);
                 console.log(res.status);
+                props.onCountChange(-count, props.product.price);
+                setRender(false);
             })
             .catch(error =>{
                 console.log(error.response)
@@ -548,6 +551,7 @@ export function ProductBoxHorizontal(props) {
                 console.log(error.message)
                 alert ("There has been an error. Please try again.");
             })
+
     }
 
     function handleCountChange(change){
@@ -584,6 +588,10 @@ export function ProductBoxHorizontal(props) {
         props.onCountChange(change, props.product.price);
     }
 
+    if(render === false)
+    {
+        return null;
+    }
     return(
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={5}>
@@ -628,14 +636,18 @@ export function ProductBoxHorizontal(props) {
                                     {count}
                                 </Box>
                             </Typography>
-                            <IconButton
-                                aria-label="reduce"
-                                onClick={() => {
-                                    handleCountChange(-1)
-                                }}
-                            >
-                                <RemoveIcon fontSize="small"/>
-                            </IconButton>
+                            {count<=1 ? (
+                                <div/>
+                            ) : (
+                                <IconButton
+                                    aria-label="reduce"
+                                    onClick={() => {
+                                        handleCountChange(-1)
+                                    }}
+                                >
+                                    <RemoveIcon fontSize="small"/>
+                                </IconButton>
+                            )}
                         </ButtonGroup>
                     </Grid>
                     <Grid className={classes.marginInsideGrid}>
