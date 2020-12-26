@@ -30,8 +30,8 @@ def index(request):
                 "status": order.status,
                 "cargoID": order.cargoID,
                 "orderDate": order.orderDate,
-                "estimatedArrivalDate ": order.estimatedArrivalDate ,
-                "arrivalDate ": order.arrivalDate,
+                "estimatedArrivalDate": order.estimatedArrivalDate ,
+                "arrivalDate": order.arrivalDate,
                 "quantity": order.quantity,
                 "comment": comment
             }
@@ -53,7 +53,7 @@ def index(request):
                 "brand": product.brand,
                 "description": product.description,
                 "rating": product.rating,
-                "stock ": product.stock,
+                "stock": product.stock,
                 "price": product.price,
                 "date_added": product.date_added,
                 "photo_url": photo_url
