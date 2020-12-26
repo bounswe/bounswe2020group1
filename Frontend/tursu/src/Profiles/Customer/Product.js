@@ -12,9 +12,16 @@ import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import ChatIcon from '@material-ui/icons/Chat';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import {palette} from "@material-ui/system";
 import axios from "axios";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Rating from '@material-ui/lab/Rating';
+
 
 
 const horizontalStyles = makeStyles((theme) => ({
@@ -55,10 +62,6 @@ const horizontalStyles = makeStyles((theme) => ({
         flex: "0 0 100px",
         textAlign: "left",
     },
-    brandName: {
-        flex: "0 0 100px",
-        textAlign: "left",
-    },
     productCountBox: {
         width: 45,
         height: 64,
@@ -71,41 +74,34 @@ const horizontalStyles = makeStyles((theme) => ({
     }
 }));
 
-function addComment(){
 
-}
-function viewComment(){
 
-}
-
-function commentSection(props,classes){
-
-    if (props.product.comment === ""){
-
-        return(
-            <Grid className={classes.marginInsideGrid}>
-                <IconButton size="small">
-                    <ChatIcon onClick={addComment}/>
-
-                </IconButton>
-            </Grid>
-        )
+const theme = createMuiTheme({
+    palette:{
+        primary:{
+            main: "#388e3c",
+        },
+        secondary:{
+            main: "#81c784",
+        }
     }
-    else{
-        return(
-            <Grid className={classes.marginInsideGrid}>
-                <IconButton size="small">
-                    <ChatIcon onClick={addComment}/>
-
-                </IconButton>
-            </Grid>
-        )
-    }
-}
+})
 
 export default function Product(props) {
     const classes = horizontalStyles()
     console.log(props.product)
+
+    const [open, setOpen] = React.useState(false);
+    const [value, setValue] = React.useState(5);
+
+    const handleClickOpen = () => {
+        console.log(props.product.product)
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return(
         <div className={classes.root}>
@@ -146,7 +142,54 @@ export default function Product(props) {
                             </Box>
                         </Typography>
                     </Grid>
-                    {commentSection(props,classes)}
+
+                    <ThemeProvider theme={theme} >
+                        <Grid className={classes.marginInsideGrid}>
+                            <IconButton size="small">
+                                <ChatIcon onClick={handleClickOpen}/>
+                            </IconButton>
+                            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                                <DialogTitle id="form-dialog-title">Add a Comment</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        If you wish, you can add a comment to the product you ordered!
+                                    </DialogContentText>
+                                    <TextField
+                                        autoFocus
+                                        margin="dense"
+                                        id="name"
+                                        label="Your Comment"
+                                        type="text"
+                                        fullWidth
+                                    />
+                                </DialogContent>
+                                <br/>
+                                <DialogContent >
+                                    <Box style={{ justifyContent: 'center', display: 'flex' }} component="fieldset" mb={3} borderColor="transparent">
+                                        <Typography style={{ marginBottom: '20px' }} variant="h5" align="center" component="legend">Your Rating</Typography>
+                                        <Rating
+                                            size="large"
+                                            name="simple-controlled"
+                                            value={value}
+                                            onChange={(event, newValue) => {
+                                                setValue(newValue);
+                                            }}
+                                        />
+                                    </Box>
+                                </DialogContent>
+
+                                <DialogActions>
+                                    <Button onClick={handleClose} color="primary">
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={handleClose} color="primary">
+                                        Add Comment
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                        </Grid>
+                    </ThemeProvider>
+
                 </Grid>
             </Paper>
         </div>
