@@ -39,9 +39,10 @@ let token;
 token = window.sessionStorage.getItem("authToken")
 
 class EditProduct extends React.Component{
-
     constructor(props) {
         super(props)
+        console.log("id is " , props.id)
+
 
         this.state = {
             id: 0,
@@ -55,6 +56,8 @@ class EditProduct extends React.Component{
         }
     }
 
+
+
     changeHandler = (e) => {
         this.setState({[e.target.name]: e.target.value})
     }
@@ -62,9 +65,7 @@ class EditProduct extends React.Component{
     submitHandler = (e) => {
         const formData = new FormData();
         e.preventDefault()
-        console.log("anelka")
-        console.log(this.state)
-        formData.append("id", this.state.id);
+        formData.append("id", this.props.id);
         formData.append("category", this.state.category);
         formData.append("name", this.state.name);
         formData.append("description", this.state.description);
@@ -102,15 +103,6 @@ class EditProduct extends React.Component{
             <ThemeProvider theme={theme} >
                 <Grid item>
                     <form style={{width: '600px' }} onSubmit={this.submitHandler}>
-                        <Grid item xs={12}>
-                            <Paper elevation={15} className={useStyles.paper}>
-                                <br/>
-                                <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Required ID:</Button>
-                                <Input style={{width: '300px'}} type="number" name="id"  value={id} placeholder="Enter the Product ID..." onChange={this.changeHandler} required />
-                                <br/><br/>
-                            </Paper>
-                        </Grid>
-                        <br/>
                         <Grid item xs={12}>
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>

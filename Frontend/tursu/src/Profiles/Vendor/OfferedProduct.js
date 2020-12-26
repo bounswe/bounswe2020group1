@@ -83,7 +83,6 @@ function deleteProduct(id){
 }
 
 export default function OfferedProduct(props) {
-    console.log("offered products page anelka", props)
     const classes = horizontalStyles()
     var id = props.product.id
     return(
@@ -120,7 +119,10 @@ export default function OfferedProduct(props) {
                     </Grid>
 
                     <Grid className={classes.marginInsideGrid}>
-                        <IconButton onClick={() => props.edit(id)}
+                        <IconButton onClick={() => {
+                            props.handleID(id)
+                            props.edit()
+                        }}
                                     size="small">
                             <EditIcon/>
                         </IconButton>

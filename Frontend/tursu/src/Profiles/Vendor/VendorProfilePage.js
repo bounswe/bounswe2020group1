@@ -16,7 +16,8 @@ export default class VendorProfilePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentTab : "info"
+            currentTab : "info",
+            id : -1
         }
         this.infoChange = this.infoChange.bind(this);
         this.productsChange = this.productsChange.bind(this);
@@ -25,6 +26,7 @@ export default class VendorProfilePage extends Component {
         this.SelectTitle = this.SelectTitle.bind(this);
         this.addProduct = this.addProduct.bind(this);
         this.editProduct = this.editProduct.bind(this);
+        this.handleID = this.handleID.bind(this);
     }
 
     SelectPage(){
@@ -32,13 +34,13 @@ export default class VendorProfilePage extends Component {
             case "info":
                 return <MyInfo />
             case "products":
-                return <MyProducts edit={this.editProduct} />
+                return <MyProducts edit={this.editProduct} handleID={this.handleID} />
             case "orders":
                 return <MyOrders />
             case "add":
                 return <AddProduct />
             case "edit":
-                return <EditProduct />
+                return <EditProduct id={this.state.id} />
         }
     }
     SelectTitle(){
@@ -79,6 +81,11 @@ export default class VendorProfilePage extends Component {
         console.log("anelka id" , id)
         this.setState({
             currentTab:"edit"
+        });
+    }
+    handleID(id){
+        this.setState({
+            id: id
         });
     }
     render() {
