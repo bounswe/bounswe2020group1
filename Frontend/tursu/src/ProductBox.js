@@ -213,17 +213,61 @@ function ListsDialog(props){
     const [isLoaded, setIsLoaded] = React.useState(false)
     const [nameOfNewList, setNameOfNewList] = React.useState("")
 
+    //[list_name, is product in the list]
+    const [isInList, setIsInList] = React.useState(new Map())
+
     if(open && !isLoaded)
     {
+        console.log("GIRDIM")
         setIsLoaded(true)
         axios.get("http://3.232.20.250/shoppinglist/getlists/",{
             headers: {
                 'Authorization': "Token " + window.sessionStorage.getItem("authToken")
             }
         }).then(res =>{
-            console.log("SHOPPING LISTS:", res.data)
             setLists(res.data)
+            console.log("SHOPPING LISTS:", res.data)
+            console.log("SHOPPING LISTS lists:", lists)
+            fillIsInList();
         })
+    }
+
+    function fillIsInList(){
+        for(let i=0; i<lists.length; i++)
+        {
+            let productsInShoppingList = [];
+
+            console.log("List name:", lists[i])
+
+            const formData = new FormData();
+            formData.append("list_name", lists[i])
+
+            axios.post("http://3.232.20.250/shoppinglist/products/",
+                formData,
+                {
+                    headers: {
+                        'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+                    }
+                }).then(res => {
+                console.log("PRODUCTS IN THE SHOPPING LIST")
+                console.log(res.data);
+                productsInShoppingList = res.data;
+
+                for(let j=0; j<productsInShoppingList.length; j++){
+                    console.log("ID:", productsInShoppingList[j].id)
+                    console.log("Self ID:", props.productId)
+                    if(props.productId === productsInShoppingList[j].id){
+                        isInList.set(lists[i], true);
+                    }
+                }
+                if(!isInList.has(lists[i])){
+                    isInList.set(lists[i], false);
+                }
+
+                console.log("IsInList", isInList)
+            })
+        }
+        setIsInList(isInList)
     }
 
     const handleClose = () => {
@@ -342,7 +386,8 @@ function ListsDialog(props){
             <List>
                 {lists.map((shoppingListName) => (
                   <ListItem>
-                      <Checkbox onClick={handleCheckboxChange} name={shoppingListName.toString()}/>
+                      {console.log("AAAAAAA", isInList.has(shoppingListName))}
+                      <Checkbox checked={isInList.get(shoppingListName)} onClick={handleCheckboxChange} name={shoppingListName.toString()}/>
                       <Typography variant={"body2"}>{shoppingListName.toString()}</Typography>
                   </ListItem>
                 ))}
