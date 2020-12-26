@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/Email"
         android:layout_width="355dp"
         android:layout_height="169dp"
         android:foregroundGravity="center"
@@ -36,9 +36,9 @@
         android:id="@+id/imageView11"
         android:layout_width="351dp"
         android:layout_height="208dp"
-        app:layout_constraintEnd_toEndOf="@+id/textView22"
-        app:layout_constraintStart_toStartOf="@+id/textView22"
-        app:layout_constraintTop_toBottomOf="@+id/textView22"
+        app:layout_constraintEnd_toEndOf="@+id/Email"
+        app:layout_constraintStart_toStartOf="@+id/Email"
+        app:layout_constraintTop_toBottomOf="@+id/Email"
         app:srcCompat="?android:attr/textCheckMark" />
 
     <Button

@@ -93,9 +93,9 @@
         android:layout_height="30dp"
         android:text="Free"
         android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView20"
+        app:layout_constraintBottom_toBottomOf="@+id/emailView"
         app:layout_constraintStart_toStartOf="@+id/ItemsPrice"
-        app:layout_constraintTop_toTopOf="@+id/textView20" />
+        app:layout_constraintTop_toTopOf="@+id/emailView" />
 
     <TextView
         android:id="@+id/TotalPrice"
@@ -114,11 +114,11 @@
         android:layout_marginTop="8dp"
         android:text="Total :"
         android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/textView20"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        app:layout_constraintStart_toStartOf="@+id/emailView"
+        app:layout_constraintTop_toBottomOf="@+id/emailView" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/emailView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

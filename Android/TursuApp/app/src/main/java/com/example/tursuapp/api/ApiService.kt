@@ -26,6 +26,8 @@ interface ApiService {
 
     @GET("/product")
     fun getProductDetails(@Query("id") userId: Int): Call<ProductDetailsResponse>
+    @GET("/customerpage")
+    fun getCustomerProfileInfo(@Header("Authorization") token: String): Call<ProfileInfoResponse>
 
     /*
     @GET("/product/category")

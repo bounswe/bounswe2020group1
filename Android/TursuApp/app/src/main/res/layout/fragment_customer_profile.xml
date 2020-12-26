@@ -21,59 +21,6 @@
         app:layout_constraintTop_toBottomOf="@id/linearLayoutBack"
         app:srcCompat="@drawable/ic_profile" />
 
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:padding="10dp"
-        android:text="E-mail"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView14" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView20">
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/location" />
-
-        <TextView
-            android:id="@+id/textView22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
-            android:text="Address"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/poppins_semibold"
-        android:padding="10dp"
-        android:text="Username"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView6" />
-
     <LinearLayout
         android:id="@+id/linearLayoutBack"
         android:layout_width="408dp"
@@ -96,5 +43,87 @@
             app:srcCompat="@drawable/back_arrow" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/lastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Last Name:"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/firstName"
+        app:layout_constraintTop_toBottomOf="@+id/firstName" />
+
+    <TextView
+        android:id="@+id/firstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="28dp"
+        android:layout_weight="1"
+        android:text="First Name :"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileUsername" />
+
+    <TextView
+        android:id="@+id/firstNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="none"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/firstName"
+        app:layout_constraintStart_toEndOf="@+id/firstName"
+        app:layout_constraintTop_toTopOf="@+id/firstName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/lastNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:text="none"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/lastName"
+        app:layout_constraintStart_toEndOf="@+id/lastName"
+        app:layout_constraintTop_toTopOf="@+id/lastName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/Email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins"
+        android:text="Email :"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/lastName"
+        app:layout_constraintTop_toBottomOf="@+id/lastName" />
+
+    <TextView
+        android:id="@+id/profileUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:padding="10dp"
+        android:text="Username"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView6" />
+
+    <TextView
+        android:id="@+id/emailView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:text="E-mail"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Email"
+        app:layout_constraintStart_toEndOf="@+id/Email"
+        app:layout_constraintTop_toTopOf="@+id/Email"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
