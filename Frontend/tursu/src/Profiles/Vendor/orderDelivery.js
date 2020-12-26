@@ -45,12 +45,13 @@ export default function FormDialog(props) {
       bodyFormData.append('days', days);
       axios({
           method: 'post',
-          url: 'http://3.232.20.250/order/set_delivery',
+          url: 'http://3.232.20.250/order/set_delivery/',
           data: bodyFormData,
           headers: {Authorization: 'Token ' + token}
           })
       .then(res => {
           console.log(res)
+          alert("Status is changed. Refresh page to view.")
       })
       .catch(error =>{
           if (error.response){

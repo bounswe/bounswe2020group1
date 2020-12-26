@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import {Button, Typography} from "@material-ui/core";
+import {Button, Typography, Tooltip} from "@material-ui/core";
 import Box from '@material-ui/core/Box';
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from '@material-ui/icons/Add';
@@ -21,6 +21,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Rating from '@material-ui/lab/Rating';
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 
 
 
@@ -90,6 +91,51 @@ const theme = createMuiTheme({
 let token;
 token = window.sessionStorage.getItem("authToken")
 
+function set_delivered(id){
+    console.log("delivered " + id)
+    var auth_token = sessionStorage.getItem("authToken");
+    var bodyFormData = new FormData();
+    bodyFormData.append('order_id', id);
+    axios({
+        method: 'post',
+        url: 'http://3.232.20.250/order/set_delivered/',
+        data: bodyFormData,
+        headers: {Authorization: 'Token ' + auth_token}
+        })
+    .then(res => {
+        console.log(res)
+        alert("Status is changed. Refresh page to view.")
+    })
+    .catch(error =>{
+        if (error.response){
+            console.log(error.response.message);
+        }
+    })
+}
+function options(status,id,classes){
+    console.log(id)
+
+     if (status ===  "in delivery"){
+         return(
+         <div>
+
+         <Grid className={classes.marginInsideGrid}>
+          <Tooltip title="Set status: delivered">
+             <IconButton onClick={() => set_delivered(id)} size="small">
+                 <LocalShippingIcon/>
+             </IconButton>
+             </Tooltip>
+         </Grid>
+
+         </div>
+         )
+     }
+     else{
+        return(<div><Grid className={classes.marginInsideGrid}>
+                            <IconButton size="small">
+                            </IconButton>
+                        </Grid></div>)
+     }}
 export default function Product(props) {
 
     const classes = horizontalStyles()
@@ -179,7 +225,7 @@ export default function Product(props) {
                             </Box>
                         </Typography>
                     </Grid>
-
+                    {options(props.product.status,props.product.id,classes)}
                     <ThemeProvider theme={theme} >
                         <Grid className={classes.marginInsideGrid}>
                             <IconButton size="small">

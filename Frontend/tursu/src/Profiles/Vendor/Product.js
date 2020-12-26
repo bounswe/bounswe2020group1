@@ -75,65 +75,24 @@ const horizontalStyles = makeStyles((theme) => ({
         marginBottom:  20,
     }
 }));
-function set_delivered(id){
-    console.log("delivered " + id)
-    var token = sessionStorage.getItem("authToken");
-    var bodyFormData = new FormData();
-    bodyFormData.append('order_id', id);
-    axios({
-        method: 'post',
-        url: 'http://3.232.20.250/order/set_delivered',
-        data: bodyFormData,
-        headers: {Authorization: 'Token ' + token}
-        })
-    .then(res => {
-        console.log(res)
-    })
-    .catch(error =>{
-        if (error.response){
-            console.log(error.response.message);
-        }
-    })
 
-}
-function set_delivery(id,cargo,days){
-    console.log("in delivery " + id)
-
-    var token = sessionStorage.getItem("authToken");
-    var bodyFormData = new FormData();
-    bodyFormData.append('order_id', id);
-    bodyFormData.append('cargo_id', id);
-    bodyFormData.append('days', days);
-    axios({
-        method: 'post',
-        url: 'http://3.232.20.250/order/set_delivery',
-        data: bodyFormData,
-        headers: {Authorization: 'Token ' + token}
-        })
-    .then(res => {
-        console.log(res)
-    })
-    .catch(error =>{
-        if (error.response){
-            console.log(error.response.message);
-        }
-    })
-
-}
 function set_cancelled(id){
     console.log("cancel " + id)
 
+
     var token = sessionStorage.getItem("authToken");
     var bodyFormData = new FormData();
     bodyFormData.append('order_id', id);
+    console.log(token)
     axios({
         method: 'post',
-        url: 'http://3.232.20.250/order/cancel_order',
+        url: 'http://3.232.20.250/order/cancel_order/',
         data: bodyFormData,
         headers: {Authorization: 'Token ' + token}
         })
     .then(res => {
         console.log(res)
+        alert("Status is changed. Refresh page to view.")
     })
     .catch(error =>{
         if (error.response){
@@ -159,24 +118,6 @@ function options(status,id,classes){
         </div>
         )
 
-    }
-    else if (status ===  "in delivery"){
-        return(
-        <div>
-
-        <Grid className={classes.marginInsideGrid}>
-         <Tooltip title="Set status: delivered">
-            <IconButton onClick={() => set_delivered(id)} size="small">
-                <StoreIcon/>
-            </IconButton>
-            </Tooltip>
-        </Grid>
-        <Grid className={classes.marginInsideGrid}>
-            <IconButton size="small">
-            </IconButton>
-        </Grid>
-        </div>
-        )
     }
     else{
         return(
