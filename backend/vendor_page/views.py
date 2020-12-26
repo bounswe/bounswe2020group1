@@ -24,7 +24,7 @@ def index(request):
         if len(comment) == 0:
             comment = ""
         else:
-            comment = comment.text
+            comment = comment[0].text
         order_info = {"customer": order.customer.user.user.username,
                 "product": order.product.pk,
                 "status": order.status,
