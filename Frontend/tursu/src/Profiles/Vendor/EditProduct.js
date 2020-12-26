@@ -66,13 +66,13 @@ class EditProduct extends React.Component{
         const formData = new FormData();
         e.preventDefault()
         formData.append("id", this.props.id);
-        formData.append("category", this.state.category);
-        formData.append("name", this.state.name);
-        formData.append("description", this.state.description);
-        formData.append("brand", this.state.brand);
-        formData.append("stock", this.state.stock);
-        formData.append("price", this.state.price);
-        formData.append("photo", this.state.Image);
+        if(this.state.category !== '' ) formData.append("category", this.state.category);
+        if(this.state.name !== '' ) formData.append("name", this.state.name);
+        if(this.state.description !== '' ) formData.append("description", this.state.description);
+        if(this.state.brand !== '' ) formData.append("brand", this.state.brand);
+        if(this.state.stock !== 0 ) formData.append("stock", this.state.stock);
+        if(this.state.price !== 0 ) formData.append("price", this.state.price);
+        if(this.state.Image !== '' ) formData.append("photo", this.state.Image);
 
         axios
             .post("http://3.232.20.250/product/edit/", formData, {
