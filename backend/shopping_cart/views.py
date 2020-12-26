@@ -60,7 +60,7 @@ def increase(request):
     try:
         product_id = int(request.POST["product_id"])
         product = Product.objects.filter(Q(id=product_id))[0]
-    except (KeyError, ValueError):
+    except Exception:
         return HttpResponse("Product id (product_id) not given or invalid", status=400)
 
     items = ShoppingCarts.objects.filter(Q(product=product_id, customer=customer))
@@ -83,7 +83,7 @@ def decrease(request):
     try:
         product_id = int(request.POST["product_id"])
         product = Product.objects.filter(Q(id=product_id))[0]
-    except (KeyError, ValueError):
+    except Exception:
         return HttpResponse("Product id (product_id) not given or invalid", status=400)
 
     items = ShoppingCarts.objects.filter(Q(product=product_id, customer=customer))
