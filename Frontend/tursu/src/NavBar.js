@@ -13,7 +13,13 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Paper from "@material-ui/core/Paper";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Link } from "react-router-dom";
-import Category from "./Category";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Input from '@material-ui/core/Input';
+import FindReplaceIcon from '@material-ui/icons/FindReplace';
+import './NavBar.css'
+
+
 
 
 
@@ -42,6 +48,7 @@ const useStyles = makeStyles((theme)=> ({
     },
     search:{
         color: "inherit",
+        width: 500,
         paddingLeft: `calc(1em + ${theme.spacing(1)}px)`,
         backgroundColor: fade(theme.palette.common.white, 0.15),
         '&:hover': {
@@ -66,7 +73,24 @@ const useStyles = makeStyles((theme)=> ({
     upperLeft: {
         position: 'relative',
         justifyContent: "center",
+
     },
+    searchType:{
+        marginLeft: 150,
+        marginRight: 30
+    },
+    sign:{
+        marginLeft:10
+    },
+    sign_paper:{
+        pacity: 0.5,
+
+    },
+    cart:{
+        marginLeft:100
+    },
+
+
 }))
 
 const theme = createMuiTheme({
@@ -82,6 +106,18 @@ const theme = createMuiTheme({
 
 // TODO: implement search functionality
 export default function Navbar(){
+    const [search_type, setType] = React.useState('product');
+    const [search_str, setStr] = React.useState();
+
+
+    const handleChange = (event) => {
+        setType(event.target.value);
+    };
+
+    const handleChangeStr = (event) => {
+        setStr(event.target.value);
+    };
+
     const classes = useStyles();
     var option;
     if (window.sessionStorage.getItem("isLogged") === "true" ){
@@ -107,23 +143,40 @@ export default function Navbar(){
                                 </Paper>
                             </Button>
                         </Link>
-                        <Grid container className={classes.leftSide} direction="column" spacing={3}>
-                            <Grid item xs sm className={classes.upperLeft} container direction="row">
+                        <Grid container className={classes.leftSide} direction="column" spacing={3} >
+
+                            <Grid item xs sm className={classes.upperLeft} container direction="row" >
+
+                                <Select className={classes.searchType}
+                                    id="search-type-id"
+                                    value={search_type}
+                                    onChange={handleChange}
+                                    IconComponent={FindReplaceIcon}
+                                >
+                                    <MenuItem value={"product"}>Products</MenuItem>
+                                    <MenuItem value={"vendor"}>Vendors</MenuItem>
+                                </Select>
                                 <Grid item className={classes.searchGrid}>
-                                    <InputBase placeholder="Search" id="search" className={classes.search}/>
+                                    <InputBase placeholder="Search" id="search" className={classes.search} onChange={handleChangeStr}/>
                                 </Grid>
                                 <Grid item>
-                                    <Link to='/search'>
+                                    <Link to={`/search/${search_str}/${search_type}`}>
                                         <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
-                                         }}>
+                                            window.sessionStorage.setItem("search_type", search_type)
+                                        }}>
                                             <SearchIcon/>
                                         </IconButton>
                                     </Link>
 
                                 </Grid>
-                                <Grid item>
-                                    <Paper variant="outlined" elevation={3} >
-                                        <AccountCircleIcon />
+                                <Grid item className={classes.cart}>
+                                    <IconButton >
+                                        <ShoppingCartIcon  />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item className={classes.sign}>
+                                    <Paper variant="outlined" elevation={3}  className={classes.sign_paper}>
+                                        <AccountCircleIcon  />
                                         <Link to='/signIn'>
                                             <Button variant="text">
                                                 {option}
@@ -138,7 +191,9 @@ export default function Navbar(){
                                         </IconButton>
                                     </Link>
                                 </Grid>
+
                             </Grid>
+
                             <Grid container spacing={2} className={classes.category}  >
                                 <Grid item>
                                     <Link to='/categories/Electronics'>

@@ -19,7 +19,6 @@ function App() {
                 <Route path="/" exact component={HomePage} />
                 <Route path="/categories/:category" exact component={Category} />
                 <Route path="/signIn" exact component={Sign} />
-                <Route path="/search" exact component={SearchPage} />
                 <Route path="/shoppingCart" exact component={ShoppingCart} />
                 <Route path="/shoppingList/:name" exact component={ShoppingList} />
                 <Route path="/product/:id"  component={ProductDetailPage} />
