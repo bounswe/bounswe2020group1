@@ -1,0 +1,15 @@
+.filters{
+    margin-left: 0px;
+}
+.form-control{
+    width: 100px;
+}
+.filter-button{
+    width: 150px;
+    height: 30px;
+}
+.col-sm{
+    width: 300px;
+    margin: 10px;
+    padding: 5px;
+}
