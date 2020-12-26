@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -142,3 +143,36 @@ def edit_profile(request):
         
 
     return Response({}, status=status.HTTP_200_OK)
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def google_login(request):
+    id_token = request.POST.get('token')
+    response = requests.get(f"https://oauth2.googleapis.com/tokeninfo?id_token={id_token}")
+    if response.status_code != 200:
+        return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
+    try:
+        response = response.json()
+        email = response.get("email")
+    except:
+        return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    user = User.objects.filter(email=email).first()
+    if not user:
+        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    token, _ = Token.objects.get_or_create(user=user)
+    first_name = user.first_name
+    last_name =  user.last_name
+    user_type = 'admin'
+    
+    registered_user = RegisteredUser.objects.filter(user=user).first()
+    vendor = Vendor.objects.filter(user=registered_user).first()
+    customer = Customer.objects.filter(user=registered_user).first()
+    if vendor is not None:
+        user_type = 'vendor'
+    if customer is not None:
+        user_type = 'customer'
+
+    return Response({'auth_token': token.key, 'first_name': first_name, 'last_name': last_name, 'user_type': user_type}, status=status.HTTP_200_OK)
