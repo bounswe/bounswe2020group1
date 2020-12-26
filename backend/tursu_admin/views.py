@@ -7,8 +7,9 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from product.models import Product, Image
-from registered_user.models import get_admin_from_request
+from registered_user.models import get_admin_from_request, get_customer_from_request, get_vendor_from_request
 from search.views import SearchHelper
+from comment.models import Comment
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
@@ -64,3 +65,30 @@ def verify_product(request):
     product.is_verified = True
     product.save()
     return HttpResponse("Successfully verified product")
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['POST'])
+def ban_user(request):
+    """Bans given user."""
+    user = get_vendor_from_request(request)
+    if user == None:
+        user = request.get_customer_from_request(request)
+        if user == None:
+            return HttpResponse("There is no such user.", status=400)
+    user.is_banned = True
+    user.save()
+    return HttpResponse("success")
+    
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['DELETE','POST'])
+def delete_comment(request):
+    """Deletes the given comment when DELETE request is made."""
+    try:
+        comment_id = int(request.POST["comment_id"])
+    except (KeyError, ValueError):
+        return HttpResponse("Comment id (comment_id) not given or invalid", status=400)
+    comment = Comment.objects.filter(Q(id=comment_id))
+    comment.delete()
+    return HttpResponse("success")
