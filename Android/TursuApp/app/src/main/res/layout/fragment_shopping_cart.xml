@@ -10,21 +10,20 @@
 
     <Button
         android:id="@+id/continueShopping"
-        android:layout_width="248dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="#1B319A36"
+        android:gravity="left|center_vertical"
         android:text="Continue Shopping"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.073"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridShoppingCart" />
+        app:layout_constraintTop_toBottomOf="@id/pricelayout" />
 
     <Button
         android:id="@+id/GoPayment"
-        android:layout_width="226dp"
-        android:layout_height="45dp"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
         android:text="Go To Payment Page"
         app:layout_constraintEnd_toEndOf="@+id/continueShopping"
         app:layout_constraintStart_toStartOf="@+id/continueShopping"
@@ -63,89 +62,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="386dp"
-        android:layout_height="121dp"
-        android:textStyle="normal|bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:id="@+id/pricelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/GoPayment"
-        app:layout_constraintVertical_bias="0.111" />
+        app:layout_constraintTop_toBottomOf="@id/listShoppingCart">
 
-    <TextView
-        android:id="@+id/ItemsPrice"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="32dp"
-        android:text="399 TL"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView11"
-        app:layout_constraintEnd_toEndOf="@+id/textView7"
-        app:layout_constraintTop_toTopOf="@+id/textView11"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Total:   "
+            android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/ShippingPrice"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
-        android:text="Free"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView20"
-        app:layout_constraintStart_toStartOf="@+id/ItemsPrice"
-        app:layout_constraintTop_toTopOf="@+id/textView20" />
+        <TextView
+            android:id="@+id/shoppingCartTotalPrice"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="399 TL"
+            android:textSize="18dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/TotalPrice"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
-        android:text="399 TL"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView23"
-        app:layout_constraintStart_toStartOf="@+id/ShippingPrice"
-        app:layout_constraintTop_toTopOf="@+id/textView23" />
-
-    <TextView
-        android:id="@+id/textView23"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Total :"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/textView20"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
-
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Shipping :"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/textView11"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:text="Items :"
-        android:textSize="20dp"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="@+id/textView7"
-        app:layout_constraintTop_toTopOf="@+id/textView7" />
-
-    <GridView
-        android:id="@+id/gridShoppingCart"
+    <ListView
+        android:id="@+id/listShoppingCart"
         android:layout_width="415dp"
-        android:layout_height="410dp"
+        android:layout_height="360dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-    </GridView>
+    </ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,9 +11,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
+import com.example.tursuapp.adapter.ShoppingCartAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.example.tursuapp.api.responses.ShoppingCartProductResponse
+import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -25,6 +28,8 @@ class PaymentFragment : Fragment() {
 
     private lateinit var paymentViewModel: PaymentModel
     private lateinit var product: ProductDetailsResponse
+    val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -38,14 +43,7 @@ class PaymentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*  val id_str = requireArguments().getString("id")
-        val spinner = view.findViewById<Spinner>(R.id.spinner)
-        val items = arrayOf("Add to favorites","Favorites", "List 1", "List 2", "List 3")
-        val adapter = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, items) }
-        if (spinner != null) {
-            spinner.adapter = adapter
-        }
-        getDetails(id_str!!.toInt(), view)*/
+        shoppingCartAllProducts(auth_token,view)
         view.findViewById<Button>(R.id.confirmandpay).setOnClickListener() {
 
             if (view.findViewById<TextInputEditText>(R.id.nameinputtext).text.toString() == "") {
@@ -72,29 +70,34 @@ class PaymentFragment : Fragment() {
             }
 
     }
+
     }
-    fun getDetails(id: Int, view: View){
+    fun shoppingCartAllProducts(auth_token:String,view: View){
+        val listView = view.findViewById<ListView>(R.id.shoppinCartItemsListView)
+        var shoppinCartProducts = ArrayList<ShoppingCartProductResponse>()
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.getProductDetails(id).enqueue(object :
-                retrofit2.Callback<ProductDetailsResponse> {
-            override fun onFailure(p0: Call<ProductDetailsResponse>?, p1: Throwable?) {
+        apiinterface.getProductsShoppingCart(auth_token).enqueue(object : retrofit2.Callback<List<ShoppingCartProductResponse>> {
+            override fun onFailure(p0: Call<List<ShoppingCartProductResponse>>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
             }
 
             override fun onResponse(
-                    p0: Call<ProductDetailsResponse>?,
-                    response: Response<ProductDetailsResponse>?
+                    p0: Call<List<ShoppingCartProductResponse>>?,
+                    response: Response<List<ShoppingCartProductResponse>>?
             ) {
                 if (response != null) {
-                    product = response.body()!!
-                    displayProductInfo(view)
+                    if(response.body()!=null){
+                        shoppinCartProducts = ArrayList(response.body()!!)
+
+                        val adapter = context?.let { ShoppingCartAdapter(it,shoppinCartProducts,auth_token,true,null) }
+                        val price = adapter?.calculateTotalPrice()
+                        listView.adapter = adapter
+                        view.findViewById<TextView>(R.id.totalPrice).text = price.toString() + " TL"
+                    }
+
                 }
-                //urecyclerView.adapter = ItemAdapter(userList,context)
-                //adapter!!.notifyDataSetChanged()
 
             }
-
-
         })
     }
     fun  giveMeDigitCount(number:Int):Int{
@@ -133,18 +136,5 @@ class PaymentFragment : Fragment() {
            return false;
        }
 
-    }
-    fun displayProductInfo(view: View){
-        view.findViewById<TextView>(R.id.product_name).text = product.name
-        view.findViewById<TextView>(R.id.product_description).text = product.description
-        view.findViewById<RatingBar>(R.id.ratingBar).rating = product.rating.toFloat()
-        view.findViewById<TextView>(R.id.price).text = product.price+" TL"
-        view.findViewById<TextView>(R.id.vendor).text = "Vendor: "+product.vendor_name
-
-        val image  = view.findViewById<ImageView>(R.id.productImage)
-        Picasso
-                .get() // give it the context
-                .load(product.photo_url) // load the image
-                .into(image)
     }
 }
