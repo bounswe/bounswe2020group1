@@ -100,5 +100,22 @@ interface ApiService {
     @GET("/vendorpage")
     fun getProductsOfVendor(@Header("Authorization") token :String):Call<VendorDataResponse>
 
+    @FormUrlEncoded
+    @POST("/product/delete/")
+    fun deleteProduct(@Header("Authorization") token: String,@Field("id") id: Int): Call<DeleteProductResponse>
+
+    @FormUrlEncoded
+    @POST("/product/edit/")
+    fun editProduct(@Header("Authorization") token: String,
+                    @Field("id") id: Int,
+                    @Field("category") category: String,
+                    @Field("name") name: String,
+                    @Field("description") description: String,
+                    @Field("brand") brand: String,
+                    @Field("stock") stock: Int,
+                    @Field("price") price: Float,
+                    @Field("photo") photo: String): Call<UpdateProductResponse>
+                    //image file @multipart
+
 
 }

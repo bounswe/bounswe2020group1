@@ -26,6 +26,7 @@ import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
+import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.squareup.picasso.Picasso
@@ -521,7 +522,7 @@ class HomeFragment : Fragment() {
                                 val clickedId = view.findViewById<TextView>(R.id.product_id).text
                                 val bundle = Bundle()
                                 bundle.putString("id", clickedId.toString())
-                                val newFragment = ProductPageFragment()
+                                val newFragment = VendorProductPageFragment()
                                 newFragment.arguments = bundle
                                 val fragmentManager: FragmentManager? = fragmentManager
                                 val fragmentTransaction: FragmentTransaction =
