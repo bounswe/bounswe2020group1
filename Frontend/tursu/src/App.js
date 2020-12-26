@@ -6,11 +6,13 @@ import Category from "./Category";
 import Sign from "./Sign/Sign";
 import ProductDetailPage from "./ProductDetailPage";
 import SearchPage from "./Search";
+import VendorProfilePage from "./Profiles/Vendor/VendorProfilePage";
+import CustomerProfilePage from "./Profiles/Customer/CustomerProfilePage";
 import ShoppingCart from "./ShoppingCart"
-import Sidebar from "./Profiles/VendorSidebar";
-import VendorProfilePage from "./Profiles/VendorProfilePage";
-import CustomerProfilePage from "./Profiles/CustomerProfilePage";
 import ShoppingList from "./ShoppingList";
+
+
+
 
 function App() {
     return (
@@ -20,14 +22,15 @@ function App() {
                 <Route path="/categories/:category" exact component={Category} />
                 <Route path="/signIn" exact component={Sign} />
                 <Route path="/shoppingCart" exact component={ShoppingCart} />
-                <Route path="/shoppingList/:name" exact component={ShoppingList} />
-                <Route path="/product/:id"  component={ProductDetailPage} />
+                <Route path="/product/"  component={ProductDetailPage} />
                 <Route path="/search/:search_string/:search_type/:fprice_lower?/:fprice_upper?/:fvendor_name?/:fcategory?/:sort_by?"  component={SearchPage} />
                 <Route path="/vendorProfile" exact component={VendorProfilePage} />
                 <Route path="/customerProfile" exact component={CustomerProfilePage} />
+                <Route path="/shoppingList/:name" exact component={ShoppingList} />
             </div>
         </Router>
     );
 }
 
 export default App;
+
