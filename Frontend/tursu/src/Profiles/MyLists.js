@@ -75,10 +75,11 @@ const listStyle = makeStyles((theme) => ({
 export function AList(props){
     const classes = listStyle()
 
-    const formData = new FormData();
-    formData.append("list_name", props.name);
 
     function handleDelete(){
+        const formData = new FormData();
+        formData.append("list_name", props.name);
+
         axios.post('http://3.232.20.250/shoppinglist/deletelist/',
             formData,{
                 headers: {
