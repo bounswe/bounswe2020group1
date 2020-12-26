@@ -90,6 +90,7 @@ def signup(request):
                         location.save()
                         vendor = Vendor(user=registered_user, iban=iban, rating=0, location=location)
                         vendor.save()
+                        user_type = "vendor"
                     else:
                         return Response({'error': 'Missing fields for the vendor.'}, status=status.HTTP_400_BAD_REQUEST)
                 # is_vendor returns false: create customer
@@ -101,10 +102,17 @@ def signup(request):
                     registered_user.save()
                     customer = Customer(user=registered_user, money_spent=0)
                     customer.save()
+                    user_type = "customer"
 
                 user = authenticate(request, username=username, password=password)
                 token, _ = Token.objects.get_or_create(user=user)
-                return Response({'auth_token': token.key}, status=status.HTTP_200_OK)
+                return Response({
+                        'auth_token': token.key,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name,
+                        'user_type': user_type},
+                        status=status.HTTP_200_OK)
+
     else:
         return Response({'error': 'All fields should be filled.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -228,6 +236,7 @@ def google_signup(request):
                         location.save()
                         vendor = Vendor(user=registered_user, iban=iban, rating=0, location=location)
                         vendor.save()
+                        user_type = "vendor"
                     else:
                         return Response({'error': 'Missing fields for the vendor.'}, status=status.HTTP_400_BAD_REQUEST)
                 # is_vendor returns false: create customer
@@ -239,9 +248,15 @@ def google_signup(request):
                     registered_user.save()
                     customer = Customer(user=registered_user, money_spent=0)
                     customer.save()
+                    user_type ="customer"
 
                 user = authenticate(request, username=username, password=password)
                 token, _ = Token.objects.get_or_create(user=user)
-                return Response({'auth_token': token.key}, status=status.HTTP_200_OK)
+                return Response({
+                        'auth_token': token.key,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name,
+                        'user_type': user_type},
+                        status=status.HTTP_200_OK)
     else:
         return Response({'error': 'All fields should be filled.'}, status=status.HTTP_400_BAD_REQUEST)
