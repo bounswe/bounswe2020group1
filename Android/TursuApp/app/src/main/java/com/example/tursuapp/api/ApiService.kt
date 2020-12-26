@@ -106,7 +106,7 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/product/edit/")
-    fun editProduct(@Header("Authorization") token: String,
+    fun updateProduct(@Header("Authorization") token: String,
                     @Field("id") id: Int,
                     @Field("category") category: String,
                     @Field("name") name: String,

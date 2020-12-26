@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/nav_product_page_details"
     android:clickable="true"
     tools:context=".authentication.homepage.ui.productpage.ProductPageFragment">
 

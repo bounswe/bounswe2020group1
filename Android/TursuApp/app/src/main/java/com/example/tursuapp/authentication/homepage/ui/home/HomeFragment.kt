@@ -493,7 +493,7 @@ class HomeFragment : Fragment() {
             displayFragment(R.id.nav_profile_detail)
         } else if (type == "Orders") {
             displayFragment(R.id.nav_customer_orders)
-        }else if (type == "Products") {
+        }else if (type == "Products On Sale") {
             listVendorProducts()
         }
 

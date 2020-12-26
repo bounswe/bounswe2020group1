@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -20,6 +21,10 @@ import com.example.tursuapp.adapter.VendorProductAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
+import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
+import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
+import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.squareup.picasso.Picasso
 import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageModel
 import retrofit2.Call
@@ -38,8 +43,6 @@ class VendorProductPageFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-
-
         activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
         activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
         activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
@@ -48,11 +51,11 @@ class VendorProductPageFragment : Fragment() {
         root.findViewById<ImageView>(R.id.update_product_img)?.setOnClickListener {
             //open popup with product data and update the product
             showPopupWindow(it)
+
         }
         root.findViewById<ImageView>(R.id.delete_product_img)?.setOnClickListener {
             //Do delete operation
             deleteProduct(it)
-            listVendorProducts()
 
         }
         return root
@@ -78,6 +81,14 @@ class VendorProductPageFragment : Fragment() {
         val focusable = true
         //Create a window with our parameters
         val popupWindow = PopupWindow(popupView, width, height, focusable)
+        //displaying product details
+        popupView.findViewById<TextView>(R.id.product_category).text=product.category
+        popupView.findViewById<TextView>(R.id.product_name).text = product.name
+        popupView.findViewById<TextView>(R.id.product_description).text=product.description
+        popupView.findViewById<TextView>(R.id.product_brand).text = product.brand
+        popupView.findViewById<TextView>(R.id.product_stock).text=product.stock.toString()
+        popupView.findViewById<TextView>(R.id.product_price).text = product.price
+        popupView.findViewById<TextView>(R.id.product_photo).text=product.photo_url
         //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 
@@ -85,13 +96,61 @@ class VendorProductPageFragment : Fragment() {
             popupWindow.dismiss()
         }
         popupView.findViewById<Button>(R.id.update_button).setOnClickListener {
+            val category=popupView.findViewById<TextView>(R.id.product_category).text
+            val name=popupView.findViewById<TextView>(R.id.product_name).text
+            val description=popupView.findViewById<TextView>(R.id.product_description).text
+            val brand=popupView.findViewById<TextView>(R.id.product_brand).text
+            val stock=popupView.findViewById<TextView>(R.id.product_stock).text
+            val price=popupView.findViewById<TextView>(R.id.product_price).text
+            val photo=popupView.findViewById<TextView>(R.id.product_photo).text
 
-            //popupWindow.dismiss()
-            //showPopupWindow(popupView)
+            updateProduct(it, category.toString(), name.toString(), description.toString(), brand.toString(), stock.toString(), price.toString(), photo.toString())
+            popupWindow.dismiss()
+
         }
 
-    }
 
+    }
+    private fun displayFragment(id: Int) {
+        lateinit var fragment: Fragment
+        if (id == R.id.nav_product_page_details) {
+            fragment = HomeFragment()
+        }
+        activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.nav_host_fragment, fragment)
+                ?.commit()
+        (activity as HomePageActivity).drawer.closeDrawer(GravityCompat.START)
+    }
+    private fun updateProduct(view: View,category:String,name:String,description:String,brand:String,stock:String,price:String,photo:String) {
+        val id=product.id
+        //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+        val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.updateProduct("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b",id, category,name,description,brand,stock.toInt(),price.toFloat(),photo).enqueue(object :
+                retrofit2.Callback<UpdateProductResponse> {
+            override fun onFailure(p0: Call<UpdateProductResponse>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<UpdateProductResponse>?,
+                    response: Response<UpdateProductResponse>?
+            ) {
+
+                if (response != null) {
+                    Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
+                    //showPopupWindow(view)
+                    Log.i("Status code", response.code().toString())
+                    // AddListStatus = response.body()!!
+                    (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
+
+                }
+
+            }
+
+        })
+
+
+    }
     fun getDetails(id: Int, view: View){
         val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getProductDetails(id).enqueue(object :
@@ -154,6 +213,7 @@ class VendorProductPageFragment : Fragment() {
                         //showPopupWindow(view)
                         Log.i("Status code", response.code().toString())
                         // AddListStatus = response.body()!!
+                        (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
 
                     }
 
