@@ -71,13 +71,13 @@ def verify_product(request):
 @api_view(['POST'])
 def ban_user(request):
     """Bans given user."""
-    user = get_vendor_from_request(request)
-    if user == None:
-        user = get_customer_from_request(request)
-        if user == None:
+    bannedUser = get_vendor_from_request(request)
+    if bannedUser == None:
+        bannedUser = get_customer_from_request(request)
+        if bannedUser == None:
             return HttpResponse("There is no such user.", status=400)
-    user.user.is_banned = True
-    user.save()
+    bannedUser.user.is_banned = True
+    bannedUser.user.save()
     return HttpResponse("success")
     
 @authentication_classes([SessionAuthentication, BasicAuthentication])
