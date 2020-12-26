@@ -104,4 +104,6 @@ interface ApiService {
     @GET("/shoppingcart/all")
     fun getProductsShoppingCart(@Header("Authorization") auth_token :String):Call<List<ShoppingCartProductResponse>>
 
+    @POST("/order/create_orders/")
+    fun createOrders(@Header("Authorization") auth_token :String):Call<ResponseBody>
 }

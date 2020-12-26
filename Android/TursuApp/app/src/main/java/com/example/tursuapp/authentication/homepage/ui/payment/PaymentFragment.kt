@@ -19,6 +19,7 @@ import com.example.tursuapp.api.responses.ShoppingCartProductResponse
 import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import java.lang.Exception
@@ -61,16 +62,40 @@ class PaymentFragment : Fragment() {
             } else if (!view.findViewById<CheckBox>(R.id.checkBox).isChecked) {
                 Toast.makeText(context, "Lütfen koşulları kabul ediniz.", Toast.LENGTH_SHORT).show()
             } else {
-                val newFragment = PaymentSuccessFragment()
-                val fragmentManager: FragmentManager? = fragmentManager
-                val fragmentTransaction: FragmentTransaction =
-                        requireFragmentManager().beginTransaction()
-                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                fragmentTransaction.commit()
+                createOrder()
+
             }
 
     }
 
+    }
+    fun createOrder(){
+        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.createOrders(auth_token).enqueue(object : retrofit2.Callback<ResponseBody> {
+            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<ResponseBody>?,
+                    response: Response<ResponseBody>?
+            ) {
+                if (response != null) {
+                    if(response.code()==200){
+                        val newFragment = PaymentSuccessFragment()
+                        val fragmentManager: FragmentManager? = fragmentManager
+                        val fragmentTransaction: FragmentTransaction =
+                                requireFragmentManager().beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                        fragmentTransaction.commit()
+                    }
+                    else{
+                        Toast.makeText(context, "Unsuccessful Payment.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            }
+        })
     }
     fun shoppingCartAllProducts(auth_token:String,view: View){
         val listView = view.findViewById<ListView>(R.id.shoppinCartItemsListView)
