@@ -3,6 +3,16 @@ import "./sign_components.css";
 import logo from '../rsz_11logo.png';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import GoogleLogin from "react-google-login";
+
+const clientId = '872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com';
+
+
+const responseGoogleFailure = response => {
+    console.log(response)
+    console.log("FAILURE")
+    alert("There has been an error with the Google Sign In")
+}
 
 export default class Login extends Component {
     constructor(props) {
@@ -65,6 +75,10 @@ export default class Login extends Component {
     goToForgotP(){
         this.props.onForgotPChange();
     }
+    responseGoogleSuccess = response => {
+        console.log(response)
+        this.setState({ redirect: "True" });
+    }
     render() {
             if(this.state.redirect === "False"){
                 return(
@@ -82,6 +96,15 @@ export default class Login extends Component {
                         </form>
                         <button type="button" onClick={this.goToRegistration} className="smallButton">New to Turşu? Sign up.</button>
                         <button type="button" onClick={this.goToForgotP} className="smallButton">I forgot my password.</button>
+                        <div>
+                            <GoogleLogin
+                                clientId='872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com'
+                                buttonText='Login'
+                                onSuccess={this.responseGoogleSuccess}
+                                onFailure={responseGoogleFailure}
+                                cookiePolicy={'single_host_origin'}
+                            />
+                        </div>
                     </div>
                 )
             }

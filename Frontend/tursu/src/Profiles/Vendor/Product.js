@@ -55,10 +55,6 @@ const horizontalStyles = makeStyles((theme) => ({
         flex: "0 0 100px",
         textAlign: "left",
     },
-    brandName: {
-        flex: "0 0 100px",
-        textAlign: "left",
-    },
     productCountBox: {
         width: 45,
         height: 64,
