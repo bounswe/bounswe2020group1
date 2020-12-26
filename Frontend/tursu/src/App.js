@@ -11,8 +11,8 @@ import CustomerProfilePage from "./Profiles/Customer/CustomerProfilePage";
 import ShoppingCart from "./ShoppingCart"
 import AddProduct from "./Profiles/Vendor/AddProduct";
 import Checkout from "./Checkout";
-import EditProduct from "./EditProduct";
-import DeleteProduct from "./DeleteProduct";
+import EditProduct from "./Profiles/Vendor/EditProduct";
+import DeleteProduct from "./Profiles/Vendor/DeleteProduct";
 
 
 

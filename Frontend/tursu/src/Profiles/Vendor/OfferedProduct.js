@@ -17,6 +17,7 @@ import {palette} from "@material-ui/system";
 import axios from "axios";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditProduct from "./EditProduct";
 
 
 const horizontalStyles = makeStyles((theme) => ({
@@ -74,15 +75,15 @@ const horizontalStyles = makeStyles((theme) => ({
     }
 }));
 
-function editProduct(id){
-    console.log("Editing product " + id)
-}
+
+
 function deleteProduct(id){
 
     console.log("Deleting product " + id)
 }
 
 export default function OfferedProduct(props) {
+    console.log("offered products page anelka", props)
     const classes = horizontalStyles()
     var id = props.product.id
     return(
@@ -117,11 +118,14 @@ export default function OfferedProduct(props) {
                             {props.product.category}
                         </Typography>
                     </Grid>
+
                     <Grid className={classes.marginInsideGrid}>
-                        <IconButton onClick={() => editProduct(id)} size="small">
+                        <IconButton onClick={() => props.edit(id)}
+                                    size="small">
                             <EditIcon/>
                         </IconButton>
                     </Grid>
+
                     <Grid className={classes.marginInsideGrid}>
                         <IconButton onClick={() => deleteProduct(id)} size="small">
                             <DeleteIcon/>
