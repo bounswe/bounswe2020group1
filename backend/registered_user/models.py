@@ -44,6 +44,8 @@ def get_vendor_from_request(request):
     if(str(request.user) == "AnonymousUser"):
         return None
     ruser = RegisteredUser.objects.get(user=request.user)
+    if ruser.is_banned == True:
+        return None
     try:
         vendor = Vendor.objects.get(user=ruser)
     except Exception:
@@ -55,6 +57,8 @@ def get_customer_from_request(request):
     if(str(request.user) == "AnonymousUser"):
         return None
     ruser = RegisteredUser.objects.get(user=request.user)
+    if ruser.is_banned == True:
+        return None
     try:
         customer = Customer.objects.get(user=ruser)
     except Exception:
