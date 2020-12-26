@@ -73,10 +73,10 @@ def ban_user(request):
     """Bans given user."""
     user = get_vendor_from_request(request)
     if user == None:
-        user = request.get_customer_from_request(request)
+        user = get_customer_from_request(request)
         if user == None:
             return HttpResponse("There is no such user.", status=400)
-    user.is_banned = True
+    user.user.is_banned = True
     user.save()
     return HttpResponse("success")
     
