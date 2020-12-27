@@ -88,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
                         putString("first_name", userResponse.first_name)
                         putString("last_name", userResponse.last_name)
                         putString("user_type", userResponse.user_type)
-                        putString("auth_token", userResponse.auth_token)
+                        putString("auth_token", "Token "+userResponse.auth_token)
                         putBoolean("logged_in", true)
                         apply()
                     }

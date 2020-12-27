@@ -320,9 +320,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun getLists(view: View) {
-        //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.getLists("token f057f527f56398e8041a1985919317a5c0cc2e77").enqueue(object :
+        apiInterface.getLists(auth_token).enqueue(object :
                 retrofit2.Callback<List<String>> {
             override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
                 //Log.i("MainFragment", "error" + p1?.message.toString())
@@ -355,10 +354,9 @@ class HomeFragment : Fragment() {
 
     private fun addList(view: View,window: PopupWindow){
         if(view.findViewById<EditText>(R.id.h_new_list_txt).text.isNotEmpty()){
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val listName = view.findViewById<EditText>(R.id.h_new_list_txt).text.toString()
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
+            apiInterface.addList(auth_token, listName).enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                 override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -437,9 +435,8 @@ class HomeFragment : Fragment() {
             val newRadioButton = root.findViewById<RadioButton>(selectedList)
             Log.i("Selected List Name: ", newRadioButton.text.toString())
             val listName = newRadioButton.text.toString()
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.getListedProducts("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
+            apiInterface.getListedProducts(auth_token, listName).enqueue(object :
                     retrofit2.Callback<List<ProductResponse>> {
                 override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -500,7 +497,7 @@ class HomeFragment : Fragment() {
     private fun listVendorProducts() {
         Log.i("listVendorProducts", "vendor product baslangic")
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.getProductsOfVendor("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b").enqueue(object : retrofit2.Callback<VendorDataResponse> {
+        apiInterface.getProductsOfVendor(auth_token).enqueue(object : retrofit2.Callback<VendorDataResponse> {
             override fun onFailure(p0: Call<VendorDataResponse>?, p1: Throwable?) {
                 Log.i("Vendor Product List: ", "error: " + p1?.message.toString())
             }

@@ -41,12 +41,15 @@ class VendorProductPageFragment : Fragment() {
     var vendorProductList = ArrayList<VendorProductLists>()
     var commentList = ArrayList<Comments>()
     private lateinit var commentListView: ListView
+    private lateinit var auth_token:String
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
         activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
         activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
         activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
@@ -127,9 +130,8 @@ class VendorProductPageFragment : Fragment() {
     }
     private fun updateProduct(view: View,category:String,name:String,description:String,brand:String,stock:String,price:String,photo:String) {
         val id=product.id
-        //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.updateProduct("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b",id, category,name,description,brand,stock.toInt(),price.toFloat(),photo).enqueue(object :
+        apiInterface.updateProduct(auth_token,id, category,name,description,brand,stock.toInt(),price.toFloat(),photo).enqueue(object :
                 retrofit2.Callback<ResponseBody> {
             override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
@@ -207,10 +209,8 @@ class VendorProductPageFragment : Fragment() {
     private fun deleteProduct(view: View) {
         val id = product.id
         if (id != null) {
-
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.deleteProduct("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b", id).enqueue(object :
+            apiInterface.deleteProduct(auth_token, id).enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                 override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -240,7 +240,7 @@ class VendorProductPageFragment : Fragment() {
     }
     private fun listVendorProducts() {
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.getProductsOfVendor("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b").enqueue(object : retrofit2.Callback<VendorDataResponse> {
+        apiInterface.getProductsOfVendor(auth_token).enqueue(object : retrofit2.Callback<VendorDataResponse> {
             override fun onFailure(p0: Call<VendorDataResponse>?, p1: Throwable?) {
                 Log.i("Vendor Product List: ", "error: " + p1?.message.toString())
             }
