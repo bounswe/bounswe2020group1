@@ -140,6 +140,12 @@ export default function OfferedProduct(props) {
                         </Typography>
                     </Grid>
 
+                    <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
+                        <Typography variant="caption">
+                            {props.product.stock}
+                        </Typography>
+                    </Grid>
+
                     <Grid className={classes.marginInsideGrid}>
                         <IconButton onClick={() => {
                             props.handleID(id)
