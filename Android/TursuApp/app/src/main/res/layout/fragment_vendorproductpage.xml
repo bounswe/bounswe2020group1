@@ -162,8 +162,8 @@
 
         <LinearLayout
             android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="205dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="16dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
@@ -174,18 +174,19 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/addCart"
-                android:layout_width="70dp"
-                android:layout_height="40dp"
+                android:layout_width="71dp"
+                android:layout_marginRight="5dp"
+                android:layout_height="match_parent"
                 app:cardBackgroundColor="#E8E7E7"
                 app:cardCornerRadius="10dp">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/update_product_img"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:background="#E8E7E7"
-                    android:src="@drawable/shopping_cart"
+                    android:src="@drawable/update_product_icon"
 
                     />
 
@@ -194,18 +195,19 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView3"
-                android:layout_width="70dp"
-                android:layout_height="40dp"
+                android:layout_width="73dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 app:cardBackgroundColor="#E8E7E7"
                 app:cardCornerRadius="10dp">
 
                 <ImageView
-                    android:id="@+id/add_list_image"
-                    android:layout_width="30dp"
-                    android:layout_height="31dp"
+                    android:id="@+id/delete_product_img"
+                    android:layout_width="49dp"
+                    android:layout_height="45dp"
                     android:layout_gravity="center"
                     android:background="#E8E7E7"
-                    android:src="@drawable/add_to_favorites"
+                    android:src="@drawable/ic_baseline_delete_forever_24"
 
                     />
 

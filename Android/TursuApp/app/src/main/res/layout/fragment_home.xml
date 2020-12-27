@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:id="@+id/fragment_home"
+    android:clickable="true"
     tools:context=".authentication.homepage.ui.home.HomeFragment">
 
     <com.google.android.material.button.MaterialButtonToggleGroup
