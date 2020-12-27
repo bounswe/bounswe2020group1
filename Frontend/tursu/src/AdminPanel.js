@@ -10,7 +10,7 @@ import {IconButton} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 import Axios from "axios";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import {NonverifiedProductBox} from "./ProductBox";
+import ProductListNonverified from "./NonverifiedProductList"
 import Grid from "@material-ui/core/Grid";
 
 
@@ -65,7 +65,6 @@ const theme = createMuiTheme({
 class AdminPanel extends React.Component{
 
     componentDidMount() {
-        window.sessionStorage.setItem("update", 1)
         Axios.get('http://3.232.20.250/admin/verificationpending/products/',{
             headers: {
                 'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
@@ -79,6 +78,9 @@ class AdminPanel extends React.Component{
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log(this.state.update)
+        console.log(prevState.update)
+
         if(this.state.update!==prevState.update){
             Axios.get('http://3.232.20.250/admin/verificationpending/products/',{
                 headers: {
@@ -140,11 +142,7 @@ class AdminPanel extends React.Component{
                         Item One
                     </TabPanel>
                     <TabPanel value={this.state.value} index={1}>
-                        <Grid item xs={12} container spacing={6}>
-                            {this.state.nonverified_list.map((product) => (
-                                <NonverifiedProductBox product={product} callbackUpdateList={this.handleUpdateList}/>
-                            ))}
-                        </Grid>
+                        <ProductListNonverified products={this.state.nonverified_list} callbackUpdate={this.handleUpdateList}/>
                     </TabPanel>
                     <TabPanel value={this.state.value} index={2}>
                         Item Three

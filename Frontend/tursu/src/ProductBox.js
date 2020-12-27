@@ -33,8 +33,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import Snackbar from "@material-ui/core/Snackbar";
 import {unmountComponentAtNode} from "react-dom";
 import Tooltip from "@material-ui/core/Tooltip";
-import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
-import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function ProductBox(props) {
-
     const classes = useStyles()
     //console.log(props.product.photo_url)
     return(
@@ -84,98 +81,6 @@ export default function ProductBox(props) {
         </Grid>
     );
 }
-
-
-export function NonverifiedProductBox(props) {
-    console.log("verify")
-    const handleVerify = () => {
-        props.callbackUpdateList(window.sessionStorage.getItem("update"))
-        window.sessionStorage.setItem("update", 1+parseInt(window.sessionStorage.getItem("update")))
-        props.callbackUpdateList(window.sessionStorage.getItem("update"))
-
-        const formData = new FormData();
-        formData.append("id", props.product.id);
-        Axios.post('http://3.232.20.250/admin/verifyproduct/',formData,{
-            headers: {
-                'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
-            }
-        })
-            .then(res => {
-                console.log(res)
-
-                console.log("verifysucces?")
-            })
-            .catch(error =>{
-                console.log(error.response)
-            })
-    };
-
-    const handleDelete = () => {
-
-        props.callbackUpdateList(window.sessionStorage.getItem("update"))
-        window.sessionStorage.setItem("update", 1+parseInt(window.sessionStorage.getItem("update")))
-        props.callbackUpdateList(window.sessionStorage.getItem("update"))
-
-        const formData = new FormData();
-        formData.append("id", props.product.id);
-        Axios.post('http://3.232.20.250/admin/removeproduct/',formData,{
-            headers: {
-                'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
-            }
-        })
-            .then(res => {
-                console.log(res)
-                console.log("deletesucces?")
-            })
-            .catch(error =>{
-                console.log(error.response)
-            })
-    };
-
-    const classes = useStyles()
-    //console.log(props.product.photo_url)
-    return(
-        <Grid item xs={3}>
-            <Link to={`/product/${props.product.id}`}>
-                <Button variant="contained">
-                    <Paper className={classes.paper}>
-                        <div className="ProductInfo" >
-                            <img
-                                src={props.product.photo_url}
-                                alt={props.product.name}
-                                className="responsiveImage"/>
-                            <text>
-                                <br/>
-                                <Typography variant="subtitle2">
-                                    {props.product.name}
-                                </Typography>
-                                <Typography variant="body2">
-                                    <Box fontWeight="fontWeightBold">
-                                        {props.product.price} ₺
-                                    </Box>
-                                </Typography>
-                                <Typography variant="caption">
-                                    {props.product.vendor_name}
-                                </Typography>
-                            </text>
-
-                        </div>
-                    </Paper>
-                </Button>
-            </Link>
-            <Grid>
-                <IconButton onClick={handleVerify}>
-                    <CheckIcon/>
-                </IconButton>
-                <IconButton onClick={handleDelete}>
-                    <DeleteOutlinedIcon/>
-                </IconButton>
-            </Grid>
-
-        </Grid>
-    );
-}
-
 
 const horizontalStyles = makeStyles((theme) => ({
     root: {
