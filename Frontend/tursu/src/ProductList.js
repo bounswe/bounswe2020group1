@@ -2,9 +2,7 @@ import React from 'react';
 import './HomePage.css'
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
-import ProductBox from "./ProductBox";
-import NonverifiedProductBox  from "./NonverifiedProductBox";
-import ProductBoxHorizontal from "./ProductBox";
+import ProductBox, {ProductBoxHorizontal} from "./ProductBox";
 import Grid from "@material-ui/core/Grid";
 
 

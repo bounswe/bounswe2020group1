@@ -11,28 +11,9 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import CheckIcon from '@material-ui/icons/Check';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {palette} from "@material-ui/system";
 import axios from "axios";
-import MenuItem from "@material-ui/core/MenuItem";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Menu from "@material-ui/core/Menu";
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import { Alert } from '@material-ui/lab';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from "@material-ui/core/DialogTitle";
-import List from "@material-ui/core/List";
-import ListItemText from "@material-ui/core/ListItemText";
-import Checkbox from "@material-ui/core/Checkbox";
-import Divider from "@material-ui/core/Divider";
-import CloseIcon from '@material-ui/icons/Close';
-import Snackbar from "@material-ui/core/Snackbar";
-import {unmountComponentAtNode} from "react-dom";
-import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function ProductBox(props) {
+
     const classes = useStyles()
     //console.log(props.product.photo_url)
     return(
@@ -81,6 +63,7 @@ export default function ProductBox(props) {
         </Grid>
     );
 }
+
 
 const horizontalStyles = makeStyles((theme) => ({
     root: {
