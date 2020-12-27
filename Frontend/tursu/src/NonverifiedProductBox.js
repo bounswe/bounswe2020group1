@@ -10,7 +10,9 @@ import CheckIcon from '@material-ui/icons/Check';
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import Axios from "axios";
 
+window.sessionStorage.setItem("update", 1)
 export default function NonverifiedProductBox(props) {
+
     console.log("NonverifiedProductBox")
 
     const handleVerify = () => {
@@ -18,6 +20,7 @@ export default function NonverifiedProductBox(props) {
         props.callbackUpdateList(window.sessionStorage.getItem("update"))
         window.sessionStorage.setItem("update", 1+parseInt(window.sessionStorage.getItem("update")))
         props.callbackUpdateList(window.sessionStorage.getItem("update"))
+        console.log(window.sessionStorage.getItem("update"))
         const formData = new FormData();
         formData.append("id", props.product.id);
         Axios.post('http://3.232.20.250/admin/verifyproduct/',formData,{
@@ -27,7 +30,6 @@ export default function NonverifiedProductBox(props) {
         })
             .then(res => {
                 console.log(res)
-
                 console.log("verifysucces?")
             })
             .catch(error =>{
@@ -40,6 +42,7 @@ export default function NonverifiedProductBox(props) {
         props.callbackUpdateList(window.sessionStorage.getItem("update"))
         window.sessionStorage.setItem("update", 1+parseInt(window.sessionStorage.getItem("update")))
         props.callbackUpdateList(window.sessionStorage.getItem("update"))
+        console.log(window.sessionStorage.getItem("update"))
 
         const formData = new FormData();
         formData.append("id", props.product.id);
