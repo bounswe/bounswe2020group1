@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:clickable="true"
+    android:background="#FFFFFF">
+
+    <Button
+        android:id="@+id/continueShopping"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#1B319A36"
+        android:gravity="left|center_vertical"
+        android:text="Continue Shopping"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pricelayout" />
+
+    <Button
+        android:id="@+id/GoPayment"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:text="Go To Payment Page"
+        app:layout_constraintEnd_toEndOf="@+id/continueShopping"
+        app:layout_constraintStart_toStartOf="@+id/continueShopping"
+        app:layout_constraintTop_toBottomOf="@+id/continueShopping" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="55dp"
+        android:layout_height="57dp"
+        android:paddingRight="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3"
+        app:srcCompat="@drawable/shopping_cart_all" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="50dp"
+        android:layout_height="44dp"
+        app:layout_constraintBottom_toBottomOf="@+id/continueShopping"
+        app:layout_constraintEnd_toEndOf="@+id/continueShopping"
+        app:layout_constraintTop_toTopOf="@+id/continueShopping"
+        app:srcCompat="@drawable/shopping_cart" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:background="#C1E3C2"
+        android:gravity="center|left"
+        android:paddingStart="40dp"
+        android:text="MY SHOPPING CART"
+        android:textColor="#1B1818"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/pricelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listShoppingCart">
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Total:   "
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/shoppingCartTotalPrice"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="0 TL"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listShoppingCart"
+        android:layout_width="415dp"
+        android:layout_height="360dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+    </ListView>
+
+    <ImageView
+        android:id="@+id/sc_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_arrow" />
+</androidx.constraintlayout.widget.ConstraintLayout>

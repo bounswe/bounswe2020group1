@@ -12,7 +12,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgotpassword)
-        findViewById<TextView>(R.id.signup_login_text).let { view ->
+        findViewById<TextView>(R.id.signup_vendor_text).let { view ->
             view.setOnClickListener {
                 startActivity(Intent(this, LoginActivity::class.java))
             }
