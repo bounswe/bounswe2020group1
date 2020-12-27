@@ -13,6 +13,8 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -21,14 +23,16 @@ class ProductAddFragment: Fragment() {
 
     private lateinit var productaddViewModel: ProductAddModel
     private lateinit var product: ProductDetailsResponse
+    lateinit var auth_token :String
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-       // productaddViewModel = ViewModelProvider(this).get(ProductAddModel::class.java)
 
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
         val root = inflater.inflate(R.layout.fragment_productadd,container,false)
 
         val btn = root.findViewById<View>(R.id.addProduct_button) as Button
@@ -86,8 +90,9 @@ class ProductAddFragment: Fragment() {
         if (spinner != null) {
             spinner.adapter = adapter
         }
-        //val text: String = spinner.getSelectedItem().toString()
-        val addProductCategories = spinner.selectedItem.toString()
+            view.findViewById<ImageView>(R.id.back_img).setOnClickListener {
+                (activity as HomePageActivity).displayFragment(R.id.nav_home,4,"",null)
+            }
     }
 
 
@@ -96,11 +101,12 @@ class ProductAddFragment: Fragment() {
         val spinner = root.findViewById<Spinner>(R.id.spinner2)
         val p_categories = spinner.selectedItem.toString()
         if (p_categories != "Categories") {
-            if(p_name!=null && p_brand!=null && p_stock!=null && p_price!=null && p_photo!=null && p_description!=null){
-                //var p_categories="Electronics"
+            if(p_name.isEmpty() || p_brand.isEmpty() || p_stock.isEmpty() || p_price.isEmpty() || p_photo.isEmpty() || p_description.isEmpty()){
+                Toast.makeText(activity?.applicationContext, "Input all product details ", Toast.LENGTH_SHORT).show()
+            }else{
                 Log.i("product add", p_categories)
                 val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-                apiinterface.addProduct("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b", p_categories, p_name, p_brand, p_stock.toInt(), p_price.toFloat(), p_photo, p_description).enqueue(object :
+                apiinterface.addProduct(auth_token, p_categories, p_name, p_brand, p_stock.toInt(), p_price.toFloat(), p_photo, p_description).enqueue(object :
                         retrofit2.Callback<ResponseBody> {
                     override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                         Log.i("MainFragment", "error" + p1?.message.toString())
@@ -133,8 +139,6 @@ class ProductAddFragment: Fragment() {
 
 
                 })
-            }else{
-                Toast.makeText(activity?.applicationContext, "Input all product details ", Toast.LENGTH_SHORT).show()
             }
         }else {
             Toast.makeText(activity?.applicationContext, "Select a category", Toast.LENGTH_SHORT).show()

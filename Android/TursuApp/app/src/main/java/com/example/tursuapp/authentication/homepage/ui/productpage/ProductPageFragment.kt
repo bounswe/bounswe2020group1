@@ -30,7 +30,6 @@ class ProductPageFragment : Fragment() {
 
     private lateinit var productPageViewModel: ProductPageModel
     private lateinit var product: ProductDetailsResponse
-    private lateinit var AddListStatus: AddListResponse
     val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
     var commentList = ArrayList<Comments>()
     private lateinit var commentListView: ListView

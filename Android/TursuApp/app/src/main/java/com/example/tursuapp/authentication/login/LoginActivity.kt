@@ -79,11 +79,11 @@ class LoginActivity : AppCompatActivity() {
         call.enqueue(object : Callback<LoginResponse?> {
             override fun onResponse(call: Call<LoginResponse?>, response: Response<LoginResponse?>) {
                 val userResponse: LoginResponse? = response.body()
-                Log.i("Status code",response.code().toString())
+                Log.i("Status code", response.code().toString())
 
                 if (userResponse != null) {
                     val pref = applicationContext.getSharedPreferences("UserPref", 0)
-                    with (pref.edit()) {
+                    with(pref.edit()) {
                         putString("first_name", userResponse.first_name)
                         putString("last_name", userResponse.last_name)
                         putString("user_type", userResponse.user_type)
@@ -100,7 +100,8 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Invalid credentials!", Toast.LENGTH_SHORT).show()
                 }
 
-            override fun onFailure(call: Call<TokenResponse?>, t: Throwable) {
+            }
+            override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
 
                 Log.i("Failure",t.message)
 

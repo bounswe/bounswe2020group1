@@ -23,6 +23,7 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
+import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
@@ -498,12 +499,13 @@ class HomeFragment : Fragment() {
             displayFragment(R.id.nav_customer_orders)
         }else if (type == "Products On Sale") {
             listVendorProducts()
+        }else if (type == "Product Add") {
+            displayFragment(R.id.nav_product_add)
         }
 
     }
 
     private fun listVendorProducts() {
-        Log.i("listVendorProducts", "vendor product baslangic")
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getProductsOfVendor("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b").enqueue(object : retrofit2.Callback<VendorDataResponse> {
             override fun onFailure(p0: Call<VendorDataResponse>?, p1: Throwable?) {
@@ -551,6 +553,8 @@ class HomeFragment : Fragment() {
         }
         else if(id == R.id.nav_customer_orders){
             fragment = CustomerOrdersFragment()
+        }else if(id == R.id.nav_product_add){
+            fragment = ProductAddFragment()
         }
         activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.nav_host_fragment, fragment)

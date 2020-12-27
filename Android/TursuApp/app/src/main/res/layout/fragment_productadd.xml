@@ -2,157 +2,226 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_product_add"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tursu_green">
+    android:background="@color/TursuGreen"
+    android:clickable="true"
+    android:padding="20dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="305dp"
-        android:layout_height="35dp"
-        android:text="Product Add"
-        android:textColor="#FDFDFD"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.35"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/addProduct_button"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/signup_button"
-        android:text="@string/add_product"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addProduct_description"
-        app:layout_constraintVertical_bias="0.121" />
+        android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/addProduct_price"
-        android:layout_width="311dp"
-        android:layout_height="45dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="50dp"
-        android:background="@color/white"
-        android:gravity="center|left"
-        android:hint="Price"
-        android:padding="10dp"
-        android:textColorHint="@color/tursu_green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addProduct_stock" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/addProduct_stock"
-        android:layout_width="311dp"
-        android:layout_height="45dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="50dp"
-        android:background="@color/white"
-        android:gravity="center|left"
-        android:hint="Stock"
-        android:padding="10dp"
-        android:textColorHint="@color/tursu_green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.252"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addProduct_brand" />
+            <LinearLayout
+                android:id="@+id/lin1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/addProduct_brand"
-        android:layout_width="311dp"
-        android:layout_height="45dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="50dp"
-        android:background="@color/white"
-        android:gravity="center|left"
-        android:hint="Brand"
-        android:padding="10dp"
-        android:textColorHint="@color/tursu_green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.404"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addProduct_name" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="#3F51B5">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/addProduct_photo"
-        android:layout_width="311dp"
-        android:layout_height="45dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="50dp"
-        android:background="@color/white"
-        android:gravity="center|left"
-        android:hint="Photo"
-        android:padding="10dp"
-        android:textColorHint="@color/tursu_green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.414"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addProduct_price" />
+                    <ImageView
+                        android:id="@+id/back_img"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/x" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/addProduct_name"
-        android:layout_width="311dp"
-        android:layout_height="45dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="50dp"
-        android:background="@color/white"
-        android:gravity="center|left"
-        android:hint="Name"
-        android:padding="10dp"
-        android:textColorHint="@color/tursu_green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.252"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+                    <TextView
+                        android:id="@+id/textView122"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="1dp"
+                        android:background="#3F51B5"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Product Details"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
+                </LinearLayout>
+            </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="311dp"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="53dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="56dp"
-        android:background="@color/white"
-        android:spinnerMode="dropdown"
-        android:theme="@style/Spinner2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <EditText
-        android:id="@+id/addProduct_description"
-        android:layout_width="311dp"
-        android:layout_height="122dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="59dp"
-        android:background="@color/white"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Description"
-        android:padding="10dp"
-        android:inputType="textMultiLine"
-        android:textColorHint="@color/tursu_green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addProduct_photo" />
+            <LinearLayout
+                android:id="@+id/lin3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/lin1">
+
+
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:spinnerMode="dropdown"
+                    android:popupBackground="@color/white"
+                    android:theme="@style/Spinner2" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/lin3">
+
+                <EditText
+                    android:id="@+id/addProduct_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:padding="10dp"
+                    android:textColor="@color/tursu_green"
+                    android:textColorHint="#7777" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/lin4">
+
+                <EditText
+                    android:id="@+id/addProduct_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:hint="Description"
+                    android:padding="10dp"
+                    android:textColor="@color/tursu_green"
+                    android:textColorHint="#7777" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/lin5">
+
+                <EditText
+                    android:id="@+id/addProduct_brand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:hint="Brand"
+                    android:padding="10dp"
+                    android:textColor="@color/tursu_green"
+                    android:textColorHint="#7777" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/lin6">
+
+                <EditText
+                    android:id="@+id/addProduct_stock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:hint="Stock"
+                    android:padding="10dp"
+                    android:textColor="@color/tursu_green"
+                    android:textColorHint="#7777" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/lin7">
+
+                <EditText
+                    android:id="@+id/addProduct_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:hint="Price"
+                    android:padding="10dp"
+                    android:textColor="@color/tursu_green"
+                    android:textColorHint="#7777" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/lin8">
+
+                <EditText
+                    android:id="@+id/addProduct_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:hint="Photo"
+                    android:padding="10dp"
+                    android:textColor="@color/tursu_green"
+                    android:textColorHint="#7777" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/addProduct_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="70dp"
+                android:text="ADD PRODUCT"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.072"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lin9" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
