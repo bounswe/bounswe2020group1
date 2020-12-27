@@ -2,11 +2,12 @@ import React from "react";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "../../NavBar";
-import axios from "axios";
+import Axios from "axios";
 import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import axios from "axios";
 
 
 
@@ -34,33 +35,17 @@ export const useStyles = makeStyles((theme) => ({
     },
 }));
 
-/*
-
-POST request: adds product to the systems (form data can be preffered)
-		req parameters:
-category:string
-name:string
-description:string
-brand: string
-stock: int
-price: float
-opt parameters:
-photo: Image file
-		response:
-			success or fail messages
-
-axios.post('http://3.232.20.250/product/add/', formData)
- */
-
 let token;
 token = window.sessionStorage.getItem("authToken")
 
-class AddProduct extends React.Component{
-
+class EditProduct extends React.Component{
     constructor(props) {
         super(props)
+        console.log("id is " , props.id)
+
 
         this.state = {
+            id: 0,
             category: '',
             name: '',
             description: '',
@@ -71,6 +56,8 @@ class AddProduct extends React.Component{
         }
     }
 
+
+
     changeHandler = (e) => {
         this.setState({[e.target.name]: e.target.value})
     }
@@ -78,25 +65,24 @@ class AddProduct extends React.Component{
     submitHandler = (e) => {
         const formData = new FormData();
         e.preventDefault()
-        console.log("anelka")
-        console.log(this.state)
-        formData.append("category", this.state.category);
-        formData.append("name", this.state.name);
-        formData.append("description", this.state.description);
-        formData.append("brand", this.state.brand);
-        formData.append("stock", this.state.stock);
-        formData.append("price", this.state.price);
-        formData.append("photo", this.state.Image);
+        formData.append("id", this.props.id);
+        if(this.state.category !== '' ) formData.append("category", this.state.category);
+        if(this.state.name !== '' ) formData.append("name", this.state.name);
+        if(this.state.description !== '' ) formData.append("description", this.state.description);
+        if(this.state.brand !== '' ) formData.append("brand", this.state.brand);
+        if(this.state.stock !== 0 ) formData.append("stock", this.state.stock);
+        if(this.state.price !== 0 ) formData.append("price", this.state.price);
+        if(this.state.Image !== '' ) formData.append("photo", this.state.Image);
 
         axios
-            .post("http://3.232.20.250/product/add/", formData, {
+            .post("http://3.232.20.250/product/edit/", formData, {
                 headers: {
                     'Authorization': "Token " + token //the token is a variable which holds the token
                 },
             }).then((response) => {
 
             if (response.status === 200) {
-                alert("Product added!");
+                alert("Product edited!");
                 console.log(response)
             }
         })
@@ -112,7 +98,7 @@ class AddProduct extends React.Component{
 
 
     render(){
-        const { category, name, description, brand, stock, price } = this.state
+        const { id, category, name, description, brand, stock, price } = this.state
         return(
             <ThemeProvider theme={theme} >
                 <Grid item>
@@ -121,7 +107,7 @@ class AddProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Category:</Button>
-                                <Input style={{width: '300px'}} type="text" name="category"  value={category} placeholder="Enter the Product Category..." onChange={this.changeHandler} required />
+                                <Input style={{width: '300px'}} type="text" name="category"  value={category} placeholder="Enter the Product Category..." onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -130,7 +116,7 @@ class AddProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Name:</Button>
-                                <Input style={{width: '300px'}} type="text" name="name"  value={name} placeholder="Enter the Product Name..." onChange={this.changeHandler} required />
+                                <Input style={{width: '300px'}} type="text" name="name"  value={name} placeholder="Enter the Product Name..." onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -139,7 +125,7 @@ class AddProduct extends React.Component{
                             <Paper  elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px', marginTop: '20px'}} variant="contained" color="primary"  >Description:</Button>
-                                <Input style={{width: '300px'}} type="text" name="description"  multiline='true' rows='3' value={description} placeholder="Enter the Product Description..." onChange={this.changeHandler} required />
+                                <Input style={{width: '300px'}} type="text" name="description"  multiline='true' rows='3' value={description} placeholder="Enter the Product Description..." onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -148,7 +134,7 @@ class AddProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Brand:</Button>
-                                <Input style={{width: '300px'}} type="text" name="brand" value={brand} placeholder="Enter the Product Brand..." onChange={this.changeHandler} required />
+                                <Input style={{width: '300px'}} type="text" name="brand" value={brand} placeholder="Enter the Product Brand..." onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -157,17 +143,17 @@ class AddProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary" >Stock:</Button>
-                                <Input  style={{width: '300px'}} type="number" step="1" min="0" name="stock" value={stock} placeholder="Stock" onChange={this.changeHandler} required />
+                                <Input  style={{width: '300px'}} type="number" step="1" min="0" name="stock" value={stock} placeholder="Stock" onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
                         <br/>
                         <Grid item>
                             <Paper elevation={15} className={useStyles.paper}>
-                                    <br/>
-                                    <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Price:</Button>
-                                    <Input style={{width: '300px'}} type="number" step="0.01" min="0" name="price" value={price} placeholder="Price" onChange={this.changeHandler} required />
-                                    <br/><br/>
+                                <br/>
+                                <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Price:</Button>
+                                <Input style={{width: '300px'}} type="number" step="0.01" min="0" name="price" value={price} placeholder="Price" onChange={this.changeHandler} />
+                                <br/><br/>
                             </Paper>
                         </Grid>
                         <br/>
@@ -193,11 +179,10 @@ class AddProduct extends React.Component{
                         </Grid>
                         <br/><br/>
                     </form>
-
                 </Grid>
             </ThemeProvider>
         );
     }
 }
 
-export default AddProduct;
+export default EditProduct;

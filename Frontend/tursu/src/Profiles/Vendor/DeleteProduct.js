@@ -1,7 +1,7 @@
 import React from "react";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Navbar from "./NavBar";
+import Navbar from "../../NavBar";
 import Axios from "axios";
 import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import Input from '@material-ui/core/Input';

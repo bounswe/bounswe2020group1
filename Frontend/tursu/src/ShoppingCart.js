@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
-
+import { Link } from "react-router-dom";
 import ProductList, {ProductListHorizontal} from "./ProductList";
 import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
@@ -104,9 +104,11 @@ export default function ShoppingCart(props){
                                 <Typography variant="h5" gutterBottom align={"left"}>
                                     {totalSum} ₺
                                 </Typography>
-                                <Button variant={"contained"} color="primary" size={"large"}>
-                                    Complete Order
-                                </Button>
+                            <Link to='/checkout'>
+                                    <Button variant={"contained"} color="primary" size={"large"}>
+                                        Complete Order
+                                    </Button>
+                            </Link>
                         </Grid>
                     </Paper>
                 </Grid>
