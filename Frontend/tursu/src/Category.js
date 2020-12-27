@@ -29,6 +29,7 @@ class Category extends React.Component{
         category_switch: null,
         vendor_switch: null,
         sort: null,
+        vendor_list: []
     }
 
     handleCallbackdataRange = (childData) =>{
@@ -60,6 +61,13 @@ class Category extends React.Component{
             .then(res => {
                 console.log(res)
                 this.setState({products: res.data})
+            })
+
+        Axios.get('http://3.232.20.250/helper/allvendors',{
+        })
+            .then(res => {
+                console.log(res)
+                this.setState({vendor_list: res.data})
             })
     }
 

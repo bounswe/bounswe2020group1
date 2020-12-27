@@ -65,6 +65,7 @@ const theme = createMuiTheme({
 class AdminPanel extends React.Component{
 
     componentDidMount() {
+        console.log( window.sessionStorage.getItem("authToken"))
         Axios.get('http://3.232.20.250/admin/verificationpending/products/',{
             headers: {
                 'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
@@ -98,6 +99,8 @@ class AdminPanel extends React.Component{
 
     constructor(props) {
         super(props);
+        console.log( window.sessionStorage.getItem("authToken"))
+
 
         this.state = {
             value: null,

@@ -56,7 +56,7 @@ class ProductDetail extends React.Component{
         this.state = {
             product: [],
             comments:[],
-            product_not_found : true
+            product_not_found : true,
             isAlertOpen: false
         }
 

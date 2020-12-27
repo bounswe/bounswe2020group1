@@ -39,14 +39,14 @@ export default class Login extends Component {
                 console.log("status: ", res.status);
                 console.log("type: ", res.data.user_type);
                 this.setState({ user_type: res.data.user_type });
-                this.setState({ redirect: "True" });
 
                 window.sessionStorage.setItem("authToken", res.data.auth_token);
                 window.sessionStorage.setItem("first_name", res.data.first_name);
                 window.sessionStorage.setItem("last_name", res.data.last_name);
                 window.sessionStorage.setItem("user_type", res.data.user_type);
 
-                
+                this.setState({ redirect: "True" });
+
                 console.log("auth_token: ", window.sessionStorage.getItem("authToken"));
 
             })
