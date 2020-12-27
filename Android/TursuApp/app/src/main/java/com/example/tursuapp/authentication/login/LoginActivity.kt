@@ -100,10 +100,10 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Invalid credentials!", Toast.LENGTH_SHORT).show()
                 }
 
-            }
+            override fun onFailure(call: Call<TokenResponse?>, t: Throwable) {
 
-            override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
                 Log.i("Failure",t.message)
+
             }
 
         })

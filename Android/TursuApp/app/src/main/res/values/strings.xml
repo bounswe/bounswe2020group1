@@ -13,4 +13,6 @@
     <string name="menu_categories">Categories</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_maps">Map</string>
+    <string name="add_list">Add to List</string>
+    <string name="select">SELECT</string>
 </resources>

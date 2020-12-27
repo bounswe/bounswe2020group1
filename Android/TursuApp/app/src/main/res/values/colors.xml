@@ -10,4 +10,6 @@
     <color name="TursuGreen">#10D48E</color>
     <color name="tursu_green">#10D48E</color>
     <color name="signup_gray">#E0E0E0</color>
+    <color name="duskYellow">#FFC107</color>
+    <color name="lightGrey">#BDBDB9</color>
 </resources>

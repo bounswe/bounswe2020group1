@@ -5,100 +5,214 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/nav_product_page_details"
+    android:clickable="true"
     tools:context=".authentication.homepage.ui.productpage.ProductPageFragment">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="387dp"
-        android:layout_height="297dp"
-        android:layout_margin="20dp"
-        android:background="@color/TursuGreen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Reviews" />
-
-    <TextView
-        android:id="@+id/Reviews"
-        android:layout_width="181dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center_vertical"
-        android:text="Reviews:"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.173"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/FreeShippingText" />
-
     <TextView
         android:id="@+id/product_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="397dp"
+        android:layout_height="48dp"
         android:fontFamily="@font/poppins_semibold"
         android:paddingLeft="30dp"
         android:paddingTop="20dp"
         android:paddingBottom="10dp"
-        android:text="TextView"
-        android:textSize="18sp"
+        android:text="Product Name"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/ProductInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/productImage"
-        android:layout_width="136dp"
-        android:layout_height="165dp"
-        android:layout_marginStart="28dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/product_name"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        tools:ignore="MissingConstraints" />
-
     <TextView
-        android:id="@+id/verifiedProduct"
-        android:layout_width="136dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="8dp"
-        android:background="#FF9800"
+        android:id="@+id/Reviews"
+        android:layout_width="88dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="12dp"
         android:gravity="center_vertical"
-        android:text="Verified Product"
-        android:textAlignment="center"
-        android:textSize="12sp"
+        android:text="Reviews:"
+        android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.083"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productImage"
-        tools:ignore="MissingConstraints,RtlCompat" />
+        app:layout_constraintTop_toBottomOf="@+id/const1" />
 
-    <TextView
-        android:id="@+id/FreeShippingText"
-        android:layout_width="136dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="1dp"
-        android:background="#858793"
-        android:gravity="center"
-        android:text="Free Shipping"
-        android:textAlignment="center"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/verifiedProduct"
+    <ListView
+        android:id="@+id/commentListView"
+        android:layout_width="391dp"
+        android:layout_height="193dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/TursuGreen"
+        android:clickable="false"
+        android:divider="@null"
+        android:focusable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/verifiedProduct"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/Reviews" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/const1"
+        android:layout_width="167dp"
+        android:layout_height="317dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/Reviews"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_name">
+
+        <ImageView
+            android:id="@+id/productImage"
+            android:layout_width="136dp"
+            android:layout_height="165dp"
+            app:layout_constraintBottom_toTopOf="@id/verifiedProduct"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_camera"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/verifiedProduct"
+            android:layout_width="136dp"
+            android:layout_height="40dp"
+            android:background="#4DBDCC"
+            android:gravity="center_vertical"
+            android:text="Verified Product"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/FreeShippingText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints,RtlCompat" />
+
+        <TextView
+            android:id="@+id/FreeShippingText"
+            android:layout_width="136dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="16dp"
+            android:background="#858793"
+            android:gravity="center"
+            android:text="Free Shipping"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="43dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/white"
+            android:theme="@style/RatingBar"
+            app:layout_constraintBottom_toTopOf="@+id/verifiedProduct"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/productImage" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ProductInfo"
-        android:layout_width="200dp"
-        android:layout_height="255dp"
+        android:layout_width="204dp"
+        android:layout_height="302dp"
+        android:layout_marginRight="20dp"
         android:background="@color/TursuGreen"
+        app:layout_constraintBottom_toTopOf="@+id/Reviews"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.659"
-        app:layout_constraintStart_toEndOf="@+id/productImage"
-        app:layout_constraintTop_toTopOf="@+id/productImage"
+        app:layout_constraintTop_toBottomOf="@+id/product_name"
+        app:layout_constraintVertical_bias="0.487"
         tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/cardView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="14sp"
+                android:text=""
+                android:textColor="#0091D3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="140dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/addCart"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="#E8E7E7"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="#E8E7E7"
+                    android:src="@drawable/shopping_cart"
+
+                    />
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView3"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="#E8E7E7"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/add_list_image"
+                    android:layout_width="30dp"
+                    android:layout_height="31dp"
+                    android:layout_gravity="center"
+                    android:background="#E8E7E7"
+                    android:src="@drawable/add_to_favorites"
+
+                    />
+
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/product_description"
@@ -106,124 +220,57 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
             android:padding="15dp"
-            android:text="TextView"
-            android:textSize="14sp"
+            android:text=""
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/vendor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.435" />
+
+        <TextView
+            android:id="@+id/vendor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="176dp"
+            android:layout_marginBottom="104dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textSize="12sp"
+            android:text=""
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/product_description">
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="#E8E7E7"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout3">
 
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="visible">
 
-                <TextView
-                    android:id="@+id/Size"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:paddingStart="15dp"
-                    android:text="Size:" />
+        </androidx.cardview.widget.CardView>
 
-                <Spinner
-                    android:id="@+id/SizeDropdown"
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp"
-                    android:spinnerMode="dropdown" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/Colors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:text="Colors:" />
-
-                <Spinner
-                    android:id="@+id/ColorDropdown"
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp"
-                    android:spinnerMode="dropdown" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/addShopCart"
-            android:layout_width="133dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:text="ADD TO SHOP CART"
+        <TextView
+            android:id="@+id/brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="154dp"
+            android:layout_marginBottom="126dp"
+            android:fontFamily="@font/poppins_semibold"
             android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/SellerText"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/Seller"
-            android:layout_width="120dp"
-            android:layout_height="22dp"
-            android:layout_marginBottom="4dp"
-            android:gravity="center"
-            android:text="Nikea"
+            android:text=""
+            android:textColor="#E17B5B"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/SellerText" />
-
-        <TextView
-            android:id="@+id/SellerText"
-            android:layout_width="54dp"
-            android:layout_height="23dp"
-            android:layout_marginEnd="128dp"
-            android:layout_marginBottom="4dp"
-            android:gravity="center"
-            android:text="Seller :"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/addShopCart">
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="93dp"
-                android:layout_height="25dp"
-                android:gravity="center"
-                android:text="167 Reviews:"
-                android:textAlignment="center" />
-
-            <RatingBar
-                android:id="@+id/ratingBar"
-                style="@style/Widget.AppCompat.RatingBar.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/imageView10"
-            android:layout_width="34dp"
-            android:layout_height="37dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/addShopCart"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-            tools:srcCompat="@drawable/love" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
