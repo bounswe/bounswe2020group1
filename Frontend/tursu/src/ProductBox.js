@@ -31,6 +31,7 @@ import Divider from "@material-ui/core/Divider";
 import CloseIcon from '@material-ui/icons/Close';
 import Snackbar from "@material-ui/core/Snackbar";
 import {unmountComponentAtNode} from "react-dom";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -192,18 +193,29 @@ function LongMenu(props) {
                     },
                 }}
             >
-                <MenuItem onClick={addToShoppingCart}>
-                    <ListItemIcon>
-                        <ShoppingCartIcon> </ShoppingCartIcon>
-                    </ListItemIcon>
-                    <Typography>Add to Shopping Cart</Typography>
-                </MenuItem>
-                <MenuItem onClick={addToShoppingList}>
-                    <ListItemIcon>
-                        <PlaylistAddIcon> </PlaylistAddIcon>
-                    </ListItemIcon>
-                    <Typography>Add to Shopping List</Typography>
-                </MenuItem>
+                <Tooltip title={window.sessionStorage.getItem("isLogged") ?"" : "You need to login."}
+                         placement={"top"}>
+                    <span>
+                        <MenuItem onClick={addToShoppingCart}
+                                  disabled={!window.sessionStorage.getItem("isLogged")}>
+                            <ListItemIcon>
+                                <ShoppingCartIcon> </ShoppingCartIcon>
+                            </ListItemIcon>
+                            <Typography>Add to Shopping Cart</Typography>
+                        </MenuItem>
+                    </span>
+                </Tooltip>
+                <Tooltip title={window.sessionStorage.getItem("isLogged") ? "":"You need to login."}>
+                    <span>
+                        <MenuItem onClick={addToShoppingList}
+                                  disabled={!window.sessionStorage.getItem("isLogged")}>
+                            <ListItemIcon>
+                                <PlaylistAddIcon> </PlaylistAddIcon>
+                            </ListItemIcon>
+                            <Typography>Add to Shopping List</Typography>
+                        </MenuItem>
+                    </span>
+                </Tooltip>
             </Menu>
             {isListOpen? (
                 <ListsDialog open={isListOpen} productId={props.product.id} onClose={handleListsClose}/>
