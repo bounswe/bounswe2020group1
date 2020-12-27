@@ -1,14 +1,12 @@
 package com.example.tursuapp.authentication.homepage.ui.home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -29,8 +27,6 @@ import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
-import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
-import com.squareup.picasso.Picasso
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import retrofit2.Call

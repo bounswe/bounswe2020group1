@@ -2,7 +2,6 @@ package com.example.tursuapp.authentication.homepage
 
 import android.app.Activity
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -15,15 +14,12 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.findNavController
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
-import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
+import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartFragment
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Response

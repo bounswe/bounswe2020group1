@@ -14,18 +14,12 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
-import com.example.tursuapp.adapter.OrderAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
 import com.squareup.picasso.Picasso
-import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
-import com.example.tursuapp.authentication.homepage.HomePageActivity
-import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import okhttp3.ResponseBody
-import org.w3c.dom.Text
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 

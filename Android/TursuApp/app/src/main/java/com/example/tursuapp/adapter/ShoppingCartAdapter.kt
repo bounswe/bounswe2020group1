@@ -13,17 +13,13 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ShoppingCartProductResponse
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Response
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: ArrayList<ShoppingCartProductResponse>,auth_token:String,isPayment:Boolean,priceView:TextView?) : BaseAdapter() {
+class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: ArrayList<ShoppingCartProductResponse>, private val auth_token: String, private var isPayment: Boolean, private val priceView: TextView?) : BaseAdapter() {
     var context: Context? = context
-    val auth_token = auth_token
-    var isPayment = isPayment
-    val priceView = priceView
 
     override fun getCount(): Int {
         return shoppingCartProducts.size
@@ -37,7 +33,7 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
         return position.toLong()
     }
 
-    @SuppressLint("SetTextI18n", "ViewHolder", "InflateParams")
+    @SuppressLint("SetTextI18n", "ViewHolder", "InflateParams", "CutPasteId")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         //val food = this.productList[position]
 
@@ -52,7 +48,7 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
                 increaseQuantity(shoppingCartProducts[position].product.id,quantityView)
                 shoppingCartProducts[position].quantity = shoppingCartProducts[position].quantity+1
                 if (priceView != null) {
-                    priceView.text = calculateTotalPrice().toString()+" TL"
+                    priceView.text = calculateTotalPrice()+" TL"
                 }
             }
             productView.findViewById<ImageView>(R.id.decrease).setOnClickListener {
@@ -60,7 +56,7 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
                 decreaseQuantity(shoppingCartProducts[position].product.id,quantityView)
                 shoppingCartProducts[position].quantity = shoppingCartProducts[position].quantity-1
                 if (priceView != null) {
-                    priceView.text = calculateTotalPrice().toString()+" TL"
+                    priceView.text = calculateTotalPrice()+" TL"
                 }
             }
         }
@@ -84,7 +80,7 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
 
 
 
-    fun increaseQuantity(productID:Int,quantityView:TextView){
+    private fun increaseQuantity(productID:Int, quantityView:TextView){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.addToShoppingCart(auth_token,productID).enqueue(object : retrofit2.Callback<ResponseBody> {
             override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
@@ -109,7 +105,7 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
             }
         })
     }
-    fun decreaseQuantity(productID:Int,quantityView: TextView){
+    private fun decreaseQuantity(productID:Int, quantityView: TextView){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.removeFromShoppingCart(auth_token,productID).enqueue(object : retrofit2.Callback<ResponseBody> {
             override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
@@ -141,7 +137,6 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
         }
         val df = DecimalFormat("#.#")
         df.roundingMode = RoundingMode.CEILING
-        val res = df.format(total)
-        return res
+        return df.format(total)
     }
 }
