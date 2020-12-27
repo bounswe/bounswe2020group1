@@ -170,9 +170,11 @@ export default function Navbar(){
 
                                 </Grid>
                                 <Grid item className={classes.cart}>
-                                    <IconButton >
-                                        <ShoppingCartIcon  />
-                                    </IconButton>
+                                    <Link to='/shoppingCart'>
+                                        <IconButton>
+                                            <ShoppingCartIcon className={classes.shoppingCartIcon} />
+                                        </IconButton>
+                                    </Link>
                                 </Grid>
                                 <Grid item className={classes.sign}>
                                     <Paper variant="outlined" elevation={3}  className={classes.sign_paper}>
@@ -184,14 +186,6 @@ export default function Navbar(){
                                         </Link>
                                     </Paper>
                                 </Grid>
-                                <Grid item>
-                                    <Link to='/shoppingCart'>
-                                        <IconButton>
-                                            <ShoppingCartIcon className={classes.shoppingCartIcon} />
-                                        </IconButton>
-                                    </Link>
-                                </Grid>
-
                             </Grid>
 
                             <Grid container spacing={2} className={classes.category}  >
