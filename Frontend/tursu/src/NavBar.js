@@ -18,9 +18,29 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
 import FindReplaceIcon from '@material-ui/icons/FindReplace';
 import './NavBar.css'
+import useScrollTrigger from "@material-ui/core/useScrollTrigger";
+import Slide from "@material-ui/core/Slide";
 
 
+/**
+ * It is used for enabling Navbar to disappear/appear
+ * as we move scroll towards downside/upside.
+ *
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function HideOnScroll(props) {
+    const { children } = props;
 
+    const trigger = useScrollTrigger();
+
+    return (
+        <Slide timeout={1000} appear={false} direction="down" in={!trigger}>
+            {children}
+        </Slide>
+    );
+}
 
 
 const useStyles = makeStyles((theme)=> ({
@@ -103,7 +123,7 @@ const theme = createMuiTheme({
 })
 
 // TODO: implement search functionality
-export default function Navbar(){
+export default function Navbar(props){
     const [search_type, setType] = React.useState('product');
     const [search_str, setStr] = React.useState();
 
@@ -128,109 +148,111 @@ export default function Navbar(){
     return(
         <ThemeProvider theme={theme} >
             <div className={classes.root}>
-                <AppBar>
-                    <Toolbar className={classes.toolbar}>
-                        <Link to='/'>
-                            <Button>
-                                <Paper elevation={5}>
-                                    <Avatar variant="square" className={classes.logo}>
-                                        <img src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG"
-                                             alt="logo"
-                                             className={classes.logo}/>
-                                    </Avatar>
-                                </Paper>
-                            </Button>
-                        </Link>
-                        <Grid container className={classes.leftSide} direction="column" spacing={3} >
+                <HideOnScroll children={props.children}>
+                    <AppBar>
+                        <Toolbar className={classes.toolbar}>
+                            <Link to='/'>
+                                <Button>
+                                    <Paper elevation={5}>
+                                        <Avatar variant="square" className={classes.logo}>
+                                            <img src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG"
+                                                 alt="logo"
+                                                 className={classes.logo}/>
+                                        </Avatar>
+                                    </Paper>
+                                </Button>
+                            </Link>
+                            <Grid container className={classes.leftSide} direction="column" spacing={3} >
 
-                            <Grid item xs sm className={classes.upperLeft} container direction="row" >
+                                <Grid item xs sm className={classes.upperLeft} container direction="row" >
 
-                                <Select className={classes.searchType}
-                                    id="search-type-id"
-                                    value={search_type}
-                                    onChange={handleChange}
-                                    IconComponent={FindReplaceIcon}
-                                >
-                                    <MenuItem value={"product"}>Products</MenuItem>
-                                    <MenuItem value={"vendor"}>Vendors</MenuItem>
-                                </Select>
-                                <Grid item className={classes.searchGrid}>
-                                    <InputBase placeholder="Search" id="search" className={classes.search} onChange={handleChangeStr}/>
-                                </Grid>
-                                <Grid item>
-                                    <Link to={`/search/${search_str}/${search_type}`}>
-                                        <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
-                                            window.sessionStorage.setItem("search_type", search_type)
-                                        }}>
-                                            <SearchIcon/>
-                                        </IconButton>
-                                    </Link>
+                                    <Select className={classes.searchType}
+                                        id="search-type-id"
+                                        value={search_type}
+                                        onChange={handleChange}
+                                        IconComponent={FindReplaceIcon}
+                                    >
+                                        <MenuItem value={"product"}>Products</MenuItem>
+                                        <MenuItem value={"vendor"}>Vendors</MenuItem>
+                                    </Select>
+                                    <Grid item className={classes.searchGrid}>
+                                        <InputBase placeholder="Search" id="search" className={classes.search} onChange={handleChangeStr}/>
+                                    </Grid>
+                                    <Grid item>
+                                        <Link to={`/search/${search_str}/${search_type}`}>
+                                            <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
+                                                window.sessionStorage.setItem("search_type", search_type)
+                                            }}>
+                                                <SearchIcon/>
+                                            </IconButton>
+                                        </Link>
 
+                                    </Grid>
+                                    <Grid item className={classes.cart}>
+                                        <Link to='/shoppingCart'>
+                                            <IconButton>
+                                                <ShoppingCartIcon className={classes.shoppingCartIcon} />
+                                            </IconButton>
+                                        </Link>
+                                    </Grid>
+                                    <Grid item className={classes.sign}>
+                                        <Paper variant="outlined" elevation={3}  className={classes.sign_paper}>
+                                            <AccountCircleIcon  />
+                                            <Link to='/signIn'>
+                                                <Button variant="text">
+                                                    {option}
+                                                </Button>
+                                            </Link>
+                                        </Paper>
+                                    </Grid>
                                 </Grid>
-                                <Grid item className={classes.cart}>
-                                    <Link to='/shoppingCart'>
-                                        <IconButton>
-                                            <ShoppingCartIcon className={classes.shoppingCartIcon} />
-                                        </IconButton>
-                                    </Link>
-                                </Grid>
-                                <Grid item className={classes.sign}>
-                                    <Paper variant="outlined" elevation={3}  className={classes.sign_paper}>
-                                        <AccountCircleIcon  />
-                                        <Link to='/signIn'>
-                                            <Button variant="text">
-                                                {option}
+
+                                <Grid container spacing={2} className={classes.category}  >
+                                    <Grid item>
+                                        <Link to='/categories/Electronics'>
+                                            <Button variant="contained" color="secondary">
+                                                Electronics
                                             </Button>
                                         </Link>
-                                    </Paper>
+                                    </Grid>
+
+                                    <Grid item>
+                                        <Link to='/categories/Fashion'>
+                                            <Button variant="contained" color="secondary">
+                                                Fashion
+                                            </Button>
+                                        </Link>
+                                    </Grid>
+
+                                    <Grid item>
+                                        <Link to='/categories/Home'>
+                                            <Button variant="contained" color="secondary">
+                                                Home
+                                            </Button>
+                                        </Link>
+                                    </Grid>
+
+                                    <Grid item>
+                                        <Link to='/categories/Sports'>
+                                            <Button variant="contained" color="secondary">
+                                                Sports&Outdoors
+                                            </Button>
+                                        </Link>
+                                    </Grid>
+
+                                    <Grid item>
+                                        <Link to='/categories/Cosmetics'>
+                                            <Button variant="contained" color="secondary">
+                                                Cosmetics
+                                            </Button>
+                                        </Link>
+                                    </Grid>
+
                                 </Grid>
                             </Grid>
-
-                            <Grid container spacing={2} className={classes.category}  >
-                                <Grid item>
-                                    <Link to='/categories/Electronics'>
-                                        <Button variant="contained" color="secondary">
-                                            Electronics
-                                        </Button>
-                                    </Link>
-                                </Grid>
-
-                                <Grid item>
-                                    <Link to='/categories/Fashion'>
-                                        <Button variant="contained" color="secondary">
-                                            Fashion
-                                        </Button>
-                                    </Link>
-                                </Grid>
-
-                                <Grid item>
-                                    <Link to='/categories/Home'>
-                                        <Button variant="contained" color="secondary">
-                                            Home
-                                        </Button>
-                                    </Link>
-                                </Grid>
-
-                                <Grid item>
-                                    <Link to='/categories/Sports'>
-                                        <Button variant="contained" color="secondary">
-                                            Sports&Outdoors
-                                        </Button>
-                                    </Link>
-                                </Grid>
-
-                                <Grid item>
-                                    <Link to='/categories/Cosmetics'>
-                                        <Button variant="contained" color="secondary">
-                                            Cosmetics
-                                        </Button>
-                                    </Link>
-                                </Grid>
-
-                            </Grid>
-                        </Grid>
-                    </Toolbar>
-                </AppBar>
+                        </Toolbar>
+                    </AppBar>
+                </HideOnScroll>
             </div>
         </ThemeProvider>
     );
