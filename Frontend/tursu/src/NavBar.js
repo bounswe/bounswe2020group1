@@ -20,6 +20,8 @@ import FindReplaceIcon from '@material-ui/icons/FindReplace';
 import './NavBar.css'
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
+import Tooltip from "@material-ui/core/Tooltip";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 
 /**
@@ -190,9 +192,11 @@ export default function Navbar(props){
                                     </Grid>
                                     <Grid item className={classes.cart}>
                                         <Link to='/shoppingCart'>
+                                            <LightTooltip title={"Shopping cart"} placement={"top-start"}>
                                             <IconButton>
                                                 <ShoppingCartIcon className={classes.shoppingCartIcon} />
                                             </IconButton>
+                                            </LightTooltip>
                                         </Link>
                                     </Grid>
                                     <Grid item className={classes.sign}>
@@ -257,3 +261,23 @@ export default function Navbar(props){
         </ThemeProvider>
     );
 }
+
+
+/**
+ * It is used for making tooltips styled.
+ * Instead of using ToolTip, use this component.
+ *
+ * It is adapted from the original documentation of Material-UI.
+ */
+const LightTooltip = withStyles((theme) => ({
+    tooltip: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 1.0)',
+        boxShadow: theme.shadows[2],
+        fontSize: 13,
+
+        // I tried to add color to arrow attribute but
+        // I was not able to do it. It can be revisited later.
+        arrow: 'rgba(0, 0, 0, 0.0)'
+    },
+}))(Tooltip);
