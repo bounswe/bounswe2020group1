@@ -12,26 +12,38 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tursuapp.R
+import com.example.tursuapp.adapter.CommentAdapter
+import com.example.tursuapp.adapter.OrderAdapter
+import com.example.tursuapp.adapter.VendorProductAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
 import com.squareup.picasso.Picasso
 import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrder
+import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
+import com.example.tursuapp.authentication.homepage.ui.order.Product
+import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import okhttp3.ResponseBody
 import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
+data class Comment(val customer: String, val text: String, val rating: Int)
 class ProductPageFragment : Fragment() {
 
     private lateinit var productPageViewModel: ProductPageModel
     private lateinit var product: ProductDetailsResponse
     private lateinit var AddListStatus: AddListResponse
+    var commentList = ArrayList<Comments>()
+    private lateinit var commentListView: ListView
     var allLists = listOf<String>()
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -61,6 +73,7 @@ class ProductPageFragment : Fragment() {
        // if (spinner != null) {
          //   spinner.adapter = adapter
         //}
+       // commentListView = view.findViewById(R.id.commentListView)
         getDetails(id_str!!.toInt(), view)
         view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
             var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -71,6 +84,7 @@ class ProductPageFragment : Fragment() {
         if(response.code()==200){
             Toast.makeText(context, "Ürün sepetinize eklenirken bir sorun yaşandı.", Toast.LENGTH_SHORT).show()
         }else{ Toast.makeText(context, "Ürün sepetinize eklendi", Toast.LENGTH_SHORT).show()}*/
+
         }
 
     }
@@ -316,8 +330,54 @@ class ProductPageFragment : Fragment() {
                     response: Response<ProductDetailsResponse>?
             ) {
                 if (response != null) {
+                        Log.i("MainFragment", "inside onResponse")
+                        product = response.body()!!
+                        displayProductInfo(view)
+                        commentList=ArrayList(product.comments)
+                        val adapter = context?.let { CommentAdapter(it, commentList) }
+                        commentListView = view.findViewById(R.id.commentListView)
+                        displayProductInfo(view)
+                        if (commentListView != null) {
+                            commentListView.adapter = adapter
+
+                            /*
+                            commentListView.setOnItemClickListener { _, view, _, _ ->
+                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                                val bundle = Bundle()
+                                bundle.putString("id", clickedId.toString())
+                                val newFragment = VendorProductPageFragment()
+                                newFragment.arguments = bundle
+                                val fragmentManager: FragmentManager? = fragmentManager
+                                val fragmentTransaction: FragmentTransaction =
+                                        fragmentManager!!.beginTransaction()
+                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                                fragmentTransaction.commit()
+                            }*/
+                       // }
+                    }else{
+                        Log.i("Customer Comments: ", "have not any comment")
+                       // Toast.makeText(context, "have not any comment", Toast.LENGTH_SHORT).show()
+                    }
+
+
+
+                    /*
                     product = response.body()!!
-                    displayProductInfo(view)
+                    val adapter = CommentAdapter(context!!, commentList)
+                    commentListView.adapter = adapter
+
+                    commentListView.setOnItemClickListener { parent, view, position, id ->
+                        val productOfCommentsList = getOrders(position)
+                        val adapter = CommentAdapter(context!!, productOfCommentsList)
+                        commentListView.adapter = adapter
+                        adapter.notifyDataSetChanged()
+
+                        displayProductInfo(view)
+
+                        // backArrow.setOnClickListener {
+                        //   displayFragment(R.id.nav_customer_orders)
+                        //}
+                    }*/
                 }
                 //urecyclerView.adapter = ItemAdapter(userList,context)
                 //adapter!!.notifyDataSetChanged()
@@ -334,6 +394,7 @@ class ProductPageFragment : Fragment() {
         view.findViewById<RatingBar>(R.id.ratingBar).rating = product.rating.toFloat()
         view.findViewById<TextView>(R.id.price).text = product.price+" TL"
         view.findViewById<TextView>(R.id.vendor).text = "Vendor: "+product.vendor_name
+        view.findViewById<TextView>(R.id.brand).text = "Brand: "+product.brand
 
         val image  = view.findViewById<ImageView>(R.id.productImage)
         if(product.photo_url!="") {
