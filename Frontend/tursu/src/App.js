@@ -6,10 +6,9 @@ import Category from "./Category";
 import Sign from "./Sign/Sign";
 import ProductDetailPage from "./ProductDetailPage";
 import SearchPage from "./Search";
+import VendorProfilePage from "./Profiles/Vendor/VendorProfilePage";
+import CustomerProfilePage from "./Profiles/Customer/CustomerProfilePage";
 import ShoppingCart from "./ShoppingCart"
-import Sidebar from "./Profiles/VendorSidebar";
-import VendorProfilePage from "./Profiles/VendorProfilePage";
-import CustomerProfilePage from "./Profiles/CustomerProfilePage";
 import AdminPanel from "./AdminPanel"
 
 function App() {
