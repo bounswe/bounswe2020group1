@@ -20,7 +20,6 @@ import com.example.tursuapp.adapter.CommentAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
-import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -30,18 +29,20 @@ class ProductPageFragment : Fragment() {
 
     private lateinit var productPageViewModel: ProductPageModel
     private lateinit var product: ProductDetailsResponse
-    private lateinit var AddListStatus: AddListResponse
-    val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
+
+    lateinit var auth_token :String
     var commentList = ArrayList<Comments>()
     private lateinit var commentListView: ListView
     var allLists = listOf<String>()
     var productList = ArrayList<ProductResponse>()
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
         activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
         activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
         activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
@@ -124,9 +125,8 @@ class ProductPageFragment : Fragment() {
     }
 
     private fun getLists(view: View){
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.getLists("token f057f527f56398e8041a1985919317a5c0cc2e77").enqueue(object :
+        apiInterface.getLists(auth_token).enqueue(object :
                 retrofit2.Callback<List<String>> {
             override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
                 //Log.i("MainFragment", "error" + p1?.message.toString())
@@ -159,11 +159,10 @@ class ProductPageFragment : Fragment() {
 
     private fun addList(view: View,window: PopupWindow){
         if(view.findViewById<EditText>(R.id.new_list_txt).text.isNotEmpty()){
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val empty=""
             val listName = view.findViewById<EditText>(R.id.new_list_txt).text.toString()
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
+            apiInterface.addList(auth_token, listName).enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                 override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -246,8 +245,6 @@ class ProductPageFragment : Fragment() {
             val newRadioButton = view.findViewById<RadioButton>(selectedList)
             Log.i("Selected List Name: ", newRadioButton.text.toString())
             val listName = newRadioButton.text.toString()
-            val auth_token="token f057f527f56398e8041a1985919317a5c0cc2e77"
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiInterface.deleteList(auth_token, listName).enqueue(object :
                     retrofit2.Callback<ResponseBody> {

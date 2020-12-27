@@ -46,6 +46,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
     //var adapter: ProductAdapter? = null
+    lateinit var auth_token:String
     var productList = ArrayList<ProductResponse>()
     var allLists = listOf<String>()
     var vendorList = ArrayList<VendorResponse>()
@@ -58,14 +59,9 @@ class HomeFragment : Fragment() {
     private lateinit var toggleGroup: MaterialButtonToggleGroup
     private val filterDictionary = mapOf("Bestsellers" to "bestseller", "Newest" to "newest", "Ascending Price" to "priceAsc", "Descending Price" to "priceDesc", "Number of Comments" to "numComments")
     var vendorProductList = ArrayList<VendorProductLists>()
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setFilterFunction()
-        homeViewModel =
-                ViewModelProvider(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         val args = arguments
         filters = hashMapOf()
         if (args != null) {
@@ -83,7 +79,8 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })
-
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
         return root
     }
 
@@ -401,8 +398,6 @@ class HomeFragment : Fragment() {
             val newRadioButton = view.findViewById<RadioButton>(selectedList)
             Log.i("Selected List Name: ", newRadioButton.text.toString())
             val listName = newRadioButton.text.toString()
-            val auth_token="token f057f527f56398e8041a1985919317a5c0cc2e77"
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiInterface.deleteList(auth_token, listName).enqueue(object :
                     retrofit2.Callback<ResponseBody> {

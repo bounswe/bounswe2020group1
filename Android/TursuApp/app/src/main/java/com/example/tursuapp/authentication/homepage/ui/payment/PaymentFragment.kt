@@ -28,7 +28,7 @@ import retrofit2.Response
 class PaymentFragment : Fragment() {
 
     private lateinit var paymentViewModel: PaymentModel
-    private val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
+    lateinit var auth_token :String
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -36,6 +36,8 @@ class PaymentFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         paymentViewModel = ViewModelProvider(this).get(PaymentModel::class.java)
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
         val root = inflater.inflate(R.layout.fragment_paymentpage, container, false)
         setButtonVisibilities()
         return root
