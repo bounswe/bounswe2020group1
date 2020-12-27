@@ -80,37 +80,37 @@ export default class Login extends Component {
         this.setState({ redirect: "True" });
     }
     render() {
-            if(this.state.redirect === "False"){
-                return(
-                    <div className="login">
-                        <img src={logo} alt="Tursu Logo"></img>
-                        <h1>Sign In</h1>
-                        <form onSubmit={this.handleSubmit}>
-                            <input className="tursu_input" type="text" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
-                            <br/>
+        if(this.state.redirect === "False"){
+            return(
+                <div className="login">
+                    <img src={logo} alt="Tursu Logo"></img>
+                    <h1>Sign In</h1>
+                    <form onSubmit={this.handleSubmit}>
+                        <input className="tursu_input" type="text" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
+                        <br/>
 
-                            <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
+                        <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
 
-                            <br/>
-                            <button type="submit" className="tursu_button">Sign In</button>
-                        </form>
-                        <button type="button" onClick={this.goToRegistration} className="smallButton">New to Turşu? Sign up.</button>
-                        <button type="button" onClick={this.goToForgotP} className="smallButton">I forgot my password.</button>
-                        <div>
-                            <GoogleLogin
-                                clientId='872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com'
-                                buttonText='Login'
-                                onSuccess={this.responseGoogleSuccess}
-                                onFailure={responseGoogleFailure}
-                                cookiePolicy={'single_host_origin'}
+                        <br/>
+                        <button type="submit" className="tursu_button">Sign In</button>
+                    </form>
+                    <button type="button" onClick={this.goToRegistration} className="smallButton">New to Turşu? Sign up.</button>
+                    <button type="button" onClick={this.goToForgotP} className="smallButton">I forgot my password.</button>
+                    <div>
+                        <GoogleLogin
+                            clientId='872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com'
+                            buttonText='Login'
+                            onSuccess={this.responseGoogleSuccess}
+                            onFailure={responseGoogleFailure}
+                            cookiePolicy={'single_host_origin'}
                             />
-                        </div>
                     </div>
+                </div>
                 )
-            }
-            else if (this.state.redirect === "True"){
-                window.sessionStorage.setItem("isLogged", "true");
-                return (<Redirect to={".."} />)
-            }
+        }
+        else if (this.state.redirect === "True"){
+            window.sessionStorage.setItem("isLogged", "true");
+            return (<Redirect to={".."} />)
+        }
     }
 }
