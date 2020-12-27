@@ -75,18 +75,26 @@ class AddProduct extends React.Component{
         this.setState({[e.target.name]: e.target.value})
     }
 
+    fileHandler = (e) => {
+        let file = e.target.files[0]
+        this.setState({Image: file})
+        console.log("file is " , file)
+    }
+
+
     submitHandler = (e) => {
         const formData = new FormData();
         e.preventDefault()
         console.log("anelka")
         console.log(this.state)
+        let file = this.state.Image
         formData.append("category", this.state.category);
         formData.append("name", this.state.name);
         formData.append("description", this.state.description);
         formData.append("brand", this.state.brand);
         formData.append("stock", this.state.stock);
         formData.append("price", this.state.price);
-        formData.append("photo", this.state.Image);
+        formData.append("photo", file);
 
         axios
             .post("http://3.232.20.250/product/add/", formData, {
@@ -178,7 +186,7 @@ class AddProduct extends React.Component{
 
                                 <Button style={{width: '300px'}} variant="contained" component="label" >
                                     Upload File
-                                    <input type="file" hidden/>
+                                    <input type="file" onChange={this.fileHandler} hidden/>
                                 </Button>
                                 <br/><br/>
                             </Paper>
