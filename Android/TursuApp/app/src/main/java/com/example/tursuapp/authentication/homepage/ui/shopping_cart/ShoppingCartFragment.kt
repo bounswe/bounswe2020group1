@@ -2,6 +2,7 @@ package com.example.tursuapp.authentication.homepage.ui.shoppingcart
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,6 +35,7 @@ import retrofit2.Response
 class ShoppingCartFragment : Fragment() {
 
     private lateinit var shoppingCartViewModel: ShoppingCartModel
+    private lateinit var backButton : ImageView
     val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
 
     private lateinit var shoppingCartListView : ListView
@@ -46,13 +48,23 @@ class ShoppingCartFragment : Fragment() {
         shoppingCartViewModel = ViewModelProvider(this).get(ShoppingCartModel::class.java)
         val root = inflater.inflate(R.layout.fragment_shopping_cart, container, false)
         shoppingCartAllProducts(auth_token)
+        setButtonVisibilities()
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<ImageView>(R.id.sc_back_button).setOnClickListener {
+            val newFragment = HomeFragment()
+            val fragmentManager: FragmentManager? = fragmentManager
+            val fragmentTransaction: FragmentTransaction =
+                    requireFragmentManager().beginTransaction()
+            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+            fragmentTransaction.commit()
+        }
         shoppingCartListView = view.findViewById<ListView>(R.id.listShoppingCart)
         price = view.findViewById(R.id.shoppingCartTotalPrice)
+        view.findViewById<Button>(R.id.GoPayment)!!.visibility = View.INVISIBLE
         view.findViewById<Button>(R.id.continueShopping).setOnClickListener(){
             val newFragment = HomeFragment()
             val fragmentManager: FragmentManager? = fragmentManager
@@ -87,10 +99,14 @@ class ShoppingCartFragment : Fragment() {
                 if (response != null) {
                     if(response.body()!=null){
                         shoppinCartProducts = ArrayList(response.body()!!)
-                        val tempPriceView = view?.findViewById<TextView>(R.id.shoppingCartTotalPrice)
-                        val adapter = context?.let { ShoppingCartAdapter(it,shoppinCartProducts,auth_token,false,price) }
-                        shoppingCartListView.adapter = adapter
-                        price.text=  adapter?.calculateTotalPrice().toString() + " TL"
+                        if(shoppinCartProducts.size!=0){
+                            view!!.findViewById<Button>(R.id.GoPayment)!!.visibility = View.VISIBLE
+                            val tempPriceView = view?.findViewById<TextView>(R.id.shoppingCartTotalPrice)
+                            val adapter = context?.let { ShoppingCartAdapter(it,shoppinCartProducts,auth_token,false,price) }
+                            shoppingCartListView.adapter = adapter
+                            price.text=  adapter?.calculateTotalPrice() + " TL"
+                        }
+
                     }
 
                 }
@@ -99,5 +115,13 @@ class ShoppingCartFragment : Fragment() {
         })
     }
 
-
+    private fun setButtonVisibilities() {
+        val filterImage = activity?.findViewById<ImageView>(R.id.filter_image)
+        val searchBar = activity?.findViewById<EditText>(R.id.editMobileNo)
+        val searchButton = activity?.findViewById<Button>(R.id.search_button)
+        //listing all products
+        filterImage!!.visibility = View.INVISIBLE
+        searchBar!!.visibility = View.INVISIBLE
+        searchButton!!.visibility = View.INVISIBLE
+    }
 }

@@ -16,6 +16,8 @@ import okhttp3.ResponseBody
 import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Response
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: ArrayList<ShoppingCartProductResponse>,auth_token:String,isPayment:Boolean,priceView:TextView?) : BaseAdapter() {
     var context: Context? = context
@@ -132,12 +134,14 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
             }
         })
     }
-    fun calculateTotalPrice():Double{
+    fun calculateTotalPrice():String{
         var total = 0.0
         for(item in shoppingCartProducts){
             total += ((item.product.price.toDouble()) * (item.quantity))
         }
-        total = String.format("%.2f", total).toDouble()
-        return total
+        val df = DecimalFormat("#.#")
+        df.roundingMode = RoundingMode.CEILING
+        val res = df.format(total)
+        return res
     }
 }

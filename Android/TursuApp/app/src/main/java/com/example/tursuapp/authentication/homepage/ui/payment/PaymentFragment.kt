@@ -1,11 +1,14 @@
 package com.example.tursuapp.authentication.homepage.ui.payment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -16,13 +19,10 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ShoppingCartProductResponse
-import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCartFragment
 import com.google.android.material.textfield.TextInputEditText
-import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
-import java.lang.Exception
 
 
 class PaymentFragment : Fragment() {
@@ -38,13 +38,52 @@ class PaymentFragment : Fragment() {
     ): View? {
         paymentViewModel = ViewModelProvider(this).get(PaymentModel::class.java)
         val root = inflater.inflate(R.layout.fragment_paymentpage, container, false)
-
+        setButtonVisibilities()
         return root
     }
-
+    private fun setButtonVisibilities() {
+        val filterImage = activity?.findViewById<ImageView>(R.id.filter_image)
+        val searchBar = activity?.findViewById<EditText>(R.id.editMobileNo)
+        val searchButton = activity?.findViewById<Button>(R.id.search_button)
+        //listing all products
+        filterImage!!.visibility = View.INVISIBLE
+        searchBar!!.visibility = View.INVISIBLE
+        searchButton!!.visibility = View.INVISIBLE
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        shoppingCartAllProducts(auth_token,view)
+        shoppingCartAllProducts(auth_token, view)
+        val nameinputtext = view.findViewById<EditText>(R.id.nameinputtext)
+        nameinputtext.requestFocus()
+        var imm: InputMethodManager? = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(nameinputtext, InputMethodManager.SHOW_IMPLICIT)
+
+        val cardnumberinputtext = view.findViewById<EditText>(R.id.cardnumberinputtext)
+        nameinputtext.requestFocus()
+        imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(cardnumberinputtext, InputMethodManager.SHOW_IMPLICIT)
+
+        val cvcinputtext = view.findViewById<EditText>(R.id.cvcinputtext)
+        nameinputtext.requestFocus()
+        imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(cvcinputtext, InputMethodManager.SHOW_IMPLICIT)
+
+        val expirationdateinputtext = view.findViewById<EditText>(R.id.expirationdateinputtext)
+        nameinputtext.requestFocus()
+        imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(expirationdateinputtext, InputMethodManager.SHOW_IMPLICIT)
+
+        val addressinputtext = view.findViewById<EditText>(R.id.addressinputtext)
+        nameinputtext.requestFocus()
+        imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(addressinputtext, InputMethodManager.SHOW_IMPLICIT)
+
+        val cityinputtext = view.findViewById<EditText>(R.id.cityinputtext)
+        nameinputtext.requestFocus()
+        imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(cityinputtext, InputMethodManager.SHOW_IMPLICIT)
+
+
         view.findViewById<Button>(R.id.confirmandpay).setOnClickListener() {
 
             if (view.findViewById<TextInputEditText>(R.id.nameinputtext).text.toString() == "") {
@@ -81,15 +120,14 @@ class PaymentFragment : Fragment() {
                     response: Response<ResponseBody>?
             ) {
                 if (response != null) {
-                    if(response.code()==200){
+                    if (response.code() == 200) {
                         val newFragment = PaymentSuccessFragment()
                         val fragmentManager: FragmentManager? = fragmentManager
                         val fragmentTransaction: FragmentTransaction =
                                 requireFragmentManager().beginTransaction()
                         fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
                         fragmentTransaction.commit()
-                    }
-                    else{
+                    } else {
                         Toast.makeText(context, "Unsuccessful Payment.", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -97,7 +135,7 @@ class PaymentFragment : Fragment() {
             }
         })
     }
-    fun shoppingCartAllProducts(auth_token:String,view: View){
+    fun shoppingCartAllProducts(auth_token: String, view: View){
         val listView = view.findViewById<ListView>(R.id.shoppinCartItemsListView)
         var shoppinCartProducts = ArrayList<ShoppingCartProductResponse>()
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -111,10 +149,10 @@ class PaymentFragment : Fragment() {
                     response: Response<List<ShoppingCartProductResponse>>?
             ) {
                 if (response != null) {
-                    if(response.body()!=null){
+                    if (response.body() != null) {
                         shoppinCartProducts = ArrayList(response.body()!!)
 
-                        val adapter = context?.let { ShoppingCartAdapter(it,shoppinCartProducts,auth_token,true,null) }
+                        val adapter = context?.let { ShoppingCartAdapter(it, shoppinCartProducts, auth_token, true, null) }
                         val price = adapter?.calculateTotalPrice()
                         listView.adapter = adapter
                         view.findViewById<TextView>(R.id.totalPrice).text = price.toString() + " TL"
@@ -125,7 +163,7 @@ class PaymentFragment : Fragment() {
             }
         })
     }
-    fun  giveMeDigitCount(number:Int):Int{
+    fun  giveMeDigitCount(number: Int):Int{
         var count=0
         var sayi=number
         while(sayi>0){
@@ -134,30 +172,30 @@ class PaymentFragment : Fragment() {
         }
         return count
     }
-    fun  isAllNumber(number:String):Boolean{
+    fun  isAllNumber(number: String):Boolean{
         for (item in number) {
             try{
                var x= item.toInt()
-            }catch(e: Exception){
+            }catch (e: Exception){
                 return false;
             }
 
         }
         return true;
     }
-    fun  isLegidDate(date:String):Boolean{
+    fun  isLegidDate(date: String):Boolean{
        try {
            if(date.length!=5){
                return false;
            }
-           if(date.substring(0,2).toInt()>12){
+           if(date.substring(0, 2).toInt()>12){
                return false;
            }
-           if(!(date.substring(3,5).toInt()<99)){
+           if(!(date.substring(3, 5).toInt()<99)){
                return false;
            }
            return true;
-       }catch (e:Exception){
+       }catch (e: Exception){
            return false;
        }
 
