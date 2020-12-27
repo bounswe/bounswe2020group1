@@ -7,8 +7,9 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from product.models import Product, Image
-from registered_user.models import get_admin_from_request
+from registered_user.models import get_admin_from_request, get_customer_from_request, get_vendor_from_request, RegisteredUser
 from search.views import SearchHelper
+from comment.models import Comment
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
@@ -64,3 +65,39 @@ def verify_product(request):
     product.is_verified = True
     product.save()
     return HttpResponse("Successfully verified product")
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['POST'])
+def ban_user(request):
+    """Bans given user."""
+    admin = get_admin_from_request(request)
+    if(admin is None):
+        return HttpResponse("Admin authentication failed", status=401)
+    try:
+        username = request.POST["username"]
+    except (KeyError, ValueError):
+        return HttpResponse("User name (username) not given or invalid", status=400)
+    try:
+        ruser = RegisteredUser.objects.get(username=username)
+    except Exception:
+        return HttpResponse("There is no such user.", status=400)
+    ruser.is_banned = True
+    ruser.save()
+    return HttpResponse("success")
+    
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['DELETE','POST'])
+def delete_comment(request):
+    """Deletes the given comment when DELETE request is made."""
+    admin = get_admin_from_request(request)
+    if(admin is None):
+        return HttpResponse("Admin authentication failed", status=401)
+    try:
+        comment_id = int(request.POST["comment_id"])
+    except (KeyError, ValueError):
+        return HttpResponse("Comment id (comment_id) not given or invalid", status=400)
+    comment = Comment.objects.filter(Q(id=comment_id))
+    comment.delete()
+    return HttpResponse("success")
