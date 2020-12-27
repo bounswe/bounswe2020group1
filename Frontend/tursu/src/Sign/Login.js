@@ -109,6 +109,9 @@ export default class Login extends Component {
                 )
         }
         else if (this.state.redirect === "True"){
+            if(this.state.user_type=="admin"){
+                return (<Redirect to={"admin/"} />)
+            }
             window.sessionStorage.setItem("isLogged", "true");
             return (<Redirect to={".."} />)
         }
