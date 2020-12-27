@@ -56,7 +56,7 @@ class Filter extends React.Component {
         return (
             <div >
                 <div className="col-sm">
-                    <RadioButtons parentCallbackSB = {this.handleCallbackdataSortBy} parentCallbackFC = {this.handleCallbackdataFilterCategory} parentCallbackFV = {this.handleCallbackdataFilterVendor}  parentCallbackSC = {this.handleCallbackCategorySwitch} parentCallbackSV = {this.handleCallbackVendorSwitch} vendorList={this.props.vendorList}/>
+                    <RadioButtons inCategory={this.props.inCategory} parentCallbackSB = {this.handleCallbackdataSortBy} parentCallbackFC = {this.handleCallbackdataFilterCategory} parentCallbackFV = {this.handleCallbackdataFilterVendor}  parentCallbackSC = {this.handleCallbackCategorySwitch} parentCallbackSV = {this.handleCallbackVendorSwitch} vendorList={this.props.vendorList}/>
                 </div>
                 <div  className="col-sm">
                     <RangeSlider parentCallback = {this.handleCallbackSlider}/>

@@ -3,6 +3,16 @@ import "./sign_components.css";
 import logo from '../rsz_11logo.png';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import GoogleLogin from "react-google-login";
+
+const clientId = '872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com';
+
+
+const responseGoogleFailure = response => {
+    console.log(response)
+    console.log("FAILURE")
+    alert("There has been an error with the Google Sign In")
+}
 
 export default class Login extends Component {
     constructor(props) {
@@ -30,8 +40,15 @@ export default class Login extends Component {
                 console.log("type: ", res.data.user_type);
                 this.setState({ user_type: res.data.user_type });
                 this.setState({ redirect: "True" });
+
                 window.sessionStorage.setItem("authToken", res.data.auth_token);
+                window.sessionStorage.setItem("first_name", res.data.first_name);
+                window.sessionStorage.setItem("last_name", res.data.last_name);
+                window.sessionStorage.setItem("user_type", res.data.user_type);
+
+                
                 console.log("auth_token: ", window.sessionStorage.getItem("authToken"));
+
             })
             .catch(error =>{
                 if (error.response){
@@ -39,6 +56,7 @@ export default class Login extends Component {
                         alert ("The email or password you have entered is incorrect. Please try again.");
                     }
                     else{
+                        console.log(error.response.message);
                         alert ("There has been an error. Please try again.");
                     }
                 }
@@ -60,6 +78,10 @@ export default class Login extends Component {
     goToForgotP(){
         this.props.onForgotPChange();
     }
+    responseGoogleSuccess = response => {
+        console.log(response)
+        this.setState({ redirect: "True" });
+    }
     render() {
         if(this.state.redirect === "False"){
             return(
@@ -77,8 +99,17 @@ export default class Login extends Component {
                     </form>
                     <button type="button" onClick={this.goToRegistration} className="smallButton">New to Turşu? Sign up.</button>
                     <button type="button" onClick={this.goToForgotP} className="smallButton">I forgot my password.</button>
+                    <div>
+                        <GoogleLogin
+                            clientId='872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com'
+                            buttonText='Login'
+                            onSuccess={this.responseGoogleSuccess}
+                            onFailure={responseGoogleFailure}
+                            cookiePolicy={'single_host_origin'}
+                            />
+                    </div>
                 </div>
-            )
+                )
         }
         else if (this.state.redirect === "True"){
             if(this.state.user_type=="admin"){

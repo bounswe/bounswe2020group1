@@ -8,6 +8,9 @@ import Avatar from "@material-ui/core/Avatar";
 import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Navbar from "./NavBar";
 import axios from 'axios'
+import { green } from '@material-ui/core/colors';
+import {Alert} from "@material-ui/lab";
+import Snackbar from "@material-ui/core/Snackbar";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 const theme = createMuiTheme({
@@ -20,6 +23,8 @@ const theme = createMuiTheme({
         }
     }
 })
+
+
 
 export default function ProductDetailPage() {
     return (
@@ -50,9 +55,13 @@ class ProductDetail extends React.Component{
 
         this.state = {
             product: [],
+            comments:[],
+            product_not_found : true
+            isAlertOpen: false
         }
 
         this.addToShoppingCart = this.addToShoppingCart.bind(this);
+        this.handleAlertClose = this.handleAlertClose.bind(this)
     }
 
     componentDidMount() {
@@ -63,23 +72,36 @@ class ProductDetail extends React.Component{
                 id: array[4]
             }
         }).then(res =>{
-            console.log(res);
             this.setState({product: res.data})
+            this.setState({comments: res.data.comments})
+            this.setState({product_not_found: true})
+        }).catch((error) => {
+            console.log(error) //Logs a string: Error: Request failed with status code 404
+            this.setState({product_not_found: false})
         })
+
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         // TODO: it will fail if two different products have the same name. Resolve this.
+        const array = window.location.href.split("/")
         if(this.state.product.name !== prevState.product.name)
         {
             axios.get("http://3.232.20.250/product/", {
                 params: {
-                    id: window.sessionStorage.getItem("product_id")
+                    id: array[4]
                 }
             }).then(res =>{
                 console.log(res);
                 this.setState({product: res.data})
+                this.setState({comments: res.data.comments})
+                this.setState({product_not_found: true})
+            }).catch((error) => {
+                console.log(error) //Logs a string: Error: Request failed with status code 404
+                this.setState({product_not_found: false})
             })
         }
+
+
     }
 
     addToShoppingCart(){
@@ -88,7 +110,7 @@ class ProductDetail extends React.Component{
         formData.append("product_id", this.state.product.id);
         console.log("Token " + window.sessionStorage.getItem("authToken"))
         axios.post('http://3.232.20.250/shoppingcart/add',
-                    formData, {
+            formData, {
                 headers: {
                     'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
                 }
@@ -96,15 +118,25 @@ class ProductDetail extends React.Component{
             .then(res => {
                 console.log(res);
                 console.log(res.status);
+                if(res.status === 200)
+                {
+                    this.setState({isAlertOpen: true})
+                }
             })
             .catch(error =>{
-                    console.log(error)
-                    alert ("There has been an error. Please try again.");
+                console.log(error)
+                alert ("There has been an error. Please try again.");
             })
     }
 
+    handleAlertClose(){
+        this.setState({isAlertOpen: false})
+    }
+
     render(){
+
         return(
+
             <div >
                 <br/>
                 <br/>
@@ -116,6 +148,7 @@ class ProductDetail extends React.Component{
                 <br/>
                 <br/>
                 <br/>
+                {this.state.product_not_found &&
                 <Grid className="product-page"  id="photo" container spacing={3}>
                     <Grid  item xs={6}>
                         <ButtonBase >
@@ -129,8 +162,6 @@ class ProductDetail extends React.Component{
                             <b> Vendor: </b> {this.state.product.vendor_name}<br></br>
                             <b> Description: </b> {this.state.product.description}<br></br>
                         </Typography>
-
-
                     </Grid>
 
                     <Grid item xs={4} >
@@ -149,30 +180,34 @@ class ProductDetail extends React.Component{
                     </Grid>
                     <Grid item xs={8} >
                     </Grid>
+                    <br/>
+                    <br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
 
-                    <Grid item xs={6}>
-                        <Paper>
-                            <Typography variant="body2" color="textPrimary" align="left">
-                                <Avatar alt="Remy Sharp" src="https://raw.githubusercontent.com/bounswe/bounswe2020group1/master/images/logo.PNG" />
-                                I bought this sneakers and I am satisfied with it.
-                            </Typography>
-
-                        </Paper>
-                    </Grid>
-
-                    <Grid item xs={6}>
-                        <Paper >
-
-                            <Typography variant="body2" color="textPrimary" align="left">
-                                <Avatar alt="Al" >Al
+                    <Paper id="comments">
+                        {this.state.comments.map((comment) => (
+                            <Typography variant="body2" color="textPrimary" align={"left"}>
+                                <Avatar>{comment.customer}
                                 </Avatar>
-                                {window.location.href}
-
+                                {comment.text}
+                                <br/><br/>
                             </Typography>
 
-                        </Paper>
-                    </Grid>
+
+                        ))
+                        }
+                    </Paper>
+                </Grid>}
+                {!this.state.product_not_found &&
+                <Grid item>
+                    <Typography variant="subtitle1">Product Not Found</Typography>
                 </Grid>
+                }
+                <Snackbar open={this.state.isAlertOpen} autoHideDuration={2000} onClose={this.handleAlertClose}>
+                    <Alert onClose={this.handleAlertClose} severity="success">
+                        Product is added to shopping cart.
+                    </Alert>
+                </Snackbar>
             </div>
         )
     }

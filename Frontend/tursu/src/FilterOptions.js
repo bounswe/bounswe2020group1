@@ -75,24 +75,26 @@ export default function RadioButtons(props) {
                 <FormControlLabel value="numComments" control={<GreenRadio />} label="Most commented" />
             </RadioGroup>}
 
-            <br/>
-            <Switch
+            {props.inCategory &&
+            <br/>}
+            {props.inCategory &&
+                <Switch
                 checked={state.FilterCategory}
                 onChange={handleChangeSwitch}
                 color="primary"
                 name="FilterCategory"
-                inputProps={{ 'aria-label': 'primary checkbox' }}
-            ></Switch> Filter Category
-
-            {state.FilterCategory &&
-            <RadioGroup aria-label="anonymous" name="anonymous" onChange={handleChangeFilterCategory} row>
-                <FormControlLabel value="Electronics" control={<GreenRadio />} label="Electronics" />
-                <FormControlLabel value="Fashion" control={<GreenRadio />} label="Fashion" />
-                <FormControlLabel value="Home" control={<GreenRadio />} label="Home" />
-                <FormControlLabel value="Cosmetics" control={<GreenRadio />} label="Cosmetics" />
-                <FormControlLabel value="Sports" control={<GreenRadio />} label="Sports" />
-                <FormControlLabel value="Office" control={<GreenRadio />} label="Office" />
-            </RadioGroup>}
+                inputProps={{'aria-label': 'primary checkbox'}}
+                ></Switch>} {props.inCategory && "Filter Category"
+            }
+            {props.inCategory && state.FilterCategory &&
+                <RadioGroup aria-label="anonymous" name="anonymous" onChange={handleChangeFilterCategory} row>
+                <FormControlLabel value="Electronics" control={<GreenRadio/>} label="Electronics" />
+                <FormControlLabel value="Fashion" control={<GreenRadio/>} label="Fashion" />
+                <FormControlLabel value="Home" control={<GreenRadio/>} label="Home" />
+                <FormControlLabel value="Cosmetics" control={<GreenRadio/>} label="Cosmetics" />
+                <FormControlLabel value="Sports" control={<GreenRadio/>} label="Sports" />
+                <FormControlLabel value="Office" control={<GreenRadio/>} label="Office" />
+                </RadioGroup>}
 
             <br/>
             <Switch
