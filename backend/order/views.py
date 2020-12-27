@@ -24,13 +24,15 @@ def create_orders(request):
         return HttpResponse("Customer authentication failed", status=401)
     items = ShoppingCarts.objects.filter(Q(customer=customer))
     created_=datetime.datetime.now()
-    
+    invalid_list = []
     for item in items:
         product = item.product
         quantity = item.quantity
         if product.stock < quantity:
-            return HttpResponse("Not enough stock for product {}".format(product.name), status=400)
-
+            invalid_list.append(str(product.name))
+    if(len(invalid_list) > 0):
+        return JsonResponse({"invalid": invalid_list}, safe=False)
+    
     for item in items:
         product = item.product
         vendor = item.product.vendor
