@@ -32,6 +32,7 @@ import com.example.tursuapp.authentication.homepage.ui.shoppingcart.ShoppingCart
 import com.squareup.picasso.Picasso
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 /*
@@ -142,26 +143,21 @@ class HomeFragment : Fragment() {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         popupView.findViewById<ImageView>(R.id.dismiss_popup3).setOnClickListener {
             popupWindow.dismiss()
+            listAllProducts()
         }
         //get shopping lists
         getLists(popupView)
         //add a new list to shopping lists
         popupView.findViewById<Button>(R.id.h_add_new_List_button).setOnClickListener {
-            addList(popupView)
-            popupWindow.dismiss()
-            showPopupWindowForLists(popupView)
+            addList(popupView,popupWindow)
         }
         //delete a list from shopping lists
         popupView.findViewById<Button>(R.id.h_delete_List_button).setOnClickListener {
-            deleteList(popupView)
-            popupWindow.dismiss()
-            showPopupWindowForLists(popupView)
+            deleteList(popupView,popupWindow)
         }
         //gets products from the selected shopping list
         popupView.findViewById<Button>(R.id.h_show_products).setOnClickListener {
-            Log.i("vi:", popupView.toString())
             showListedProducts(popupView,popupWindow)
-            Log.i("vi2:", popupView.toString())
 
 
         }
@@ -364,26 +360,31 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun addList(view: View) {
-        if (view.findViewById<EditText>(R.id.h_new_list_txt).text.isNotEmpty()) {
+    private fun addList(view: View,window: PopupWindow){
+        if(view.findViewById<EditText>(R.id.h_new_list_txt).text.isNotEmpty()){
             //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val listName = view.findViewById<EditText>(R.id.h_new_list_txt).text.toString()
-            val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiInterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
-                    retrofit2.Callback<AddListResponse> {
-                override fun onFailure(p0: Call<AddListResponse>?, p1: Throwable?) {
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
                 }
 
                 override fun onResponse(
-                        p0: Call<AddListResponse>?,
-                        response: Response<AddListResponse>?
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
                 ) {
 
                     if (response != null) {
-                        //Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
-                        Log.i("Status code", response.code().toString())
-                        // AddListStatus = response.body()!!
+                        Log.i("Status code",response.code().toString())
+                        if(response.code()==200) {
+                            Toast.makeText(context, "List has been successfully added", Toast.LENGTH_SHORT).show()
+                            window.dismiss()
+                            showPopupWindowForLists(view)
+                        }else{
+                            Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                        }
 
                     }
 
@@ -395,43 +396,47 @@ class HomeFragment : Fragment() {
         }else{
             Toast.makeText(context, "Please input a list name", Toast.LENGTH_SHORT).show()
         }
-
     }
 
-    private fun deleteList(view: View) {
+    private fun deleteList(view: View,window: PopupWindow){
         if(view.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId!=-1) {
             val selectedList = view.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId
             Log.i("Selected List Id: ", selectedList.toString())
             val newRadioButton = view.findViewById<RadioButton>(selectedList)
             Log.i("Selected List Name: ", newRadioButton.text.toString())
             val listName = newRadioButton.text.toString()
-
+            val auth_token="token f057f527f56398e8041a1985919317a5c0cc2e77"
             //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.deleteList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
-                    retrofit2.Callback<DeleteListResponse> {
-                override fun onFailure(p0: Call<DeleteListResponse>?, p1: Throwable?) {
+            apiInterface.deleteList(auth_token, listName).enqueue(object :
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
                 }
 
                 override fun onResponse(
-                        p0: Call<DeleteListResponse>?,
-                        response: Response<DeleteListResponse>?
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
                 ) {
-
                     if (response != null) {
-                        //showPopupWindow(view)
                         Log.i("Status code", response.code().toString())
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "List has been successfully deleted", Toast.LENGTH_SHORT).show()
+                            window.dismiss()
+                            showPopupWindowForLists(view)
+                        } else {
+                            Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                        }
 
                     }
 
                 }
 
             })
-
         }else{
             Toast.makeText(context, "Select a list name", Toast.LENGTH_SHORT).show()
         }
+
     }
 
     private fun showListedProducts(root: View,window: PopupWindow) {

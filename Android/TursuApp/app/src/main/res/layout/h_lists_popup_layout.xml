@@ -27,6 +27,8 @@
                     android:id="@+id/dismiss_popup3"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="4dp"
                     app:srcCompat="@drawable/x" />
 
                 <TextView
@@ -34,9 +36,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:layout_marginRight="23dp"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
-                    android:text="Shopping Lists"
+                    android:text="My Shopping Lists"
                     android:textColor="#777777"
                     android:textSize="20sp" />
             </LinearLayout>

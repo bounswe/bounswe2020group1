@@ -22,6 +22,7 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
@@ -29,7 +30,6 @@ class ProductPageFragment : Fragment() {
 
     private lateinit var productPageViewModel: ProductPageModel
     private lateinit var product: ProductDetailsResponse
-    private lateinit var AddListStatus: AddListResponse
     var commentList = ArrayList<Comments>()
     private lateinit var commentListView: ListView
     var allLists = listOf<String>()
@@ -152,14 +152,14 @@ class ProductPageFragment : Fragment() {
             val listName = view.findViewById<EditText>(R.id.new_list_txt).text.toString()
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiInterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
-                    retrofit2.Callback<AddListResponse> {
-                override fun onFailure(p0: Call<AddListResponse>?, p1: Throwable?) {
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
                 }
 
                 override fun onResponse(
-                        p0: Call<AddListResponse>?,
-                        response: Response<AddListResponse>?
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
                 ) {
 
                     if (response != null) {
@@ -195,19 +195,19 @@ class ProductPageFragment : Fragment() {
 
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiInterface.addToList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName, productId).enqueue(object :
-                    retrofit2.Callback<AddToListResponse> {
-                override fun onFailure(p0: Call<AddToListResponse>?, p1: Throwable?) {
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
                 }
 
                 override fun onResponse(
-                        p0: Call<AddToListResponse>?,
-                        response: Response<AddToListResponse>?
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
                 ) {
                     if (response != null) {
                         Log.i("Status code", response.code().toString())
                         if (response.code() == 200) {
-                            Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Product has been successfully added to list", Toast.LENGTH_SHORT).show()
                             //showPopupWindow(view)
                             window.dismiss()
                             // AddListStatus = response.body()!!
@@ -234,24 +234,29 @@ class ProductPageFragment : Fragment() {
             val newRadioButton = view.findViewById<RadioButton>(selectedList)
             Log.i("Selected List Name: ", newRadioButton.text.toString())
             val listName = newRadioButton.text.toString()
-
+            val auth_token="token f057f527f56398e8041a1985919317a5c0cc2e77"
             //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.deleteList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
-                    retrofit2.Callback<DeleteListResponse> {
-                override fun onFailure(p0: Call<DeleteListResponse>?, p1: Throwable?) {
+            apiInterface.deleteList(auth_token, listName).enqueue(object :
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
                 }
 
                 override fun onResponse(
-                        p0: Call<DeleteListResponse>?,
-                        response: Response<DeleteListResponse>?
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
                 ) {
-
                     if (response != null) {
-                            Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show()
+                        Log.i("Status code", response.code().toString())
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "List has been successfully deleted", Toast.LENGTH_SHORT).show()
                             window.dismiss()
                             showPopupWindow(view)
+                        } else {
+                            Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                        }
+
                     }
 
                 }
@@ -275,26 +280,24 @@ class ProductPageFragment : Fragment() {
 
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiInterface.deleteFromList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName, productId).enqueue(object :
-                    retrofit2.Callback<DeleteFromListResponse> {
-                override fun onFailure(p0: Call<DeleteFromListResponse>?, p1: Throwable?) {
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
                 }
 
                 override fun onResponse(
-                        p0: Call<DeleteFromListResponse>?,
-                        response: Response<DeleteFromListResponse>?
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
                 ) {
                     if (response != null) {
                         Log.i("Status code", response.code().toString())
                         if (response.code() == 200) {
-                            Toast.makeText(context, "Product has been successfully deleted from the list", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Product has been successfully deleted from list", Toast.LENGTH_SHORT).show()
                             window.dismiss()
-                            //showPopupWindow(view)
-                            // AddListStatus = response.body()!!
-                            //view.findViewById<EditText>(R.id.new_list_txt).setText("")
                         } else {
                             Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                         }
+
                     }
 
                 }
@@ -306,7 +309,7 @@ class ProductPageFragment : Fragment() {
             }
     }
 
-    fun getDetails(id: Int, view: View){
+    private fun getDetails(id: Int, view: View){
         val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getProductDetails(id).enqueue(object :
                 retrofit2.Callback<ProductDetailsResponse> {
@@ -348,27 +351,7 @@ class ProductPageFragment : Fragment() {
                         // Toast.makeText(context, "have not any comment", Toast.LENGTH_SHORT).show()
                     }
 
-
-                    /*
-                    product = response.body()!!
-                    val adapter = CommentAdapter(context!!, commentList)
-                    commentListView.adapter = adapter
-
-                    commentListView.setOnItemClickListener { parent, view, position, id ->
-                        val productOfCommentsList = getOrders(position)
-                        val adapter = CommentAdapter(context!!, productOfCommentsList)
-                        commentListView.adapter = adapter
-                        adapter.notifyDataSetChanged()
-
-                        displayProductInfo(view)
-
-                        // backArrow.setOnClickListener {
-                        //   displayFragment(R.id.nav_customer_orders)
-                        //}
-                    }*/
                 }
-                //urecyclerView.adapter = ItemAdapter(userList,context)
-                //adapter!!.notifyDataSetChanged()
 
             }
 

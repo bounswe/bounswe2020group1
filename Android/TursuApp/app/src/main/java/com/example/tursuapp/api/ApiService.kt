@@ -65,22 +65,22 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/shoppinglist/createlist/")
-    fun addList(@Header("Authorization") token: String,@Field("list_name") list_name: String): Call<AddListResponse>
+    fun addList(@Header("Authorization") token: String,@Field("list_name") list_name: String): Call<ResponseBody>
 
     @GET("/shoppinglist/getlists/")
     fun getLists(@Header("Authorization") token: String): Call<List<String>>
 
     @FormUrlEncoded
     @POST("/shoppinglist/addtolist/")
-    fun addToList(@Header("Authorization") token: String,@Field("list_name") list_name: String,@Field("product_id") product_id: Int): Call<AddToListResponse>
+    fun addToList(@Header("Authorization") token: String,@Field("list_name") list_name: String,@Field("product_id") product_id: Int): Call<ResponseBody>
 
     @FormUrlEncoded
     @POST("/shoppinglist/deletelist/")
-    fun deleteList(@Header("Authorization") token: String,@Field("list_name") list_name: String): Call<DeleteListResponse>
+    fun deleteList(@Header("Authorization") token: String,@Field("list_name") list_name: String): Call<ResponseBody>
 
     @FormUrlEncoded
     @POST("/shoppinglist/deletefromlist/")
-    fun deleteFromList(@Header("Authorization") token: String,@Field("list_name") list_name: String,@Field("product_id") product_id: Int): Call<DeleteFromListResponse>
+    fun deleteFromList(@Header("Authorization") token: String,@Field("list_name") list_name: String,@Field("product_id") product_id: Int): Call<ResponseBody>
 
     @FormUrlEncoded
     @POST("/shoppinglist/products/")
@@ -102,7 +102,7 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/product/delete/")
-    fun deleteProduct(@Header("Authorization") token: String,@Field("id") id: Int): Call<DeleteProductResponse>
+    fun deleteProduct(@Header("Authorization") token: String,@Field("id") id: Int): Call<ResponseBody>
 
     @FormUrlEncoded
     @POST("/product/edit/")
@@ -114,7 +114,7 @@ interface ApiService {
                     @Field("brand") brand: String,
                     @Field("stock") stock: Int,
                     @Field("price") price: Float,
-                    @Field("photo") photo: String): Call<UpdateProductResponse>
+                    @Field("photo") photo: String): Call<ResponseBody>
                     //image file @multipart
 
 

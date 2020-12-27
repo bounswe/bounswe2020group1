@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
+import com.example.tursuapp.adapter.CommentAdapter
 import com.example.tursuapp.adapter.VendorProductAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
@@ -27,6 +28,7 @@ import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragm
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.squareup.picasso.Picasso
 import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageModel
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,6 +39,8 @@ class VendorProductPageFragment : Fragment() {
     private lateinit var productPageViewModel: VendorProductPageModel
     private lateinit var product: ProductDetailsResponse
     var vendorProductList = ArrayList<VendorProductLists>()
+    var commentList = ArrayList<Comments>()
+    private lateinit var commentListView: ListView
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -126,22 +130,23 @@ class VendorProductPageFragment : Fragment() {
         //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.updateProduct("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b",id, category,name,description,brand,stock.toInt(),price.toFloat(),photo).enqueue(object :
-                retrofit2.Callback<UpdateProductResponse> {
-            override fun onFailure(p0: Call<UpdateProductResponse>?, p1: Throwable?) {
+                retrofit2.Callback<ResponseBody> {
+            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
             }
 
             override fun onResponse(
-                    p0: Call<UpdateProductResponse>?,
-                    response: Response<UpdateProductResponse>?
+                    p0: Call<ResponseBody>?,
+                    response: Response<ResponseBody>?
             ) {
-
                 if (response != null) {
-                    Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
-                    //showPopupWindow(view)
                     Log.i("Status code", response.code().toString())
-                    // AddListStatus = response.body()!!
-                    (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
+                    if (response.code() == 200) {
+                        Toast.makeText(context, "Product has been successfully updated", Toast.LENGTH_SHORT).show()
+                        (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
+                    } else {
+                        Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    }
 
                 }
 
@@ -164,21 +169,29 @@ class VendorProductPageFragment : Fragment() {
                     response: Response<ProductDetailsResponse>?
             ) {
                 if (response != null) {
+                    Log.i("MainFragment", "inside onResponse")
                     product = response.body()!!
                     displayProductInfo(view)
+                    commentList = ArrayList(product.comments)
+                    val adapter = context?.let { CommentAdapter(it, commentList) }
+                    commentListView = view.findViewById(R.id.commentListView)
+                    displayProductInfo(view)
+                    if (commentListView != null) {
+                        commentListView.adapter = adapter
+                    }
+
                 }
             }
-
-
         })
     }
 
     fun displayProductInfo(view: View){
         view.findViewById<TextView>(R.id.product_name).text = product.name
         view.findViewById<TextView>(R.id.product_description).text = product.description
-        //view.findViewById<RatingBar>(R.id.ratingBar).rating = product.rating.toFloat()
+        view.findViewById<RatingBar>(R.id.ratingBar).rating = product.rating.toFloat()
         view.findViewById<TextView>(R.id.price).text = product.price+" TL"
         view.findViewById<TextView>(R.id.vendor).text = "Vendor: "+product.vendor_name
+        view.findViewById<TextView>(R.id.brand).text = "Brand: "+product.brand
 
         val image  = view.findViewById<ImageView>(R.id.productImage)
         if(product.photo_url!="") {
@@ -198,22 +211,24 @@ class VendorProductPageFragment : Fragment() {
             //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiInterface.deleteProduct("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b", id).enqueue(object :
-                    retrofit2.Callback<DeleteProductResponse> {
-                override fun onFailure(p0: Call<DeleteProductResponse>?, p1: Throwable?) {
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
                 }
 
                 override fun onResponse(
-                        p0: Call<DeleteProductResponse>?,
-                        response: Response<DeleteProductResponse>?
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
                 ) {
 
                     if (response != null) {
-                        Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
-                        //showPopupWindow(view)
                         Log.i("Status code", response.code().toString())
-                        // AddListStatus = response.body()!!
-                        (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "Product has been successfully deleted", Toast.LENGTH_SHORT).show()
+                            (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
+                        } else {
+                            Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                        }
 
                     }
 
