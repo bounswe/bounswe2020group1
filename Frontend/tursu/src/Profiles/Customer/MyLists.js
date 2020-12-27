@@ -109,8 +109,10 @@ export function AList(props){
                 <Grid container item className={classes.grid} alignItems="center"  spacing={4}>
                     <Grid item className={[classes.marginInsideGrid, classes.name].join(" ") }>
                         <Typography  className={classes.listName}>
-                            {props.name}
-                        </Typography>
+                            <Box fontWeight="fontWeightBold">
+                                {props.name}
+                            </Box>
+                    </Typography>
                     </Grid>
                     <Grid item
                           container
