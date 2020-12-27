@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -14,7 +14,24 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {palette} from "@material-ui/system";
 import axios from "axios";
+import MenuItem from "@material-ui/core/MenuItem";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from "@material-ui/core/Menu";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import { Alert } from '@material-ui/lab';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from "@material-ui/core/DialogTitle";
+import List from "@material-ui/core/List";
+import ListItemText from "@material-ui/core/ListItemText";
+import Checkbox from "@material-ui/core/Checkbox";
+import Divider from "@material-ui/core/Divider";
+import CloseIcon from '@material-ui/icons/Close';
+import Snackbar from "@material-ui/core/Snackbar";
 import {unmountComponentAtNode} from "react-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,7 +49,12 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductBox(props) {
 
     const classes = useStyles()
-    //console.log(props.product.photo_url)
+
+    const handleClickOnOptionsIcon = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
     return(
         <Grid item xs={3}>
             <Link to={`/product/${props.product.id}`}>
@@ -43,20 +65,31 @@ export default function ProductBox(props) {
                                 src={props.product.photo_url}
                                 alt={props.product.name}
                                 className="responsiveImage"/>
-                            <text>
-                                <br/>
-                                <Typography variant="subtitle2">
-                                    {props.product.name}
-                                </Typography>
-                                <Typography variant="body2">
-                                    <Box fontWeight="fontWeightBold">
-                                        {props.product.price} ₺
-                                    </Box>
-                                </Typography>
-                                <Typography variant="caption">
-                                    {props.product.vendor_name}
-                                </Typography>
-                            </text>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexWrap: 'nowrap',
+                                justifyContent: 'center',
+                                marginLeft: '50px'
+                            }}>
+                                <text>
+                                    <br/>
+                                    <Typography variant="subtitle2">
+                                        {props.product.name}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        <Box fontWeight="fontWeightBold">
+                                            {props.product.price} ₺
+                                        </Box>
+                                    </Typography>
+                                    <Typography variant="caption">
+                                        {props.product.vendor_name}
+                                    </Typography>
+                                </text>
+                                <div onClick={handleClickOnOptionsIcon}>
+                                    {LongMenu(props)}
+                                </div>
+                            </div>
                         </div>
                     </Paper>
                 </Button>
@@ -65,6 +98,378 @@ export default function ProductBox(props) {
     );
 }
 
+function LongMenu(props) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [isListOpen, SetIsListOpen]  = React.useState(false);
+    const [isAlertOpen, SetIsAlertOpen]  = React.useState(false);
+    // const [selectedValue, setSelectedValue] = React.useState();
+
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const addToShoppingCart = () => {
+        handleClose()
+
+        console.log(props.product.id)
+        const formData = new FormData();
+        formData.append("product_id", props.product.id);
+        console.log("Token " + window.sessionStorage.getItem("authToken"))
+        axios.post('http://3.232.20.250/shoppingcart/add',
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+                if(res.status === 200){
+                    // alert("Product is successfully added to the shopping cart.");
+                    SetIsAlertOpen(true);
+                    // <Alert severity="success">This is a success alert — check it out!</Alert>
+                }
+            })
+            .catch(error =>{
+                console.log(error)
+                alert ("There has been an error. Please try again.");
+            })
+    }
+
+    const addToShoppingList = () => {
+        SetIsListOpen(true);
+    }
+
+    const handleListsClose = () => {
+        SetIsListOpen(false)
+    }
+
+    const handleAlertClose = () => {
+        SetIsAlertOpen(false)
+    }
+
+    return (
+        <div>
+            <IconButton
+                onClick={handleClick}
+                name="optionsButton"
+            >
+                <MoreVertIcon />
+            </IconButton>
+            <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                    style: {
+                        marginTop: 40,
+                        maxHeight: 45 * 4.5,
+                        width: '30ch',
+                    },
+                }}
+            >
+                <MenuItem onClick={addToShoppingCart}>
+                    <ListItemIcon>
+                        <ShoppingCartIcon> </ShoppingCartIcon>
+                    </ListItemIcon>
+                    <Typography>Add to Shopping Cart</Typography>
+                </MenuItem>
+                <MenuItem onClick={addToShoppingList}>
+                    <ListItemIcon>
+                        <PlaylistAddIcon> </PlaylistAddIcon>
+                    </ListItemIcon>
+                    <Typography>Add to Shopping List</Typography>
+                </MenuItem>
+            </Menu>
+            {isListOpen? (
+                <ListsDialog open={isListOpen} productId={props.product.id} onClose={handleListsClose}/>
+            ):(
+                <div></div>
+            )}
+            <Snackbar open={isAlertOpen} autoHideDuration={2000} onClose={handleAlertClose}>
+                <Alert onClose={handleAlertClose} severity="success">
+                    Product is added to shopping cart.
+                </Alert>
+            </Snackbar>
+        </div>
+    );
+}
+
+const listsDialogStyles =  makeStyles((theme) => ({
+    //style for font size
+    textField:{
+        fontSize:15
+    },
+}));
+
+function ListsDialog(props){
+    const classes = listsDialogStyles()
+
+    const { open, onClose} = props;
+    const [isCreatingNewList, setIsCreatingNewList] = React.useState(false);
+    const [lists, setLists] = React.useState([])
+    const [isLoaded, setIsLoaded] = React.useState(false)
+    const [nameOfNewList, setNameOfNewList] = React.useState("")
+
+    //[list_name, is product in the list]
+    const [isInList, setIsInList] = React.useState(new Map())
+
+    //ComponentDidMount
+    useEffect(() => {
+        console.log("DIDMOUNT")
+        if(open && !isLoaded)
+        {
+            setIsLoaded(true)
+            axios.get("http://3.232.20.250/shoppinglist/getlists/",{
+                headers: {
+                    'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+                }
+            }).then(res =>{
+                setLists(res.data)
+                console.log("SHOPPING LISTS:", res.data)
+                console.log("SHOPPING LISTS lists:", lists)
+                fillIsInList(res.data);
+            })
+        }
+    }, [])
+
+
+    function fillIsInList(tmpList){
+        console.log("Icerideyim.", tmpList.length)
+        for(let i=0; i<tmpList.length; i++)
+        {
+            let productsInShoppingList = [];
+
+            console.log("List name:", tmpList[i])
+
+            const formData = new FormData();
+            formData.append("list_name", tmpList[i])
+
+            axios.post("http://3.232.20.250/shoppinglist/products/",
+                formData,
+                {
+                    headers: {
+                        'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+                    }
+                }).then(res => {
+                console.log("PRODUCTS IN THE SHOPPING LIST")
+                console.log(res.data);
+                productsInShoppingList = res.data;
+
+                for(let j=0; j<productsInShoppingList.length; j++){
+                    console.log("ID:", productsInShoppingList[j].id)
+                    console.log("Self ID:", props.productId)
+                    if(props.productId === productsInShoppingList[j].id){
+                        setIsInList(new Map(isInList.set(tmpList[i], true)));
+                        console.log("UPDATED")
+                    }
+                }
+                if(!isInList.has(tmpList[i])){
+                    setIsInList(new Map(isInList.set(tmpList[i], false)));
+                    console.log("UPDATED")
+                }
+                console.log("IsInList", isInList)
+            })
+        }
+    }
+
+    const handleClose = () => {
+        setIsCreatingNewList(false)
+        setIsLoaded(false)
+        onClose();
+    };
+
+    // const handleListItemClick = (value) => {
+    //     onClose(value);
+    // };
+
+    const ChangeStateToCreateNewList = () => {
+        setIsCreatingNewList(true);
+    }
+
+    const createNewList = () => {
+
+        const formData = new FormData();
+        formData.append("list_name", nameOfNewList);
+        setNameOfNewList("")
+
+        axios.post("http://3.232.20.250/shoppinglist/createlist/",
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            }
+        ).then(res =>{
+            console.log("New Shopping list is added:", res)
+            setIsCreatingNewList(false)
+            setIsLoaded(false)
+        }).catch( error => {
+                if(error.response){
+                    if(error.response.status === 400){
+                        alert("A list with the same name already exists.")
+                    }
+                }
+            }
+        )
+    }
+
+    function handleChangeInNameOfNewList(event){
+        setNameOfNewList(event.target.value)
+    }
+
+    function handleCheckboxChange(event){
+        console.log("YETER", event.target.checked)
+        if(event.target.checked){
+            addProductToList(event.target.name)
+            setIsInList(new Map(isInList.set(event.target.name, true)))
+        }
+        else{
+            removeProductFromList(event.target.name)
+            setIsInList(new Map(isInList.set(event.target.name, false)))
+        }
+        event.stopPropagation(event.target.name)
+    }
+
+    function addProductToList(listName){
+        const formData = new FormData();
+        formData.append("list_name", listName);
+        formData.append("product_id", props.productId);
+
+        axios.post('http://3.232.20.250/shoppinglist/addtolist/',
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+    }
+
+    function removeProductFromList(listName){
+        const formData = new FormData();
+        formData.append("list_name", listName);
+        formData.append("product_id", props.productId);
+
+        console.log("Deleting the product from the list.")
+        axios.post('http://3.232.20.250/shoppinglist/deletefromlist/',
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+    }
+
+    let temp = true
+    return (
+        <Dialog open={open} onClose={handleClose}>
+            <div style={{
+                display: "flex",
+                flexWrap: 'nowrap',
+                justifyContent: 'space-around',
+                height: "auto",
+                width: "200px",
+
+            }}>
+                <DialogTitle>
+                    <Typography>Save to:</Typography>
+                </DialogTitle>
+                <IconButton onClick={handleClose}>
+                    <CloseIcon/>
+                </IconButton>
+            </div>
+            <Divider/>
+            <List>
+                {lists.map((shoppingListName) => (
+                  <ListItem>
+                      {temp = isInList.get(shoppingListName)}
+                      <Checkbox checked={temp}
+                                onClick={handleCheckboxChange}
+                                name={shoppingListName.toString()}/>
+                      {console.log("RERENsDERD")}
+                      {console.log(temp)}
+                      <Typography variant={"body2"}>{shoppingListName.toString()}</Typography>
+                  </ListItem>
+                ))}
+            </List>
+            <Divider/>
+            {isCreatingNewList ? (
+                <div style={{
+                    marginLeft: "15px",
+                    marginTop: "10px"
+                }}>
+                    <List>
+                        <ListItem>
+                            <Typography variant={"body2"}>Name</Typography>
+                        </ListItem>
+                        <ListItem>
+                            <TextField style={{
+                                marginTop: "-5px",
+                                marginBottom: "15px",
+                                width:"130px",
+                                paddingRight:"10px"}}
+                                       placeholder={"Enter list name..."}
+                               InputProps={{
+                                   classes: {
+                                       input: classes.textField,
+                                   },
+                               }}
+                                value={nameOfNewList}
+                                onChange={handleChangeInNameOfNewList}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <Button variant={"outlined"}
+                                    onClick={createNewList}
+                                    size={"small"}
+                                    style={{
+                                       position: "absolute",
+                                       right: 25,
+                                       marginBottom: 10,
+                                    }}
+                            >
+                                <Typography style={{fontSize: 12}}>Create</Typography>
+                            </Button>
+                        </ListItem>
+                    </List>
+                </div>
+            ) : (
+                <Button style={{textTransform: "none"}} onClick={ChangeStateToCreateNewList}>
+                    <div style={{
+                        padding: "5px",
+                        paddingLeft: "20px",
+                        paddingRight: "30px",
+                        display: "flex",
+                        flexWrap: "nowrap",
+                        alignItems: "center"
+                    }}>
+                        <AddIcon color={"action"} style={{paddingRight:"5px"}}/>
+                        <Typography variant={"body2"}>Create a new list</Typography>
+                    </div>
+                </Button>
+            )}
+        </Dialog>
+    )
+}
 
 const horizontalStyles = makeStyles((theme) => ({
     root: {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import myInfo from "./MyInfo";
-import myLists from "./MyLists";
+import MyLists from "./MyLists";
 import myOrders from "./MyOrders";
 //import Stepper from '../Stepper';
 //import Navbar from "../NavBar";

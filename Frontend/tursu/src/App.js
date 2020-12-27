@@ -9,6 +9,7 @@ import SearchPage from "./Search";
 import VendorProfilePage from "./Profiles/Vendor/VendorProfilePage";
 import CustomerProfilePage from "./Profiles/Customer/CustomerProfilePage";
 import ShoppingCart from "./ShoppingCart"
+import ShoppingList from "./ShoppingList";
 import AddProduct from "./Profiles/Vendor/AddProduct";
 import Checkout from "./Checkout";
 import EditProduct from "./EditProduct";
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/search/:search_string/:search_type/:fprice_lower?/:fprice_upper?/:fvendor_name?/:fcategory?/:sort_by?"  component={SearchPage} />
                 <Route path="/vendorProfile" exact component={VendorProfilePage} />
                 <Route path="/customerProfile" exact component={CustomerProfilePage} />
+                <Route path="/shoppingList/:name" exact component={ShoppingList} />
                 <Route path="/addProduct" exact component={AddProduct} />
                 <Route path="/editProduct" exact component={EditProduct} />
                 <Route path="/deleteProduct" exact component={DeleteProduct} />
@@ -39,3 +41,4 @@ function App() {
 }
 
 export default App;
+
