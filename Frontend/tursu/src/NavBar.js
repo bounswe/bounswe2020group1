@@ -89,6 +89,9 @@ const useStyles = makeStyles((theme)=> ({
     shoppingCartIcon:{
         color: 'white'
     },
+    shoppingCartIconPassive:{
+        color: 'black'
+    },
     leftSide: {
         display: "flex"
     },
@@ -191,13 +194,27 @@ export default function Navbar(props){
 
                                     </Grid>
                                     <Grid item className={classes.cart}>
-                                        <Link to='/shoppingCart'>
-                                            <LightTooltip title={"Shopping cart"} placement={"top-start"}>
-                                            <IconButton>
-                                                <ShoppingCartIcon className={classes.shoppingCartIcon} />
-                                            </IconButton>
-                                            </LightTooltip>
-                                        </Link>
+                                        {window.sessionStorage.getItem("isLogged")?(
+                                            <Link to='/shoppingCart'>
+                                                <LightTooltip title={"Shopping cart"} placement={"top-start"}>
+                                                    <IconButton>
+                                                        <ShoppingCartIcon className={classes.shoppingCartIcon} />
+                                                    </IconButton>
+                                                </LightTooltip>
+                                            </Link>
+                                        ):(
+                                            <Tooltip title={"You need to login."} placement={"top-start"}>
+                                                <span>
+                                                    <IconButton disabled={true}>
+                                                        <Link to='/shoppingCart'>
+                                                            <ShoppingCartIcon className={classes.shoppingCartIconPassive}
+                                                            />
+                                                         </Link>
+                                                    </IconButton>
+                                                </span>
+                                            </Tooltip>
+                                        )}
+
                                     </Grid>
                                     <Grid item className={classes.sign}>
                                         <Paper variant="outlined" elevation={3}  className={classes.sign_paper}>
