@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintVertical_bias="0.02"
         app:srcCompat="@drawable/tursu_logo" />
 
 
@@ -37,6 +37,42 @@
         app:layout_constraintTop_toBottomOf="@+id/signup_username" />
 
     <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/iban_number"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/white"
+        android:gravity="center|left"
+        android:hint="IBAN Number"
+        android:paddingLeft="16dp"
+        android:textColor="@color/TursuGreen"
+        android:textColorHint="@color/tursu_green"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_email" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/city"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/white"
+        android:gravity="center|left"
+        android:hint="City"
+        android:paddingLeft="16dp"
+        android:textColor="@color/TursuGreen"
+        android:textColorHint="@color/tursu_green"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iban_number" />
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/signup_name"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -53,7 +89,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.04" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/signup_surname"
@@ -106,9 +142,8 @@
         android:textColor="@color/TursuGreen"
         android:textColorHint="@color/tursu_green"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_email" />
+        app:layout_constraintTop_toBottomOf="@+id/city" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/signup_passwordConfirmation"
@@ -140,6 +175,22 @@
         android:text="@string/sign_up"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_location" />
+
+    <Button
+        android:id="@+id/add_location"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/white"
+        android:text="Add Location"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signup_passwordConfirmation" />
 
@@ -160,7 +211,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Are a shop owner?"
+            android:text="Are a shop here for shopping?"
             android:textAlignment="center"
             android:textAppearance="@style/normal_text"
             android:textSize="16sp" />
@@ -171,7 +222,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:clickable="true"
-            android:text="Sign up as a vendor!"
+            android:text="Sign up as a customer!"
             android:textAlignment="center"
             android:textAppearance="@style/clickable_text"
             android:textSize="14sp" />
