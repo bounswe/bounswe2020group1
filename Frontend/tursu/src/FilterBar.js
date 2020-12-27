@@ -6,7 +6,6 @@ import RangeSlider from "./FilterSlider";
 import RadioButtons from "./FilterOptions";
 import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from "@material-ui/core/IconButton";
-import Grid from "@material-ui/core/Grid";
 import ClearIcon from '@material-ui/icons/Clear';
 
 
@@ -30,21 +29,15 @@ class Filter extends React.Component {
     handleCallbackdataSortBy = (childData) =>{
         this.setState({dataSortBy: childData})
         this.props.callbackSort(childData)
-        console.log(childData)
-        console.log(this.state.dataSortBy)
-
     }
 
     handleCallbackdataFilterCategory = (childData) =>{
         this.props.callbackCategory(childData)
         this.setState({dataFilterCategory: childData})
-        console.log(this.state.dataFilterCategory)
     }
     handleCallbackdataFilterVendor = (childData) =>{
         this.setState({dataFilterVendor: childData})
         this.props.callbackVendor(childData)
-
-        console.log(this.state.dataFilterVendor)
     }
 
     handleCallbackSlider = (childData) =>{

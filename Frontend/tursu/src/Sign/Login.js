@@ -22,6 +22,7 @@ export default class Login extends Component {
             email: "",
             password: "",
             redirect: "False",
+            user_type: null
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -36,6 +37,8 @@ export default class Login extends Component {
             .then(res => {
                 console.log("result:", res);
                 console.log("status: ", res.status);
+                console.log("type: ", res.data.user_type);
+                this.setState({ user_type: res.data.user_type });
                 this.setState({ redirect: "True" });
 
                 window.sessionStorage.setItem("authToken", res.data.auth_token);

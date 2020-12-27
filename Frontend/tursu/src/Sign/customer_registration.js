@@ -39,6 +39,7 @@ export default class Customer extends Component {
                     this.setState({ redirect: "True" });
                 })
                 .catch(error =>{
+                    console.log(error.response.status)
                     alert ("There has been an error. Please try again.");
                 })
         }
