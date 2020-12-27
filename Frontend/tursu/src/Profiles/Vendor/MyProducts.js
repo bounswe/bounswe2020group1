@@ -31,7 +31,7 @@ export default class myProducts extends Component {
         return(
             <div>
                 {this.state.product_list.map((product) => (
-                    <OfferedProduct product={product}/>
+                    <OfferedProduct handleID={this.props.handleID} edit={this.props.edit} product={product}/>
                 ))}
             </div>
         )

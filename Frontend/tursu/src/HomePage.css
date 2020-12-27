@@ -15,7 +15,8 @@
 
 .responsiveImage{
     width: 50%;
-    height: auto;
+    height: 100px;
+    padding-top: 30px;
 }
 
 .Navbar{

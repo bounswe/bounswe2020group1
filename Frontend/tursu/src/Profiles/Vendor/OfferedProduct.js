@@ -74,12 +74,34 @@ const horizontalStyles = makeStyles((theme) => ({
     }
 }));
 
-function editProduct(id){
-    console.log("Editing product " + id)
-}
+let token;
+token = window.sessionStorage.getItem("authToken")
+
 function deleteProduct(id){
 
     console.log("Deleting product " + id)
+    const formData = new FormData();
+    formData.append("id", id);
+    axios
+        .post("http://3.232.20.250/product/delete/", formData, {
+            headers: {
+                'Authorization': "Token " + token //the token is a variable which holds the token
+            },
+        }).then((response) => {
+
+        if (response.status === 200) {
+            alert("Product deleted!");
+            console.log(response)
+        }
+    })
+        .catch((err) => {
+            if (err.response.status === 400) {
+                alert(err.response.data);
+            } else if (err.response.status === 401) {
+                alert(err.response.data);
+            }
+
+        });
 }
 
 export default function OfferedProduct(props) {
@@ -117,16 +139,23 @@ export default function OfferedProduct(props) {
                             {props.product.category}
                         </Typography>
                     </Grid>
+
                     <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
                         <Typography variant="caption">
                             {props.product.stock}
                         </Typography>
                     </Grid>
+
                     <Grid className={classes.marginInsideGrid}>
-                        <IconButton onClick={() => editProduct(id)} size="small">
+                        <IconButton onClick={() => {
+                            props.handleID(id)
+                            props.edit()
+                        }}
+                                    size="small">
                             <EditIcon/>
                         </IconButton>
                     </Grid>
+
                     <Grid className={classes.marginInsideGrid}>
                         <IconButton onClick={() => deleteProduct(id)} size="small">
                             <DeleteIcon/>
