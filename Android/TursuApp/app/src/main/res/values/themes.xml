@@ -12,6 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/Theme.TursuApp.ActionBar</item>
+    </style>
+
+    <style name="Theme.TursuApp.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="background">@color/purple_700</item>
     </style>
 
     <style name="Theme.TursuApp.NoActionBar">

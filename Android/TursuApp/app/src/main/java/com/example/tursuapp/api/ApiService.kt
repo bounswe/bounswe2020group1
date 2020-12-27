@@ -2,6 +2,7 @@ package com.example.tursuapp.api
 
 import android.content.Context
 import com.example.tursuapp.api.requests.LoginRequest
+import com.example.tursuapp.api.responses.LoginResponse
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.TokenResponse
@@ -20,7 +21,29 @@ interface ApiService {
 */
     @FormUrlEncoded
     @POST("/user/login")
-    fun login(@Field("email") email: String,@Field("password") password:String): Call<TokenResponse>
+    fun login(@Field("email") email: String,@Field("password") password:String): Call<LoginResponse>
+
+    @FormUrlEncoded
+    @POST("/user/signup")
+    fun signup(@Field("first_name") first_name: String,
+               @Field("last_name") last_name: String,
+               @Field("username") username: String,
+               @Field("email") email: String,
+               @Field("password") password: String): Call<TokenResponse>
+
+    @FormUrlEncoded
+    @POST("/user/signup")
+    fun vendorSignup(@Field("first_name") first_name: String,
+                     @Field("last_name") last_name: String,
+                     @Field("username") username: String,
+                     @Field("email") email: String,
+                     @Field("password") password: String,
+                     @Field("is_vendor") is_vendor: String,
+                     @Field("IBAN") iban: String,
+                     @Field("latitude") latitude: String,
+                     @Field("longitude") longitude: String,
+                     @Field("city") city: String): Call<TokenResponse>
+
     @GET("/")
     fun getProducts(): Call<List<ProductResponse>>
 
