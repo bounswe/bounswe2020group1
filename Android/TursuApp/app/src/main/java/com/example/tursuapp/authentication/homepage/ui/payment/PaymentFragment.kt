@@ -17,6 +17,7 @@ import com.example.tursuapp.R
 import com.example.tursuapp.adapter.ShoppingCartAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.CreateOrderResponse
 import com.example.tursuapp.api.responses.ShoppingCartProductResponse
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.ResponseBody
@@ -108,23 +109,30 @@ class PaymentFragment : Fragment() {
     }
     fun createOrder(){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.createOrders(auth_token).enqueue(object : retrofit2.Callback<ResponseBody> {
-            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+        apiinterface.createOrders(auth_token).enqueue(object : retrofit2.Callback<CreateOrderResponse> {
+            override fun onFailure(p0: Call<CreateOrderResponse>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
             }
 
             override fun onResponse(
-                    p0: Call<ResponseBody>?,
-                    response: Response<ResponseBody>?
+                    p0: Call<CreateOrderResponse>?,
+                    response: Response<CreateOrderResponse>?
             ) {
                 if (response != null) {
                     if (response.code() == 200) {
-                        val newFragment = PaymentSuccessFragment()
-                        val fragmentManager: FragmentManager? = fragmentManager
-                        val fragmentTransaction: FragmentTransaction =
-                                requireFragmentManager().beginTransaction()
-                        fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                        fragmentTransaction.commit()
+
+                        if (response.body()!!.invalid != null) {
+                            //ürün kalmamış
+                            Toast.makeText(context, "Ürün " + response.body()!!.invalid.toString() + " is not in stock", Toast.LENGTH_LONG).show()
+                        } else {
+                            val newFragment = PaymentSuccessFragment()
+                            val fragmentManager: FragmentManager? = fragmentManager
+                            val fragmentTransaction: FragmentTransaction =
+                                    requireFragmentManager().beginTransaction()
+                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
+                        }
+
                     } else {
                         Toast.makeText(context, "Unsuccessful Payment.", Toast.LENGTH_SHORT).show()
                     }
