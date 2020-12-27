@@ -29,9 +29,9 @@ const useStyles = makeStyles((theme)=> ({
         flexGrow: 1
     },
     toolbar: {
-        minHeight: 80,
+        height: 100,
         alignItems: "flex-start",
-        paddingTop: theme.spacing(3),
+        paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(3)
     },
     logo: {
@@ -76,21 +76,19 @@ const useStyles = makeStyles((theme)=> ({
 
     },
     searchType:{
-        marginLeft: 150,
-        marginRight: 30
+        marginRight: 5
     },
     sign:{
         marginLeft:10
     },
     sign_paper:{
-        pacity: 0.5,
-
+        position: "absolute",
+        left: "85%"
     },
     cart:{
-        marginLeft:100
+        position: "absolute",
+        right: "180px",
     },
-
-
 }))
 
 const theme = createMuiTheme({
