@@ -106,29 +106,33 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
         })
     }
     private fun decreaseQuantity(productID:Int, quantityView: TextView){
-        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.removeFromShoppingCart(auth_token,productID).enqueue(object : retrofit2.Callback<ResponseBody> {
-            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
-                Log.i("MainFragment", "error" + p1?.message.toString())
-            }
+        if(quantityView.text.toString().toInt()>0) {
+            val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiinterface.removeFromShoppingCart(auth_token, productID).enqueue(object : retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
 
-            override fun onResponse(
-                    p0: Call<ResponseBody>?,
-                    response: Response<ResponseBody>?
-            ) {
-                if (response != null) {
-                    if(response.code()==200){
-                        Toast.makeText(context,"removed from shopping cart",Toast.LENGTH_SHORT).show()
-                        quantityView.text = (quantityView.text.toString().toInt()-1).toString()
-                    }
-                    else{
-                        Toast.makeText(context,"NOT removed shopping cart",Toast.LENGTH_SHORT).show()
+                override fun onResponse(
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
+                ) {
+                    if (response != null) {
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "removed from shopping cart", Toast.LENGTH_SHORT).show()
+                            quantityView.text = (quantityView.text.toString().toInt() - 1).toString()
+                        } else {
+                            Toast.makeText(context, "NOT removed shopping cart", Toast.LENGTH_SHORT).show()
+                        }
+
                     }
 
                 }
-
-            }
-        })
+            })
+        }
+        else{
+            Toast.makeText(context,"negative number!",Toast.LENGTH_SHORT).show()
+        }
     }
     fun calculateTotalPrice():String{
         var total = 0.0
