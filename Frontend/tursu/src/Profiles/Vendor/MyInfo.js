@@ -10,32 +10,36 @@ export default class myInfo extends Component {
         super(props);
         this.state = {
             name : "",
-            surname : "",
             username : "",
-            money : "",
             email : "",
+            latitude: "",
+            longitude: "",
+            iban: "",
+            rating: 0.0,
             editName: "false",
-            editSurname: "false",
+            editIban: "false",
             editPassword: "false",
         }
         this.routeName = this.routeName.bind(this);
         this.nameChange = this.nameChange.bind(this);
-        this.surnameChange = this.surnameChange.bind(this);
+        this.ibanChange = this.ibanChange.bind(this);
         this.passwordChange = this.passwordChange.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
     }
     componentDidMount() {
         console.log('componentDidMount() lifecycle');
         var token = sessionStorage.getItem("authToken");
-        axios.get('http://3.232.20.250/customerpage', {headers: {Authorization: 'Token ' + token}})
+        axios.get('http://3.232.20.250/vendorpage', {headers: {Authorization: 'Token ' + token}})
         .then(res => {
             console.log(res)
 
             this.setState({ name: res.data.first_name});
-            this.setState({ surname: res.data.last_name});
-            this.setState({ username: res.data.username});
-            this.setState({ money: res.data.money_spent});
             this.setState({ email: res.data.email});
+            this.setState({ username: res.data.username});
+            this.setState({ latitude: res.data.latitude});
+            this.setState({ longitude: res.data.longitude});
+            this.setState({ iban: res.data.iban});
+            this.setState({ rating: res.data.rating});
 
         })
         .catch(error =>{
@@ -52,12 +56,12 @@ export default class myInfo extends Component {
             this.setState({editName:"false"})
         }
     }
-    surnameChange(){
-        if (this.state.editSurname==="false"){
-            this.setState({editSurname:"true"})
+    ibanChange(){
+        if (this.state.editIban==="false"){
+            this.setState({editIban:"true"})
         }
         else{
-            this.setState({editSurname:"false"})
+            this.setState({editIban:"false"})
         }
     }
     passwordChange(){
@@ -77,12 +81,12 @@ export default class myInfo extends Component {
                 else{
                     return <EditInfoBox field={field} edit={this.nameChange} change={this.handleEdit}/>
                 }
-            case "Surname":
-                if (this.state.editSurname === "false"){
-                    return <InfoBox field={field} edit={this.surnameChange}/>
+            case "IBAN":
+                if (this.state.editIban === "false"){
+                    return <InfoBox field={field} edit={this.ibanChange}/>
                 }
                 else{
-                    return <EditInfoBox field={field} edit={this.surnameChange} change={this.handleEdit}/>
+                    return <EditInfoBox field={field} edit={this.ibanChange} change={this.handleEdit}/>
                 }
             case "Password":
                 if (this.state.editPassword === "false"){
@@ -99,8 +103,8 @@ export default class myInfo extends Component {
         //alert(key);
         if (key==="Name"){
                 bodyFormData.append('first_name', value);}
-        else if (key=== "Surname"){
-                bodyFormData.append('last_name', value)}
+        else if (key=== "IBAN"){
+                bodyFormData.append('iban', value)}
         else if (key==="Password"){
                 bodyFormData.append('password', value);
         }
@@ -126,17 +130,23 @@ export default class myInfo extends Component {
         {key: 'Name',
             value: this.state.name,
             editable : 'True'},
-        {key: 'Surname',
-            value: this.state.surname,
-            editable : 'True'},
         {key: 'Username',
             value: this.state.username,
             editable : 'False'},
         {key: 'Email',
             value: this.state.email,
             editable : 'False'},
-        {key: 'Money spent on Turşu',
-            value: this.state.money,
+        {key: 'IBAN',
+            value: this.state.iban,
+            editable : 'True'},
+        {key: 'Latitude',
+            value: this.state.latitude,
+            editable : 'False'},
+        {key: 'Longitude',
+            value: this.state.longitude,
+            editable : 'False'},
+        {key: 'Rating',
+            value: this.state.rating,
             editable : 'False'},
         {key: 'Password',
             value: '****',
@@ -146,11 +156,13 @@ export default class myInfo extends Component {
             <Grid item>
                 <div>
                     {this.routeName(fields[0])}
-                    {this.routeName(fields[1])}
+                    <InfoBox field={fields[1]}/>
                     <InfoBox field={fields[2]}/>
-                    <InfoBox field={fields[3]}/>
+                    {this.routeName(fields[3])}
                     <InfoBox field={fields[4]}/>
-                    {this.routeName(fields[5])}
+                    <InfoBox field={fields[5]}/>
+                    <InfoBox field={fields[6]}/>
+                    {this.routeName(fields[7])}
                 </div>
             </Grid>
         )
