@@ -13,10 +13,6 @@ import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 interface ApiService {
-    /**
-    @POST("/user/login")
-    fun login(@Body loginRequest: LoginRequest): Call<TokenResponse>
-     */
     @FormUrlEncoded
     @POST("/user/login")
     fun login(@Field("email") email: String, @Field("password") password: String): Call<TokenResponse>
@@ -97,6 +93,20 @@ interface ApiService {
     @POST("/order/cancel_order/")
     fun cancelOrder(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int):Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("/shoppingcart/increase")
+    fun addToShoppingCart(@Header("Authorization") auth_token :String,@Field("product_id") orderId: Int):Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/shoppingcart/decrease")
+    fun removeFromShoppingCart(@Header("Authorization") auth_token :String,@Field("product_id") orderId: Int):Call<ResponseBody>
+
+    @GET("/shoppingcart/all")
+    fun getProductsShoppingCart(@Header("Authorization") auth_token :String):Call<List<ShoppingCartProductResponse>>
+
+    @POST("/order/create_orders/")
+    fun createOrders(@Header("Authorization") auth_token :String):Call<CreateOrderResponse>
+  
     @GET("/vendorpage")
     fun getProductsOfVendor(@Header("Authorization") token :String):Call<VendorDataResponse>
 
@@ -116,6 +126,5 @@ interface ApiService {
                     @Field("price") price: Float,
                     @Field("photo") photo: String): Call<ResponseBody>
                     //image file @multipart
-
 
 }

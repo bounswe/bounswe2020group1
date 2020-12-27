@@ -36,8 +36,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/order_product_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="5dp"
+                    android:text="Order Name"
+                    android:textColor="#595959"
+                    android:textStyle="bold" />
+
                 <ImageView
-                    android:id="@+id/imageView8"
+                    android:id="@+id/decrease"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
@@ -91,16 +101,6 @@
                         android:text="100 TL"
                         android:textColor="#2196F3" />
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/order_product_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:padding="5dp"
-                    android:text="Order Name"
-                    android:textColor="#595959"
-                    android:textStyle="bold" />
 
             </LinearLayout>
 

@@ -30,6 +30,8 @@ class ProductPageFragment : Fragment() {
 
     private lateinit var productPageViewModel: ProductPageModel
     private lateinit var product: ProductDetailsResponse
+    private lateinit var AddListStatus: AddListResponse
+    val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
     var commentList = ArrayList<Comments>()
     private lateinit var commentListView: ListView
     var allLists = listOf<String>()
@@ -54,24 +56,34 @@ class ProductPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id_str = requireArguments().getString("id")
-       // val spinner = view.findViewById<Spinner>(R.id.spinner)
-       // val items = arrayOf("Add to favorites", "Favorites", "List 1", "List 2", "List 3")
-       // val adapter = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, items) }
-       // if (spinner != null) {
-         //   spinner.adapter = adapter
-        //}
-       // commentListView = view.findViewById(R.id.commentListView)
+
         getDetails(id_str!!.toInt(), view)
         view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
             var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            //apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)
-            /*
-         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-         var response=apiinterface.addToCart("Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9",id_str!!.toInt(),1)
-        if(response.code()==200){
-            Toast.makeText(context, "Ürün sepetinize eklenirken bir sorun yaşandı.", Toast.LENGTH_SHORT).show()
-        }else{ Toast.makeText(context, "Ürün sepetinize eklendi", Toast.LENGTH_SHORT).show()}*/
+            val quantity = 1
+            apiinterface.addToShoppingCart(auth_token,product.id).enqueue(object :
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
 
+                override fun onResponse(
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
+                ) {
+                    if (response != null) {
+                        if(response.code()==200){
+                            Toast.makeText(context,"added to shopping cart",Toast.LENGTH_SHORT).show()
+                        }
+                         else{
+                            Toast.makeText(context,"NOT added to shopping cart",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                }
+
+
+            })
         }
 
     }

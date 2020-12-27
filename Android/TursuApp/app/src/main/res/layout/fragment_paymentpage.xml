@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:clickable="true">
 
     <Button
         android:id="@+id/confirmandpay"
         android:layout_width="204dp"
         android:layout_height="41dp"
-        android:layout_marginBottom="4dp"
+        android:layout_margin="20dp"
+        android:gravity="center_horizontal"
         android:text="Confirm And Pay"
-        app:layout_constraintBottom_toBottomOf="@+id/colorbg3"
-        app:layout_constraintEnd_toEndOf="@+id/colorbg3"
-        app:layout_constraintHorizontal_bias="0.086"
-        app:layout_constraintStart_toStartOf="@+id/colorbg3" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shoppingCartItems" />
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -31,69 +32,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/colorbg2" />
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="47dp"
-        android:layout_height="66dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView19"
-        app:layout_constraintEnd_toEndOf="@+id/textView19"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.437"
-        app:srcCompat="@drawable/shopping_cart_all" />
-
-    <TextView
-        android:id="@+id/colorbg3"
-        android:layout_width="389dp"
-        android:layout_height="190dp"
-        android:layout_marginBottom="16dp"
-        android:background="#61A4C3"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox"
-        app:layout_constraintVertical_bias="0.565" />
-
-    <TextView
-        android:id="@+id/textView19"
+    <LinearLayout
+        android:id="@+id/shoppingCartItems"
         android:layout_width="0dp"
-        android:layout_height="82dp"
-        android:background="#92E896"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:text="Payment Page"
-        android:textSize="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/textView33"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginTop="13dp"
+        android:orientation="vertical"
         android:text="Items :"
-        app:layout_constraintBottom_toBottomOf="@+id/colorbg3"
-        app:layout_constraintEnd_toEndOf="@+id/colorbg3"
-        app:layout_constraintHorizontal_bias="0.046"
-        app:layout_constraintStart_toStartOf="@+id/colorbg3"
-        app:layout_constraintTop_toTopOf="@+id/colorbg3"
-        app:layout_constraintVertical_bias="0.07" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox">
+
+        <ListView
+            android:id="@+id/shoppinCartItemsListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/colorbg1"
         android:layout_width="390dp"
-        android:layout_height="210dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="15dp"
         android:background="#E4B3B3"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView19"
-        app:layout_constraintVertical_bias="0.027" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/colorbg2"
@@ -244,4 +209,17 @@
         app:layout_constraintStart_toEndOf="@+id/name"
         app:layout_constraintTop_toTopOf="@+id/name" />
 
+    <TextView
+        android:id="@+id/totalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="31dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/confirmandpay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shoppingCartItems" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
