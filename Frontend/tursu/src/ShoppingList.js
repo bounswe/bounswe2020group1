@@ -102,9 +102,15 @@ export default function ShoppingList(props){
                     </Paper>
                 </Grid>
                 <h4>
-                    Shopping Cart
+                    {props.match.params.name}
                 </h4>
-                <Grid item container direction="row">
+                <Grid item
+                      container
+                      direction="row"
+                      style={{
+                          paddingLeft:"220px"
+                      }}
+                >
                     {<ProductsInShoppingList products={products} listName={props.match.params.name}/>}
                 </Grid>
             </Grid>
