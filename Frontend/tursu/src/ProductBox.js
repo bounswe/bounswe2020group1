@@ -40,8 +40,10 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(1),
         textAlign: 'center',
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
         // backgroundColor: "#388e3c",
+        height: 300,
+        width: 220
     },
 }));
 
@@ -70,21 +72,35 @@ export default function ProductBox(props) {
                                 alignItems: 'center',
                                 flexWrap: 'nowrap',
                                 justifyContent: 'center',
-                                marginLeft: '50px'
+                                marginLeft: '50px',
+                                paddingTop: 10
                             }}>
                                 <text>
-                                    <br/>
-                                    <Typography variant="subtitle2">
-                                        {props.product.name}
-                                    </Typography>
-                                    <Typography variant="body2">
-                                        <Box fontWeight="fontWeightBold">
-                                            {props.product.price} ₺
-                                        </Box>
-                                    </Typography>
-                                    <Typography variant="caption">
-                                        {props.product.vendor_name}
-                                    </Typography>
+                                    <div style={{
+                                        height: "75px",
+                                        alignText: "center",
+                                        width: "150px"
+                                    }}>
+                                        <br/>
+                                        <Typography variant="subtitle2">
+                                            {props.product.name}
+                                        </Typography>
+                                        <br/>
+                                    </div>
+                                    <div style={{
+                                        position: "absolute",
+                                        left: "38%",
+                                        top: "260px",
+                                    }}>
+                                        <Typography variant="body2">
+                                            <Box fontWeight="fontWeightBold">
+                                                {props.product.price} ₺
+                                            </Box>
+                                        </Typography>
+                                        <Typography variant="caption">
+                                            {props.product.vendor_name}
+                                        </Typography>
+                                    </div>
                                 </text>
                                 <div onClick={handleClickOnOptionsIcon}>
                                     {LongMenu(props)}
