@@ -9,6 +9,11 @@ import SearchPage from "./Search";
 import VendorProfilePage from "./Profiles/Vendor/VendorProfilePage";
 import CustomerProfilePage from "./Profiles/Customer/CustomerProfilePage";
 import ShoppingCart from "./ShoppingCart"
+
+
+
+
+
 import AdminPanel from "./AdminPanel"
 
 function App() {
@@ -23,6 +28,11 @@ function App() {
                 <Route path="/search/:search_string/:search_type/:fprice_lower?/:fprice_upper?/:fvendor_name?/:fcategory?/:sort_by?"  component={SearchPage} />
                 <Route path="/vendorProfile" exact component={VendorProfilePage} />
                 <Route path="/customerProfile" exact component={CustomerProfilePage} />
+
+
+
+
+
                 <Route path="/admin" exact component={AdminPanel} />
             </div>
         </Router>
