@@ -38,7 +38,9 @@ export default function MyLists(props){
     }
 
     return(
-        <div>
+        <div style={{
+            paddingBottom:"30px"
+        }}>
             {lists.map((item) => (
                <AList name={item} onDelete={handleDelete}/>
             ))}
@@ -63,7 +65,7 @@ const listStyle = makeStyles((theme) => ({
         justifyContent: "space-between"
     },
     listName: {
-        marginLeft: "20px"
+        marginLeft: "40px"
     },
     goToListButton: {
         width: "100px"
@@ -72,7 +74,7 @@ const listStyle = makeStyles((theme) => ({
         marginBottom:  20,
     },
     name:{
-        flexGrow: 3
+
     }
 }));
 
@@ -104,23 +106,31 @@ export function AList(props){
     return(
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={5}>
-                <Grid container item className={classes.grid} alignItems="center" spacing={4}>
+                <Grid container item className={classes.grid} alignItems="center"  spacing={4}>
                     <Grid item className={[classes.marginInsideGrid, classes.name].join(" ") }>
                         <Typography  className={classes.listName}>
                             {props.name}
                         </Typography>
                     </Grid>
-                    <Grid item className={classes.marginInsideGrid}>
-                        <Link to={gotoLink}>
-                            <Button variant={"contained"} sizeclassName={classes.goToListButton}>
-                                Go to list
-                            </Button>
-                        </Link>
-                    </Grid>
-                    <Grid item className={classes.marginInsideGrid}>
-                        <IconButton size="small">
-                            <DeleteOutlineIcon color="error" onClick={handleDelete}/>
-                        </IconButton>
+                    <Grid item
+                          container
+                          direction={"column"}
+                          style={{
+                              width: "200px",
+                              paddingTop: "40px",
+                          }}>
+                        <Grid item className={classes.marginInsideGrid}>
+                            <Link to={gotoLink}>
+                                <Button variant={"contained"} sizeclassName={classes.goToListButton}>
+                                    Go to list
+                                </Button>
+                            </Link>
+                        </Grid>
+                        <Grid item className={classes.marginInsideGrid}>
+                            <IconButton size="small">
+                                <DeleteOutlineIcon color="error" onClick={handleDelete}/>
+                            </IconButton>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Paper>
