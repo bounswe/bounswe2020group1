@@ -1,19 +1,11 @@
 package com.example.tursuapp.api
 
-import android.content.Context
-import com.example.tursuapp.api.requests.LoginRequest
-import com.example.tursuapp.api.responses.AddProductResponse
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.TokenResponse
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import java.util.concurrent.TimeUnit
 
 interface ApiService {
 /**
@@ -44,7 +36,7 @@ interface ApiService {
                    @Field("stock") stock:Int,
                    @Field("price") price:Float,
                    @Field("photo") photo:String,
-                   @Field("description") description:String): Call<AddProductResponse>
+                   @Field("description") description:String): Call<ResponseBody>
     //@Part("photo") photo:MultipartBody.Part)
     //<auth_token> must be added
 

@@ -2,7 +2,6 @@ package com.example.tursuapp.authentication.homepage.ui.product
 
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,16 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.api.responses.AddProductResponse
 import com.example.tursuapp.api.responses.ProductDetailsResponse
-import com.example.tursuapp.api.responses.TokenResponse
-import com.example.tursuapp.authentication.homepage.HomePageActivity
+import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 class ProductAddFragment: Fragment() {
@@ -97,49 +92,55 @@ class ProductAddFragment: Fragment() {
 
 
 
-    fun productadd(root:View,p_name: String,p_brand: String,p_stock: String,p_price: String,p_photo: String,p_description: String){
+    fun productadd(root:View,p_name: String,p_brand: String,p_stock: String,p_price: String,p_photo: String,p_description: String) {
         val spinner = root.findViewById<Spinner>(R.id.spinner2)
-        val p_categories=spinner.selectedItem.toString()
-        //var p_categories="Electronics"
-        Log.i("product add",p_categories)
-        val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.addProduct("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b",p_categories,p_name,p_brand,p_stock.toInt(),p_price.toFloat(),p_photo,p_description).enqueue(object :
-                retrofit2.Callback<AddProductResponse> {
-            override fun onFailure(p0: Call<AddProductResponse>?, p1: Throwable?) {
-                // Log.i("MainFragment", "error" + p1?.message.toString())
+        val p_categories = spinner.selectedItem.toString()
+        if (p_categories != "Categories") {
+            if(p_name!=null && p_brand!=null && p_stock!=null && p_price!=null && p_photo!=null && p_description!=null){
+                //var p_categories="Electronics"
+                Log.i("product add", p_categories)
+                val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+                apiinterface.addProduct("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b", p_categories, p_name, p_brand, p_stock.toInt(), p_price.toFloat(), p_photo, p_description).enqueue(object :
+                        retrofit2.Callback<ResponseBody> {
+                    override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                        Log.i("MainFragment", "error" + p1?.message.toString())
+                    }
+
+                    override fun onResponse(
+                            p0: Call<ResponseBody>?,
+                            response: Response<ResponseBody>?
+                    ) {
+                        val applicationContext = getActivity()?.getApplicationContext()
+                        if (response != null) {
+                            if (response.code() == 200) {
+                                Toast.makeText(activity?.applicationContext, "Product has been successfully added", Toast.LENGTH_SHORT).show()
+                                //showPopupWindow(view)
+                                Log.i("Status code", response.code().toString())
+                                //clear textviews
+                                spinner.setSelection(-1)
+                                root.findViewById<EditText>(R.id.addProduct_name).text.clear()
+                                root.findViewById<EditText>(R.id.addProduct_brand).text.clear()
+                                root.findViewById<EditText>(R.id.addProduct_stock).text.clear()
+                                root.findViewById<EditText>(R.id.addProduct_price).text.clear()
+                                root.findViewById<EditText>(R.id.addProduct_photo).text.clear()
+                                root.findViewById<EditText>(R.id.addProduct_description).text.clear()
+                            } else {
+                                Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                    }
+
+
+                })
+            }else{
+                Toast.makeText(activity?.applicationContext, "Input all product details ", Toast.LENGTH_SHORT).show()
             }
+        }else {
+            Toast.makeText(activity?.applicationContext, "Select a category", Toast.LENGTH_SHORT).show()
 
-            override fun onResponse(
-                    p0: Call<AddProductResponse>?,
-                    response: Response<AddProductResponse>?
-            ) {
-                val applicationContext = getActivity()?.getApplicationContext()
-                if (response != null) {
-                    Toast.makeText(activity?.applicationContext, "Success", Toast.LENGTH_SHORT).show()
-                    //showPopupWindow(view)
-                     Log.i("Status code",response.code().toString())
-                    // AddListStatus = response.body()!!
-                    //view.findViewById<EditText>(R.id.new_list_txt).setText("")
-                    //val intent = Intent(applicationContext, HomePageActivity::class.java)
-                    //                    startActivity(intent)
-                    //clear textviews
-                    //root.findViewById<EditText>(R.id.addProduct_name).text.clear()
-                    //root.findViewById<EditText>(R.id.addProduct_brand).text.clear()
-                    //root.findViewById<EditText>(R.id.addProduct_stock).text.clear()
-                    //root.findViewById<EditText>(R.id.addProduct_price).text.clear()
-                    //root.findViewById<EditText>(R.id.addProduct_photo).text.clear()
-                }else {
-                    Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-
-
-        })
-
+        }
     }
-
-
 
 
 }
