@@ -40,6 +40,7 @@ Type 1 -> category
 Type 2 -> search
 Type 3 -> filter
 Type 4 -> sort
+Type 5 -> account
  */
 
 @Suppress("DEPRECATION", "UNCHECKED_CAST")
@@ -142,10 +143,6 @@ class HomeFragment : Fragment() {
         popupView.findViewById<ImageView>(R.id.dismiss_popup3).setOnClickListener {
             popupWindow.dismiss()
         }
-        //popupView.findViewById<Button>(R.id.apply_filters).setOnClickListener {
-        //  applyFilters(popupView)
-        //  popupWindow.dismiss()
-        //}
         //get shopping lists
         getLists(popupView)
         //add a new list to shopping lists
@@ -163,8 +160,7 @@ class HomeFragment : Fragment() {
         //gets products from the selected shopping list
         popupView.findViewById<Button>(R.id.h_show_products).setOnClickListener {
             Log.i("vi:", popupView.toString())
-            showListedProducts(popupView)
-            popupWindow.dismiss()
+            showListedProducts(popupView,popupWindow)
             Log.i("vi2:", popupView.toString())
 
 
@@ -396,14 +392,15 @@ class HomeFragment : Fragment() {
 
             })
 
+        }else{
+            Toast.makeText(context, "Please input a list name", Toast.LENGTH_SHORT).show()
         }
 
     }
 
     private fun deleteList(view: View) {
-        var selectedList = -1
-        selectedList = view.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId
-        if (selectedList != -1) {
+        if(view.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId!=-1) {
+            val selectedList = view.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId
             Log.i("Selected List Id: ", selectedList.toString())
             val newRadioButton = view.findViewById<RadioButton>(selectedList)
             Log.i("Selected List Name: ", newRadioButton.text.toString())
@@ -432,55 +429,60 @@ class HomeFragment : Fragment() {
 
             })
 
+        }else{
+            Toast.makeText(context, "Select a list name", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun showListedProducts(root: View) {
-        val selectedList = root.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId
-        Log.i("Selected List Id: ", selectedList.toString())
-        val newRadioButton = root.findViewById<RadioButton>(selectedList)
-        Log.i("Selected List Name: ", newRadioButton.text.toString())
-        val listName = newRadioButton.text.toString()
+    private fun showListedProducts(root: View,window: PopupWindow) {
+        if(root.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId!=-1) {
+            val selectedList = root.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId
+            Log.i("Selected List Id: ", selectedList.toString())
+            val newRadioButton = root.findViewById<RadioButton>(selectedList)
+            Log.i("Selected List Name: ", newRadioButton.text.toString())
+            val listName = newRadioButton.text.toString()
+            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+            val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiInterface.getListedProducts("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
+                    retrofit2.Callback<List<ProductResponse>> {
+                override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
 
-        //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
-        val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.getListedProducts("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
-                retrofit2.Callback<List<ProductResponse>> {
-            override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
-                Log.i("MainFragment", "error" + p1?.message.toString())
-            }
+                override fun onResponse(
+                        p0: Call<List<ProductResponse>>?,
+                        response: Response<List<ProductResponse>>?
+                ) {
+                    Log.i("MainFragment", productList.joinToString())
+                    Log.i("MainFragment", "inside onResponse")
+                    if (response != null) {
+                        productList = ArrayList(response.body()!!)
 
-            override fun onResponse(
-                    p0: Call<List<ProductResponse>>?,
-                    response: Response<List<ProductResponse>>?
-            ) {
-                Log.i("MainFragment", productList.joinToString())
-                Log.i("MainFragment", "inside onResponse")
-                if (response != null) {
-                    productList = ArrayList(response.body()!!)
-
-                    val adapter = context?.let { ProductAdapter(it, productList) }
-                    val gridView = view?.findViewById<GridView>(R.id.gridView)
-                    if (gridView != null) {
-                        gridView.adapter = adapter
-                        gridView.setOnItemClickListener { _, view, _, _ ->
-                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                            val bundle = Bundle()
-                            bundle.putString("id", clickedId.toString())
-                            val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle
-                            val fragmentManager: FragmentManager? = activity?.supportFragmentManager
-                            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                            fragmentTransaction.commit()
+                        val adapter = context?.let { ProductAdapter(it, productList) }
+                        val gridView = view?.findViewById<GridView>(R.id.gridView)
+                        if (gridView != null) {
+                            gridView.adapter = adapter
+                            gridView.setOnItemClickListener { _, view, _, _ ->
+                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                                val bundle = Bundle()
+                                bundle.putString("id", clickedId.toString())
+                                val newFragment = ProductPageFragment()
+                                newFragment.arguments = bundle
+                                val fragmentManager: FragmentManager? = activity?.supportFragmentManager
+                                val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                                fragmentTransaction.commit()
+                            }
                         }
+                        window.dismiss()
                     }
 
                 }
 
-            }
-
-        })
+            })
+        }else{
+            Toast.makeText(context, "Select a list name", Toast.LENGTH_SHORT).show()
+        }
 
 
     }

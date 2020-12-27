@@ -10,7 +10,6 @@ import android.widget.RatingBar
 import android.widget.TextView
 import com.example.tursuapp.R
 import com.example.tursuapp.api.responses.Comments
-import com.example.tursuapp.authentication.homepage.ui.productpage.Comment
 
 //For products in grid view
 
