@@ -146,7 +146,7 @@ const horizontalStyles = makeStyles((theme) => ({
         marginLeft: 10,
         marginTop: 50,
         marginBottom: 1,
-        width: 700,
+        width: "500px",
     },
     grid: {
         paddingLeft: theme.spacing(1),
