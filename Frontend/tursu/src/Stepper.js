@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Paper from '@material-ui/core/Paper';
@@ -8,36 +8,10 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
+import Axios from "axios";
+import Box from "@material-ui/core/Box";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
-const products = [
-    {
-        label: 'Apple Macbook Pro Touch Bar',
-        imgPath:
-            'https://productimages.hepsiburada.net/s/32/375/10354045517874.jpg',
-    },
-    {
-        label: 'Samsung Galaxy S10',
-        imgPath:
-            'https://productimages.hepsiburada.net/s/25/500/10107307622450.jpg',
-    },
-    {
-        label: 'Nike Air Max 270 Unisex',
-        imgPath:
-            'https://cdn-ss.akinon.net/products/2019/11/22/176133/5f94a5dd-c875-4858-8f9a-fed16b5e74fb_size1400x1400_quality85_cropCenter.jpg',
-    },
-    {
-        label: 'Ironing Table',
-        imgPath:
-            'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.singeryetkilisatici.com%2Fimages_buyuk%2Ff48%2FSinger-SB2040-Rezistansli-Fanli-_48_1.jpg&f=1&nofb=1',
-    },
-    {
-        label: 'Voit Pilates Ball',
-        imgPath:
-            'https://aknbarcin.b-cdn.net/products/2020/01/13/86119/5cb857d7-523b-4f21-976c-26997c4863e2.jpg',
-    },
-];
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,7 +22,14 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 50,
+        height: 40,
+        backgroundColor: theme.palette.background.grey,
+    },
+    name :{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 40,
         backgroundColor: theme.palette.background.default,
     },
     img: {
@@ -63,11 +44,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function SwipeableTextMobileStepper() {
+function Stepper() {
     const classes = useStyles();
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
-    const maxSteps = products.length;
+    const [productNames, setProductNames] = React.useState([]);
+    const [productImages, setProductImages] = React.useState([]);
+    const maxSteps = productNames.length;
+
+    //ComponentDidMount
+    useEffect(() => {
+        Axios.get('http://3.232.20.250/recommendation/bestseller',{
+            headers: {
+                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            }}).then(res => {
+                let tempName = []
+                let tempImage = []
+                for(let i=0; i<res.data.length; i++)
+                {
+                    tempName.push(res.data[i].name)
+                    tempImage.push(res.data[i].photo_url)
+                }
+                console.log("IMAGES", tempImage)
+                setProductNames(tempName)
+                setProductImages(tempImage)
+        })
+    }, [])
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -81,10 +83,16 @@ function SwipeableTextMobileStepper() {
         setActiveStep(step);
     };
 
+
     return (
         <div className={classes.root}>
-            <Paper square elevation={2} className={classes.header}>
-                <Typography align="center">{products[activeStep].label}</Typography>
+            <Paper square elevation={3} className={classes.header}>
+                <Typography align="center">
+                    <Box fontWeight="fontWeightBold"> BEST SELLERS </Box>
+                </Typography>
+            </Paper>
+            <Paper square elevation={0} className={classes.name}>
+                <Typography align="center">{productNames[activeStep]}</Typography>
             </Paper>
             <AutoPlaySwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -92,10 +100,10 @@ function SwipeableTextMobileStepper() {
                 onChangeIndex={handleStepChange}
                 enableMouseEvents
             >
-                {products.map((step, index) => (
-                    <div key={step.label}>
+                {productImages.map((step, index) => (
+                    <div>
                         {Math.abs(activeStep - index) <= 2 ? (
-                            <img className={classes.img} src={step.imgPath} alt={step.label} />
+                            <img className={classes.img} src={step} alt={"photo"} />
                         ) : null}
                     </div>
                 ))}
@@ -122,4 +130,4 @@ function SwipeableTextMobileStepper() {
     );
 }
 
-export default SwipeableTextMobileStepper;
+export default Stepper;
