@@ -12,7 +12,7 @@ import Avatar from "@material-ui/core/Avatar";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Paper from "@material-ui/core/Paper";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { Link } from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
@@ -22,7 +22,12 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
 import Tooltip from "@material-ui/core/Tooltip";
 import withStyles from "@material-ui/core/styles/withStyles";
-
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+import Menu from "@material-ui/core/Menu";
+import PersonIcon from '@material-ui/icons/Person';
 
 /**
  * It is used for enabling Navbar to disappear/appear
@@ -236,8 +241,9 @@ export default function Navbar(props){
                                                     </Button>
                                                 </Link>
                                             )}
-
+                                            <UserDropDown></UserDropDown>
                                         </Paper>
+
                                     </Grid>
                                 </Grid>
 
@@ -292,7 +298,69 @@ export default function Navbar(props){
     );
 }
 
+function UserDropDown(){
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [isListOpen, SetIsListOpen]  = React.useState(false);
+    const [isAlertOpen, SetIsAlertOpen]  = React.useState(false);
 
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return(
+        <div>
+            <IconButton
+                onClick={handleClick}
+                name="optionsButton"
+            >
+                <ArrowDropDownIcon />
+            </IconButton>
+            <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                    style: {
+                        marginTop: 40,
+                        maxHeight: 45 * 4.5,
+                        width: '30ch',
+                    },
+                }}
+            >
+                {/*TODO: Convert this linkto structure to redirecting structure.*/}
+                <Link to={"/customerProfile"}>
+                    <MenuItem>
+                        <ListItemIcon>
+                           <PersonIcon></PersonIcon>
+                        </ListItemIcon>
+                        <Typography>My Profile</Typography>
+                    </MenuItem>
+                </Link>
+                <Link to={"/"}>
+                    <MenuItem onClick={
+                        ()=>{
+                            window.sessionStorage.clear()
+                        }
+                    }>
+                        <ListItemIcon>
+                            <PersonIcon></PersonIcon>
+                        </ListItemIcon>
+                        <Typography>Log Out</Typography>
+                    </MenuItem>
+                </Link>
+            </Menu>
+        </div>
+
+    )
+}
 /**
  * It is used for making tooltips styled.
  * Instead of using ToolTip, use this component.
