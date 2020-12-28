@@ -60,10 +60,6 @@ const horizontalStyles = makeStyles((theme) => ({
         flex: "0 0 100px",
         textAlign: "left",
     },
-    brandName: {
-        flex: "0 0 100px",
-        textAlign: "left",
-    },
     productCountBox: {
         width: 45,
         height: 64,
@@ -76,69 +72,37 @@ const horizontalStyles = makeStyles((theme) => ({
     }
 }));
 
-function set_cancelled(id){
-    console.log("cancel " + id)
-
-
-    var token = sessionStorage.getItem("authToken");
-    var bodyFormData = new FormData();
-    bodyFormData.append('order_id', id);
-    console.log(token)
-    axios({
-        method: 'post',
-        url: 'http://3.232.20.250/order/cancel_order/',
-        data: bodyFormData,
-        headers: {Authorization: 'Token ' + token}
-        })
-    .then(res => {
-        console.log(res)
-        alert("Status is changed. Refresh page to view.")
-    })
-    .catch(error =>{
-        if (error.response){
-            console.log(error.response.message);
-        }
-    })
-
-}
-function options(status,id,classes){
-    console.log(id)
-
-    if (status === "processing"){
-        return(
-        <div>
-        <FormDialog classes={classes} id={id}/>
-        <Grid className={classes.marginInsideGrid}>
-        <Tooltip title="Cancel order">
-            <IconButton onClick={() => set_cancelled(id)} size="small">
-                <CancelPresentationIcon/>
-            </IconButton>
-            </Tooltip>
-        </Grid>
-        </div>
-        )
-
-    }
-    else{
-        return(
-        <div>
-        <Grid className={classes.marginInsideGrid}>
-            <IconButton size="small">
-            </IconButton>
-        </Grid>
-        <Grid className={classes.marginInsideGrid}>
-            <IconButton size="small">
-            </IconButton>
-        </Grid>
-        </div>
-        )
-    }
-}
-
-
 export default function Product(props) {
     const classes = horizontalStyles()
+    const [status, setStatus] = React.useState(props.product.status);
     console.log(props.product)
+
+    function set_cancelled(){
+        console.log("cancel " + props.product.id)
+        var token = sessionStorage.getItem("authToken");
+        var bodyFormData = new FormData();
+        bodyFormData.append('order_id', props.product.id);
+        console.log(token)
+        axios({
+            method: 'post',
+            url: 'http://3.232.20.250/order/cancel_order/',
+            data: bodyFormData,
+            headers: {Authorization: 'Token ' + token}
+        })
+            .then(res => {
+                console.log(res)
+                setStatus("canceled")
+            })
+            .catch(error =>{
+                if (error.response){
+                    console.log(error.response.message);
+                }
+            })
+    }
+
+    function handleProcessingToInDelivery(){
+        setStatus("in delivery")
+    }
 
     return(
         <div className={classes.root}>
@@ -169,7 +133,7 @@ export default function Product(props) {
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
                         <Typography variant="caption">
-                            {props.product.status}
+                            {status}
                         </Typography>
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.price].join(" ")}>
@@ -184,7 +148,29 @@ export default function Product(props) {
                             {props.product.orderDate}
                         </Typography>
                     </Grid>
-                    {options(props.product.status,props.product.id,classes)}
+                    {status==="processing" ?(
+                        <div>
+                            <FormDialog classes={classes} id={props.product.id} onSubmit={handleProcessingToInDelivery}/>
+                            <Grid className={classes.marginInsideGrid}>
+                                <Tooltip title="Cancel order">
+                                    <IconButton onClick={set_cancelled} size="small">
+                                        <CancelPresentationIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        </div>
+                    ):(
+                        <div>
+                            <Grid className={classes.marginInsideGrid}>
+                                <IconButton size="small">
+                                </IconButton>
+                            </Grid>
+                            <Grid className={classes.marginInsideGrid}>
+                                <IconButton size="small">
+                                </IconButton>
+                            </Grid>
+                        </div>
+                    )}
                 </Grid>
             </Paper>
         </div>

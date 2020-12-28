@@ -91,51 +91,7 @@ const theme = createMuiTheme({
 let token;
 token = window.sessionStorage.getItem("authToken")
 
-function set_delivered(id){
-    console.log("delivered " + id)
-    var auth_token = sessionStorage.getItem("authToken");
-    var bodyFormData = new FormData();
-    bodyFormData.append('order_id', id);
-    axios({
-        method: 'post',
-        url: 'http://3.232.20.250/order/set_delivered/',
-        data: bodyFormData,
-        headers: {Authorization: 'Token ' + auth_token}
-        })
-    .then(res => {
-        console.log(res)
-        alert("Status is changed. Refresh page to view.")
-    })
-    .catch(error =>{
-        if (error.response){
-            console.log(error.response.message);
-        }
-    })
-}
-function options(status,id,classes){
-    console.log(id)
 
-     if (status ===  "in delivery"){
-         return(
-         <div>
-
-         <Grid className={classes.marginInsideGrid}>
-          <Tooltip title="Set status: delivered">
-             <IconButton onClick={() => set_delivered(id)} size="small">
-                 <LocalShippingIcon/>
-             </IconButton>
-             </Tooltip>
-         </Grid>
-
-         </div>
-         )
-     }
-     else{
-        return(<div><Grid className={classes.marginInsideGrid}>
-                            <IconButton size="small">
-                            </IconButton>
-                        </Grid></div>)
-     }}
 export default function Product(props) {
 
     const classes = horizontalStyles()
@@ -143,6 +99,7 @@ export default function Product(props) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(5);
     const [comment, setComment] = React.useState("");
+    const [status, setStatus] = React.useState("in delivery");
 
     const handleClickOpen = () => {
         console.log(props.product.product)
@@ -186,6 +143,28 @@ export default function Product(props) {
         setOpen(false);
     };
 
+    function set_delivered(id){
+        console.log("delivered " + id)
+        var auth_token = sessionStorage.getItem("authToken");
+        var bodyFormData = new FormData();
+        bodyFormData.append('order_id', id);
+        axios({
+            method: 'post',
+            url: 'http://3.232.20.250/order/set_delivered/',
+            data: bodyFormData,
+            headers: {Authorization: 'Token ' + auth_token}
+        })
+            .then(res => {
+                console.log(res)
+                alert("Status is changed. Refresh page to view.")
+            })
+            .catch(error =>{
+                if (error.response){
+                    console.log(error.response.message);
+                }
+            })
+    }
+
     return(
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={5}>
@@ -225,12 +204,32 @@ export default function Product(props) {
                             </Box>
                         </Typography>
                     </Grid>
-                    {options(props.product.status,props.product.id,classes)}
+                    {status==="in delivery" ?(
+                        <div>
+
+                            <Grid className={classes.marginInsideGrid}>
+                                <Tooltip title="Set status: delivered">
+                                    <IconButton onClick={() => setStatus("delivered")} size="small">
+                                        <LocalShippingIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+
+                        </div>
+                    ):(
+                        <div>
+                            <Grid className={classes.marginInsideGrid}>
+                                <IconButton size="small"/>
+                            </Grid>
+                        </div>
+                    )}
                     <ThemeProvider theme={theme} >
                         <Grid className={classes.marginInsideGrid}>
+                        <Tooltip title="Add Comment">
                             <IconButton size="small">
                                 <ChatIcon onClick={handleClickOpen}/>
                             </IconButton>
+                        </Tooltip>
                             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                                 <DialogTitle id="form-dialog-title">Add a Comment</DialogTitle>
                                 <DialogContent>

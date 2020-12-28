@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import {Button, Typography} from "@material-ui/core";
+import {Button, Typography, Tooltip} from "@material-ui/core";
 import Box from '@material-ui/core/Box';
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from '@material-ui/icons/Add';
@@ -147,6 +147,7 @@ export default function OfferedProduct(props) {
                     </Grid>
 
                     <Grid className={classes.marginInsideGrid}>
+                    <Tooltip title="Edit">
                         <IconButton onClick={() => {
                             props.handleID(id)
                             props.edit()
@@ -154,12 +155,15 @@ export default function OfferedProduct(props) {
                                     size="small">
                             <EditIcon/>
                         </IconButton>
+                        </Tooltip>
                     </Grid>
 
                     <Grid className={classes.marginInsideGrid}>
+                    <Tooltip title="Delete">
                         <IconButton onClick={() => deleteProduct(id)} size="small">
                             <DeleteIcon/>
                         </IconButton>
+                        </Tooltip>
                     </Grid>
                 </Grid>
             </Paper>
