@@ -160,7 +160,6 @@ export default function Checkout() {
 
     return (
         <React.Fragment style={{backgroundColor: '#388e3c'}} >
-            <CssBaseline />
             <ThemeProvider theme={theme} >
                 <AppBar position="fixed" color="primary" className={classes.appBar}>
                     <Toolbar>
