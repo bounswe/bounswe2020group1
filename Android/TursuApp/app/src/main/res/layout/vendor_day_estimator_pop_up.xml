@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="20dp"
+    android:layout_margin="40dp"
     android:background="@color/TursuGreen">
 
     <Button
@@ -56,8 +56,9 @@
         android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="What is the estimated day count for delivery?"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="What is the estimated \n day count \n for delivery?"
         android:textColor="#FFFFFF"
         android:textSize="16dp"
         android:textStyle="bold"
