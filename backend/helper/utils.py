@@ -33,7 +33,7 @@ def recommend_based_on_orders(customer):
     recommendation = []
     for product in recommended:
         if product not in products:
-            recommendation.append(product.name)
+            recommendation.append(product)
     sample_size = min(10, len(recommendation))
     return random.sample(recommendation, k=sample_size)
 
