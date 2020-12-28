@@ -28,6 +28,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import Menu from "@material-ui/core/Menu";
 import PersonIcon from '@material-ui/icons/Person';
+import PowerSettingsNewSharpIcon from '@material-ui/icons/PowerSettingsNewSharp';
 
 /**
  * It is used for enabling Navbar to disappear/appear
@@ -222,17 +223,27 @@ export default function Navbar(props){
 
                                     </Grid>
                                     <Grid item className={classes.sign}>
-                                        <Paper variant="outlined" elevation={3}  className={classes.sign_paper}>
-                                            <AccountCircleIcon  />
+                                        <Paper variant="outlined" elevation={3}  className={classes.sign_paper}
+                                               style={{
+                                                   display: "flex",
+                                                   alignItems: "center",
+                                                   justifyContent: "center",
+                                                   width: "175px",
+                                               }}
+                                        >
                                             {window.sessionStorage.getItem("isLogged") ? (
-                                                <span onClick={
-                                                    ()=>window.sessionStorage.clear()
-                                                }>
-                                                    <Link to='/'>
-                                                        <Button variant="text">
-                                                            {option}
-                                                        </Button>
-                                                    </Link>
+                                                <span style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    paddingLeft: "10px"
+                                                }}>
+                                                    <AccountCircleIcon style={{
+                                                        paddingRight: "5px"
+                                                    }}/>
+                                                    <Typography>
+                                                        {"My Account"}
+                                                    </Typography>
+                                                    <UserDropDown/>
                                                 </span>
                                             ):(
                                                 <Link to='/signIn'>
@@ -241,7 +252,6 @@ export default function Navbar(props){
                                                     </Button>
                                                 </Link>
                                             )}
-                                            <UserDropDown></UserDropDown>
                                         </Paper>
 
                                     </Grid>
@@ -313,6 +323,7 @@ function UserDropDown(){
         setAnchorEl(null);
     };
 
+    const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
     return(
         <div>
             <IconButton
@@ -331,12 +342,12 @@ function UserDropDown(){
                     style: {
                         marginTop: 40,
                         maxHeight: 45 * 4.5,
-                        width: '30ch',
+                        width: '20ch',
                     },
                 }}
             >
                 {/*TODO: Convert this linkto structure to redirecting structure.*/}
-                <Link to={"/customerProfile"}>
+                <Link to={linkAddress}>
                     <MenuItem>
                         <ListItemIcon>
                            <PersonIcon></PersonIcon>
@@ -351,7 +362,7 @@ function UserDropDown(){
                         }
                     }>
                         <ListItemIcon>
-                            <PersonIcon></PersonIcon>
+                            <PowerSettingsNewSharpIcon/>
                         </ListItemIcon>
                         <Typography>Log Out</Typography>
                     </MenuItem>
