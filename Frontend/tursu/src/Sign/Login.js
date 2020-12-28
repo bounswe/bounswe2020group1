@@ -35,24 +35,27 @@ export default class Login extends Component {
         formData.append("password", this.state.password);
         axios.post('http://3.232.20.250/user/login',  formData)
             .then(res => {
+
                 console.log("result:", res);
                 console.log("status: ", res.status);
                 console.log("type: ", res.data.user_type);
                 this.setState({ user_type: res.data.user_type });
+
 
                 window.sessionStorage.setItem("authToken", res.data.auth_token);
                 window.sessionStorage.setItem("first_name", res.data.first_name);
                 window.sessionStorage.setItem("last_name", res.data.last_name);
                 window.sessionStorage.setItem("user_type", res.data.user_type);
 
+
                 this.setState({ redirect: "True" });
 
-                console.log("auth_token: ", window.sessionStorage.getItem("authToken"));
+                
 
             })
             .catch(error =>{
                 if (error.response){
-                    if (error.response.status === 401){
+                    if (error.response.status == 401){
                         alert ("The email or password you have entered is incorrect. Please try again.");
                     }
                     else{
@@ -89,7 +92,9 @@ export default class Login extends Component {
                     <img src={logo} alt="Tursu Logo"></img>
                     <h1>Sign In</h1>
                     <form onSubmit={this.handleSubmit}>
-                        <input className="tursu_input" type="text" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
+
+                        <input className="tursu_input" type="text" name="email" id="email" placeholder="Email or Username" value={this.state.email} onChange={this.handleChange} required />
+
                         <br/>
 
                         <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
@@ -111,12 +116,15 @@ export default class Login extends Component {
                 </div>
                 )
         }
+
         else if (this.state.redirect === "True"){
             if(this.state.user_type=="admin"){
                 return (<Redirect to={"admin/"} />)
+
             }
             window.sessionStorage.setItem("isLogged", "true");
             return (<Redirect to={".."} />)
         }
+
     }
 }

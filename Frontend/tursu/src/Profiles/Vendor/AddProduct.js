@@ -7,6 +7,7 @@ import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/style
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 
 
@@ -174,7 +175,7 @@ class AddProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                     <br/>
                                     <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Price:</Button>
-                                    <Input style={{width: '300px'}} type="number" step="0.01" min="0" name="price" value={price} placeholder="Price" onChange={this.changeHandler} required />
+                                    <Input style={{width: '300px'}} startAdornment={<InputAdornment position="start">₺</InputAdornment>} type="number" step="0.01" min="0" name="price" value={price} placeholder="Price" onChange={this.changeHandler} required />
                                     <br/><br/>
                             </Paper>
                         </Grid>

@@ -244,7 +244,7 @@ const listsDialogStyles =  makeStyles((theme) => ({
     },
 }));
 
-function ListsDialog(props){
+export function ListsDialog(props){
     const classes = listsDialogStyles()
 
     const { open, onClose} = props;
@@ -253,6 +253,7 @@ function ListsDialog(props){
     const [isLoaded, setIsLoaded] = React.useState(false)
     const [nameOfNewList, setNameOfNewList] = React.useState("")
     const [render, SetRender] = React.useState(false)
+
     //[list_name, is product in the list]
     const [isInList, setIsInList] = React.useState(new Map())
 
