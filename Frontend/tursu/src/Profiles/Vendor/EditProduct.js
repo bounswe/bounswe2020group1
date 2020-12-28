@@ -8,6 +8,7 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import axios from "axios";
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 
 
@@ -45,15 +46,47 @@ class EditProduct extends React.Component{
 
 
         this.state = {
+            pCategory: '',
+            pName: '',
+            pDescription: '',
+            pBrand: '',
+            pStock: '',
+            pPrice: '',
             id: 0,
             category: '',
             name: '',
             description: '',
             brand: '',
-            stock: 0,
-            price: 0.00,
+            stock: '',
+            price: '',
             Image: '',
         }
+
+    }
+
+
+    componentDidMount() {
+        axios.get(`http://3.232.20.250/product/`, {
+
+            params: {
+                id: this.props.id
+            }
+        }).then(res =>{
+            console.log("res is: ", res)
+            this.setState({pCategory: res.data.category});
+            this.setState({pName: res.data.name});
+            this.setState({pDescription: res.data.description})
+            this.setState({pBrand: res.data.brand})
+            this.setState({pStock: res.data.stock})
+            this.setState({pPrice: res.data.price})
+
+            console.log("category is: ", this.state.pCategory)
+            console.log("name is: ", this.state.pName)
+
+        }).catch((error) => {
+            alert(error)
+        })
+
     }
 
 
@@ -115,7 +148,7 @@ class EditProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Category:</Button>
-                                <Input style={{width: '300px'}} type="text" name="category"  value={category} placeholder="Enter the Product Category..." onChange={this.changeHandler} />
+                                <Input style={{width: '300px'}} type="text" name="category"  value={category} placeholder={this.state.pCategory} onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -124,7 +157,7 @@ class EditProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Name:</Button>
-                                <Input style={{width: '300px'}} type="text" name="name"  value={name} placeholder="Enter the Product Name..." onChange={this.changeHandler} />
+                                <Input style={{width: '300px'}} type="text" name="name"  value={name} placeholder={this.state.pName} onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -133,7 +166,7 @@ class EditProduct extends React.Component{
                             <Paper  elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px', marginTop: '20px'}} variant="contained" color="primary"  >Description:</Button>
-                                <Input style={{width: '300px'}} type="text" name="description"  multiline='true' rows='3' value={description} placeholder="Enter the Product Description..." onChange={this.changeHandler} />
+                                <Input style={{width: '300px'}} type="text" name="description"  multiline='true' rows='3' value={description} placeholder={this.state.pDescription} onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -142,7 +175,7 @@ class EditProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Brand:</Button>
-                                <Input style={{width: '300px'}} type="text" name="brand" value={brand} placeholder="Enter the Product Brand..." onChange={this.changeHandler} />
+                                <Input style={{width: '300px'}} type="text" name="brand" value={brand} placeholder={this.state.pBrand} onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -151,7 +184,7 @@ class EditProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary" >Stock:</Button>
-                                <Input  style={{width: '300px'}} type="number" step="1" min="0" name="stock" value={stock} placeholder="Stock" onChange={this.changeHandler} />
+                                <Input  style={{width: '300px'}} type="number" step="1" min="0" name="stock" value={stock} placeholder={this.state.pStock} onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
@@ -160,7 +193,7 @@ class EditProduct extends React.Component{
                             <Paper elevation={15} className={useStyles.paper}>
                                 <br/>
                                 <Button style={{width: '200px', marginRight: '50px'}} variant="contained" color="primary"  >Price:</Button>
-                                <Input style={{width: '300px'}} type="number" step="0.01" min="0" name="price" value={price} placeholder="Price" onChange={this.changeHandler} />
+                                <Input style={{width: '300px'}} startAdornment={<InputAdornment position="start">₺</InputAdornment>} type="number" step="0.01" min="0" name="price" value={price} placeholder={this.state.pPrice} onChange={this.changeHandler} />
                                 <br/><br/>
                             </Paper>
                         </Grid>
