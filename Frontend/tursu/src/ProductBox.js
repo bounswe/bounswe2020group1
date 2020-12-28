@@ -247,7 +247,7 @@ function ListsDialog(props){
     const [lists, setLists] = React.useState([])
     const [isLoaded, setIsLoaded] = React.useState(false)
     const [nameOfNewList, setNameOfNewList] = React.useState("")
-
+    const [render, SetRender] = React.useState(false)
     //[list_name, is product in the list]
     const [isInList, setIsInList] = React.useState(new Map())
 
@@ -306,6 +306,7 @@ function ListsDialog(props){
                     console.log("UPDATED")
                 }
                 console.log("IsInList", isInList)
+                SetRender(!render)
             })
         }
     }
@@ -340,6 +341,9 @@ function ListsDialog(props){
             console.log("New Shopping list is added:", res)
             setIsCreatingNewList(false)
             setIsLoaded(false)
+            lists.push(nameOfNewList)
+            setLists(lists)
+            SetRender(!render)
         }).catch( error => {
                 if(error.response){
                     if(error.response.status === 400){
