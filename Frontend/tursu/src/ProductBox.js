@@ -244,7 +244,7 @@ const listsDialogStyles =  makeStyles((theme) => ({
     },
 }));
 
-function ListsDialog(props){
+export function ListsDialog(props){
     const classes = listsDialogStyles()
 
     const { open, onClose} = props;

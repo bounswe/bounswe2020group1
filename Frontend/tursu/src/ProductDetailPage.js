@@ -12,6 +12,11 @@ import { green } from '@material-ui/core/colors';
 import {Alert} from "@material-ui/lab";
 import Snackbar from "@material-ui/core/Snackbar";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import {ListsDialog} from "./ProductBox"
 
 const theme = createMuiTheme({
     palette:{
@@ -57,7 +62,8 @@ class ProductDetail extends React.Component{
             product: [],
             comments:[],
             product_not_found : true,
-            isAlertOpen: false
+            isAlertOpen: false,
+            isListOpen: false,
         }
 
         this.addToShoppingCart = this.addToShoppingCart.bind(this);
@@ -132,22 +138,20 @@ class ProductDetail extends React.Component{
     handleAlertClose(){
         this.setState({isAlertOpen: false})
     }
+    addToShoppingList = () => {
+        this.setState({isListOpen: true})
+    }
+
+    handleListsClose = () => {
+        this.setState({isListOpen: false})
+    }
 
     render(){
 
         return(
 
             <div >
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 {this.state.product_not_found &&
                 <Grid className="product-page"  id="photo" container spacing={3}>
                     <Grid  item xs={6}>
@@ -155,49 +159,73 @@ class ProductDetail extends React.Component{
                             <img  alt="complex" src={this.state.product.photo_url}  width="300" height="300"/>
                         </ButtonBase>
                     </Grid>
-                    <Grid container  xs={6} alignItems="center" justify="center">
+                    <Grid item  xs={6} alignItems="flex-start" justify="left">
 
-                        <Typography>
+                        <Typography align="left">
                             <h1>{this.state.product.name}</h1>
+                            <Typography variant="h4"><b>{this.state.product.price}₺</b></Typography>
                             <b> Vendor: </b> {this.state.product.vendor_name}<br></br>
                             <b> Description: </b> {this.state.product.description}<br></br>
                         </Typography>
+                        <List>
+                            {this.state.comments.map((comment) => (
+                                <ListItem alignItems="flex-start">
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: "#388e3c"}}>
+                                            {comment.customer}
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={comment.customer}
+                                        secondary={
+                                            <React.Fragment>
+                                                <Typography
+                                                    component="span"
+                                                    variant="body2"
+                                                    color="textPrimary"
+                                                >
+                                                </Typography>
+                                                {comment.text}
+                                            </React.Fragment>
+                                        }
+                                    />
+                                </ListItem>
+
+                            ))
+                            }
+                        </List>
                     </Grid>
 
-                    <Grid item xs={4} >
-                        <Grid item xs container direction="column" spacing={2}>
-                            <Grid item>
-                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    <Button variant="contained" color="primary" onClick={this.addToShoppingCart}
-                                    disabled={(window.sessionStorage.getItem("user_type")==="vendor")}>
-                                        Add To Cart
-                                    </Button>
-                                </Typography>
-                            </Grid>
+                    <Grid container xs={12} justify={"center"} spacing={5}>
+                        <Grid item>
+                            <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                                <Button variant="contained" color="primary" onClick={this.addToShoppingList}
+                                        disabled={(window.sessionStorage.getItem("user_type")==="vendor")}>
+                                    Add To List
+                                </Button>
+                                {this.state.isListOpen? (
+                                    <ListsDialog open={this.state.isListOpen} productId={this.state.product.id} onClose={this.handleListsClose}/>
+                                ):(
+                                    <div></div>
+                                )}
+                            </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="subtitle1">${this.state.product.price}</Typography>
+                            <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                                <Button variant="contained" color="primary" onClick={this.addToShoppingCart}
+                                        disabled={(window.sessionStorage.getItem("user_type")==="vendor")}>
+                                    Add To Cart
+                                </Button>
+                            </Typography>
+
                         </Grid>
-                    </Grid>
-                    <Grid item xs={8} >
+
                     </Grid>
                     <br/>
                     <br/>
                     &nbsp;&nbsp;&nbsp;&nbsp;
 
-                    <Paper id="comments">
-                        {this.state.comments.map((comment) => (
-                            <Typography variant="body2" color="textPrimary" align={"left"}>
-                                <Avatar>{comment.customer}
-                                </Avatar>
-                                {comment.text}
-                                <br/><br/>
-                            </Typography>
 
-
-                        ))
-                        }
-                    </Paper>
                 </Grid>}
                 {!this.state.product_not_found &&
                 <Grid item>
