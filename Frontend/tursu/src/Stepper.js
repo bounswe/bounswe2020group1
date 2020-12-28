@@ -10,6 +10,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import Axios from "axios";
 import Box from "@material-ui/core/Box";
+import {Link} from "react-router-dom";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -49,25 +50,27 @@ function Stepper() {
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
     const [productNames, setProductNames] = React.useState([]);
+    const [productIDS, setProductIDS] = React.useState([]);
     const [productImages, setProductImages] = React.useState([]);
     const maxSteps = productNames.length;
 
     //ComponentDidMount
     useEffect(() => {
-        Axios.get('http://3.232.20.250/recommendation/bestseller',{
-            headers: {
-                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
-            }}).then(res => {
+        Axios.get('http://3.232.20.250/recommendation/bestseller')
+            .then(res => {
                 let tempName = []
                 let tempImage = []
+                let tempID = []
                 for(let i=0; i<res.data.length; i++)
                 {
                     tempName.push(res.data[i].name)
                     tempImage.push(res.data[i].photo_url)
+                    tempID.push(res.data[i].id)
                 }
                 console.log("IMAGES", tempImage)
                 setProductNames(tempName)
                 setProductImages(tempImage)
+                setProductIDS(tempID)
         })
     }, [])
 
@@ -103,7 +106,11 @@ function Stepper() {
                 {productImages.map((step, index) => (
                     <div>
                         {Math.abs(activeStep - index) <= 2 ? (
-                            <img className={classes.img} src={step} alt={"photo"} />
+                            <Link to={`/product/${productIDS[activeStep]}`}>
+                                <Paper elevation={5}>
+                                    <img className={classes.img} src={step} alt={"photo"} />
+                                </Paper>
+                            </Link>
                         ) : null}
                     </div>
                 ))}
