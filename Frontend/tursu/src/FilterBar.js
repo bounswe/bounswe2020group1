@@ -61,17 +61,6 @@ class Filter extends React.Component {
                 <div  className="col-sm">
                     <RangeSlider parentCallback = {this.handleCallbackSlider}/>
                 </div>
-                <Link to={`/search/${window.sessionStorage.getItem("searched")}/${window.sessionStorage.getItem("search_type")}/${this.state.dataSlider[0]}/${this.state.dataSlider[1]}/${this.state.dataFilterVendor}/${this.state.dataFilterCategory}/${this.state.dataSortBy}`}>
-                    <IconButton >
-                        <FilterListIcon/>
-                    </IconButton>
-                </Link>
-                <Link to={`/search/${window.sessionStorage.getItem("searched")}/${window.sessionStorage.getItem("search_type")}`}>
-                    <IconButton >
-                        <ClearIcon />
-                    </IconButton>
-                </Link>
-
             </div>
         );
     }
