@@ -75,7 +75,7 @@ class HomePage extends React.Component{
                         <div>
                             <Typography variant="h4" style={{
                                 marginTop:"20px"
-                            }}>Products Recommended For You</Typography>
+                            }}>Recommended For You</Typography>
                             <Divider style={{marginBottom:"20px"}} />
                             <Grid item xs={12} container spacing={6} justify={"space-around"}>
                                 {this.state.recommendedProducts.map((product) => ( <ProductBox product={product}/>))}
