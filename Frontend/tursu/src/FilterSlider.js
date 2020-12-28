@@ -34,8 +34,7 @@ export default function RangeSlider( props ) {
                 valueLabelDisplay="auto"
                 aria-labelledby="range-slider"
                 getAriaValueText={valuetext}
-                max={10000}
-
+                max={20000}
             />
         </div>
     );

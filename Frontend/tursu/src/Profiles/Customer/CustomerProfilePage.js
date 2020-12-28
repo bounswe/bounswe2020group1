@@ -8,6 +8,8 @@ import CustomerSidebar from "./CustomerSidebar";
 import MyInfo from "./MyInfo";
 import MyLists from "./MyLists";
 import MyOrders from "./MyOrders";
+import {Typography} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 
 
 export default class CustomerProfilePage extends Component {
@@ -36,11 +38,31 @@ export default class CustomerProfilePage extends Component {
     SelectTitle(){
         switch (this.state.currentTab) {
             case "info":
-                return <h1 className="stepper">My Information</h1>
+                return (<div className="stepper">
+                    <Typography >
+                    <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                        My Information
+                    </Box>
+                </Typography>
+                </div>)
             case "lists":
-                return <h1 className="stepper">My Lists</h1>
+                return (<div className="stepper">
+                <Typography className="stepper">
+                    <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                        My Lists
+                    </Box>
+                </Typography>
+                </div>)
             case "orders":
-                 return <h1 className="stepper">My Orders</h1>
+                 return (<div className="stepper">
+                <Typography className="stepper">
+                     <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                         My Orders
+                     </Box>
+                 </Typography>
+                </div>)
+            default:
+                return <div></div>
         }
     }
     infoChange(){

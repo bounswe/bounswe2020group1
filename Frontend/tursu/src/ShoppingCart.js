@@ -9,6 +9,7 @@ import Axios from "axios";
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import Box from "@material-ui/core/Box";
 
 const theme = createMuiTheme({
     palette:{
@@ -91,9 +92,11 @@ export default function ShoppingCart(props){
                         <Navbar />
                     </Paper>
                 </Grid>
-                <h4>
-                    Shopping Cart
-                </h4>
+                <Typography >
+                    <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                       Shopping Cart
+                    </Box>
+                </Typography>
                 <Grid item container direction="row">
                     {<ProductListHorizontal products={products} onCountChange={onCountChange}/>}
                     <Paper className={classes.summaryPaper}>

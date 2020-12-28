@@ -101,9 +101,11 @@ export default function ShoppingList(props){
                         <Navbar />
                     </Paper>
                 </Grid>
-                <h4>
-                    {props.match.params.name}
-                </h4>
+                <Typography >
+                    <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                        {props.match.params.name}
+                    </Box>
+                </Typography>
                 <Grid item
                       container
                       direction="row"

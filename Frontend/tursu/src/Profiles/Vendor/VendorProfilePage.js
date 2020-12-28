@@ -10,6 +10,8 @@ import MyProducts from "./MyProducts";
 import MyOrders from "./MyOrders";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
+import {Typography} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 
 
 export default class VendorProfilePage extends Component {
@@ -46,15 +48,45 @@ export default class VendorProfilePage extends Component {
     SelectTitle(){
         switch (this.state.currentTab) {
             case "info":
-                return <h1 className="stepper">My Information</h1>
+                return (<div className="stepper">
+                    <Typography >
+                        <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                            My Information
+                        </Box>
+                    </Typography>
+                </div>)
             case "products":
-                return <h1 className="stepper">My Products</h1>
+                return (<div className="stepper">
+                    <Typography >
+                        <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                            My Products
+                        </Box>
+                    </Typography>
+                </div>)
             case "orders":
-                return <h1 className="stepper">My Orders</h1>
+                return (<div className="stepper">
+                    <Typography >
+                        <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                            My Orders
+                        </Box>
+                    </Typography>
+                </div>)
             case "add":
-                return <h1 className="stepper">Add Product</h1>
+                return (<div className="stepper">
+                    <Typography >
+                        <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                            Add Product
+                        </Box>
+                    </Typography>
+                </div>)
             case "edit":
-                return <h1 className="stepper">Edit Product</h1>
+                return (<div className="stepper">
+                    <Typography >
+                        <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                            Edit Product
+                        </Box>
+                    </Typography>
+                </div>)
         }
     }
     infoChange(){

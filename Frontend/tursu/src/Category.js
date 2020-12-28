@@ -7,6 +7,8 @@ import ProductListVertical from "./ProductList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 import Filter from "./FilterBar";
+import {Typography} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 
 const theme = createMuiTheme({
     palette:{
@@ -100,9 +102,11 @@ class Category extends React.Component{
                             <Navbar />
                         </Paper>
                     </Grid>
-                    <h1>
-                        {this.props.match.params.category}
-                    </h1>
+                    <Typography >
+                        <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                            {this.props.match.params.category}
+                        </Box>
+                    </Typography>
                     <br/>
                     <Grid item xs={12}>
                         <Paper>
