@@ -17,6 +17,8 @@ export default class Vendor extends Component {
             username: "",
             iban: "",
             location:"",
+            longitude:"",
+            latitude:"",
             redirect: "False",
         }
 
@@ -34,15 +36,14 @@ export default class Vendor extends Component {
             formData.append("username", this.state.username);
             formData.append("password", this.state.password);
             formData.append("IBAN", this.state.iban);
-            formData.append("latitude", 1.11);
-            formData.append("longitude", 1.11);
+            formData.append("latitude", this.state.latitude);
+            formData.append("longitude", this.state.longitude);
             formData.append("city", this.state.location);
             axios.post('http://3.232.20.250/user/signup', formData)
                 .then(res =>{
                     console.log(res);
                     console.log(res.data);
-                    this.setState({ redirect: "True" });
-                    window.sessionStorage.setItem("auth_token", res.data.auth_token);
+                    this.props.login()
                 })
                 .catch(error =>{
                     alert ("There has been an error. Please try again.");
@@ -59,7 +60,7 @@ export default class Vendor extends Component {
         });
     }
     render() {
-        if(this.state.redirect === "False"){
+
             return(
                 <div className="registration">
 
@@ -69,6 +70,9 @@ export default class Vendor extends Component {
                         <br/>
                         <input className="tursu_input" type="text" name="iban" id="iban" placeholder="IBAN" value={this.state.iban} onChange={this.handleChange} required />
                         <input className="tursu_input" type="text" name="location" id="location" placeholder="City" value={this.state.location} onChange={this.handleChange} required />
+                        <br/>
+                        <input className="tursu_input" type="text" name="latitude" id="latitude" placeholder="latitude" value={this.state.latitude} onChange={this.handleChange} required />
+                        <input className="tursu_input" type="text" name="longitude" id="longitude" placeholder="longitude" value={this.state.longitude} onChange={this.handleChange} required />
                         <br/>
                         <input className="tursu_input" type="text" name="username" id="username" placeholder="Username" value={this.state.username} onChange={this.handleChange} required />
 
@@ -86,10 +90,6 @@ export default class Vendor extends Component {
 
                 </div>
             )
-        }
-        else if (this.state.redirect === "True"){
-            window.sessionStorage.setItem("isLogged", "true");
-            return (<Redirect to={".."} />)
-        }
+
     }
 }

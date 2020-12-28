@@ -38,9 +38,7 @@ export default class Customer extends Component {
                 .then(res =>{
                     console.log(res);
                     console.log(res.data);
-                    window.sessionStorage.setItem("auth_token", res.data.auth_token);
-                    console.log(res.data.auth_token);
-                    this.setState({ redirect: "True" });
+                    this.props.login()
                 })
                 .catch(error =>{
                     alert ("There has been an error. Please try again.");
@@ -58,7 +56,6 @@ export default class Customer extends Component {
         });
     }
     render() {
-        if(this.state.redirect === "False"){
             return(
                 <div>
 
@@ -83,10 +80,6 @@ export default class Customer extends Component {
 
                 </div>
             )
-        }
-        else if (this.state.redirect === "True"){
-            window.sessionStorage.setItem("isLogged", "true");
-            return (<Redirect to={".."} />)
-        }
+
     }
 }
