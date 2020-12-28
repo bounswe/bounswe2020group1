@@ -15,6 +15,7 @@ import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 import Avatar from "@material-ui/core/Avatar";
+import axios from "axios";
 
 
 function Copyright() {
@@ -130,6 +131,26 @@ export default function Checkout() {
             alert("You must accept the Pre Information Conditions!")
             return;
         }
+
+        if(activeStep === steps.length-1){
+            console.log(window.sessionStorage.getItem("authToken"))
+            const formData = new FormData();
+            axios.post('http://3.232.20.250/order/create_orders/',
+                formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+                .then(res =>{
+                    console.log(res);
+                    console.log(res.data);
+                })
+                .catch(error =>{
+                    console.log(error.response.status)
+                    alert ("There has been an error. Please try again.");
+                })
+        }
+
         setActiveStep(activeStep + 1);
     };
 
