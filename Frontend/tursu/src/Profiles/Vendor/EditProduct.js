@@ -63,6 +63,14 @@ class EditProduct extends React.Component{
     }
 
     submitHandler = (e) => {
+        if(this.state.price < 0){
+            alert("Please enter a valid price!")
+            return ;
+        }
+        if(this.state.stock < 0){
+            alert("Please enter a valid stock!")
+            return ;
+        }
         const formData = new FormData();
         e.preventDefault()
         formData.append("id", this.props.id);
