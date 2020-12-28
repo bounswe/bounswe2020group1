@@ -60,7 +60,7 @@ class VendorOrderFragment : Fragment() {
                     orders = response.body()?.orders!!
                     products = response.body()!!.products
                     createOrderProductDict()
-                    val adapter = VendorOrderAdapter(context!!, ordersDictionary.keys.toList(), ordersDictionary.values.toList())
+                    val adapter = VendorOrderAdapter(context!!, ordersDictionary.keys.toList(), ordersDictionary.values.toList(),auth_token)
                     listView.adapter = adapter
 
 
