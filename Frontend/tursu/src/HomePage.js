@@ -28,10 +28,26 @@ class HomePage extends React.Component{
     }
 
     componentDidMount() {
-        Axios.get('http://3.232.20.250/').then(res => {
-            console.log(res)
-            this.setState({ products: res.data})
-        })
+        if(window.sessionStorage.getItem("isLogged"))
+        {
+            // Axios.get('http://3.232.20.250/recommendation/recommended',{
+            //     headers: {
+            //         'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            //     }}).then(res => {
+            //         console.log(res)
+            //         this.setState({ products: res.data})
+            // })
+            Axios.get('http://3.232.20.250/').then(res => {
+                console.log(res)
+                this.setState({ products: res.data})
+            })
+        }
+        else{
+            Axios.get('http://3.232.20.250/').then(res => {
+                console.log(res)
+                this.setState({ products: res.data})
+            })
+        }
     }
 
     render(){

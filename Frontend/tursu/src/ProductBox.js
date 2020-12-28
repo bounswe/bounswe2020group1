@@ -104,9 +104,14 @@ export default function ProductBox(props) {
                                         </Typography>
                                     </div>
                                 </text>
-                                <div onClick={handleClickOnOptionsIcon}>
-                                    {LongMenu(props)}
-                                </div>
+                                {(window.sessionStorage.getItem("user_type")==="vendor")? (
+                                    <div style={{paddingLeft:"40px"}}>
+                                    </div>
+                                ):(
+                                    <div onClick={handleClickOnOptionsIcon}>
+                                        {LongMenu(props)}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Paper>

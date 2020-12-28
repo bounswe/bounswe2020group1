@@ -168,7 +168,8 @@ class ProductDetail extends React.Component{
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid item>
                                 <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    <Button variant="contained" color="primary" onClick={this.addToShoppingCart}>
+                                    <Button variant="contained" color="primary" onClick={this.addToShoppingCart}
+                                    disabled={(window.sessionStorage.getItem("user_type")==="vendor")}>
                                         Add To Cart
                                     </Button>
                                 </Typography>

@@ -200,7 +200,7 @@ export default function Navbar(props){
 
                                     </Grid>
                                     <Grid item className={classes.cart}>
-                                        {window.sessionStorage.getItem("isLogged")?(
+                                        {window.sessionStorage.getItem("isLogged") && (window.sessionStorage.getItem("user_type")!=="vendor")?(
                                             <Link to='/shoppingCart'>
                                                 <LightTooltip title={"Shopping cart"} placement={"top-start"}>
                                                     <IconButton>
@@ -209,7 +209,7 @@ export default function Navbar(props){
                                                 </LightTooltip>
                                             </Link>
                                         ):(
-                                            <Tooltip title={"You need to login."} placement={"top-start"}>
+                                            <Tooltip title={"You need to login as customer."} placement={"top-start"}>
                                                 <span>
                                                     <IconButton disabled={true}>
                                                         <Link to='/shoppingCart'>
