@@ -41,6 +41,7 @@ export default class Customer extends Component {
                     this.props.login()
                 })
                 .catch(error =>{
+                    console.log(error.response.status)
                     alert ("There has been an error. Please try again.");
                 })
         }
