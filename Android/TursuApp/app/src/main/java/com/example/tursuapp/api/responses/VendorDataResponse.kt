@@ -51,7 +51,7 @@ class VendorProductLists(id:Int, category:String,name:String, brand:String,descr
 
 }
 
-class VendorOrderLists(id:Int,customer:String,product:Int,status:String,cargoID:String, orderDate:String, estimateArrivalDate:String, arrivalDate:String,quantity:Int, comment:String){
+class VendorOrderLists(id:Int,customer:String,product:Int,status:String,cargoID:String, orderDate:String, estimatedArrivalDate:String, arrivalDate:String,quantity:Int, comment:String){
     @SerializedName("id")
     val id : Int = id
     @SerializedName("customer")
@@ -64,8 +64,8 @@ class VendorOrderLists(id:Int,customer:String,product:Int,status:String,cargoID:
     val cargoID : String = cargoID
     @SerializedName("orderDate")
     val orderDate : String = orderDate
-    @SerializedName("estimateArrivalDate")
-    val estimateArrivalDate : String = estimateArrivalDate
+    @SerializedName("estimatedArrivalDate")
+    val estimatedArrivalDate : String = estimatedArrivalDate
     @SerializedName("arrivalDate")
     val arrivalDate : String = arrivalDate
     @SerializedName("quantity")
