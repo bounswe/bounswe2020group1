@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class VendorGiveOrderViewModel : ViewModel() {
+class VendorOrderViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         //value = "This is home Fragment"
