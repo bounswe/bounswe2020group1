@@ -219,11 +219,24 @@ export default function Navbar(props){
                                     <Grid item className={classes.sign}>
                                         <Paper variant="outlined" elevation={3}  className={classes.sign_paper}>
                                             <AccountCircleIcon  />
-                                            <Link to='/signIn'>
-                                                <Button variant="text">
-                                                    {option}
-                                                </Button>
-                                            </Link>
+                                            {window.sessionStorage.getItem("isLogged") ? (
+                                                <span onClick={
+                                                    ()=>window.sessionStorage.clear()
+                                                }>
+                                                    <Link to='/'>
+                                                        <Button variant="text">
+                                                            {option}
+                                                        </Button>
+                                                    </Link>
+                                                </span>
+                                            ):(
+                                                <Link to='/signIn'>
+                                                    <Button variant="text">
+                                                        {option}
+                                                    </Button>
+                                                </Link>
+                                            )}
+
                                         </Paper>
                                     </Grid>
                                 </Grid>
