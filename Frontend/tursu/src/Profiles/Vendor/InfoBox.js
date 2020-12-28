@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import {Button, Typography} from "@material-ui/core";
+import {Button, Typography, Tooltip} from "@material-ui/core";
 import Box from '@material-ui/core/Box';
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 //import AddIcon from '@material-ui/icons/Add';
@@ -75,9 +75,11 @@ function isEditable(props,classes){
     if (props.field.editable === 'True'){
         return(
             <Grid className={classes.marginInsideGrid}>
+            <Tooltip title="Edit">
                 <IconButton size="small" onClick={props.edit}>
                     <EditIcon/>
                 </IconButton>
+                </Tooltip>
             </Grid>
         )
     }

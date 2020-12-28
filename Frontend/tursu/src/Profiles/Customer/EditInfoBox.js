@@ -5,6 +5,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
+import {Tooltip} from "@material-ui/core";
 
 
 export default class EditInfoBox extends Component {
@@ -45,10 +46,14 @@ export default class EditInfoBox extends Component {
                     <nobr><input type={this.state.type} name={this.state.key} id={this.state.key} placeholder={this.state.show} value={this.state.value} onChange={this.handleChange} required /></nobr>
                 </Grid>
                 <Grid>
+                <Tooltip title="Edit">
                     <IconButton size="small" onClick={this.handleSubmit}><CheckCircleIcon/></IconButton>
+                </Tooltip>
                 </Grid>
                 <Grid >
+                <Tooltip title="Cancel">
                     <IconButton size="small" onClick={this.props.edit}><CancelIcon/></IconButton>
+                </Tooltip>
                 </Grid>
             </Grid>
         </Paper>

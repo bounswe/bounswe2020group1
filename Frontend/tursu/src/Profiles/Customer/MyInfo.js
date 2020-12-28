@@ -97,8 +97,6 @@ export default class myInfo extends Component {
     handleEdit(key,value){
         var token = sessionStorage.getItem("authToken");
         var bodyFormData = new FormData();
-        alert(key);
-        alert(value);
         if (key==="Name"){
                 bodyFormData.append('first_name', value);}
         else if (key=== "Surname"){

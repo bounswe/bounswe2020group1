@@ -228,9 +228,11 @@ export default function Product(props) {
                     {options(props.product.status,props.product.id,classes)}
                     <ThemeProvider theme={theme} >
                         <Grid className={classes.marginInsideGrid}>
+                        <Tooltip title="Add Comment">
                             <IconButton size="small">
                                 <ChatIcon onClick={handleClickOpen}/>
                             </IconButton>
+                        </Tooltip>
                             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                                 <DialogTitle id="form-dialog-title">Add a Comment</DialogTitle>
                                 <DialogContent>
