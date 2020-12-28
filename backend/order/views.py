@@ -44,6 +44,7 @@ def create_orders(request):
             arrivalDate=datetime.date.today(),
             created=created_)
         product.stock -= quantity
+        customer.money_spent += quantity * product.price
         product.save()
         order.save()
 
@@ -99,7 +100,7 @@ def get_orders(request):
 
     if len(group) > 0:
         orders.append(group)
-
+    orders.reverse()
     return JsonResponse(orders, safe=False)
 
 
@@ -176,9 +177,11 @@ def cancel_order(request):
             return HttpResponse("Order is already cancelled", status=400)
         order.status = "cancelled"
         order.product.stock += order.quantity
+        order.customer.money_spent -= order.quantity * order.product.price
     else: 
         return HttpResponse("Order doesn't belong to given user", status=400)
     
     order.product.save()
     order.save()
+    order.customer.save()
     return JsonResponse({}, safe=False)

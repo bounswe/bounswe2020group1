@@ -35,7 +35,8 @@ def index(request):
                 "rating": comment.rating
             }
             comments_of_product.append(comment_info)
-    
+    comments_of_product.reverse()
+
     product_info = {"id": product.pk,
                 "name": product.name,
                 "description": product.description,
