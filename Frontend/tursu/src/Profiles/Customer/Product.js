@@ -99,7 +99,7 @@ export default function Product(props) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(5);
     const [comment, setComment] = React.useState("");
-    const [status, setStatus] = React.useState("in delivery");
+    const [status, setStatus] = React.useState(props.product.status);
 
     const handleClickOpen = () => {
         console.log(props.product.product)
@@ -143,11 +143,11 @@ export default function Product(props) {
         setOpen(false);
     };
 
-    function set_delivered(id){
-        console.log("delivered " + id)
+    function set_delivered(){
+        console.log("delivered " + props.product.id)
         var auth_token = sessionStorage.getItem("authToken");
         var bodyFormData = new FormData();
-        bodyFormData.append('order_id', id);
+        bodyFormData.append('order_id', props.product.id);
         axios({
             method: 'post',
             url: 'http://3.232.20.250/order/set_delivered/',
@@ -155,8 +155,8 @@ export default function Product(props) {
             headers: {Authorization: 'Token ' + auth_token}
         })
             .then(res => {
+                setStatus("delivered")
                 console.log(res)
-                alert("Status is changed. Refresh page to view.")
             })
             .catch(error =>{
                 if (error.response){
@@ -194,7 +194,7 @@ export default function Product(props) {
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
                         <Typography variant="caption">
-                            {props.product.status}
+                            {status}
                         </Typography>
                     </Grid>
                     <Grid item className={[classes.marginInsideGrid, classes.price].join(" ")}>
@@ -206,15 +206,13 @@ export default function Product(props) {
                     </Grid>
                     {status==="in delivery" ?(
                         <div>
-
                             <Grid className={classes.marginInsideGrid}>
                                 <Tooltip title="Set status: delivered">
-                                    <IconButton onClick={() => setStatus("delivered")} size="small">
+                                    <IconButton onClick={set_delivered} size="small">
                                         <LocalShippingIcon/>
                                     </IconButton>
                                 </Tooltip>
                             </Grid>
-
                         </div>
                     ):(
                         <div>
