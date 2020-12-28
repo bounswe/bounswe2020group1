@@ -88,7 +88,7 @@ def signup(request):
                         registered_user.save()
                         location = Location(latitude=latitude, longitude=longitude, city=city)
                         location.save()
-                        vendor = Vendor(user=registered_user, iban=iban, rating=0, location=location)
+                        vendor = Vendor(user=registered_user, iban=iban, rating=0, location=location, is_verified=True)
                         vendor.save()
                         user_type = "vendor"
                     else:
