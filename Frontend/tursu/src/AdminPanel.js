@@ -105,6 +105,7 @@ class AdminPanel extends React.Component{
         this.state = {
             value: null,
             comment_id: null,
+            username:null,
             nonverified_list: [],
             update : null
         };
@@ -118,6 +119,21 @@ class AdminPanel extends React.Component{
 
     handleDeleteComment = () => {
         console.log(this.state.comment_id)
+
+        const formData = new FormData();
+        formData.append("comment_id", this.state.comment_id);
+        Axios.post('http://3.232.20.250/admin/deletecomment/',formData,{
+            headers: {
+                'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+            }
+        })
+            .then(res => {
+                console.log(res)
+                console.log("comment deleted?")
+            })
+            .catch(error =>{
+                console.log(error.response)
+            })
     };
 
     handleValueDeleteComment = (event) => {
@@ -125,12 +141,37 @@ class AdminPanel extends React.Component{
         console.log(this.state.comment_id)
     };
 
+    handleBanUser = () => {
+        console.log(this.state.username)
+
+        const formData = new FormData();
+        formData.append("username", "bilibili");
+        Axios.post('http://3.232.20.250/admin/banuser/',formData,{
+            headers: {
+                'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+            }
+        })
+            .then(res => {
+                console.log(res)
+                console.log("user banned")
+            })
+            .catch(error =>{
+                console.log(error.response)
+            })
+    };
+
+    handleValueBanUser = (event) => {
+        this.setState({username: event.target.value})
+    };
+
     handleUpdateList = (childData) => {
         this.setState({update:childData})
     };
     render(){
+        console.log(this.state.update)
 
         return(
+
             <ThemeProvider theme={theme} >
                 <div >
                     <AppBar position="center">
@@ -148,7 +189,14 @@ class AdminPanel extends React.Component{
                         <ProductListNonverified products={this.state.nonverified_list} callbackUpdate={this.handleUpdateList}/>
                     </TabPanel>
                     <TabPanel value={this.state.value} index={2}>
-                        Item Three
+                        <br/><br/>
+                        <form noValidate autoComplete="off">
+                            Enter username of the user that you wished to comment<br/><br/>
+                            <TextField id="outlined-basic" label="Username" variant="outlined" value={this.state.username}  onChange={this.handleValueBanUser}/>
+                            <IconButton onClick={this.handleBanUser}>
+                                <DeleteOutlinedIcon/>
+                            </IconButton>
+                        </form>
                     </TabPanel>
                     <TabPanel value={this.state.value} index={3}>
                         <br/><br/>
