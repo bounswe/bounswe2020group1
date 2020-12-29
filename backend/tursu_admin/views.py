@@ -79,7 +79,7 @@ def ban_user(request):
     except (KeyError, ValueError):
         return HttpResponse("User name (username) not given or invalid", status=400)
     try:
-        ruser = RegisteredUser.objects.get(username=username)
+        ruser = RegisteredUser.objects.get(user__username=username)
     except Exception:
         return HttpResponse("There is no such user.", status=400)
     ruser.is_banned = True
