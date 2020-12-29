@@ -12,4 +12,6 @@
     <color name="signup_gray">#E0E0E0</color>
     <color name="duskYellow">#FFC107</color>
     <color name="lightGrey">#BDBDB9</color>
+    <color name="hintColor">#7777</color>
+
 </resources>

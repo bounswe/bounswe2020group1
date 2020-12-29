@@ -1,15 +1,9 @@
 package com.example.tursuapp.api
 
-import android.content.Context
 import com.example.tursuapp.api.responses.*
-import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import java.util.concurrent.TimeUnit
 
 interface ApiService {
     @FormUrlEncoded
@@ -39,6 +33,8 @@ interface ApiService {
 
     @GET("/")
     fun getProducts(): Call<List<ProductResponse>>
+    @GET("/customerpage")
+    fun getCustomerProfileInfo(@Header("Authorization") token: String): Call<ProfileInfoResponse>
 
     @GET("/product")
     fun getProductDetails(@Query("id") userId: Int): Call<ProductDetailsResponse>
@@ -114,6 +110,10 @@ interface ApiService {
     fun cancelOrder(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int):Call<ResponseBody>
 
     @FormUrlEncoded
+    @POST("/order/set_delivery/")
+    fun setDelivery(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int,@Field("cargo_id") cargoId: String,@Field("days") days: Int):Call<ResponseBody>
+
+    @FormUrlEncoded
     @POST("/shoppingcart/increase")
     fun addToShoppingCart(@Header("Authorization") auth_token :String,@Field("product_id") orderId: Int):Call<ResponseBody>
 
@@ -146,5 +146,18 @@ interface ApiService {
                     @Field("price") price: Float,
                     @Field("photo") photo: String): Call<ResponseBody>
                     //image file @multipart
+
+    @FormUrlEncoded
+    @POST("/product/add/")
+    fun addProduct(@Header("Authorization") token: String,
+                   @Field("category") category: String,
+                   @Field("name") name:String,
+                   @Field("brand") brand:String,
+                   @Field("stock") stock:Int,
+                   @Field("price") price:Float,
+                   @Field("photo") photo:String,
+                   @Field("description") description:String): Call<ResponseBody>
+
+
 
 }

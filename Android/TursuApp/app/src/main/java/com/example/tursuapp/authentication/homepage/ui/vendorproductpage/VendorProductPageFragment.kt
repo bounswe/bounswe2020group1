@@ -129,32 +129,41 @@ class VendorProductPageFragment : Fragment() {
         (activity as HomePageActivity).drawer.closeDrawer(GravityCompat.START)
     }
     private fun updateProduct(view: View,category:String,name:String,description:String,brand:String,stock:String,price:String,photo:String) {
-        val id=product.id
-        val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.updateProduct(auth_token,id, category,name,description,brand,stock.toInt(),price.toFloat(),photo).enqueue(object :
-                retrofit2.Callback<ResponseBody> {
-            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
-                Log.i("MainFragment", "error" + p1?.message.toString())
-            }
-
-            override fun onResponse(
-                    p0: Call<ResponseBody>?,
-                    response: Response<ResponseBody>?
-            ) {
-                if (response != null) {
-                    Log.i("Status code", response.code().toString())
-                    if (response.code() == 200) {
-                        Toast.makeText(context, "Product has been successfully updated", Toast.LENGTH_SHORT).show()
-                        (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
-                    } else {
-                        Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+        if (price.toFloat() < 0) {
+            Toast.makeText(activity?.applicationContext, "Price must be bigger than zero", Toast.LENGTH_SHORT).show()
+        } else {
+            if (stock.toInt() < 0) {
+                Toast.makeText(activity?.applicationContext, "Stock must be bigger than zero", Toast.LENGTH_SHORT).show()
+            } else {
+                val id = product.id
+                //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
+                val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+                apiInterface.updateProduct(auth_token, id, category, name, description, brand, stock.toInt(), price.toFloat(), photo).enqueue(object :
+                        retrofit2.Callback<ResponseBody> {
+                    override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                        Log.i("MainFragment", "error" + p1?.message.toString())
                     }
 
-                }
+                    override fun onResponse(
+                            p0: Call<ResponseBody>?,
+                            response: Response<ResponseBody>?
+                    ) {
+                        if (response != null) {
+                            Log.i("Status code", response.code().toString())
+                            if (response.code() == 200) {
+                                Toast.makeText(context, "Product has been successfully updated", Toast.LENGTH_SHORT).show()
+                                (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+                            } else {
+                                Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                            }
 
+                        }
+
+                    }
+
+                })
             }
-
-        })
+        }
 
 
     }

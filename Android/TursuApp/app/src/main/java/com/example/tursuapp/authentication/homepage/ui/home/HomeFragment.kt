@@ -23,6 +23,8 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
+import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
+import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
@@ -47,6 +49,7 @@ class HomeFragment : Fragment() {
 
     //var adapter: ProductAdapter? = null
     lateinit var auth_token:String
+    lateinit var user_type:String
     var productList = ArrayList<ProductResponse>()
     var allLists = listOf<String>()
     var vendorList = ArrayList<VendorResponse>()
@@ -59,6 +62,7 @@ class HomeFragment : Fragment() {
     private lateinit var toggleGroup: MaterialButtonToggleGroup
     private val filterDictionary = mapOf("Bestsellers" to "bestseller", "Newest" to "newest", "Ascending Price" to "priceAsc", "Descending Price" to "priceDesc", "Number of Comments" to "numComments")
     var vendorProductList = ArrayList<VendorProductLists>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setFilterFunction()
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
@@ -81,6 +85,7 @@ class HomeFragment : Fragment() {
         })
         val pref = context?.getSharedPreferences("UserPref", 0)
         auth_token = pref?.getString("auth_token",null).toString()
+        user_type = pref?.getString("user_type",null).toString()
         return root
     }
 
@@ -333,13 +338,17 @@ class HomeFragment : Fragment() {
             ) {
                 if (response != null) {
                     Log.i("Status code", response.code().toString())
-                    allLists = response.body()!!
-                    val radioGroup = view.findViewById<RadioGroup>(R.id.h_radioGroupLists)
-                    for (list in allLists) {
-                        Log.i("List:", list)
-                        val btn1 = RadioButton(activity?.applicationContext)
-                        btn1.text = list
-                        radioGroup.addView(btn1)
+                    if(response.code()==200) {
+                        allLists = response.body()!!
+                        val radioGroup = view.findViewById<RadioGroup>(R.id.h_radioGroupLists)
+                        for (list in allLists) {
+                            Log.i("List:", list)
+                            val btn1 = RadioButton(activity?.applicationContext)
+                            btn1.text = list
+                            radioGroup.addView(btn1)
+                        }
+                    }else {
+                        Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                     }
 
 
@@ -487,15 +496,22 @@ class HomeFragment : Fragment() {
         } else if (type == "Profile") {
             displayFragment(R.id.nav_profile_detail)
         } else if (type == "Orders") {
-            displayFragment(R.id.nav_customer_orders)
+            if(user_type=="customer"){
+                displayFragment(R.id.nav_customer_orders)
+            }
+            else{
+                displayFragment(R.id.nav_vendor_order)
+            }
+
         }else if (type == "Products On Sale") {
             listVendorProducts()
+        }else if (type == "Product Add") {
+            displayFragment(R.id.nav_product_add)
         }
 
     }
 
     private fun listVendorProducts() {
-        Log.i("listVendorProducts", "vendor product baslangic")
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getProductsOfVendor(auth_token).enqueue(object : retrofit2.Callback<VendorDataResponse> {
             override fun onFailure(p0: Call<VendorDataResponse>?, p1: Throwable?) {
@@ -543,6 +559,11 @@ class HomeFragment : Fragment() {
         }
         else if(id == R.id.nav_customer_orders){
             fragment = CustomerOrdersFragment()
+        }else if(id == R.id.nav_product_add){
+            fragment = ProductAddFragment()
+        }
+        else if(id==R.id.nav_vendor_order){
+            fragment = VendorOrderFragment()
         }
         activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.nav_host_fragment, fragment)

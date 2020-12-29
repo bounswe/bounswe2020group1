@@ -1,11 +1,10 @@
-package com.example.tursuapp.authentication.homepage.ui.order
-
+package com.example.tursuapp.authentication.homepage.ui.product
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class VendorGiveOrderViewModel : ViewModel() {
+class ProductAddModel: ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         //value = "This is home Fragment"
