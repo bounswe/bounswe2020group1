@@ -17,4 +17,30 @@
         <item name="android:letterSpacing">0.04</item>
         <item name="android:textColor">#FB7181</item>
     </style>
+    <style name="profile">
+
+        <item name="android:textSize">
+            12sp
+        </item>
+
+        <item name="android:letterSpacing">
+            0.04
+        </item>
+
+        <item name="android:textColor">
+            #223263
+        </item>
+
+    </style>
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/lightGrey</item>
+        <item name="colorControlActivated">@color/duskYellow</item>
+    </style>
+    <style name="Spinner2" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/tursu_green</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

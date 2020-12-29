@@ -1,5 +1,6 @@
 <resources>
     <string name="sign_up">Sign Up</string>
+    <string name="add_product">Add Product</string>
     <string name="app_name">Tursu App</string>
     <string name="title_activity_home_page">HomePageActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -12,4 +13,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_categories">Categories</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="add_list">Add to List</string>
+    <string name="select">SELECT</string>
 </resources>

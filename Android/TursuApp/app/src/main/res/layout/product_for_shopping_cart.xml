@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+
+    <ImageView
+        android:id="@+id/shoppingcartProductImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/infos"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/shoppingcartProductImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.407"
+        app:layout_constraintStart_toEndOf="@+id/shoppingcartProductImage"
+        app:layout_constraintTop_toTopOf="@+id/shoppingcartProductImage"
+        app:layout_constraintVertical_bias="0.608">
+
+        <LinearLayout
+            android:id="@+id/changeQuantityLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ProductName">
+
+            <ImageView
+                android:id="@+id/decrease"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:srcCompat="@drawable/minus" />
+
+            <TextView
+                android:id="@+id/shoppingCartProductQuantity"
+                android:layout_width="30dp"
+                android:layout_height="27dp"
+                android:gravity="center"
+                android:text="3"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/increase"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:srcCompat="@drawable/plus" />
+
+        </LinearLayout>
+
+        <TextView
+
+            android:id="@+id/shoppingcartProductPrice"
+            android:layout_width="68dp"
+            android:layout_height="22dp"
+            android:text="399.99 TL"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ProductName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/ProductName"
+            app:layout_constraintTop_toBottomOf="@+id/ProductName"
+            app:layout_constraintVertical_bias="0.18" />
+
+        <TextView
+            android:id="@+id/ProductName"
+            android:layout_width="122dp"
+            android:layout_height="50dp"
+            android:foregroundGravity="left"
+            android:gravity="center_vertical"
+            android:text="Nikea Sneakers"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.172"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.116" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
