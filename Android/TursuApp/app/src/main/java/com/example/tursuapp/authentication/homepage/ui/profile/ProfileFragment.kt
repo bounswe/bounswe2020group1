@@ -6,17 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProfileInfoResponse
+import com.example.tursuapp.api.responses.VendorDataResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
-import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import retrofit2.Call
 import retrofit2.Response
 
@@ -24,7 +22,9 @@ class ProfileFragment : Fragment() {
 
     private lateinit var galleryViewModel: ProfileViewModel
 
-    var profileInfo = ProfileInfoResponse("","","","",0,listOf<String>(""),listOf<String>(""))
+    lateinit var profileInfo : ProfileInfoResponse
+    private lateinit var auth_token:String
+    private lateinit var user_type:String
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -34,12 +34,19 @@ class ProfileFragment : Fragment() {
         galleryViewModel =
                 ViewModelProvider(this).get(ProfileViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_customer_profile, container, false)
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
+        user_type = pref?.getString("user_type",null).toString()
 
+        return root
+    }
+
+    fun getCustomerProfileInfo(view: View){
         val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.getCustomerProfileInfo("token f057f527f56398e8041a1985919317a5c0cc2e77").enqueue(object :
+        apiInterface.getCustomerProfileInfo(auth_token).enqueue(object :
                 retrofit2.Callback<ProfileInfoResponse> {
             override fun onFailure(p0: Call<ProfileInfoResponse>?, p1: Throwable?) {
-                //Log.i("MainFragment", "error" + p1?.message.toString())
+                Log.i("MainFragment", "error" + p1?.message.toString())
             }
 
             override fun onResponse(
@@ -48,16 +55,12 @@ class ProfileFragment : Fragment() {
             ) {
                 if (response != null) {
                     Log.i("Status code",response.code().toString())
-                    profileInfo = response.body()!!
+                    val profileInfo = response.body()!!
                     if(profileInfo!=null){
-                        val usernameView = view?.findViewById<TextView>(R.id.profileUsername)
-                        usernameView?.text=profileInfo.username
-                        val firstNameView = view?.findViewById<TextView>(R.id.firstNameView)
-                        usernameView?.text=profileInfo.first_name
-                        val lastNameView = view?.findViewById<TextView>(R.id.lastNameView)
-                        usernameView?.text=profileInfo.last_name
-                        val emailView = view?.findViewById<TextView>(R.id.emailView)
-                        usernameView?.text=profileInfo.email
+                        view?.findViewById<TextView>(R.id.profileUsername).text = profileInfo.username
+                        view?.findViewById<TextView>(R.id.firstNameView).text = profileInfo.first_name
+                        view?.findViewById<TextView>(R.id.lastNameView).text = profileInfo.last_name
+                        view?.findViewById<TextView>(R.id.emailView).text = profileInfo.email
                     }
 
 
@@ -69,16 +72,46 @@ class ProfileFragment : Fragment() {
             }
 
         })
-
-        return root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(user_type=="customer"){
+            getCustomerProfileInfo(view)
+        }
+        else{
+            getVendorProfileInfo(view)
+        }
         view.findViewById<ImageView>(R.id.back_button).setOnClickListener {
             (activity as HomePageActivity).displayFragment(R.id.nav_home,0,"",null)
         }
 
     }
+    fun getVendorProfileInfo(view: View){
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.getProductsOfVendor(auth_token).enqueue(object :
+                retrofit2.Callback<VendorDataResponse> {
+            override fun onFailure(p0: Call<VendorDataResponse>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
 
+            override fun onResponse(
+                    p0: Call<VendorDataResponse>?,
+                    response: Response<VendorDataResponse>?
+            ) {
+                if (response != null) {
+                    Log.i("Status code",response.code().toString())
+                    val profileInfo = response.body()!!
+                    view.findViewById<TextView>(R.id.profileUsername).text = profileInfo.username
+                    view.findViewById<TextView>(R.id.firstNameView).text = profileInfo.first_name
+                    view.findViewById<TextView>(R.id.lastNameView).text = profileInfo.last_name
+                    view.findViewById<TextView>(R.id.emailView).text = profileInfo.email
+
+
+                }
+
+
+            }
+
+        })
+    }
 }

@@ -2,7 +2,7 @@ package com.example.tursuapp.api.responses
 
 import com.google.gson.annotations.SerializedName
 
-class ProfileInfoResponse(username:String,email:String, first_name:String, last_name:String,money_spent:Int, orders:List<String>, lists:List<String>) {
+class ProfileInfoResponse(username:String, email:String, first_name:String, last_name:String, money_spent:Int, orders:List<CustomerProfileOrder>, lists:List<String>) {
     @SerializedName("username")
     val username : String = username
     @SerializedName("email")
@@ -14,7 +14,10 @@ class ProfileInfoResponse(username:String,email:String, first_name:String, last_
     @SerializedName("money_spent")
     val money_spent : Int = money_spent
     @SerializedName("orders")
-    val orders : List<String> = orders
+    val orders : List<CustomerProfileOrder> = orders
     @SerializedName("lists")
     val lists : List<String> = lists
+}
+class CustomerProfileOrder(){
+
 }
