@@ -45,6 +45,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     var allVendors = listOf<String>()
     var allBrands = listOf<String>()
     var allCategories = listOf<String>()
+    lateinit var userType:String
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
@@ -71,7 +72,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         inputMethodManager.hideSoftInputFromWindow(
                 activity.currentFocus!!.windowToken, 0)
     }
-    private fun setExpandableSideMenu(){
+    private fun setExpandableSideMenuCustomer(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
         listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
@@ -80,23 +81,52 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
             if (groupPosition == 1) {
                 displayFragment(R.id.nav_home, 0, "", null)
-                //isFilterAvailable = false
-                //filterImage.visibility = View.GONE
             }
             false
         }
-        expListView!!.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
+        expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
+            if (groupPosition == 0) {
+                when (childPosition) {
+                    0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
+                    1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
+                    2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
+                    3 -> displayFragment(R.id.nav_home, 5, "Payment", null)
+                }
+            }
+            if (groupPosition == 2) {
+                when (childPosition) {
+                    0 -> displayFragment(R.id.nav_home, 1, "Electronics", null)
+                    1 -> displayFragment(R.id.nav_home, 1, "Fashion", null)
+                    2 -> displayFragment(R.id.nav_home, 1, "Home", null)
+                    3 -> displayFragment(R.id.nav_home, 1, "Cosmetics", null)
+                    4 -> displayFragment(R.id.nav_home, 1, "Sports", null)
+                }
+            }
+
+            false
+        }
+        expListView!!.setSelectedGroup(0)
+    }
+    private fun setExpandableSideMenuVendor(){
+        expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
+        prepareListData()
+        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
+        expListView!!.setAdapter(listAdapter)
+        expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
+            if (groupPosition == 1) {
+                displayFragment(R.id.nav_home, 0, "", null)
+            }
+            false
+        }
+        expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
+
                 if (groupPosition == 0) {
-                    //displayStandardFragment(R.id.nav_account)
-                    //isFilterAvailable = false
-                    //filterImage.visibility = View.GONE
                     when (childPosition) {
                         0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
                         1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
                         2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
-                        3 -> displayFragment(R.id.nav_home, 5, "Payment", null)
-                        4 -> displayFragment(R.id.nav_home, 5, "Product Add", null)
-                        5 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+                        3 -> displayFragment(R.id.nav_home, 5, "Product Add", null)
+                        4 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
                     }
                 }
                 if (groupPosition == 2) {
@@ -107,8 +137,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                     3 -> displayFragment(R.id.nav_home, 1, "Cosmetics", null)
                     4 -> displayFragment(R.id.nav_home, 1, "Sports", null)
                 }
-                //isFilterAvailable = true
-                //filterImage.visibility = View.VISIBLE
             }
 
             false
@@ -142,6 +170,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val pref = getSharedPreferences("UserPref", 0)
+        userType = pref?.getString("user_type",null).toString()
         getAllBrands()
         getAllCategories()
         getAllVendors()
@@ -149,6 +179,24 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         setAppBar()
         setExpandableSideMenu()
         setSearchFunction()
+        setShoppingCart()
+    }
+    fun setShoppingCart(){
+        val sc = findViewById<CardView>(R.id.shopping_cart)
+        if(userType=="customer"){
+            sc.visibility = View.VISIBLE
+        }
+        else{
+            sc.visibility = View.GONE
+        }
+    }
+    fun setExpandableSideMenu(){
+        if(userType=="customer"){
+            setExpandableSideMenuCustomer()
+        }
+        else{
+            setExpandableSideMenuVendor()
+        }
     }
     private fun getAllVendors(){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -255,18 +303,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         radioGroup.addView(btn3)
         radioGroup.addView(btn4)
     }
-    /*
-    private fun displayStandardFragment(id: Int){
-        lateinit var fragment: Fragment
-        if(id == R.id.nav_account){
-            fragment = AccountFragment()
-        }
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment, fragment)
-                .commit()
-        this.drawer.closeDrawer(GravityCompat.START)
-    }
-    */
 
     fun displayFragment(id: Int, type: Int, keys: String, filters: HashMap<String, String>?){
         lateinit var fragment: Fragment
@@ -309,21 +345,35 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         categoryNames.add("Home")
         categoryNames.add("Cosmetics")
         categoryNames.add("Sports")
-
+        val accountSubItems: MutableList<String>
         // Adding child data
-        val accountSubItems: MutableList<String> = ArrayList()
-
-        accountSubItems.add("Profile")
-        accountSubItems.add("Orders")
-        accountSubItems.add("Shopping Lists")
-        accountSubItems.add("Payment")
-        accountSubItems.add("Product Add")
-        accountSubItems.add("Products On Sale")
-
+        if(userType=="customer"){
+            accountSubItems = menuItemsForCustomer()
+        }
+        else{
+            accountSubItems = menuItemsForVendor()
+        }
         //listDataChild!![(listDataHeader as ArrayList<String>)[0]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[0]] = accountSubItems
         listDataChild!![(listDataHeader as ArrayList<String>)[1]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[2]] = categoryNames
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
+    }
+    fun menuItemsForVendor():MutableList<String>{
+        val accountSubItems: MutableList<String> = ArrayList()
+        accountSubItems.add("Profile")
+        accountSubItems.add("Orders")
+        accountSubItems.add("Shopping Lists")
+        accountSubItems.add("Product Add")
+        accountSubItems.add("Products On Sale")
+        return accountSubItems
+    }
+    fun menuItemsForCustomer():MutableList<String>{
+        val accountSubItems: MutableList<String> = ArrayList()
+        accountSubItems.add("Profile")
+        accountSubItems.add("Orders")
+        accountSubItems.add("Shopping Lists")
+        accountSubItems.add("Payment")
+        return accountSubItems
     }
 }

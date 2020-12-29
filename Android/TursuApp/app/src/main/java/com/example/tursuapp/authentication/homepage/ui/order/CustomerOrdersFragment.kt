@@ -31,7 +31,7 @@ data class CustomerOrder(val price: String, val quantity: Int, val status: Strin
 data class Product(val name:String,val vendorName:String,val photoUrl:String,val quantity:Int,val status:String,val estimatedArrivalDate:String,val productID:Int)
 class CustomerOrdersFragment : Fragment() {
 
-    val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
+    lateinit var auth_token :String
     private lateinit var backArrow:ImageView
     private lateinit var customerOrderPageViewModel: CustomerOrdersViewModel
     private var orderList: MutableList<CustomerOrder> = mutableListOf()
@@ -43,6 +43,8 @@ class CustomerOrdersFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         customerOrderPageViewModel = ViewModelProvider(this).get(CustomerOrdersViewModel::class.java)
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
         val root = inflater.inflate(R.layout.fragment_customer_orders, container, false)
         return root
     }
@@ -77,7 +79,7 @@ class CustomerOrdersFragment : Fragment() {
                     orderListView.adapter = adapter
                     orderListView.setOnItemClickListener { parent, view, position, id ->
                         val productOfOrdersList = getOrders(position)
-                        val adapter = ProductOrderAdapter(context!!, productOfOrdersList)
+                        val adapter = ProductOrderAdapter(context!!, productOfOrdersList,auth_token)
                         orderListView.adapter = adapter
                         adapter.notifyDataSetChanged()
                         backArrow.setOnClickListener {
@@ -146,11 +148,10 @@ class CustomerOrdersFragment : Fragment() {
             orderList.add(newOrder)
         }
     }
-    class ProductOrderAdapter(context: Context, private var productList: List<Product>) : BaseAdapter() {
-        val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
-
+    class ProductOrderAdapter(context: Context, private var productList: List<Product>,
+                              val auth_token: String
+    ) : BaseAdapter() {
         var context: Context? = context
-
         override fun getCount(): Int {
             return productList.size
         }

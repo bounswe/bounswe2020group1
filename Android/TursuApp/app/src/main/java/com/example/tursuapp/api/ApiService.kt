@@ -114,6 +114,10 @@ interface ApiService {
     fun cancelOrder(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int):Call<ResponseBody>
 
     @FormUrlEncoded
+    @POST("/order/set_delivery/")
+    fun setDelivery(@Header("Authorization") auth_token :String,@Field("order_id") orderId: Int,@Field("cargo_id") cargoId: String,@Field("days") days: Int):Call<ResponseBody>
+
+    @FormUrlEncoded
     @POST("/shoppingcart/increase")
     fun addToShoppingCart(@Header("Authorization") auth_token :String,@Field("product_id") orderId: Int):Call<ResponseBody>
 

@@ -25,7 +25,7 @@ import retrofit2.Response
 class ShoppingCartFragment : Fragment() {
 
     private lateinit var shoppingCartViewModel: ShoppingCartModel
-    private val auth_token = "Token 3f4f61f58fec5cd1e984d84a2ce003875fa771f9"
+    private lateinit var auth_token :String
 
     private lateinit var shoppingCartListView : ListView
     private lateinit var price:TextView
@@ -35,6 +35,8 @@ class ShoppingCartFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         shoppingCartViewModel = ViewModelProvider(this).get(ShoppingCartModel::class.java)
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
         val root = inflater.inflate(R.layout.fragment_shopping_cart, container, false)
         shoppingCartAllProducts(auth_token)
         setButtonVisibilities()

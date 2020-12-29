@@ -13,6 +13,7 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.LoginResponse
+import com.example.tursuapp.api.responses.TokenResponse
 import com.example.tursuapp.authentication.forgotpassword.ForgotPasswordActivity
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.signup.SignUpActivity
@@ -87,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
                         putString("first_name", userResponse.first_name)
                         putString("last_name", userResponse.last_name)
                         putString("user_type", userResponse.user_type)
-                        putString("auth_token", userResponse.auth_token)
+                        putString("auth_token", "Token "+userResponse.auth_token)
                         putBoolean("logged_in", true)
                         apply()
                     }
@@ -99,16 +100,16 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(applicationContext, "Invalid credentials!", Toast.LENGTH_SHORT).show()
                 }
-
             }
+
             override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
 
-                Log.i("Failure",t.message)
+                Log.i("Failure", t.message)
 
             }
 
-        })
 
+        })
     }
 
 }

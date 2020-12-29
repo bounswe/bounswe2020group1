@@ -24,6 +24,7 @@ import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
+import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
@@ -47,6 +48,8 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
     //var adapter: ProductAdapter? = null
+    lateinit var auth_token:String
+    lateinit var user_type:String
     var productList = ArrayList<ProductResponse>()
     var allLists = listOf<String>()
     var vendorList = ArrayList<VendorResponse>()
@@ -59,14 +62,10 @@ class HomeFragment : Fragment() {
     private lateinit var toggleGroup: MaterialButtonToggleGroup
     private val filterDictionary = mapOf("Bestsellers" to "bestseller", "Newest" to "newest", "Ascending Price" to "priceAsc", "Descending Price" to "priceDesc", "Number of Comments" to "numComments")
     var vendorProductList = ArrayList<VendorProductLists>()
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setFilterFunction()
-        homeViewModel =
-                ViewModelProvider(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         val args = arguments
         filters = hashMapOf()
         if (args != null) {
@@ -84,7 +83,9 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })
-
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token",null).toString()
+        user_type = pref?.getString("user_type",null).toString()
         return root
     }
 
@@ -324,9 +325,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun getLists(view: View) {
-        //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.getLists("token f057f527f56398e8041a1985919317a5c0cc2e77").enqueue(object :
+        apiInterface.getLists(auth_token).enqueue(object :
                 retrofit2.Callback<List<String>> {
             override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
                 //Log.i("MainFragment", "error" + p1?.message.toString())
@@ -359,10 +359,9 @@ class HomeFragment : Fragment() {
 
     private fun addList(view: View,window: PopupWindow){
         if(view.findViewById<EditText>(R.id.h_new_list_txt).text.isNotEmpty()){
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val listName = view.findViewById<EditText>(R.id.h_new_list_txt).text.toString()
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.addList("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
+            apiInterface.addList(auth_token, listName).enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                 override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -402,8 +401,6 @@ class HomeFragment : Fragment() {
             val newRadioButton = view.findViewById<RadioButton>(selectedList)
             Log.i("Selected List Name: ", newRadioButton.text.toString())
             val listName = newRadioButton.text.toString()
-            val auth_token="token f057f527f56398e8041a1985919317a5c0cc2e77"
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             apiInterface.deleteList(auth_token, listName).enqueue(object :
                     retrofit2.Callback<ResponseBody> {
@@ -443,9 +440,8 @@ class HomeFragment : Fragment() {
             val newRadioButton = root.findViewById<RadioButton>(selectedList)
             Log.i("Selected List Name: ", newRadioButton.text.toString())
             val listName = newRadioButton.text.toString()
-            //Authorization: token f057f527f56398e8041a1985919317a5c0cc2e77
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.getListedProducts("token f057f527f56398e8041a1985919317a5c0cc2e77", listName).enqueue(object :
+            apiInterface.getListedProducts(auth_token, listName).enqueue(object :
                     retrofit2.Callback<List<ProductResponse>> {
                 override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -496,7 +492,13 @@ class HomeFragment : Fragment() {
         } else if (type == "Profile") {
             displayFragment(R.id.nav_profile_detail)
         } else if (type == "Orders") {
-            displayFragment(R.id.nav_customer_orders)
+            if(user_type=="customer"){
+                displayFragment(R.id.nav_customer_orders)
+            }
+            else{
+                displayFragment(R.id.nav_vendor_order)
+            }
+
         }else if (type == "Products On Sale") {
             listVendorProducts()
         }else if (type == "Product Add") {
@@ -507,7 +509,7 @@ class HomeFragment : Fragment() {
 
     private fun listVendorProducts() {
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiInterface.getProductsOfVendor("token 8032e2a35b4663ae5c6d6ccfc59876dfd80b260b").enqueue(object : retrofit2.Callback<VendorDataResponse> {
+        apiInterface.getProductsOfVendor(auth_token).enqueue(object : retrofit2.Callback<VendorDataResponse> {
             override fun onFailure(p0: Call<VendorDataResponse>?, p1: Throwable?) {
                 Log.i("Vendor Product List: ", "error: " + p1?.message.toString())
             }
@@ -555,6 +557,9 @@ class HomeFragment : Fragment() {
             fragment = CustomerOrdersFragment()
         }else if(id == R.id.nav_product_add){
             fragment = ProductAddFragment()
+        }
+        else if(id==R.id.nav_vendor_order){
+            fragment = VendorOrderFragment()
         }
         activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.nav_host_fragment, fragment)
