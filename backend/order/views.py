@@ -12,6 +12,8 @@ from product.models import Product, Category, Image
 from shopping_cart.models import ShoppingCarts
 from order.models import Order
 from registered_user.models import get_vendor_from_request, get_customer_from_request
+from django.utils import timezone
+import datetime
 
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -23,7 +25,7 @@ def create_orders(request):
     if(customer is None):
         return HttpResponse("Customer authentication failed", status=401)
     items = ShoppingCarts.objects.filter(Q(customer=customer))
-    created_=datetime.datetime.now()
+    created_=datetime.datetime.now(tz=timezone.utc)
     invalid_list = []
     for item in items:
         product = item.product
