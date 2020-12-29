@@ -124,9 +124,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                     when (childPosition) {
                         0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
                         1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
-                        2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
-                        3 -> displayFragment(R.id.nav_home, 5, "Product Add", null)
-                        4 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+                       // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
+                        2 -> displayFragment(R.id.nav_home, 5, "Product Add", null)
+                        3 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
                     }
                 }
                 if (groupPosition == 2) {
@@ -363,7 +363,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val accountSubItems: MutableList<String> = ArrayList()
         accountSubItems.add("Profile")
         accountSubItems.add("Orders")
-        accountSubItems.add("Shopping Lists")
+        //accountSubItems.add("Shopping Lists")
         accountSubItems.add("Product Add")
         accountSubItems.add("Products On Sale")
         return accountSubItems

@@ -56,11 +56,14 @@ class ProductPageFragment : Fragment() {
     }
     fun setVisibilities(view:View){
         val addToCart = view.findViewById<CardView>(R.id.addCart)
+        val addToList = view.findViewById<CardView>(R.id.cardView3)
         if(user_type=="customer"){
             addToCart.visibility = View.VISIBLE
+            addToList.visibility = View.VISIBLE
         }
         else{
             addToCart.visibility = View.INVISIBLE
+            addToList.visibility = View.INVISIBLE
         }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

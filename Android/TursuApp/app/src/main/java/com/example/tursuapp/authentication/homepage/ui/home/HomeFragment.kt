@@ -338,13 +338,17 @@ class HomeFragment : Fragment() {
             ) {
                 if (response != null) {
                     Log.i("Status code", response.code().toString())
-                    allLists = response.body()!!
-                    val radioGroup = view.findViewById<RadioGroup>(R.id.h_radioGroupLists)
-                    for (list in allLists) {
-                        Log.i("List:", list)
-                        val btn1 = RadioButton(activity?.applicationContext)
-                        btn1.text = list
-                        radioGroup.addView(btn1)
+                    if(response.code()==200) {
+                        allLists = response.body()!!
+                        val radioGroup = view.findViewById<RadioGroup>(R.id.h_radioGroupLists)
+                        for (list in allLists) {
+                            Log.i("List:", list)
+                            val btn1 = RadioButton(activity?.applicationContext)
+                            btn1.text = list
+                            radioGroup.addView(btn1)
+                        }
+                    }else {
+                        Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                     }
 
 
