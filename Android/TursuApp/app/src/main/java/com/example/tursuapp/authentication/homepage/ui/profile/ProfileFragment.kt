@@ -1,10 +1,12 @@
 package com.example.tursuapp.authentication.homepage.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -15,8 +17,11 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.ProfileInfoResponse
 import com.example.tursuapp.api.responses.VendorDataResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
+import com.example.tursuapp.authentication.login.LoginActivity
 import retrofit2.Call
 import retrofit2.Response
+
 
 class ProfileFragment : Fragment() {
 
@@ -37,6 +42,25 @@ class ProfileFragment : Fragment() {
         val pref = context?.getSharedPreferences("UserPref", 0)
         auth_token = pref?.getString("auth_token",null).toString()
         user_type = pref?.getString("user_type",null).toString()
+
+        val button: Button = root!!.findViewById(R.id.logout_button) as Button
+        button.setOnClickListener {
+            val pref = activity?.applicationContext?.getSharedPreferences("UserPref", 0)
+            if (pref != null) {
+                with(pref.edit()) {
+                    remove("first_name")
+                    remove("last_name")
+                    remove("user_type")
+                    remove("auth_token")
+                    putBoolean("logged_in", false)
+                    apply()
+                }
+            }
+            val intent = Intent(activity?.applicationContext, LoginActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+
+        }
 
         return root
     }

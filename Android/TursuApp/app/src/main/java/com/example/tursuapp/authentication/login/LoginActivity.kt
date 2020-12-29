@@ -30,13 +30,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Check if the user is logged in.
-//        val pref = applicationContext.getSharedPreferences("UserPref", 0)
-//        if (pref.getBoolean("logged_in", false)) {
-//            val intent = Intent(applicationContext, HomePageActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
+//         Check if the user is logged in.
+        val pref = applicationContext.getSharedPreferences("UserPref", 0)
+        if (pref.getBoolean("logged_in", false)) {
+            val intent = Intent(applicationContext, HomePageActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         val continueText = findViewById<TextView>(R.id.continue_button)
         continueText.paintFlags = continueText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
