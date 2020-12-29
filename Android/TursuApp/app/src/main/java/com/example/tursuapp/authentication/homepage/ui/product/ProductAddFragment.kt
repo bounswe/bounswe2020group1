@@ -103,42 +103,50 @@ class ProductAddFragment: Fragment() {
         if (p_categories != "Categories") {
             if(p_name.isEmpty() || p_brand.isEmpty() || p_stock.isEmpty() || p_price.isEmpty() || p_photo.isEmpty() || p_description.isEmpty()){
                 Toast.makeText(activity?.applicationContext, "Input all product details ", Toast.LENGTH_SHORT).show()
-            }else{
-                Log.i("product add", p_categories)
-                val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-                apiinterface.addProduct(auth_token, p_categories, p_name, p_brand, p_stock.toInt(), p_price.toFloat(), p_photo, p_description).enqueue(object :
-                        retrofit2.Callback<ResponseBody> {
-                    override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
-                        Log.i("MainFragment", "error" + p1?.message.toString())
-                    }
-
-                    override fun onResponse(
-                            p0: Call<ResponseBody>?,
-                            response: Response<ResponseBody>?
-                    ) {
-                        val applicationContext = getActivity()?.getApplicationContext()
-                        if (response != null) {
-                            if (response.code() == 200) {
-                                Toast.makeText(activity?.applicationContext, "Product has been successfully added", Toast.LENGTH_SHORT).show()
-                                //showPopupWindow(view)
-                                Log.i("Status code", response.code().toString())
-                                //clear textviews
-                                spinner.setSelection(-1)
-                                root.findViewById<EditText>(R.id.addProduct_name).text.clear()
-                                root.findViewById<EditText>(R.id.addProduct_brand).text.clear()
-                                root.findViewById<EditText>(R.id.addProduct_stock).text.clear()
-                                root.findViewById<EditText>(R.id.addProduct_price).text.clear()
-                                root.findViewById<EditText>(R.id.addProduct_photo).text.clear()
-                                root.findViewById<EditText>(R.id.addProduct_description).text.clear()
-                            } else {
-                                Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+            }else {
+                if (p_price.toFloat() < 0) {
+                    Toast.makeText(activity?.applicationContext, "Price must be bigger than zero", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (p_stock.toInt() < 0) {
+                        Toast.makeText(activity?.applicationContext, "Stock must be bigger than zero", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.i("product add", p_categories)
+                        val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+                        apiinterface.addProduct(auth_token, p_categories, p_name, p_brand, p_stock.toInt(), p_price.toFloat(), p_photo, p_description).enqueue(object :
+                                retrofit2.Callback<ResponseBody> {
+                            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                                Log.i("MainFragment", "error" + p1?.message.toString())
                             }
-                        }
 
+                            override fun onResponse(
+                                    p0: Call<ResponseBody>?,
+                                    response: Response<ResponseBody>?
+                            ) {
+                                val applicationContext = getActivity()?.getApplicationContext()
+                                if (response != null) {
+                                    if (response.code() == 200) {
+                                        Toast.makeText(activity?.applicationContext, "Product has been successfully added", Toast.LENGTH_SHORT).show()
+                                        //showPopupWindow(view)
+                                        Log.i("Status code", response.code().toString())
+                                        //clear textviews
+                                        spinner.setSelection(-1)
+                                        root.findViewById<EditText>(R.id.addProduct_name).text.clear()
+                                        root.findViewById<EditText>(R.id.addProduct_brand).text.clear()
+                                        root.findViewById<EditText>(R.id.addProduct_stock).text.clear()
+                                        root.findViewById<EditText>(R.id.addProduct_price).text.clear()
+                                        root.findViewById<EditText>(R.id.addProduct_photo).text.clear()
+                                        root.findViewById<EditText>(R.id.addProduct_description).text.clear()
+                                    } else {
+                                        Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                            }
+
+
+                        })
                     }
-
-
-                })
+                }
             }
         }else {
             Toast.makeText(activity?.applicationContext, "Select a category", Toast.LENGTH_SHORT).show()
