@@ -189,6 +189,7 @@ class SearchTestCase(TestCase):
                 stock=product['stock'],
                 price=product['price'],
                 date_added=product['dateAdded'],
+                is_verified=True,
                 )
             prod.save()
 
