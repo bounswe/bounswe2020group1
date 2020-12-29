@@ -189,6 +189,7 @@ class SearchTestCase(TestCase):
                 stock=product['stock'],
                 price=product['price'],
                 date_added=product['dateAdded'],
+                is_verified=True,
                 )
             prod.save()
 
@@ -260,3 +261,40 @@ class SearchTestCase(TestCase):
         response = self.client.get('/search/', {'search_string': string,
                               'search_type': 'product'}).json()
         self.assertEqual(len(response), 0)
+
+    def test_searching_vendor(self):
+        """Searching a vendor"""
+
+        string = 'Apple'
+        response = self.client.get('/search/', {'search_string': string,
+                              'search_type': 'vendor'}).json()
+        vendor_names = set(vendor['name'] for vendor in response)
+        self.assertIn("Apple", vendor_names)
+
+    def test_searching_vendor_case_insensitive(self):
+        """Searching a vendor with case insensitive query"""
+
+        string = 'aPpLe'
+        response = self.client.get('/search/', {'search_string': string,
+                              'search_type': 'vendor'}).json()
+        vendor_names = set(vendor['name'] for vendor in response)
+        self.assertIn("Apple", vendor_names)
+
+    def test_searching_multiple_vendors(self):
+        """Searching a vendor with case insensitive query"""
+
+        string = 'aPpLe saMSuNg'
+        response = self.client.get('/search/', {'search_string': string,
+                              'search_type': 'vendor'}).json()
+        vendor_names = set(vendor['name'] for vendor in response)
+        self.assertIn("Apple", vendor_names)
+        self.assertIn("Samsung", vendor_names)
+
+    def test_searching_nonexisting_vendors(self):
+        """Searching a nonexisting vendor"""
+
+        string = '_t_h_i_s_v_e_n_d_o_r_d_o_e_s_n_o_t_e_x_i_s_t'
+        response = self.client.get('/search/', {'search_string': string,
+                              'search_type': 'vendor'}).json()
+        self.assertEqual(len(response), 0)
+

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from product.models import Product, Image
+from comment.models import Comment
 
 def index(request):
     try:
@@ -15,22 +16,40 @@ def index(request):
     else:
         product = product[0]
     
-    static_url = "http://3.232.20.250/static/"
+    static_url = "http://3.232.20.250/static/images/"
     images = Image.objects.filter(product=product)
+    all_photos = [f"{static_url}{image.photo}" for image in images]
     if(len(images) > 0):
         photo_url = f"{static_url}{images[0].photo}"
     else:
         photo_url = ""
+        
+    comments = Comment.objects.filter(Q(product=product))
+    comments_of_product = []
+    if len(comments) > 0:
+        for comment in comments:
+            comment_info = {
+                "id": comment.pk,
+                "customer": comment.customer.user.user.username,
+                "text": comment.text,
+                "rating": comment.rating
+            }
+            comments_of_product.append(comment_info)
+    comments_of_product.reverse()
+
     product_info = {"id": product.pk,
                 "name": product.name,
                 "description": product.description,
-                "photo_url": photo_url,    #TODO ADD PHOTO URL
+                "photo_url": photo_url,
                 "vendor_name": product.vendor.user.user.first_name,
                 "category": product.category.name,
                 "rating": product.rating,
                 "stock": product.stock,
                 "price": product.price,
-                "comments": []      #WILL BE EMPTY FOR THE FIRST MILESTONE
+                "brand": product.brand,
+                "comments": comments_of_product,
+                "all_photos": all_photos,
+
             }
                    
     return JsonResponse(product_info, safe=False)
