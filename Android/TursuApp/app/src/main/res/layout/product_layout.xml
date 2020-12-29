@@ -13,10 +13,13 @@
         android:id="@+id/img_product"
         android:layout_width="109dp"
         android:layout_height="109dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="false"
-        android:layout_marginTop="16dp"
-        />
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/product_id"
@@ -26,11 +29,15 @@
 
     <TextView
         android:id="@+id/text_product"
-        android:layout_width="109dp"
-        android:layout_height="36dp"
+        android:layout_width="121dp"
+        android:layout_height="69dp"
+        android:layout_below="@+id/img_product"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="133dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
         android:gravity="top"
         android:lineSpacingExtra="0sp"
         android:text="deneme"
@@ -40,11 +47,18 @@
 
     <TextView
         android:id="@+id/price_product"
-        android:layout_width="109dp"
-        android:layout_height="22dp"
+        android:layout_width="125dp"
+        android:layout_height="26dp"
+        android:layout_below="@+id/text_product"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="177dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:gravity="top"
         android:lineSpacingExtra="4sp"
         android:text=""
