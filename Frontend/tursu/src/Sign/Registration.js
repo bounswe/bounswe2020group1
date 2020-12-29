@@ -48,7 +48,7 @@ export default class Registration extends Component {
                     <img src={logo} alt="Tursu Logo"></img>
                     <h1>Sign Up for Customers</h1>
                     </div>
-                    <Customer />
+                    <Customer login={this.goToLogin}/>
                     <button type="button" onClick={this.goToLogin} className="smallButton">Already have an account? Sign in.</button>
 
 
@@ -72,7 +72,7 @@ export default class Registration extends Component {
                         <img src={logo} alt="Tursu Logo"></img>
                         <h1>Sign Up for Vendors</h1>
                     </div>
-                    <Vendor />
+                    <Vendor login={this.goToLogin}/>
                     <button type="button" onClick={this.goToLogin} className="smallButton">Already have an account? Sign in.</button>
 
 

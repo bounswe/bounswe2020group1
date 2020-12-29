@@ -1,0 +1,22 @@
+.sidebar-link {
+    textDecoration: 'none';
+    color: black;
+}
+.sidebar{
+    /*margin-top: 1550px;*/
+    /*margin-left: 2050px;*/
+    width: 230px;
+}
+.ProfilePage{
+    margin-top: 180px;
+    align-items: center;
+}
+.stepper{
+    margin-top: 145px;
+}
+.product{
+    width: 1000px;
+}
+.item{
+    width: 500px
+}

@@ -25,24 +25,28 @@ export default class Customer extends Component {
         if (this.state.password === this.state.password_confirmation){
             const formData = new FormData();
             formData.append("email", this.state.email);
-            formData.append("is_vendor", "False");
+            formData.append("is_vendor", "");
             formData.append("first_name", this.state.name);
             formData.append("last_name", this.state.surname);
             formData.append("username", this.state.username);
             formData.append("password", this.state.password);
             formData.append("IBAN", "");
-            formData.append("location", "");
+            formData.append("latitude", 1.11);
+            formData.append("longitude", 1.11);
+            formData.append("city", "");
             axios.post('http://3.232.20.250/user/signup', formData)
                 .then(res =>{
                     console.log(res);
-                    console.log(res.data)
-                    this.setState({ redirect: "True" });
+                    console.log(res.data);
+                    this.props.login()
                 })
                 .catch(error =>{
+                    console.log(error.response.status)
                     alert ("There has been an error. Please try again.");
                 })
         }
         else{
+            console.log("asda")
             alert("Password confirmation does not match password. Please type passwords again.");
         }
         event.preventDefault();
@@ -53,7 +57,6 @@ export default class Customer extends Component {
         });
     }
     render() {
-        if(this.state.redirect === "False"){
             return(
                 <div>
 
@@ -78,10 +81,6 @@ export default class Customer extends Component {
 
                 </div>
             )
-        }
-        else if (this.state.redirect === "True"){
-            window.sessionStorage.setItem("isLogged", "true");
-            return (<Redirect to={".."} />)
-        }
+
     }
 }
