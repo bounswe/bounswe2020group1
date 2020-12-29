@@ -22,7 +22,7 @@ interface ApiService {
                @Field("last_name") last_name: String,
                @Field("username") username: String,
                @Field("email") email: String,
-               @Field("password") password: String): Call<TokenResponse>
+               @Field("password") password: String): Call<LoginResponse>
 
     @FormUrlEncoded
     @POST("/user/signup")
@@ -35,7 +35,7 @@ interface ApiService {
                      @Field("IBAN") iban: String,
                      @Field("latitude") latitude: String,
                      @Field("longitude") longitude: String,
-                     @Field("city") city: String): Call<TokenResponse>
+                     @Field("city") city: String): Call<LoginResponse>
 
     @GET("/")
     fun getProducts(): Call<List<ProductResponse>>

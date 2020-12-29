@@ -78,21 +78,21 @@ class SignUpActivity : AppCompatActivity() {
     private fun signUp(button: Button, first_name: String, last_name: String, username: String,
                        email: String, password: String){
         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        val call: Call<TokenResponse> = apiinterface.signup(first_name, last_name, username, email, password)
+        val call: Call<LoginResponse> = apiinterface.signup(first_name, last_name, username, email, password)
 
         Log.w("request", call.request().toString())
 
-        call.enqueue(object : Callback<TokenResponse?> {
-            override fun onResponse(call: Call<TokenResponse?>, response: Response<TokenResponse?>) {
-                val userResponse: TokenResponse? = response.body()
+        call.enqueue(object : Callback<LoginResponse?> {
+            override fun onResponse(call: Call<LoginResponse?>, response: Response<LoginResponse?>) {
+                val userResponse: LoginResponse? = response.body()
                 Log.i("Status code",response.code().toString())
 
                 if (userResponse != null) {
                     val pref = applicationContext.getSharedPreferences("UserPref", 0)
                     with (pref.edit()) {
-//                        putString("first_name", userResponse.first_name)
-//                        putString("last_name", userResponse.last_name)
-//                        putString("user_type", userResponse.user_type)
+                        putString("first_name", userResponse.first_name)
+                        putString("last_name", userResponse.last_name)
+                        putString("user_type", userResponse.user_type)
                         putString("auth_token", "Token "+userResponse.auth_token)
                         putBoolean("logged_in", true)
                         apply()
@@ -108,7 +108,7 @@ class SignUpActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<TokenResponse?>, t: Throwable) {
+            override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
                 Log.i("Failure",t.message)
             }
 
