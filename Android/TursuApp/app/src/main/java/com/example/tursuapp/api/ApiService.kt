@@ -151,4 +151,17 @@ interface ApiService {
                     @Field("photo") photo: String): Call<ResponseBody>
                     //image file @multipart
 
+    @FormUrlEncoded
+    @POST("/product/add/")
+    fun addProduct(@Header("Authorization") token: String,
+                   @Field("category") category: String,
+                   @Field("name") name:String,
+                   @Field("brand") brand:String,
+                   @Field("stock") stock:Int,
+                   @Field("price") price:Float,
+                   @Field("photo") photo:String,
+                   @Field("description") description:String): Call<ResponseBody>
+
+
+
 }
