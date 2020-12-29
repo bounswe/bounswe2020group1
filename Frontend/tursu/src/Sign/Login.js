@@ -11,7 +11,7 @@ const clientId = '872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleuserc
 const responseGoogleFailure = response => {
     console.log(response)
     console.log("FAILURE")
-    alert("There has been an error with the Google Sign In")
+    //alert("There has been an error with the Google Sign In")
 }
 
 export default class Login extends Component {
