@@ -22,7 +22,28 @@ class Vendor(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
     iban = models.CharField(max_length=60, null=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
-
+    #def __str__(self):
+    #    import json
+    #    this = Vendor.objects.get(
+    #                #location=self.location,
+    #                iban=self.iban,
+    #                #rating=self.rating,
+    #                is_verified=self.is_verified
+    #            )
+    #    user = this.user
+    #    vend = {
+    #        "@context": "TURSU.VENDOR",
+    #        "name": user.user.first_name,
+    #        "username": user.user.username,
+    #        "email": user.user.username,
+    #        "is_verified": self.is_verified,
+    #        "iban": self.iban,
+    #        #"latitude": float(self.location.latitude),
+    #        #"longitude": float(self.location.longitude),
+    #        #"city": self.location.city,
+    #        #"rating": float(self.rating)
+    #    }
+    #    return str(vend)
 
 class Customer(models.Model):
     user = models.OneToOneField(RegisteredUser, on_delete=models.CASCADE)
