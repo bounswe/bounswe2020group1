@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'shopping_list',
     'helper',
     'actstream',
+    'tursu_admin',
 ]
 SITE_ID = 1
 MIDDLEWARE = [

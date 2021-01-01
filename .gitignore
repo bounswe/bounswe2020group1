@@ -1,0 +1,6 @@
+*.pyc
+.DS_Store
+**/migrations/**
+**/migrations
+**/migrations/__init__.py
+**/static/**

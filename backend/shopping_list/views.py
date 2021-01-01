@@ -30,7 +30,7 @@ def create_shopping_list(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_shopping_list(request):
     """Delete shopping list with given name"""
     customer = get_customer_from_request(request)
@@ -73,7 +73,7 @@ def add_product_to_shopping_list(request):
     except Exception:
         return HttpResponse("There is no such product with given id", status=400)
     try:
-        listing = ListedProducts.objects.create(product_list=product_list, product=product)
+        listing, _ = ListedProducts.objects.get_or_create(product_list=product_list, product=product)
         listing.save()
     except Exception:
         return HttpResponse("Product with the id is already in the list", status=400)
@@ -82,7 +82,7 @@ def add_product_to_shopping_list(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_product_from_shopping_list(request):
     """Delete product with id from the shopping list with given name"""
     customer = get_customer_from_request(request)
@@ -106,7 +106,7 @@ def delete_product_from_shopping_list(request):
     except Exception:
         return HttpResponse("There is no such product with given id", status=400)
     try:
-        listing = ListedProducts.objects.get(product_list=product_list, product=product)
+        listing = ListedProducts.objects.filter(product_list=product_list, product=product)
         listing.delete()
     except Exception:
         return HttpResponse("Product with the id is not in the list", status=400)
