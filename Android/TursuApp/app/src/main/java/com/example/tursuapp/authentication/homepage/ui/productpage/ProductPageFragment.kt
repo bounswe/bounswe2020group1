@@ -52,6 +52,10 @@ class ProductPageFragment : Fragment() {
         root.findViewById<ImageView>(R.id.add_list_image)?.setOnClickListener {
             showPopupWindow(it)
         }
+        root.findViewById<ImageView>(R.id.add_comment_image)?.setOnClickListener {
+            showPopupAddComment(it)
+        }
+
         return root
     }
     fun setVisibilities(view:View){
@@ -99,6 +103,7 @@ class ProductPageFragment : Fragment() {
             })
         }
 
+
     }
 
     @SuppressLint("InflateParams")
@@ -136,6 +141,30 @@ class ProductPageFragment : Fragment() {
         }
     }
 
+    @SuppressLint("InflateParams")
+    private fun showPopupAddComment(view: View) {
+        //Create a View object yourself through inflater
+        val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView: View = inflater.inflate(R.layout.comment_add_popup_layout, null)
+        //Specify the length and width through constants
+        val width = LinearLayout.LayoutParams.MATCH_PARENT
+        val height = LinearLayout.LayoutParams.MATCH_PARENT
+        //val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        //val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        //Make Inactive Items Outside Of PopupWindow
+        val focusable = true
+        //Create a window with our parameters
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+        popupView.findViewById<ImageView>(R.id.addComment_cancel_btn).setOnClickListener {
+            popupWindow.dismiss()
+        }
+        popupView.findViewById<Button>(R.id.addComment_button).setOnClickListener {
+            //addList(popupView,popupWindow)
+        }
+
+    }
     private fun getLists(view: View){
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getLists(auth_token).enqueue(object :

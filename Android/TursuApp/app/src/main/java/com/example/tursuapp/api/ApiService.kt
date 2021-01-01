@@ -158,6 +158,13 @@ interface ApiService {
                    @Field("photo") photo:String,
                    @Field("description") description:String): Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("/comment/")
+    fun addComment(@Header("Authorization") token: String,
+                   @Field("product_id") product_id: Int,
+                   @Field("text") text:String,
+                   @Field("rating") rating:String): Call<ResponseBody>
+
 
 
 }
