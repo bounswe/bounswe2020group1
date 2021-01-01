@@ -58,49 +58,41 @@
                 </LinearLayout>
             </LinearLayout>
 
+
             <LinearLayout
-                android:id="@+id/linear01"
-                android:layout_width="372dp"
-                android:layout_height="37dp"
-                android:layout_marginTop="10dp"
+                android:id="@+id/linear0"
+                android:layout_width="365dp"
+                android:layout_height="154dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lin1">
 
-                <TextView
-                    android:id="@+id/addComment_product_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:paddingLeft="30dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="5dp"
-                    android:text="Product Name"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear0"
-                android:layout_width="371dp"
-                android:layout_height="127dp"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linear01">
-
                 <ImageView
                     android:id="@+id/addComment_productImage"
-                    android:layout_width="109dp"
-                    android:layout_height="123dp"
+                    android:layout_width="135dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/imageborder"
                     app:layout_constraintBottom_toTopOf="@id/verifiedProduct"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@android:drawable/ic_menu_camera"
                     tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/addComment_product_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:paddingLeft="30dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="Product Name"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -118,8 +110,12 @@
                     android:id="@+id/addComment_ratingBar"
                     style="@style/Widget.AppCompat.RatingBar"
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_height="match_parent"
                     android:background="@color/white"
+                    android:isIndicator="false"
+                    android:rating="0.0"
+                    android:numStars="5"
                     android:theme="@style/RatingBar" />
             </LinearLayout>
 
@@ -135,8 +131,9 @@
 
                 <EditText
                     android:id="@+id/addComment_text"
-                    android:layout_width="355dp"
+                    android:layout_width="348dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:background="@color/white"
                     android:gravity="top|left"
                     android:hint="Your Comment"

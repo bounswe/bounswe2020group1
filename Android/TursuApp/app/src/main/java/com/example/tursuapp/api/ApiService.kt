@@ -163,7 +163,7 @@ interface ApiService {
     fun addComment(@Header("Authorization") token: String,
                    @Field("product_id") product_id: Int,
                    @Field("text") text:String,
-                   @Field("rating") rating:String): Call<ResponseBody>
+                   @Field("rating") rating:Int): Call<ResponseBody>
 
 
 
