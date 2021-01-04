@@ -186,6 +186,10 @@ class CustomerOrdersFragment : Fragment() {
                     setDeliveredButton.visibility = View.INVISIBLE
                     addCommentCView.visibility=View.VISIBLE
                 }
+                addCommentImage.setOnClickListener {
+                    ShowAddCommentPopup(productView,productList[position].id,productList[position].name,productList[position].photoUrl,auth_token)
+                }
+
             }
             else if(productList[position].status=="processing"){
                 cancelOrderButton.visibility = View.VISIBLE
