@@ -11,8 +11,8 @@ from django.contrib.contenttypes.models import ContentType
 
 from django.contrib.sites.models import Site
 one = Site.objects.all()[0]
-#one.domain = 'http//3.232.20.250'
-one.domain = 'localhost:8000'
+one.domain = '3.232.20.250'
+#one.domain = 'localhost:8000'
 one.name = 'Tursu'
 one.save()
 class JSONActivity(AbstractActivityStream):
@@ -24,35 +24,29 @@ class JSONActivity(AbstractActivityStream):
             'totalItems': len(items),
             'items': [self.format(action) for action in items]
             }
-# Add related functions to form JSON to change the stream 
-# https://django-activity-stream.readthedocs.io/en/latest/_modules/actstream/feeds.html#AbstractActivityStream
-#    def format_item(self, action, item_type='actor'):
-#        """
-#        Returns a formatted dictionary for an individual item based on the action and item_type.
-#        """
-#        obj = getattr(action, item_type)
-#        return {
-#            'id': self.get_uri(action, obj),
-#            'url': self.get_url(action, obj),
-#            'objectType': ContentType.objects.get_for_model(obj).name,
-#            'displayName': str(obj)
-#        }
-
 
 
 @api_view(['GET']) 
 def vendors(request):
     act = JSONActivity()
-    # TODO UPDATE TO RETURN ALL VENDORS
-    actions = actor_stream(Vendor.objects.get(id=30))
+    try:
+        vendor_name = request.GET["vendor_name"]
+        vendor = Vendor.objects.get(user__user__first_name=vendor_name)
+    except:
+        return HttpResponse("Vendor with name does not exist!", status=400)
+    actions = actor_stream(vendor)
     resp = act.serialize(actions)
     return JsonResponse(resp, safe=False)
 
 @api_view(['GET']) 
 def products(request):
     act = JSONActivity()
-    # TODO UPDATE TO RETURN ALL PRODUCTS
-    actions = any_stream(Product.objects.get(id=49))
+    try:
+        product_id = request.GET["product_id"]
+        product = Product.objects.get(id=product_id)
+    except:
+        return HttpResponse("Product with id does not exist!", status=400)
+    actions = any_stream(product)
     resp = act.serialize(actions)
     return JsonResponse(resp, safe=False)
 
