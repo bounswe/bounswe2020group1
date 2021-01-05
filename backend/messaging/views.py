@@ -186,9 +186,9 @@ def create_flow_customer_vendor(request):
         vendor = Vendor.objects.get(user__user__first_name=vendor_name)
     except:
         return HttpResponse("Vendor does not exist", status=400)
-    orders = Order.objects.filter(customer=customer, vendor=vendor)
-    if len(orders) == 0:
-        return HttpResponse("You can't message vendors that you haven't ordered from", status=400)
+    #orders = Order.objects.filter(customer=customer, vendor=vendor)
+    #if len(orders) == 0:
+    #    return HttpResponse("You can't message vendors that you haven't ordered from", status=400)
     flow, _ = MessageFlowCustomer.objects.get_or_create(
             customer=customer,
             vendor=vendor
