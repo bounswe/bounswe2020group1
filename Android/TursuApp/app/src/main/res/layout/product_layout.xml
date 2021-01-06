@@ -42,7 +42,7 @@
         android:lineSpacingExtra="0sp"
         android:text="deneme"
         android:textColor="#575555"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
     <TextView

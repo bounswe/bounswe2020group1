@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -92,22 +93,30 @@ class HomeFragment : Fragment() {
         val filterImage = activity?.findViewById<ImageView>(R.id.filter_image)
         val searchBar = activity?.findViewById<EditText>(R.id.editMobileNo)
         val searchButton = activity?.findViewById<Button>(R.id.search_button)
+        val recommendationLists = activity?.findViewById<ConstraintLayout>(R.id.horizontalLists)
+        val gridView = activity?.findViewById<GridView>(R.id.gridView)
         //listing all products
         when (type) {
             0 -> {
+                gridView!!.visibility = View.GONE
+                recommendationLists!!.visibility = View.VISIBLE
                 filterImage!!.visibility = View.INVISIBLE
                 searchBar!!.visibility = View.VISIBLE
                 searchButton!!.visibility = View.VISIBLE
             }
             //category screen
             1 -> {
-                filterImage!!.visibility = View.VISIBLE
+                gridView!!.visibility = View.VISIBLE
+                recommendationLists!!.visibility = View.GONE
+                filterImage!!.visibility = View.GONE
                 searchBar!!.visibility = View.INVISIBLE
                 searchButton!!.visibility = View.INVISIBLE
             }
             //search screen
             2 -> {
-                filterImage!!.visibility = View.VISIBLE
+                gridView!!.visibility = View.VISIBLE
+                recommendationLists!!.visibility = View.GONE
+                filterImage!!.visibility = View.GONE
                 searchBar!!.visibility = View.VISIBLE
                 searchButton!!.visibility = View.VISIBLE
             }
@@ -140,7 +149,7 @@ class HomeFragment : Fragment() {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         popupView.findViewById<ImageView>(R.id.dismiss_popup3).setOnClickListener {
             popupWindow.dismiss()
-            listAllProducts()
+            listRecommendedProducts()
         }
         //get shopping lists
         getLists(popupView)
@@ -260,6 +269,7 @@ class HomeFragment : Fragment() {
                     vendorList = ArrayList(response.body()!!)
                     val adapter = context?.let { VendorAdapter(it, vendorList) }
                     val gridView = view?.findViewById<GridView>(R.id.gridView)
+                    gridView!!.visibility = View.VISIBLE
                     if (gridView != null) {
                         gridView.adapter = adapter
                         gridView.setOnItemClickListener { _, view, _, _ ->
@@ -301,6 +311,7 @@ class HomeFragment : Fragment() {
                     productList = ArrayList(response.body()!!)
                     val adapter = context?.let { ProductAdapter(it, productList) }
                     val gridView = view?.findViewById<GridView>(R.id.gridView)
+                    gridView!!.visibility = View.VISIBLE
                     if (gridView != null) {
                         gridView.adapter = adapter
                         gridView.setOnItemClickListener { _, view, _, _ ->
@@ -461,6 +472,7 @@ class HomeFragment : Fragment() {
 
                         val adapter = context?.let { ProductAdapter(it, productList) }
                         val gridView = view?.findViewById<GridView>(R.id.gridView)
+                        gridView!!.visibility = View.VISIBLE
                         if (gridView != null) {
                             gridView.adapter = adapter
                             gridView.setOnItemClickListener { _, view, _, _ ->
@@ -526,6 +538,7 @@ class HomeFragment : Fragment() {
                         vendorProductList=ArrayList(response.body()!!.products)
                         val adapter = context?.let { VendorProductAdapter(it, vendorProductList) }
                         val gridView = view?.findViewById<GridView>(R.id.gridView)
+                        gridView!!.visibility = View.VISIBLE
                         if (gridView != null) {
                             gridView.adapter = adapter
                             gridView.setOnItemClickListener { _, view, _, _ ->
@@ -588,6 +601,7 @@ class HomeFragment : Fragment() {
                     productList = ArrayList(response.body()!!)
                     val adapter = context?.let { ProductAdapter(it, productList) }
                     val gridView = view?.findViewById<GridView>(R.id.gridView)
+                    gridView!!.visibility = View.VISIBLE
                     if (gridView != null) {
                         gridView.adapter = adapter
                         gridView.setOnItemClickListener { _, view, _, _ ->
@@ -610,8 +624,10 @@ class HomeFragment : Fragment() {
         })
     }
     fun listRecommendedProducts(){
-        val hRecyclerView = view?.findViewById(R.id.recommRecylerView) as RecyclerView
-
+        val recommRecyclerView = view?.findViewById(R.id.recommRecylerView) as RecyclerView
+        val bestsellerRecyclerView = view?.findViewById(R.id.bestsellerRecyclerView) as RecyclerView
+        val topratedRecyclerView = view?.findViewById(R.id.topRatedRecyclerView) as RecyclerView
+        val newestRecyclerView = view?.findViewById(R.id.newestRecyclerView) as RecyclerView
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getRecommendedProducts(auth_token).enqueue(object : retrofit2.Callback<RecommendationPackResponse> {
             override fun onFailure(p0: Call<RecommendationPackResponse>?, p1: Throwable?) {
@@ -622,13 +638,27 @@ class HomeFragment : Fragment() {
                 p0: Call<RecommendationPackResponse>?,
                 response: Response<RecommendationPackResponse>?
             ) {
-                Log.i("MainFragment", productList.joinToString())
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
-                    productList = ArrayList(response.body()?.bestseller!!)
-                    hRecyclerView.apply {
-                        hRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        hRecyclerView.adapter = productList?.let { RecommendationProductAdapter(productList, context) }
+                    val recommList = ArrayList(response.body()?.recommended!!)
+                    val bestsellerList = ArrayList(response.body()?.bestseller!!)
+                    val topratedList = ArrayList(response.body()?.toprated!!)
+                    val newestList = ArrayList(response.body()?.newest!!)
+                    recommRecyclerView.apply {
+                        recommRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        recommRecyclerView.adapter = productList?.let { RecommendationProductAdapter(recommList, context) }
+                    }
+                    topratedRecyclerView.apply {
+                        topratedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        topratedRecyclerView.adapter = productList?.let { RecommendationProductAdapter(topratedList, context) }
+                    }
+                    newestRecyclerView.apply {
+                        newestRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        newestRecyclerView.adapter = productList?.let { RecommendationProductAdapter(newestList, context) }
+                    }
+                    bestsellerRecyclerView.apply {
+                        bestsellerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        bestsellerRecyclerView.adapter = productList?.let { RecommendationProductAdapter(bestsellerList, context) }
                     }
                 }
 
@@ -728,7 +758,7 @@ class HomeFragment : Fragment() {
                 displayAccountSubItems(view, keys)
             }
             else -> {
-                listAllProducts()
+                listRecommendedProducts()
             }
         }
         Log.i("HomeFragment", "here")
