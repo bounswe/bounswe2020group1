@@ -13,8 +13,11 @@ def product_filter(request, products):
         pass
 
     try:
-        category = request.GET["fcategory"]
-        query &= Q(category__name__iexact=category)
+        categories = request.GET["fcategory"]
+        category_filter = Q()
+        for category in categories.split("|"):
+            category_filter |= Q(category__name__iexact=category)
+        query &= category_filter
     except KeyError:
         pass
 
@@ -30,13 +33,19 @@ def product_filter(request, products):
     query &=  Q(price__range=(price_lower, price_upper))
 
     try:
-        vendor_name = request.GET["fvendor_name"]
-        query &= Q(vendor__user__user__first_name__iexact=vendor_name)
+        vendor_names = request.GET["fvendor_name"]
+        vendor_filter = Q()
+        for vendor_name in vendor_names.split("|"):
+            vendor_filter |= Q(vendor__user__user__first_name__iexact=vendor_name)
+        query &= vendor_filter
     except KeyError:
         pass
     try:
-        brand = request.GET["fbrand"]
-        query &= Q(brand__iexact=brand)
+        brands = request.GET["fbrand"]
+        brand_filter = Q()
+        for brand in brands.split("|"):
+            brand_filter |= Q(brand__iexact=brand)
+        query &= brand_filter
     except KeyError:
         pass
     return products.filter(query)
