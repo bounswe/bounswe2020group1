@@ -158,6 +158,7 @@ interface ApiService {
                    @Field("photo") photo:String,
                    @Field("description") description:String): Call<ResponseBody>
 
-
+    @GET("/recommendation/recommendation_pack")
+    fun getRecommendedProducts(@Header("Authorization") token :String): Call<RecommendationPackResponse>
 
 }

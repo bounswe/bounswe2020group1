@@ -14,8 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tursuapp.R
 import com.example.tursuapp.adapter.ProductAdapter
+import com.example.tursuapp.adapter.RecommendationProductAdapter
 import com.example.tursuapp.adapter.VendorAdapter
 import com.example.tursuapp.adapter.VendorProductAdapter
 import com.example.tursuapp.api.ApiService
@@ -79,10 +82,6 @@ class HomeFragment : Fragment() {
             activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
         }
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
-        })
         val pref = context?.getSharedPreferences("UserPref", 0)
         auth_token = pref?.getString("auth_token",null).toString()
         user_type = pref?.getString("user_type",null).toString()
@@ -610,7 +609,36 @@ class HomeFragment : Fragment() {
 
         })
     }
+    fun listRecommendedProducts(){
+        val hRecyclerView = view?.findViewById(R.id.recommRecylerView) as RecyclerView
 
+        val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getRecommendedProducts(auth_token).enqueue(object : retrofit2.Callback<RecommendationPackResponse> {
+            override fun onFailure(p0: Call<RecommendationPackResponse>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                p0: Call<RecommendationPackResponse>?,
+                response: Response<RecommendationPackResponse>?
+            ) {
+                Log.i("MainFragment", productList.joinToString())
+                Log.i("MainFragment", "inside onResponse")
+                if (response != null) {
+                    productList = ArrayList(response.body()?.bestseller!!)
+                    hRecyclerView.apply {
+                        hRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        hRecyclerView.adapter = productList?.let { RecommendationProductAdapter(productList, context) }
+                    }
+                }
+
+            }
+
+
+        })
+
+
+    }
     private fun listAllProducts() {
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProducts().enqueue(object : retrofit2.Callback<List<ProductResponse>> {
@@ -683,7 +711,8 @@ class HomeFragment : Fragment() {
         when (type) {
             0 -> {
                 //all products
-                listAllProducts()
+                //listAllProducts()
+                listRecommendedProducts()
             }
             1 -> {
                 //category
