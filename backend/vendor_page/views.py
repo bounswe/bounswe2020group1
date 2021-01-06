@@ -8,6 +8,7 @@ from product.models import Product, Image
 from order.models import Order
 from registered_user.models import Vendor, get_vendor_from_request
 from comment.models import Comment
+from search.views import SearchHelper
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
@@ -74,4 +75,27 @@ def index(request):
                 "products": my_products
             }
             
+    return JsonResponse(vendor_info, safe=False)
+
+@api_view(['GET']) 
+def public_vendor_page(request):
+    try:
+        vendor_name = request.GET["vendor_name"]
+        vendor = Vendor.objects.get(user__user__first_name=vendor_name)
+    except:
+        return HttpResponse("Vendor with name does not exist!", status=400)
+    product_info = Product.objects.filter(vendor=vendor)
+    products =  SearchHelper.prepare_products(product_info)
+    vendor_info = {
+                "username": vendor.user.user.username,
+                "email": vendor.user.user.email,
+                "first_name": vendor.user.user.first_name,
+                "last_name": vendor.user.user.last_name,
+                "latitude": str(vendor.location.latitude),
+                "longitude": str(vendor.location.longitude),
+                "city": vendor.location.city,
+                "iban": vendor.iban,
+                "rating": vendor.rating,
+                "products": products
+            }
     return JsonResponse(vendor_info, safe=False)
