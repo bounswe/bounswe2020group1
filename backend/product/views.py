@@ -8,7 +8,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from product.models import Product, Category, Image
 from registered_user.models import get_vendor_from_request
-
+from filter_sort.utils import product_filter, product_sort
+from search.views import SearchHelper
 
 
 def category(request):
@@ -31,35 +32,16 @@ def category(request):
         category_name = request.GET["name"]
     except:
         return JsonResponse([], safe=False)
-
     product_data = []
-    if category_name == "":
-        product_data = Product.objects.all()
+    category_data = Category.objects.filter(name=category_name)
+    if len(category_data) == 1:
+        category_ = category_data[0]
     else:
-        category_data = Category.objects.filter(Q(name=category_name))
-        if len(category_data) == 1 and category_data[0].name == category_name:
-            category_id = category_data[0].id
-            product_data = Product.objects.filter(category=category_id)
-
-    products = []
-    static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
-    for product in product_data:
-        images = Image.objects.filter(product=product)
-        if(len(images) > 0):
-            photo_url = f"{static_url}{images[0].photo}"
-        else:
-            photo_url = ""
-        product_info = {"id": product.pk,
-                       "name": product.name,
-                       "photo_url": photo_url, 
-                       "vendor_name": product.vendor.user.user.first_name,
-                       "category": product.category.name,
-                       "rating": product.rating,
-                       "stock": product.stock,
-                       "price": product.price
-                    }
-        products.append(product_info)
-
+        return JsonResponse([], safe=False)
+    category_products = Product.objects.filter(category=category_)
+    filtered_products = product_filter(request, category_products)
+    sorted_products = product_sort(request, filtered_products)
+    products =  SearchHelper.prepare_products(sorted_products)
     return JsonResponse(products, safe=False)
 
 class ImageUploadForm(forms.Form):
@@ -188,7 +170,7 @@ def edit_product(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_product(request):
     """Delete product with given parameters when DELETE request is made."""
     vendor = get_vendor_from_request(request)
@@ -242,7 +224,7 @@ def add_photo_to_product(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_all_photos_of_product(request):
     """Delete photos of product with given parameters when DELETE request is made."""
     vendor = get_vendor_from_request(request)
@@ -267,7 +249,7 @@ def delete_all_photos_of_product(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE'])
+@api_view(['DELETE','POST'])
 def delete_photo_of_product_with_name(request):
     """Delete photo of product with given parameters when DELETE request is made."""
     vendor = get_vendor_from_request(request)

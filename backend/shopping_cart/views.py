@@ -52,7 +52,53 @@ def add(request):
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
-@api_view(['DELETE']) 
+@api_view(['POST']) 
+def increase(request):
+    customer = get_customer_from_request(request)
+    if(customer is None):
+        return HttpResponse("Customer authentication failed", status=401)
+    try:
+        product_id = int(request.POST["product_id"])
+        product = Product.objects.filter(Q(id=product_id))[0]
+    except Exception:
+        return HttpResponse("Product id (product_id) not given or invalid", status=400)
+
+    items = ShoppingCarts.objects.filter(Q(product=product_id, customer=customer))
+    if len(items) == 0:
+        item = ShoppingCarts.objects.create(product=product, customer=customer, quantity=1)
+        item.save()
+    else:
+        items[0].quantity = items[0].quantity + 1
+        items[0].save()
+       
+    return HttpResponse("success")
+    
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['POST']) 
+def decrease(request):
+    customer = get_customer_from_request(request)
+    if(customer is None):
+        return HttpResponse("Customer authentication failed", status=401)
+    try:
+        product_id = int(request.POST["product_id"])
+        product = Product.objects.filter(Q(id=product_id))[0]
+    except Exception:
+        return HttpResponse("Product id (product_id) not given or invalid", status=400)
+
+    items = ShoppingCarts.objects.filter(Q(product=product_id, customer=customer))
+    if len(items) == 0:
+        return HttpResponse("success")
+    else:
+        items[0].quantity = items[0].quantity - 1
+        items[0].save()
+        if items[0].quantity == 0:
+            items[0].delete()    
+    return HttpResponse("success")
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes((IsAuthenticated,))
+@api_view(['DELETE','POST']) 
 def delete(request):
     customer = get_customer_from_request(request)
     if(customer is None):
