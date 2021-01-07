@@ -7,6 +7,8 @@ import ProductList from "./ProductList";
 import VendorList from "./VendorList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import Button from '@material-ui/core/Button';
 
 
 
@@ -33,7 +35,8 @@ class SearchPage extends React.Component{
         category_switch: null,
         vendor_switch: null,
         sort: null,
-        vendor_list: []
+        vendor_list: [],
+        filter_tab: false,
 
     }
     handleCallbackdataRange = (childData) =>{
@@ -80,13 +83,17 @@ class SearchPage extends React.Component{
         })
             .then(res => {
                 console.log(res)
-                this.setState({vendor_list: res.data})
+                this
+                    .setState({vendor_list: res.data})
             })
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         const array = window.location.href.split("/")
-        if((this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
-            console.log(this.state.vendor)
+
+
+
+        if((array[4] !== prevProps.match.params.search_string)||(this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
+            console.log(this.state.category)
             Axios.get('http://3.232.20.250/search/',{
                 params: {
                     search_string : array[4],
@@ -104,28 +111,46 @@ class SearchPage extends React.Component{
                     this.setState({search_url: array.slice(4,11)});
                 })
         }
-
-
-
     }
+
+    toggleDrawer = (open) => (event) => {
+        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        this.setState({filter_tab: open});
+    };
 
     render(){
         if("product"==this.state.search_url[1]){
             return(
                 <ThemeProvider theme={theme} >
-                    <Grid container spacing={15} direction="column" className="HomePage">
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Navbar />
-                            </Paper>
-                        </Grid>
-                        <br/>
-                        <Grid item xs={12}>
-                            <Paper>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Navbar />
+                        </Paper>
+                    </Grid>
+                    <Grid container xs={12} direction="column">
+                        <Grid item xs={3} direction="column">
+
+                            <SwipeableDrawer
+                                variant="temporary"
+                                anchor="left"
+                                open={this.state.filter_tab}
+                                onClose={this.toggleDrawer(false)}
+                                onOpen={this.toggleDrawer(true)}
+                            >
+
                                 <Filter inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list}/>
-                            </Paper>
+                            </SwipeableDrawer>
                         </Grid>
-                        <Grid item xs={12} container>
+                        <br/><br/><br/><br/><br/><br/><br/><br/>
+                        <Grid item>
+                            <Button variant="contained" color="primary" onClick={this.toggleDrawer(true)}>Filter</Button>
+                        </Grid>
+                        <br/><br/>
+                        <Grid item xs={12} direction="column">
+
                             <ProductList products={this.state.products}/>
                         </Grid>
                     </Grid>
