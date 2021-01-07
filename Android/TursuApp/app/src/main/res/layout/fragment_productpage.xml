@@ -10,6 +10,32 @@
     tools:context=".authentication.homepage.ui.productpage.ProductPageFragment">
 
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView4"
+        android:layout_width="49dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="7dp"
+        app:cardBackgroundColor="#E8E7E7"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Reviews"
+        app:layout_constraintTop_toBottomOf="@+id/ProductInfo">
+
+        <ImageView
+            android:id="@+id/add_comment_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#E8E7E7"
+            android:src="@drawable/ic_baseline_add_comment_24"
+
+            />
+
+
+    </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/product_name"
         android:layout_width="397dp"
@@ -41,19 +67,18 @@
 
     <ListView
         android:id="@+id/commentListView"
-        android:layout_width="391dp"
-        android:layout_height="193dp"
-        android:layout_margin="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="398dp"
+        android:layout_height="187dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="21dp"
         android:background="@color/TursuGreen"
         android:clickable="false"
         android:divider="@null"
         android:focusable="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Reviews" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView4" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/const1"
