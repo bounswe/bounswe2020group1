@@ -2,8 +2,8 @@ package com.example.tursuapp.authentication.homepage.ui.productpage
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.media.Image
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,14 +13,15 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.adapter.CommentAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.api.responses.*
+import com.example.tursuapp.api.responses.Comments
+import com.example.tursuapp.api.responses.ProductDetailsResponse
+import com.example.tursuapp.api.responses.ProductResponse
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -42,8 +43,8 @@ class ProductPageFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val pref = context?.getSharedPreferences("UserPref", 0)
-        auth_token = pref?.getString("auth_token",null).toString()
-        user_type = pref?.getString("user_type",null).toString()
+        auth_token = pref?.getString("auth_token", null).toString()
+        user_type = pref?.getString("user_type", null).toString()
         activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
         activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
         activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
@@ -52,18 +53,25 @@ class ProductPageFragment : Fragment() {
         root.findViewById<ImageView>(R.id.add_list_image)?.setOnClickListener {
             showPopupWindow(it)
         }
+        root.findViewById<ImageView>(R.id.add_comment_image)?.setOnClickListener {
+            showPopupAddComment(it)
+        }
+
         return root
     }
-    fun setVisibilities(view:View){
+    fun setVisibilities(view: View){
         val addToCart = view.findViewById<CardView>(R.id.addCart)
         val addToList = view.findViewById<CardView>(R.id.cardView3)
+        val addComment = view.findViewById<CardView>(R.id.cardView4)
         if(user_type=="customer"){
             addToCart.visibility = View.VISIBLE
             addToList.visibility = View.VISIBLE
+            addComment.visibility = View.VISIBLE
         }
         else{
             addToCart.visibility = View.INVISIBLE
             addToList.visibility = View.INVISIBLE
+            addComment.visibility = View.INVISIBLE
         }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,7 +82,7 @@ class ProductPageFragment : Fragment() {
         view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
             var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
             val quantity = 1
-            apiinterface.addToShoppingCart(auth_token,product.id).enqueue(object :
+            apiinterface.addToShoppingCart(auth_token, product.id).enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                 override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -85,11 +93,10 @@ class ProductPageFragment : Fragment() {
                         response: Response<ResponseBody>?
                 ) {
                     if (response != null) {
-                        if(response.code()==200){
-                            Toast.makeText(context,"added to shopping cart",Toast.LENGTH_SHORT).show()
-                        }
-                         else{
-                            Toast.makeText(context,"NOT added to shopping cart",Toast.LENGTH_SHORT).show()
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "added to shopping cart", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "NOT added to shopping cart", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -98,6 +105,7 @@ class ProductPageFragment : Fragment() {
 
             })
         }
+
 
     }
 
@@ -122,13 +130,13 @@ class ProductPageFragment : Fragment() {
             popupWindow.dismiss()
         }
         popupView.findViewById<Button>(R.id.add_new_List_button).setOnClickListener {
-            addList(popupView,popupWindow)
+            addList(popupView, popupWindow)
         }
         popupView.findViewById<Button>(R.id.add_product_to_list).setOnClickListener {
             addToList(popupView, popupWindow)
         }
         popupView.findViewById<Button>(R.id.delete_List_button).setOnClickListener {
-            deleteList(popupView,popupWindow)
+            deleteList(popupView, popupWindow)
         }
         popupView.findViewById<Button>(R.id.delete_product_from_list).setOnClickListener {
             deleteFromList(popupView, popupWindow)
@@ -136,6 +144,43 @@ class ProductPageFragment : Fragment() {
         }
     }
 
+    @SuppressLint("InflateParams")
+    private fun showPopupAddComment(view: View) {
+        //Create a View object yourself through inflater
+        val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView: View = inflater.inflate(R.layout.comment_add_popup_layout, null)
+        //Specify the length and width through constants
+        val width = LinearLayout.LayoutParams.MATCH_PARENT
+        val height = LinearLayout.LayoutParams.MATCH_PARENT
+        //val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        //val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        //Make Inactive Items Outside Of PopupWindow
+        val focusable = true
+        //Create a window with our parameters
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+        //load product name and photo to the popup
+        popupView.findViewById<TextView>(R.id.addComment_product_name).text=product.name
+        val image  = popupView.findViewById<ImageView>(R.id.addComment_productImage)
+        if(product.photo_url!="") {
+            Picasso
+                    .get() // give it the context
+                    .load(product.photo_url) // load the image
+                    .into(image)
+        }
+        else{
+            image.setImageResource(R.drawable.ic_menu_camera)
+        }
+
+        popupView.findViewById<ImageView>(R.id.addComment_cancel_btn).setOnClickListener {
+            popupWindow.dismiss()
+        }
+        popupView.findViewById<Button>(R.id.addComment_button).setOnClickListener {
+            addComment(view,popupView, popupWindow)
+        }
+
+    }
     private fun getLists(view: View){
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getLists(auth_token).enqueue(object :
@@ -168,8 +213,49 @@ class ProductPageFragment : Fragment() {
         })
 
     }
+    private fun addComment(root:View,view: View, window: PopupWindow){
+        if(view.findViewById<TextView>(R.id.addComment_text).text.isEmpty() || view.findViewById<RatingBar>(R.id.addComment_ratingBar).rating == 0.0f){
+            Toast.makeText(context, "Please input your comment and rating", Toast.LENGTH_SHORT).show()
+        }else {
+            val commentRating = view.findViewById<RatingBar>(R.id.addComment_ratingBar).rating
+            val commentText = view.findViewById<TextView>(R.id.addComment_text).text
+            val productId = product.id
+            Log.i("Product Id: ", productId.toString())
+            val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiInterface.addComment(auth_token, productId, commentText.toString(), commentRating.toInt()).enqueue(object :
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
 
-    private fun addList(view: View,window: PopupWindow){
+                override fun onResponse(
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
+                ) {
+
+                    if (response != null) {
+                        Log.i("Status code", response.code().toString())
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "Comment has been successfully added", Toast.LENGTH_SHORT).show()
+                            window.dismiss()
+
+                        } else if (response.code() == 401) {
+                            Toast.makeText(context, "The customer did not buy the product.", Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            Toast.makeText(context, response.code(), Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+
+                }
+
+
+            })
+        }
+
+    }
+    private fun addList(view: View, window: PopupWindow){
         if(view.findViewById<EditText>(R.id.new_list_txt).text.isNotEmpty()){
             val empty=""
             val listName = view.findViewById<EditText>(R.id.new_list_txt).text.toString()
@@ -186,12 +272,12 @@ class ProductPageFragment : Fragment() {
                 ) {
 
                     if (response != null) {
-                        Log.i("Status code",response.code().toString())
-                        if(response.code()==200) {
+                        Log.i("Status code", response.code().toString())
+                        if (response.code() == 200) {
                             Toast.makeText(context, "List has been successfully added", Toast.LENGTH_SHORT).show()
                             window.dismiss()
                             showPopupWindow(view)
-                        }else{
+                        } else {
                             Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                         }
 
@@ -250,7 +336,7 @@ class ProductPageFragment : Fragment() {
         }
     }
 
-    private fun deleteList(view: View,window: PopupWindow){
+    private fun deleteList(view: View, window: PopupWindow){
         if(view.findViewById<RadioGroup>(R.id.radioGroupLists).checkedRadioButtonId!=-1) {
             val selectedList = view.findViewById<RadioGroup>(R.id.radioGroupLists).checkedRadioButtonId
             Log.i("Selected List Id: ", selectedList.toString())
