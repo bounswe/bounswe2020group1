@@ -655,19 +655,19 @@ class HomeFragment : Fragment() {
                     val newestList = ArrayList(response.body()?.newest!!)
                     recommRecyclerView.apply {
                         recommRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        recommRecyclerView.adapter = RecommendationProductAdapter(recommList, context)
+                        recommRecyclerView.adapter = RecommendationProductAdapter(recommList, context,this@HomeFragment)
                     }
                     topratedRecyclerView.apply {
                         topratedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        topratedRecyclerView.adapter = RecommendationProductAdapter(topratedList, context)
+                        topratedRecyclerView.adapter = RecommendationProductAdapter(topratedList, context,this@HomeFragment)
                     }
                     newestRecyclerView.apply {
                         newestRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        newestRecyclerView.adapter = RecommendationProductAdapter(newestList, context)
+                        newestRecyclerView.adapter = RecommendationProductAdapter(newestList, context,this@HomeFragment)
                     }
                     bestsellerRecyclerView.apply {
                         bestsellerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        bestsellerRecyclerView.adapter = RecommendationProductAdapter(bestsellerList, context)
+                        bestsellerRecyclerView.adapter = RecommendationProductAdapter(bestsellerList, context,this@HomeFragment)
                     }
                 }
 

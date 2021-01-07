@@ -1,17 +1,20 @@
 package com.example.tursuapp.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tursuapp.R
 import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.squareup.picasso.Picasso
 
-class RecommendationProductAdapter(val course_names:ArrayList<ProductResponse>,val context: Context) : RecyclerView.Adapter<ViewHolder>() {
+class RecommendationProductAdapter(val course_names:ArrayList<ProductResponse>,val context: Context,val fragment: Fragment) : RecyclerView.Adapter<ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.product_id.text = course_names[position].id.toString()
         holder.product_name.text = course_names[position].name
@@ -24,6 +27,16 @@ class RecommendationProductAdapter(val course_names:ArrayList<ProductResponse>,v
         }
         else{
             holder.product_img.setImageResource(R.drawable.ic_menu_camera)
+        }
+        holder.itemView.setOnClickListener {
+            val clickedId = holder.product_id.text
+            val bundle = Bundle()
+            bundle.putString("id", clickedId.toString())
+            val newFragment = ProductPageFragment()
+            newFragment.arguments = bundle
+            fragment.activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.nav_host_fragment, newFragment)?.addToBackStack(null)
+                    ?.commit()
         }
     }
 
