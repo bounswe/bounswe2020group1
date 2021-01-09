@@ -75,6 +75,7 @@ export default class Vendor extends Component {
         else{
             return "ok"
         }
+        //thanks to: https://stackoverflow.com/questions/50547523/how-can-i-use-javascript-to-test-for-password-strength-in-a-way-that-returns-the
     }
     render() {
 
