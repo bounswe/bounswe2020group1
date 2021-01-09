@@ -181,6 +181,7 @@ class MessagingPage extends React.Component{
                                     <ListItemText primary={window.sessionStorage.getItem("first_name")}></ListItemText>
                                 </ListItem>
                             </List>
+
                             <Divider />
                             <List>
                                 {window.sessionStorage.getItem("user_type")==="customer" && this.state.flows.map((flow) => (
@@ -199,7 +200,19 @@ class MessagingPage extends React.Component{
                                         </ListItemIcon>
                                         <ListItemText primary={flow.username }>{flow.username }</ListItemText>
                                     </ListItem>
+
                                 ))}
+                                <Divider />
+                                {window.sessionStorage.getItem("user_type")==="vendor" && this.state.admin_flows.map((flow) => (
+                                    <ListItem button onClick={() => this.handleChangeFlow(flow.id)}>
+                                        <ListItemIcon>
+                                            <Avatar alt={flow.id }  src="https://material-ui.com/static/images/avatar/2.jpg" />
+                                        </ListItemIcon>
+                                        <ListItemText primary={"Admin"}></ListItemText>
+                                    </ListItem>
+
+                                ))}
+
 
                             </List>
                         </Grid>
