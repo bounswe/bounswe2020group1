@@ -14,8 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tursuapp.R
 import com.example.tursuapp.adapter.ProductAdapter
+import com.example.tursuapp.adapter.RecommendationProductAdapter
 import com.example.tursuapp.adapter.VendorAdapter
 import com.example.tursuapp.adapter.VendorProductAdapter
 import com.example.tursuapp.api.ApiService
@@ -62,6 +65,8 @@ class HomeFragment : Fragment() {
     private lateinit var toggleGroup: MaterialButtonToggleGroup
     private val filterDictionary = mapOf("Bestsellers" to "bestseller", "Newest" to "newest", "Ascending Price" to "priceAsc", "Descending Price" to "priceDesc", "Number of Comments" to "numComments")
     var vendorProductList = ArrayList<VendorProductLists>()
+    lateinit var gridView:GridView
+    private lateinit var recommendationView:ScrollView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setFilterFunction()
@@ -79,16 +84,23 @@ class HomeFragment : Fragment() {
             activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
         }
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
-        })
         val pref = context?.getSharedPreferences("UserPref", 0)
         auth_token = pref?.getString("auth_token",null).toString()
         user_type = pref?.getString("user_type",null).toString()
         return root
     }
 
+    fun makeHeadingsVisible(view:View,isRecommended:Boolean){
+        if(isRecommended){
+            view.findViewById<TextView>(R.id.recommendedProductsText).visibility = View.VISIBLE
+        }
+        else{
+            view.findViewById<TextView>(R.id.recommendedProductsText).visibility = View.GONE
+        }
+        view.findViewById<TextView>(R.id.bestsellerProductsText).visibility = View.VISIBLE
+        view.findViewById<TextView>(R.id.topratedProductsText).visibility = View.VISIBLE
+        view.findViewById<TextView>(R.id.newestProductsText).visibility = View.VISIBLE
+    }
     private fun setButtonVisibilities(type: Int) {
         val filterImage = activity?.findViewById<ImageView>(R.id.filter_image)
         val searchBar = activity?.findViewById<EditText>(R.id.editMobileNo)
@@ -102,13 +114,13 @@ class HomeFragment : Fragment() {
             }
             //category screen
             1 -> {
-                filterImage!!.visibility = View.VISIBLE
+                filterImage!!.visibility = View.GONE
                 searchBar!!.visibility = View.INVISIBLE
                 searchButton!!.visibility = View.INVISIBLE
             }
             //search screen
             2 -> {
-                filterImage!!.visibility = View.VISIBLE
+                filterImage!!.visibility = View.GONE
                 searchBar!!.visibility = View.VISIBLE
                 searchButton!!.visibility = View.VISIBLE
             }
@@ -123,7 +135,10 @@ class HomeFragment : Fragment() {
 
 
     }
-
+    fun disableRecommendationEnableGrid(){
+        gridView.visibility = View.VISIBLE
+        recommendationView.visibility = View.GONE
+    }
     @SuppressLint("InflateParams")
     private fun showPopupWindowForLists(view: View) {
         Log.i("showPopup:", "here")
@@ -141,7 +156,7 @@ class HomeFragment : Fragment() {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         popupView.findViewById<ImageView>(R.id.dismiss_popup3).setOnClickListener {
             popupWindow.dismiss()
-            listAllProducts()
+            listRecommendedProducts()
         }
         //get shopping lists
         getLists(popupView)
@@ -260,21 +275,19 @@ class HomeFragment : Fragment() {
                 if (response != null) {
                     vendorList = ArrayList(response.body()!!)
                     val adapter = context?.let { VendorAdapter(it, vendorList) }
-                    val gridView = view?.findViewById<GridView>(R.id.gridView)
-                    if (gridView != null) {
-                        gridView.adapter = adapter
-                        gridView.setOnItemClickListener { _, view, _, _ ->
-                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                            val bundle = Bundle()
-                            bundle.putString("id", clickedId.toString())
-                            val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle
-                            val fragmentManager: FragmentManager? = fragmentManager
-                            val fragmentTransaction: FragmentTransaction =
-                                    fragmentManager!!.beginTransaction()
-                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                            fragmentTransaction.commit()
-                        }
+                    disableRecommendationEnableGrid()
+                    gridView.adapter = adapter
+                    gridView.setOnItemClickListener { _, view, _, _ ->
+                        val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                        val bundle = Bundle()
+                        bundle.putString("id", clickedId.toString())
+                        val newFragment = ProductPageFragment()
+                        newFragment.arguments = bundle
+                        val fragmentManager: FragmentManager? = fragmentManager
+                        val fragmentTransaction: FragmentTransaction =
+                                fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                        fragmentTransaction.commit()
                     }
                 }
             }
@@ -301,21 +314,19 @@ class HomeFragment : Fragment() {
                 if (response != null) {
                     productList = ArrayList(response.body()!!)
                     val adapter = context?.let { ProductAdapter(it, productList) }
-                    val gridView = view?.findViewById<GridView>(R.id.gridView)
-                    if (gridView != null) {
-                        gridView.adapter = adapter
-                        gridView.setOnItemClickListener { _, view, _, _ ->
-                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                            val bundle = Bundle()
-                            bundle.putString("id", clickedId.toString())
-                            val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle
-                            val fragmentManager: FragmentManager? = fragmentManager
-                            val fragmentTransaction: FragmentTransaction =
-                                    fragmentManager!!.beginTransaction()
-                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                            fragmentTransaction.commit()
-                        }
+                    disableRecommendationEnableGrid()
+                    gridView.adapter = adapter
+                    gridView.setOnItemClickListener { _, view, _, _ ->
+                        val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                        val bundle = Bundle()
+                        bundle.putString("id", clickedId.toString())
+                        val newFragment = ProductPageFragment()
+                        newFragment.arguments = bundle
+                        val fragmentManager: FragmentManager? = fragmentManager
+                        val fragmentTransaction: FragmentTransaction =
+                                fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                        fragmentTransaction.commit()
                     }
                 }
             }
@@ -461,20 +472,18 @@ class HomeFragment : Fragment() {
                         productList = ArrayList(response.body()!!)
 
                         val adapter = context?.let { ProductAdapter(it, productList) }
-                        val gridView = view?.findViewById<GridView>(R.id.gridView)
-                        if (gridView != null) {
-                            gridView.adapter = adapter
-                            gridView.setOnItemClickListener { _, view, _, _ ->
-                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                                val bundle = Bundle()
-                                bundle.putString("id", clickedId.toString())
-                                val newFragment = ProductPageFragment()
-                                newFragment.arguments = bundle
-                                val fragmentManager: FragmentManager? = activity?.supportFragmentManager
-                                val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                                fragmentTransaction.commit()
-                            }
+                        disableRecommendationEnableGrid()
+                        gridView.adapter = adapter
+                        gridView.setOnItemClickListener { _, view, _, _ ->
+                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                            val bundle = Bundle()
+                            bundle.putString("id", clickedId.toString())
+                            val newFragment = ProductPageFragment()
+                            newFragment.arguments = bundle
+                            val fragmentManager: FragmentManager? = activity?.supportFragmentManager
+                            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
                         }
                         window.dismiss()
                     }
@@ -526,21 +535,19 @@ class HomeFragment : Fragment() {
                         Log.i("MainFragment", "inside onResponse")
                         vendorProductList=ArrayList(response.body()!!.products)
                         val adapter = context?.let { VendorProductAdapter(it, vendorProductList) }
-                        val gridView = view?.findViewById<GridView>(R.id.gridView)
-                        if (gridView != null) {
-                            gridView.adapter = adapter
-                            gridView.setOnItemClickListener { _, view, _, _ ->
-                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                                val bundle = Bundle()
-                                bundle.putString("id", clickedId.toString())
-                                val newFragment = VendorProductPageFragment()
-                                newFragment.arguments = bundle
-                                val fragmentManager: FragmentManager? = fragmentManager
-                                val fragmentTransaction: FragmentTransaction =
-                                        fragmentManager!!.beginTransaction()
-                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                                fragmentTransaction.commit()
-                            }
+                        disableRecommendationEnableGrid()
+                        gridView.adapter = adapter
+                        gridView.setOnItemClickListener { _, view, _, _ ->
+                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                            val bundle = Bundle()
+                            bundle.putString("id", clickedId.toString())
+                            val newFragment = VendorProductPageFragment()
+                            newFragment.arguments = bundle
+                            val fragmentManager: FragmentManager? = fragmentManager
+                            val fragmentTransaction: FragmentTransaction =
+                                    fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
                         }
                     }else{
                         Log.i("Vendor Products: ", "have not any product")
@@ -554,16 +561,19 @@ class HomeFragment : Fragment() {
 
     private fun displayFragment(id: Int) {
         lateinit var fragment: Fragment
-        if (id == R.id.nav_profile_detail) {
-            fragment = ProfileFragment()
-        }
-        else if(id == R.id.nav_customer_orders){
-            fragment = CustomerOrdersFragment()
-        }else if(id == R.id.nav_product_add){
-            fragment = ProductAddFragment()
-        }
-        else if(id==R.id.nav_vendor_order){
-            fragment = VendorOrderFragment()
+        when (id) {
+            R.id.nav_profile_detail -> {
+                fragment = ProfileFragment()
+            }
+            R.id.nav_customer_orders -> {
+                fragment = CustomerOrdersFragment()
+            }
+            R.id.nav_product_add -> {
+                fragment = ProductAddFragment()
+            }
+            R.id.nav_vendor_order -> {
+                fragment = VendorOrderFragment()
+            }
         }
         activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.nav_host_fragment, fragment)
@@ -588,20 +598,18 @@ class HomeFragment : Fragment() {
                 if (response != null) {
                     productList = ArrayList(response.body()!!)
                     val adapter = context?.let { ProductAdapter(it, productList) }
-                    val gridView = view?.findViewById<GridView>(R.id.gridView)
-                    if (gridView != null) {
-                        gridView.adapter = adapter
-                        gridView.setOnItemClickListener { _, view, _, _ ->
-                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                            val bundle = Bundle()
-                            bundle.putString("id", clickedId.toString())
-                            val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle
-                            val fragmentManager: FragmentManager? = fragmentManager
-                            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                            fragmentTransaction.commit()
-                        }
+                    disableRecommendationEnableGrid()
+                    gridView.adapter = adapter
+                    gridView.setOnItemClickListener { _, view, _, _ ->
+                        val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                        val bundle = Bundle()
+                        bundle.putString("id", clickedId.toString())
+                        val newFragment = ProductPageFragment()
+                        newFragment.arguments = bundle
+                        val fragmentManager: FragmentManager? = fragmentManager
+                        val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                        fragmentTransaction.commit()
                     }
                 }
 
@@ -610,7 +618,62 @@ class HomeFragment : Fragment() {
 
         })
     }
+    private fun enableRecommendationDisableGrid(){
+        gridView.visibility = View.GONE
+        recommendationView.visibility = View.VISIBLE
+    }
+    private fun listRecommendedProducts(){
+        val recommRecyclerView = view?.findViewById(R.id.recommRecylerView) as RecyclerView
+        val bestsellerRecyclerView = view?.findViewById(R.id.bestsellerRecyclerView) as RecyclerView
+        val topratedRecyclerView = view?.findViewById(R.id.topRatedRecyclerView) as RecyclerView
+        val newestRecyclerView = view?.findViewById(R.id.newestRecyclerView) as RecyclerView
+        val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        enableRecommendationDisableGrid()
+        apiinterface.getRecommendedProducts(auth_token).enqueue(object : retrofit2.Callback<RecommendationPackResponse> {
+            override fun onFailure(p0: Call<RecommendationPackResponse>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
 
+            override fun onResponse(
+                p0: Call<RecommendationPackResponse>?,
+                response: Response<RecommendationPackResponse>?
+            ) {
+                Log.i("MainFragment", "inside onResponse")
+                if (response != null) {
+                    val recommList = ArrayList(response.body()?.recommended!!)
+                    var isRecommended = true
+                    if(recommList.size==0){
+                        isRecommended = false
+                    }
+                    makeHeadingsVisible(view!!,isRecommended)
+                    val bestsellerList = ArrayList(response.body()?.bestseller!!)
+                    val topratedList = ArrayList(response.body()?.toprated!!)
+                    val newestList = ArrayList(response.body()?.newest!!)
+                    recommRecyclerView.apply {
+                        recommRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        recommRecyclerView.adapter = RecommendationProductAdapter(recommList, context,this@HomeFragment)
+                    }
+                    topratedRecyclerView.apply {
+                        topratedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        topratedRecyclerView.adapter = RecommendationProductAdapter(topratedList, context,this@HomeFragment)
+                    }
+                    newestRecyclerView.apply {
+                        newestRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        newestRecyclerView.adapter = RecommendationProductAdapter(newestList, context,this@HomeFragment)
+                    }
+                    bestsellerRecyclerView.apply {
+                        bestsellerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        bestsellerRecyclerView.adapter = RecommendationProductAdapter(bestsellerList, context,this@HomeFragment)
+                    }
+                }
+
+            }
+
+
+        })
+
+
+    }
     private fun listAllProducts() {
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProducts().enqueue(object : retrofit2.Callback<List<ProductResponse>> {
@@ -627,21 +690,19 @@ class HomeFragment : Fragment() {
                 if (response != null) {
                     productList = ArrayList(response.body()!!)
                     val adapter = context?.let { ProductAdapter(it, productList) }
-                    val gridView = view?.findViewById<GridView>(R.id.gridView)
-                    if (gridView != null) {
-                        gridView.adapter = adapter
-                        gridView.setOnItemClickListener { _, view, _, _ ->
-                            val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                            val bundle = Bundle()
-                            bundle.putString("id", clickedId.toString())
-                            val newFragment = ProductPageFragment()
-                            newFragment.arguments = bundle
-                            val fragmentManager: FragmentManager? = fragmentManager
-                            val fragmentTransaction: FragmentTransaction =
-                                    fragmentManager!!.beginTransaction()
-                            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                            fragmentTransaction.commit()
-                        }
+                    disableRecommendationEnableGrid()
+                    gridView.adapter = adapter
+                    gridView.setOnItemClickListener { _, view, _, _ ->
+                        val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                        val bundle = Bundle()
+                        bundle.putString("id", clickedId.toString())
+                        val newFragment = ProductPageFragment()
+                        newFragment.arguments = bundle
+                        val fragmentManager: FragmentManager? = fragmentManager
+                        val fragmentTransaction: FragmentTransaction =
+                                fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+                        fragmentTransaction.commit()
                     }
                 }
 
@@ -658,6 +719,8 @@ class HomeFragment : Fragment() {
         toggleGroup = view.findViewById(R.id.toggle_button_group)
         btnProduct = view.findViewById(R.id.btn_product)
         btnVendor = view.findViewById(R.id.btn_vendor)
+        gridView = view.findViewById(R.id.gridView)
+        recommendationView = view.findViewById(R.id.horizontalLists)
         toggleGroup.check(btnProduct.id)
         toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
@@ -683,7 +746,8 @@ class HomeFragment : Fragment() {
         when (type) {
             0 -> {
                 //all products
-                listAllProducts()
+                //listAllProducts()
+                listRecommendedProducts()
             }
             1 -> {
                 //category
@@ -699,7 +763,7 @@ class HomeFragment : Fragment() {
                 displayAccountSubItems(view, keys)
             }
             else -> {
-                listAllProducts()
+                listRecommendedProducts()
             }
         }
         Log.i("HomeFragment", "here")

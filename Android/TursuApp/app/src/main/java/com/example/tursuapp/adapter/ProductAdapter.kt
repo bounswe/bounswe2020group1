@@ -2,11 +2,13 @@ package com.example.tursuapp.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.Rating
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import com.example.tursuapp.R
 import com.example.tursuapp.api.responses.ProductResponse
@@ -39,6 +41,7 @@ class ProductAdapter(context: Context, private var productList: ArrayList<Produc
         productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
         productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
         productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
+        productView.findViewById<RatingBar>(R.id.product_rating_bar).rating = this.productList[position].rating.toFloat()
         val image  = productView.findViewById<ImageView>(R.id.img_product)
         if(productList[position].photo_url!="") {
             Picasso
