@@ -278,7 +278,7 @@ def get_vendor_flows(request):
         cinfo.append({
             "id": flow.pk,
             "notify": True if not flow.vendor_read else False,
-            "username": flow.vendor.user.user.username,
+            "username": flow.customer.user.user.username,
             "type": "customer"
         })
     flow_dict["customer_flows"] =  cinfo
@@ -323,6 +323,7 @@ def get_admin_flows(request):
             "notify": True if not flow.admin_read else False,
             "context": context,
             "object_id": object_id,
+            "vendor_name": flow.vendor.user.user.first_name,
             "type": "admin"
         })
     return JsonResponse(info,safe=False)
