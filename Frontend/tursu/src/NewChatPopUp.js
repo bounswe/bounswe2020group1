@@ -17,6 +17,7 @@ import { FormControlLabel } from '@material-ui/core';
 import { FormLabel } from '@material-ui/core';
 import { RadioGroup } from '@material-ui/core';
 
+// TODO: Disable already existing vendor chat flows.
 export default function FormDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [vendor, setVendor] = React.useState("");

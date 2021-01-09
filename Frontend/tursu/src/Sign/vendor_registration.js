@@ -24,30 +24,36 @@ export default class Vendor extends Component {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.checkPassword = this.checkPassword.bind(this);
     }
     handleSubmit(event){
-        console.log("form submitted");
         if (this.state.password === this.state.password_confirmation){
-            const formData = new FormData();
-            formData.append("email", this.state.email);
-            formData.append("is_vendor", "True");
-            formData.append("first_name", this.state.name);
-            formData.append("last_name", this.state.surname);
-            formData.append("username", this.state.username);
-            formData.append("password", this.state.password);
-            formData.append("IBAN", this.state.iban);
-            formData.append("latitude", this.state.latitude);
-            formData.append("longitude", this.state.longitude);
-            formData.append("city", this.state.location);
-            axios.post('http://3.232.20.250/user/signup', formData)
-                .then(res =>{
-                    console.log(res);
-                    console.log(res.data);
-                    this.props.login()
-                })
-                .catch(error =>{
-                    alert ("There has been an error. Please try again.");
-                })
+            var strength = this.checkPassword(this.state.password)
+            if (strength==="ok"){
+                const formData = new FormData();
+                formData.append("email", this.state.email);
+                formData.append("is_vendor", "True");
+                formData.append("first_name", this.state.name);
+                formData.append("last_name", this.state.surname);
+                formData.append("username", this.state.username);
+                formData.append("password", this.state.password);
+                formData.append("IBAN", this.state.iban);
+                formData.append("latitude", this.state.latitude);
+                formData.append("longitude", this.state.longitude);
+                formData.append("city", this.state.location);
+                axios.post('http://3.232.20.250/user/signup', formData)
+                    .then(res =>{
+                        console.log(res);
+                        console.log(res.data);
+                        this.props.login()
+                    })
+                    .catch(error =>{
+                        alert ("There has been an error. Please try again.");
+                    })
+            }
+            else{
+                alert(strength)
+            }
         }
         else{
             alert("Password confirmation does not match password. Please type passwords again.");
@@ -58,6 +64,17 @@ export default class Vendor extends Component {
         this.setState({
             [event.target.name]: event.target.value
         });
+    }
+    checkPassword(password){
+        if(password.length < 8){
+            return "Your password is too short, it should at least be 8 characters long!"
+        }
+        if(!(password.match(/[a-z]+/) && password.match(/[A-Z]+/) && password.match(/[0-9]+/))){
+            return "This password is too weak. Your password should include one uppercase letter, one lowercase letter and one digit."
+        }
+        else{
+            return "ok"
+        }
     }
     render() {
 
