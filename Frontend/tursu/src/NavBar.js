@@ -29,6 +29,7 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import Menu from "@material-ui/core/Menu";
 import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewSharpIcon from '@material-ui/icons/PowerSettingsNewSharp';
+import SmsIcon from '@material-ui/icons/Sms';
 
 /**
  * It is used for enabling Navbar to disappear/appear
@@ -324,6 +325,7 @@ function UserDropDown(){
     };
 
     const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
+    const messageAddress = "/message"
     return(
         <div>
             <IconButton
@@ -353,6 +355,14 @@ function UserDropDown(){
                            <PersonIcon></PersonIcon>
                         </ListItemIcon>
                         <Typography>My Profile</Typography>
+                    </MenuItem>
+                </Link>
+                <Link to={messageAddress}>
+                    <MenuItem>
+                        <ListItemIcon>
+                           <SmsIcon></SmsIcon>
+                        </ListItemIcon>
+                        <Typography>Messages</Typography>
                     </MenuItem>
                 </Link>
                 <Link to={"/"}>
