@@ -12,6 +12,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import Axios from "axios";
+import Navbar from "./NavBar";
+import "./NavBar.css";
 
 class MessagingPage extends React.Component{
 
@@ -33,6 +35,14 @@ class MessagingPage extends React.Component{
     render(){
         return (
             <div>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Navbar />
+                        </Paper>
+                    </Grid>
+                </Grid>
+                <div className="stepper">
                 <Grid container>
                     <Grid item xs={12} >
                         <Typography variant="h5" className="header-message">Chat</Typography>
@@ -119,6 +129,7 @@ class MessagingPage extends React.Component{
                         </Grid>
                     </Grid>
                 </Grid>
+                </div>
             </div>
         );
     }
