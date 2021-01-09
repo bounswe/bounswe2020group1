@@ -355,6 +355,8 @@ def get_messages_from_flow_customer(request):
             "message": message.message,
             "date_sent": message.date_sent,
         })
+    flow.customer_read = True
+    flow.save()
     return JsonResponse(data, safe=False)
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -384,6 +386,8 @@ def get_messages_from_admin_flow_vendor(request):
             "message": message.message,
             "date_sent": message.date_sent,
         })
+    flow.vendor_read = True
+    flow.save()
     return JsonResponse(data, safe=False)
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -413,6 +417,8 @@ def get_messages_from_customer_flow_vendor(request):
             "message": message.message,
             "date_sent": message.date_sent,
         })
+    flow.vendor_read = True
+    flow.save()
     return JsonResponse(data, safe=False)
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -442,4 +448,6 @@ def get_messages_from_flow_admin(request):
             "message": message.message,
             "date_sent": message.date_sent,
         })
+    flow.admin_read = True
+    flow.save()
     return JsonResponse(data, safe=False)
