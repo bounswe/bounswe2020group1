@@ -31,6 +31,7 @@ import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
+import com.example.tursuapp.authentication.homepage.ui.profile.PublicVendorFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import okhttp3.ResponseBody
@@ -278,10 +279,11 @@ class HomeFragment : Fragment() {
                     disableRecommendationEnableGrid()
                     gridView.adapter = adapter
                     gridView.setOnItemClickListener { _, view, _, _ ->
-                        val clickedId = view.findViewById<TextView>(R.id.product_id).text
+                        val clickedVendorName = view.findViewById<TextView>(R.id.name_vendor).text
+                        Log.i("clickedVendorName:", clickedVendorName.toString())
                         val bundle = Bundle()
-                        bundle.putString("id", clickedId.toString())
-                        val newFragment = ProductPageFragment()
+                        bundle.putString("vendor_name", clickedVendorName.toString())
+                        val newFragment = PublicVendorFragment()
                         newFragment.arguments = bundle
                         val fragmentManager: FragmentManager? = fragmentManager
                         val fragmentTransaction: FragmentTransaction =

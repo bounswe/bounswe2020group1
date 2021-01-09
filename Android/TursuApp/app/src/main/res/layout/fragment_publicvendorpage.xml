@@ -8,16 +8,6 @@
     android:background="#FFFFFF"
     android:clickable="true">
 
-    <TextView
-        android:id="@+id/emailView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/Email"
-        app:layout_constraintStart_toEndOf="@+id/Email"
-        app:layout_constraintTop_toTopOf="@+id/Email"
-        app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout
         android:id="@+id/linearLayoutBack"
@@ -30,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/back_button"
+            android:id="@+id/public_back_img"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
@@ -47,13 +37,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="73dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="266dp"
         android:layout_weight="1"
         android:fontFamily="@font/poppins"
         android:text="Name :"
-        android:textSize="20dp"
+        android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.714"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutBack" />
 
@@ -62,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="238dp"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,14 +66,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="73dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="266dp"
         android:layout_weight="1"
         android:fontFamily="@font/poppins"
         android:text="City :"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.882"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutBack" />
 
@@ -91,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="76dp"
         android:layout_marginEnd="238dp"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,14 +95,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="73dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="266dp"
         android:layout_weight="1"
         android:fontFamily="@font/poppins"
         android:text="Rating :"
-        android:textSize="20dp"
+        android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.636"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutBack" />
 
@@ -121,28 +112,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="111dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="158dp"
         android:background="@color/white"
         android:theme="@style/RatingBar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/public_rating"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutBack" />
 
     <GridView
         android:id="@+id/public_gridView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="410dp"
+        android:layout_height="591dp"
+        android:layout_marginTop="140dp"
         android:background="#FFFFFF"
         android:clickable="true"
         android:horizontalSpacing="15dp"
         android:numColumns="2"
         android:verticalSpacing="10dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
