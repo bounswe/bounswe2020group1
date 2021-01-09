@@ -12,8 +12,16 @@ import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import Axios from "axios";
+import NonverifiedProductBox from "./NonverifiedProductBox";
+import InputBase from "@material-ui/core/InputBase";
 
 class MessagingPage extends React.Component{
+
+    state = {
+        flows : [],
+        selected_flow_id: null,
+        message : null,
+    }
 
     componentDidMount() {
         Axios.get('http://3.232.20.250/message/flow/customer/',{
@@ -23,12 +31,31 @@ class MessagingPage extends React.Component{
         })
             .then(res => {
                 console.log(res)
-                this.setState({nonverified_list: res.data})
+                this.setState({flows: res.data})
             })
 
 
 
     }
+    handleChangeFlow = (flow_id) => {
+        this.setState({selected_flow_id: flow_id})
+        console.log(flow_id)
+
+    };
+
+    handleSendMessage = (flow_id) => {
+        console.log(flow_id)
+        console.log(this.state.message)
+
+
+
+    };
+
+    handleChangeStr = (event) => {
+        this.setState({message: event.target.value})
+
+    };
+
 
     render(){
         return (
@@ -54,25 +81,15 @@ class MessagingPage extends React.Component{
                         </Grid>
                         <Divider />
                         <List>
-                            <ListItem button key="RemySharp">
-                                <ListItemIcon>
-                                    <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                                </ListItemIcon>
-                                <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-                                <ListItemText secondary="online" align="right"></ListItemText>
-                            </ListItem>
-                            <ListItem button key="Alice">
-                                <ListItemIcon>
-                                    <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
-                                </ListItemIcon>
-                                <ListItemText primary="Alice">Alice</ListItemText>
-                            </ListItem>
-                            <ListItem button key="CindyBaker">
-                                <ListItemIcon>
-                                    <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
-                                </ListItemIcon>
-                                <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-                            </ListItem>
+                            {this.state.flows.map((flow) => (
+                                <ListItem button onClick={() => this.handleChangeFlow(flow.id)}>
+                                    <ListItemIcon>
+                                        <Avatar alt={flow.vendor_name}  src="https://material-ui.com/static/images/avatar/2.jpg" />
+                                    </ListItemIcon>
+                                    <ListItemText primary={flow.vendor_name}>{flow.vendor_name}r</ListItemText>
+                                </ListItem>
+                            ))}
+
                         </List>
                     </Grid>
                     <Grid item xs={9}>
@@ -80,30 +97,10 @@ class MessagingPage extends React.Component{
                             <ListItem key="1">
                                 <Grid container>
                                     <Grid item xs={12}>
-                                        <ListItemText align="right" primary="Hey man, What's up ?"></ListItemText>
+                                        <ListItemText align="right" primary={this.state.selected_flow_id}></ListItemText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <ListItemText align="right" secondary="09:30"></ListItemText>
-                                    </Grid>
-                                </Grid>
-                            </ListItem>
-                            <ListItem key="2">
-                                <Grid container>
-                                    <Grid item xs={12}>
-                                        <ListItemText align="left" primary="Hey, Iam Good! What about you ?"></ListItemText>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <ListItemText align="left" secondary="09:31"></ListItemText>
-                                    </Grid>
-                                </Grid>
-                            </ListItem>
-                            <ListItem key="3">
-                                <Grid container>
-                                    <Grid item xs={12}>
-                                        <ListItemText align="right" primary="Cool. i am good, let's catch up!"></ListItemText>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <ListItemText align="right" secondary="10:30"></ListItemText>
                                     </Grid>
                                 </Grid>
                             </ListItem>
@@ -111,10 +108,10 @@ class MessagingPage extends React.Component{
                         <Divider />
                         <Grid container style={{padding: '20px'}}>
                             <Grid item xs={11}>
-                                <TextField id="outlined-basic-email" label="Type Something" fullWidth />
+                                <InputBase placeholder="Type Something" onChange={this.handleChangeStr}/>
                             </Grid>
                             <Grid xs={1} align="right">
-                                <Fab color="primary" aria-label="add" ><SendIcon /></Fab>
+                                <Fab color="primary" aria-label="add" onClick={() => this.handleSendMessage(this.state.selected_flow_id)} ><SendIcon /></Fab>
                             </Grid>
                         </Grid>
                     </Grid>
