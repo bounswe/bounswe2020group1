@@ -90,7 +90,7 @@ export default function FormDialog(props) {
                   autoFocus
                   margin="dense"
                   id="name"
-                  label="Expected numnber days until delivery"
+                  label="Expected number days until delivery"
                   type="text"
                   fullWidth
                   days={days}

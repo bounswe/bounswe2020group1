@@ -11,7 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import {Tooltip} from "@material-ui/core";
 import axios from "axios";
-import { Radio } from '@material-ui/core';
+import { Radio, Typography } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
 import { FormControlLabel } from '@material-ui/core';
 import { FormLabel } from '@material-ui/core';
@@ -81,6 +81,7 @@ export default function FormDialog(props) {
         <Tooltip title="Start a New Chat">
             <IconButton onClick={handleClickOpen} size="small">
                 <AddCommentIcon/>
+                <Typography>New Chat</Typography>
             </IconButton>
             </Tooltip>
         </Grid>
