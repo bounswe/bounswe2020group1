@@ -142,10 +142,8 @@ class AdminPanel extends React.Component{
     };
 
     handleBanUser = () => {
-        console.log(this.state.username)
-
         const formData = new FormData();
-        formData.append("username", "bilibili");
+        formData.append("username", this.state.username);
         Axios.post('http://3.232.20.250/admin/banuser/',formData,{
             headers: {
                 'Authorization' : "Token " + window.sessionStorage.getItem("authToken")

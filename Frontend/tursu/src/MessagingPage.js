@@ -21,9 +21,12 @@ class MessagingPage extends React.Component{
         flows : [],
         selected_flow_id: null,
         message : null,
+        message_info_list : [],
+        sent: false
     }
 
     componentDidMount() {
+        // her user type için ayrı request atılacak
         Axios.get('http://3.232.20.250/message/flow/customer/',{
             headers: {
                 'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
@@ -33,24 +36,56 @@ class MessagingPage extends React.Component{
                 console.log(res)
                 this.setState({flows: res.data})
             })
+    }
 
-
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log(this.state.sent)
+        if((this.state.selected_flow_id!==prevState.selected_flow_id) || (this.state.sent!==prevState.sent)){
+            Axios.get('http://3.232.20.250/message/chat/ofcustomer/',{
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                },
+                params: {
+                    flow_id : this.state.selected_flow_id,
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                    this.setState({message_info_list: res.data})
+                })
+        }
 
     }
+
     handleChangeFlow = (flow_id) => {
         this.setState({selected_flow_id: flow_id})
-        console.log(flow_id)
-
     };
 
     handleSendMessage = (flow_id) => {
+        // her user type için ayrı request atılacak
+
         console.log(flow_id)
         console.log(this.state.message)
+
+        const formData = new FormData();
+        formData.append("message", this.state.message);
+        formData.append("flow_id", flow_id);
+        Axios.post('http://3.232.20.250/message/send/customer/tovendor/',formData,{
+            headers: {
+                'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+            }
+        })
+            .then(res => {
+                console.log(res)
+                this.setState({sent: !this.state.sent})
+            })
+            .catch(error =>{
+                console.log(error.response)
+            })
 
 
 
     };
-
     handleChangeStr = (event) => {
         this.setState({message: event.target.value})
 
@@ -96,12 +131,12 @@ class MessagingPage extends React.Component{
                         <List>
                             <ListItem key="1">
                                 <Grid container>
-                                    <Grid item xs={12}>
-                                        <ListItemText align="right" primary={this.state.selected_flow_id}></ListItemText>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <ListItemText align="right" secondary="09:30"></ListItemText>
-                                    </Grid>
+
+                                    {this.state.message_info_list.map((message_info) => (
+                                        <Grid item xs={12}>
+                                            <ListItemText align="right" primary={message_info.message }></ListItemText>
+                                        </Grid>
+                                    ))}
                                 </Grid>
                             </ListItem>
                         </List>
