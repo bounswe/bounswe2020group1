@@ -14,6 +14,8 @@ import SendIcon from '@material-ui/icons/Send';
 import Axios from "axios";
 import NonverifiedProductBox from "./NonverifiedProductBox";
 import InputBase from "@material-ui/core/InputBase";
+import Navbar from "./NavBar";
+import "./NavBar.css";
 
 class MessagingPage extends React.Component{
 
