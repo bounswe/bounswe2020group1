@@ -7,6 +7,7 @@ import ProductList from "./ProductList";
 import VendorList from "./VendorList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
+import {Typography} from "@material-ui/core";
 
 
 
@@ -142,11 +143,6 @@ class SearchPage extends React.Component{
                             </Paper>
                         </Grid>
                         <br/>
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Filter />
-                            </Paper>
-                        </Grid>
                         <Grid item xs={12} container>
                             <VendorList vendors={this.state.products}/>
                         </Grid>

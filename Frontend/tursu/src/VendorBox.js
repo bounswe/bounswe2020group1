@@ -24,8 +24,8 @@ export default function VendorBox(props) {
     const classes = useStyles()
     return(
         <Grid item xs={3}>
-
-                <Button variant="contained" onClick={() => { window.sessionStorage.setItem("vendor_id", props.product.id); }}>
+            <Link to={`/vendorPublicProfile/${props.vendor.name}`}>
+                <Button variant="contained">
                     <Paper className={classes.paper}>
                         <div className="ProductInfo" >
                             <Grid item container style={{
@@ -56,7 +56,7 @@ export default function VendorBox(props) {
                         </div>
                     </Paper>
                 </Button>
-            
+            </Link>
         </Grid>
     );
 }
