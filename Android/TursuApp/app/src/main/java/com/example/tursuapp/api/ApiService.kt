@@ -4,6 +4,8 @@ import com.example.tursuapp.api.responses.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
+import io.reactivex.Observable
+import io.reactivex.Observer
 
 interface ApiService {
     @FormUrlEncoded

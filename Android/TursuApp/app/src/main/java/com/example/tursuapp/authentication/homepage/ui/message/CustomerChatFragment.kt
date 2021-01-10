@@ -1,14 +1,17 @@
 package com.example.tursuapp.authentication.homepage.ui.message
-import android.app.Activity
+
+import android.R.attr.x
+import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,14 +20,20 @@ import com.example.tursuapp.adapter.MessageAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.SingleMsgResponse
-import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import io.reactivex.Observable
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.function.Consumer
 import kotlin.collections.ArrayList
+import kotlin.concurrent.timerTask
 
 
 class CustomerChatFragment: Fragment() {
@@ -110,12 +119,15 @@ class CustomerChatFragment: Fragment() {
                     )
                     (adapter as MessageAdapter).addMessage(newMsg)
                     chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
-                    sendMsgFromCustomerToVendor(msgText.text.toString(),flow_id)
+                    sendMsgFromCustomerToVendor(msgText.text.toString(), flow_id)
                     msgText.text.clear()
                     //hideSoftKeyboard(activity as HomePageActivity)
 
                 }
             }
+            Timer().scheduleAtFixedRate(timerTask {
+                checkLastCustomer()
+            },0,2000)
         }
         else if(user_type=="vendor"){
             getVendorMessages()
@@ -133,13 +145,24 @@ class CustomerChatFragment: Fragment() {
                     )
                     (adapter as MessageAdapter).addMessage(newMsg)
                     chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
-                    sendMsgFromVendorToCustomer(msgText.text.toString(),flow_id)
+                    sendMsgFromVendorToCustomer(msgText.text.toString(), flow_id)
                     msgText.text.clear()
                     //hideSoftKeyboard(activity as HomePageActivity)
 
                 }
             }
+            Timer().scheduleAtFixedRate(timerTask {
+                checkLastVendor()
+            },0,2000)
         }
+    }
+    private fun checkLastCustomer() {
+        Log.i("Message","refreshing")
+        getCustomerMessages()
+    }
+    private fun checkLastVendor() {
+        Log.i("Message","refreshing")
+        getVendorMessages()
     }
     fun getCustomerMessages(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -176,9 +199,9 @@ class CustomerChatFragment: Fragment() {
 
         })
     }
-    fun sendMsgFromVendorToCustomer(msg:String,flow_id:Int){
+    fun sendMsgFromVendorToCustomer(msg: String, flow_id: Int){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.sendMsgFromVendorToCustomer(auth_token, msg,flow_id).enqueue(object :
+        apiinterface.sendMsgFromVendorToCustomer(auth_token, msg, flow_id).enqueue(object :
             retrofit2.Callback<ResponseBody> {
             override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
@@ -190,8 +213,8 @@ class CustomerChatFragment: Fragment() {
             ) {
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
-                    if(response.code()!=200){
-                        Toast.makeText(context,"Message cannot be sent",Toast.LENGTH_SHORT)
+                    if (response.code() != 200) {
+                        Toast.makeText(context, "Message cannot be sent", Toast.LENGTH_SHORT)
                     }
 
                 }
@@ -201,9 +224,9 @@ class CustomerChatFragment: Fragment() {
 
         })
     }
-    fun sendMsgFromCustomerToVendor(msg:String,flow_id:Int){
+    fun sendMsgFromCustomerToVendor(msg: String, flow_id: Int){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.sendMsgFromCustomerToVendor(auth_token, msg,flow_id).enqueue(object :
+        apiinterface.sendMsgFromCustomerToVendor(auth_token, msg, flow_id).enqueue(object :
             retrofit2.Callback<ResponseBody> {
             override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
@@ -215,8 +238,8 @@ class CustomerChatFragment: Fragment() {
             ) {
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
-                    if(response.code()!=200){
-                        Toast.makeText(context,"Message cannot be sent",Toast.LENGTH_SHORT)
+                    if (response.code() != 200) {
+                        Toast.makeText(context, "Message cannot be sent", Toast.LENGTH_SHORT)
                     }
 
                 }
