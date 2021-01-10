@@ -17,6 +17,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import {ListsDialog} from "./ProductBox"
+import Footer from "./Footer";
 
 const theme = createMuiTheme({
     palette:{
@@ -237,6 +238,7 @@ class ProductDetail extends React.Component{
                         Product is added to shopping cart.
                     </Alert>
                 </Snackbar>
+                <Footer/>
             </div>
         )
     }
