@@ -51,7 +51,7 @@ class VendorSignUpActivity : AppCompatActivity() {
                 val username = userName.text.toString()
                 val email = eMail.text.toString()
                 val iban_no = iban.text.toString()
-                val city_name = iban.text.toString()
+                val city_name = city.text.toString()
                 val password1 = password.text.toString()
                 val password2 = passwordConfirmation.text.toString()
 
