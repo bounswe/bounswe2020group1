@@ -10,6 +10,7 @@ import MyLists from "./MyLists";
 import MyOrders from "./MyOrders";
 import {Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import Footer from "../../Footer";
 
 
 export default class CustomerProfilePage extends Component {
@@ -96,8 +97,8 @@ export default class CustomerProfilePage extends Component {
                         <CustomerSidebar info={this.infoChange} lists={this.listsChange} orders={this.ordersChange}/>
                         {this.SelectPage()}
                     </Grid>
-
                 </Grid>
+                <Footer/>
             </ThemeProvider>
         );
     }

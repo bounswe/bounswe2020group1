@@ -12,6 +12,7 @@ import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import {Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import Footer from "../../Footer";
 
 
 export default class VendorProfilePage extends Component {
@@ -138,6 +139,7 @@ export default class VendorProfilePage extends Component {
                     </Grid>
 
                 </Grid>
+                <Footer/>
             </ThemeProvider>
         );
     }

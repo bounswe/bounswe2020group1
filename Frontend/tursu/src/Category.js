@@ -9,6 +9,7 @@ import Axios from "axios";
 import Filter from "./FilterBar";
 import {Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import Footer from "./Footer";
 
 const theme = createMuiTheme({
     palette:{
@@ -117,6 +118,7 @@ class Category extends React.Component{
                         <ProductListVertical products={this.state.products}/>
                     </Grid>
                 </Grid>
+                <Footer/>
             </ThemeProvider>
         );
     }
