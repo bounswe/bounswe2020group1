@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import {Button, Typography} from "@material-ui/core";
 import Box from '@material-ui/core/Box';
 import Rating from "@material-ui/lab/Rating";
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,6 +40,7 @@ export default function VendorBox(props) {
                                         <Box fontWeight="fontWeightBold">
                                             {props.vendor.name}
                                         </Box>
+
                                     </Typography>
                                 </Grid>
                                 <Grid>
@@ -54,6 +56,16 @@ export default function VendorBox(props) {
                                 </Grid>
                             </Grid>
                         </div>
+                        {props.vendor.is_verified ? (
+                            <VerifiedUserIcon color={"primary"} style={{
+                                position: "absolute",
+                                right: 30,
+                                top: 10
+                            }}/>
+                        ):(
+                            <div></div>
+                        )}
+
                     </Paper>
                 </Button>
             </Link>

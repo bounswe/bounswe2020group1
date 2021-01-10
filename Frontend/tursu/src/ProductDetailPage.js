@@ -160,14 +160,16 @@ class ProductDetail extends React.Component{
                         </ButtonBase>
                     </Grid>
                     <Grid item  xs={6} alignItems="flex-start" justify="left">
-                        <Link to={`/vendorPublicProfile/${this.state.product.vendor_name}`}>
+
                             <Typography align="left">
                                 <h1>{this.state.product.name}</h1>
                                 <Typography variant="h4"><b>{this.state.product.price}₺</b></Typography>
-                                <b> Vendor: </b> {this.state.product.vendor_name}<br></br>
+                                <Link to={`/vendorPublicProfile/${this.state.product.vendor_name}`}>
+                                    <b> Vendor: </b> {this.state.product.vendor_name}<br></br>
+                                </Link>
                                 <b> Description: </b> {this.state.product.description}<br></br>
                             </Typography>
-                        </Link>
+
                         <List>
                             {this.state.comments.map((comment) => (
                                 <ListItem alignItems="flex-start">

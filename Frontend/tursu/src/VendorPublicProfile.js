@@ -12,6 +12,8 @@ import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Rating from "@material-ui/lab/Rating";
+import {Link} from "react-router-dom";
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 
 const vendorProfileStyles = makeStyles((theme)=>({
@@ -76,6 +78,9 @@ export default function VendorPublicProfile(props){
                         <Typography variant="h4">
                             {vendorInfo.username}
                         </Typography>
+                        <Tooltip title={"Verified Vendor"}>
+                            <VerifiedUserIcon style={{color: "#388e3c"}}/>
+                        </Tooltip>
                         <Typography>
                             Istanbul/Turkey<br/><br/>
                         </Typography>
@@ -88,11 +93,11 @@ export default function VendorPublicProfile(props){
                     </Grid>
                 </Grid>
                 <Grid container item style={{marginTop:"30px"}}>
-                    <Accordion style={{width:"1000px", margin: "0 auto"}} elevation={5}>
+                    <Accordion style={{width:"1000px", margin: "0 auto"}} elevation={3} defaultExpanded={true}>
                         <AccordionSummary
                             expandIcon = {<ExpandMoreIcon/>}
                         >
-                            <Typography className={classes.typography.productListing}> Show Products of the Vendor</Typography>
+                            <Typography className={classes.typography.productListing}>Products of the Vendor</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Grid container item>
@@ -161,44 +166,46 @@ function ListedProduct(props) {
 
     return(
         <div className={classes.root}>
-            <Paper className={classes.paper} elevation={5}>
-                <Grid container item className={classes.grid} alignItems="center" spacing={4}>
-                    <Grid item className={classes.imageContainer}>
-                        <img
-                            src={props.product.photo_url}
-                            alt={props.product.name}
-                            className={classes.image}/>
-                    </Grid>
-                    <Grid item className={[classes.marginInsideGrid, classes.productName].join(" ") }>
-                        <Typography variant="subtitle2">
-                            {props.product.name}
-                        </Typography>
-                    </Grid>
-                    <Grid item className={[classes.marginInsideGrid, classes.price].join(" ")}>
-                        <Typography variant="body2">
-                            <Box fontWeight="fontWeightBold">
-                                {props.product.price} ₺
-                            </Box>
-                        </Typography>
-                    </Grid>
-                    <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
-                        <Typography variant="caption">
-                            Rating: {props.product.rating}
-                        </Typography>
-                    </Grid>
-                    <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
-                        <Typography variant="caption">
-                            {props.product.category}
-                        </Typography>
-                    </Grid>
+            <Link to={`/product/${props.product.id}`}>
+                <Paper className={classes.paper} elevation={5}>
+                    <Grid container item className={classes.grid} alignItems="center" spacing={4}>
+                        <Grid item className={classes.imageContainer}>
+                            <img
+                                src={props.product.photo_url}
+                                alt={props.product.name}
+                                className={classes.image}/>
+                        </Grid>
+                        <Grid item className={[classes.marginInsideGrid, classes.productName].join(" ") }>
+                            <Typography variant="subtitle2">
+                                {props.product.name}
+                            </Typography>
+                        </Grid>
+                        <Grid item className={[classes.marginInsideGrid, classes.price].join(" ")}>
+                            <Typography variant="body2">
+                                <Box fontWeight="fontWeightBold">
+                                    {props.product.price} ₺
+                                </Box>
+                            </Typography>
+                        </Grid>
+                        <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
+                            <Typography variant="caption">
+                                Rating: {props.product.rating}
+                            </Typography>
+                        </Grid>
+                        <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
+                            <Typography variant="caption">
+                                {props.product.category}
+                            </Typography>
+                        </Grid>
 
-                    <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
-                        <Typography variant="caption">
-                            {props.product.stock}
-                        </Typography>
+                        <Grid item className={[classes.marginInsideGrid, classes.brandName].join(" ")}>
+                            <Typography variant="caption">
+                                {props.product.stock}
+                            </Typography>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Paper>
+                </Paper>
+            </Link>
         </div>
     );
 }
