@@ -37,7 +37,7 @@ function App() {
                 <Route path="/deleteProduct" exact component={DeleteProduct} />
                 <Route path="/checkout" exact component={Checkout} />
                 <Route path="/admin" exact component={AdminPanel} />
-                <Route path="/vendorPublicProfile" exact component={VendorPublicProfile} />
+                <Route path="/vendorPublicProfile/:vendor_name" exact component={VendorPublicProfile} />
             </div>
         </Router>
     );

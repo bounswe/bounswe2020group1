@@ -1,8 +1,9 @@
-import React from "react"
+import React, {useEffect} from "react"
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Navbar from "./NavBar";
 import {Typography} from "@material-ui/core";
+import axios from "axios";
 
 
 const vendorProfileStyles = makeStyles((theme)=>({
@@ -24,6 +25,18 @@ const vendorProfileStyles = makeStyles((theme)=>({
  */
 export default function VendorPublicProfile(props){
     const classes = vendorProfileStyles()
+    const [vendorInfo, setVendorInfo] = React.useState([])
+
+    useEffect(() => {
+        axios.get("http://3.232.20.250/vendorpage/public",{
+            params: {
+                vendor_name: props.match.params.vendor_name
+            }
+        }).then(res =>{
+            setVendorInfo(res.data)
+        })
+    }, [])
+
 
     return(
         <div className={classes.root}>
@@ -32,12 +45,11 @@ export default function VendorPublicProfile(props){
                 <Grid list item>
                     <Grid item>
                         <Typography variant="h4">
-                            Apple
+                            {vendorInfo.username}
                         </Typography>
                         <Typography>
                             Istanbul/Turkey
                         </Typography>
-
                     </Grid>
                     <Grid item>
                         Its Rating
