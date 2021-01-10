@@ -12,7 +12,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import Axios from "axios";
-
+import FormDialog from "./NewChatPopUp"
 import NonverifiedProductBox from "./NonverifiedProductBox";
 import InputBase from "@material-ui/core/InputBase";
 import Navbar from "./NavBar";
@@ -140,6 +140,7 @@ class MessagingPage extends React.Component{
 
         console.log(flow_id)
         console.log(this.state.message)
+
         if(window.sessionStorage.getItem("user_type")==="customer"){
             const formData = new FormData();
             formData.append("message", this.state.message);
@@ -203,6 +204,10 @@ class MessagingPage extends React.Component{
 
     };
 
+    createFlow = () => {
+          console.log("New flow created.")
+    };
+
 
     render(){
         return (
@@ -215,9 +220,15 @@ class MessagingPage extends React.Component{
                     </Grid>
                 </Grid>
                 <div className="stepper">
+                <Grid container>
+                    <Grid item xs={14} >
+                        <FormDialog onSubmit={this.createFlow}/>
+                    </Grid>
+                </Grid>
                     <Grid container>
                         <Grid item xs={12} >
                             <Typography variant="h5" className="header-message">Chat</Typography>
+
                         </Grid>
                     </Grid>
                     <Grid container component={Paper} >
