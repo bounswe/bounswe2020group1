@@ -85,7 +85,6 @@ export default function VendorPublicProfile(props){
                             value = {vendorInfo.rating}
                             readOnly
                         />
-
                     </Grid>
                 </Grid>
                 <Grid container item style={{marginTop:"30px"}}>
