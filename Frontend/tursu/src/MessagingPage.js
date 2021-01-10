@@ -27,7 +27,9 @@ class MessagingPage extends React.Component{
         selected_flow_id: null,
         message : null,
         message_info_list : [],
-        sent: false
+        sent: false,
+        to_admin : null,
+        toadmin_message_info_list: [],
     }
 
     componentDidMount() {
@@ -82,8 +84,31 @@ class MessagingPage extends React.Component{
                     })
             }
         }
-        if(window.sessionStorage.getItem("user_type")==="vendor"){
-            if((this.state.selected_flow_id!==prevState.selected_flow_id) || (this.state.sent!==prevState.sent)){
+        if(window.sessionStorage.getItem("user_type")==="vendor" && (this.state.to_admin)){
+            if((this.state.selected_flow_id!==prevState.selected_flow_id) || (this.state.sent!==prevState.sent) || (this.state.to_admin!==prevState.to_admin)){
+                console.log("to admin")
+
+                Axios.get('http://3.232.20.250/message/chat/ofvendor/wadmin/',{
+                    headers: {
+                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                    },
+                    params: {
+                        flow_id : this.state.selected_flow_id,
+                    }
+                })
+                    .then(res => {
+                        console.log(res)
+                        this.setState({toadmin_message_info_list: res.data})
+                        console.log(res.data)
+                    })
+
+
+
+
+        }}
+        if(window.sessionStorage.getItem("user_type")==="vendor" && (!this.state.to_admin)){
+            console.log("to customer")
+            if((this.state.selected_flow_id!==prevState.selected_flow_id) || (this.state.sent!==prevState.sent) || (this.state.to_admin!==prevState.to_admin)){
                 Axios.get('http://3.232.20.250/message/chat/ofvendor/wcustomer/',{
                     headers: {
                         'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
@@ -97,13 +122,17 @@ class MessagingPage extends React.Component{
                         this.setState({message_info_list: res.data})
                     })
             }
-
         }
-
     }
 
     handleChangeFlow = (flow_id) => {
         this.setState({selected_flow_id: flow_id})
+        this.setState({to_admin: false})
+    };
+
+    handleChangeAdminFlow = (flow_id) => {
+        this.setState({selected_flow_id: flow_id})
+        this.setState({to_admin: true})
     };
 
     handleSendMessage = (flow_id) => {
@@ -129,23 +158,43 @@ class MessagingPage extends React.Component{
                 })
         }
         if(window.sessionStorage.getItem("user_type")==="vendor"){
-            const formData = new FormData();
-            formData.append("message", this.state.message);
-            formData.append("flow_id", flow_id);
-            Axios.post('http://3.232.20.250/message/send/vendor/tocustomer/',formData,{
-                headers: {
-                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
-                }
-            })
-                .then(res => {
-                    console.log(res)
-                    this.setState({sent: !this.state.sent})
+            if(!this.state.to_admin){
+                const formData = new FormData();
+                formData.append("message", this.state.message);
+                formData.append("flow_id", flow_id);
+                Axios.post('http://3.232.20.250/message/send/vendor/tocustomer/',formData,{
+                    headers: {
+                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                    }
                 })
-                .catch(error =>{
-                    console.log(error.response)
+                    .then(res => {
+                        console.log(res)
+                        this.setState({sent: !this.state.sent})
+                    })
+                    .catch(error =>{
+                        console.log(error.response)
+                    })
+            }
+            else{
+                const formData = new FormData();
+                formData.append("message", this.state.message);
+                formData.append("flow_id", flow_id);
+                Axios.post('http://3.232.20.250/message/send/vendor/toadmin/',formData,{
+                    headers: {
+                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                    }
                 })
-        }
+                    .then(res => {
+                        console.log(res)
+                        this.setState({sent: !this.state.sent})
+                    })
+                    .catch(error =>{
+                        console.log(error.response)
+                    })
+            }
 
+        }
+        this.setState({message: ""})
 
     };
 
@@ -204,7 +253,7 @@ class MessagingPage extends React.Component{
                                 ))}
                                 <Divider />
                                 {window.sessionStorage.getItem("user_type")==="vendor" && this.state.admin_flows.map((flow) => (
-                                    <ListItem button onClick={() => this.handleChangeFlow(flow.id)}>
+                                    <ListItem button onClick={() => this.handleChangeAdminFlow(flow.id)}>
                                         <ListItemIcon>
                                             <Avatar alt={flow.id }  src="https://material-ui.com/static/images/avatar/2.jpg" />
                                         </ListItemIcon>
@@ -221,7 +270,18 @@ class MessagingPage extends React.Component{
                                 <ListItem key="1">
                                     <Grid container>
 
-                                        {this.state.message_info_list.map((message_info) => (
+                                        {(!this.state.to_admin) && this.state.message_info_list.map((message_info) => (
+                                            (message_info.sender === "self" &&
+                                                <Grid item xs={12}>
+                                                    <ListItemText align="right" primary={message_info.message }></ListItemText>
+                                                </Grid>) ||
+                                            (message_info.sender === "other" &&
+                                                <Grid item xs={12}>
+                                                    <ListItemText align="left" primary={message_info.message }></ListItemText>
+                                                </Grid>)
+                                        ))}
+
+                                        {(this.state.to_admin) && this.state.toadmin_message_info_list.map((message_info) => (
                                             (message_info.sender === "self" &&
                                                 <Grid item xs={12}>
                                                     <ListItemText align="right" primary={message_info.message }></ListItemText>
@@ -237,7 +297,7 @@ class MessagingPage extends React.Component{
                             <Divider />
                             <Grid container align="left" style={{padding: '20px'}}>
                                 <Grid item xs={11} >
-                                    <InputBase style={{width: 400}} placeholder="Type Something" multiline={true} onChange={this.handleChangeStr}/>
+                                    <InputBase style={{width: 400}} placeholder="Type Something" multiline={true} onChange={this.handleChangeStr} value={this.state.message}/>
                                 </Grid>
                                 <Grid xs={1} align="right">
                                     <Fab color="primary" aria-label="add" onClick={() => this.handleSendMessage(this.state.selected_flow_id)} ><SendIcon /></Fab>
