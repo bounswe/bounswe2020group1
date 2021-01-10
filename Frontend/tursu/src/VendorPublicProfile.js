@@ -5,15 +5,13 @@ import Navbar from "./NavBar";
 import {Tooltip, Typography} from "@material-ui/core";
 import axios from "axios";
 import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
+import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ProductBox from "./ProductBox";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Rating from "@material-ui/lab/Rating";
 
 
 const vendorProfileStyles = makeStyles((theme)=>({
@@ -50,6 +48,15 @@ export default function VendorPublicProfile(props){
     const classes = vendorProfileStyles()
     const [vendorInfo, setVendorInfo] = React.useState([])
 
+    /**
+     * It is used for centralizing text in the AccordionSummary.
+     */
+    const AccordionSummary = withStyles({
+        content: {
+            flexGrow: 0
+        }
+    })(MuiAccordionSummary);
+
     useEffect(() => {
         axios.get("http://3.232.20.250/vendorpage/public",{
             params: {
@@ -70,15 +77,19 @@ export default function VendorPublicProfile(props){
                             {vendorInfo.username}
                         </Typography>
                         <Typography>
-                            Istanbul/Turkey
+                            Istanbul/Turkey<br/><br/>
                         </Typography>
                     </Grid>
                     <Grid item>
-                        Its Rating
+                        <Rating
+                            value = {vendorInfo.rating}
+                            readOnly
+                        />
+
                     </Grid>
                 </Grid>
                 <Grid container item style={{marginTop:"30px"}}>
-                    <Accordion style={{width:"1000px", margin: "0 auto"}}>
+                    <Accordion style={{width:"1000px", margin: "0 auto"}} elevation={5}>
                         <AccordionSummary
                             expandIcon = {<ExpandMoreIcon/>}
                         >
@@ -125,7 +136,7 @@ const listedProductStyles = makeStyles((theme) => ({
     },
     image: {
         width: "50%",
-        height: "auto",
+        height: "40px",
         marginTop: "12px"
     },
     productName: {
