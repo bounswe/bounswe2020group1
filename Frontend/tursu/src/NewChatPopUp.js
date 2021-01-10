@@ -21,28 +21,44 @@ import { RadioGroup } from '@material-ui/core';
 export default function FormDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [vendor, setVendor] = React.useState("");
-    const [ready, setReady] = React.useState(false)
     const [list, setList] = React.useState([])
+    const [usedV, setUsedV] = React.useState(["asena_initial_value"])
 
     const handleClickOpen = () => {
         axios({
               method: 'get',
-              url: 'http://3.232.20.250/helper/allvendors/',
+              url: 'http://3.232.20.250/message/flow/customer/',
               headers: {Authorization: 'Token ' + window.sessionStorage.getItem("authToken")}
               })
           .then(res => {
               console.log(res)
-              setList (res.data)
-              setVendor (list[0])
-              setReady (true);
-              setOpen (true);
+              var usedVendors = []
+              for (var i=0; i<(res.data).length; i++){
+                  usedVendors.push((res.data)[i].vendor_name)
+              }
+              setUsedV (usedVendors)
+
+              axios({
+                    method: 'get',
+                    url: 'http://3.232.20.250/helper/allvendors/',
+                    headers: {Authorization: 'Token ' + window.sessionStorage.getItem("authToken")}
+                    })
+                .then(res => {
+                    console.log(res)
+                    setList (res.data)
+                    setOpen (true)
+                })
+                .catch(error =>{
+                    if (error.response){
+                        console.log(error.response.message);
+                    }
+              })
           })
           .catch(error =>{
               if (error.response){
                   console.log(error.response.message);
               }
         })
-
     };
 
     const handleClose = () => {
@@ -50,6 +66,7 @@ export default function FormDialog(props) {
     };
 
     const handleChange = (e) => {
+        console.log(e.target.value)
         setVendor(e.target.value)
     };
 
@@ -93,13 +110,15 @@ export default function FormDialog(props) {
               <DialogContentText>
                 Select a vendor with whom you would like to start a chat.
               </DialogContentText>
-                {ready ?(
+                {(list!=[] && usedV!=["asena_initial_value"]) ?(
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Vendors:</FormLabel>
                   <RadioGroup aria-label="gender" name="gender1" value={vendor} onChange={handleChange}>
                   {console.log(list)}
+                  {console.log(usedV)}
                   {list.map((list_item) => (
-                         <FormControlLabel value={list_item} control={<Radio />} label={list_item} />
+                         (usedV.includes(list_item) && <FormControlLabel value="disabled" disabled control={<Radio />} label={list_item} />) ||
+                         (!usedV.includes(list_item) && <FormControlLabel value={list_item} control={<Radio />} label={list_item} />)
                   ))}
                   </RadioGroup>
                 </FormControl>
