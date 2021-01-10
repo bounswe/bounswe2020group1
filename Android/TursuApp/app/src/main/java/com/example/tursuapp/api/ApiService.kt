@@ -168,4 +168,22 @@ interface ApiService {
                    @Field("text") text:String,
                    @Field("rating") rating:Int): Call<ResponseBody>
 
+
+
+    @GET("/message/flow/customer/")
+    fun getMessageFlowCustomer(@Header("Authorization") token :String): Call<List<CustomerMessageFlowResponse>>
+
+    @GET("/message/chat/ofcustomer/")
+    fun getMessagesFromSelectedFlow(@Header("Authorization") token :String, @Query("flow_id") flow_id:Int): Call<List<SingleMsgResponse>>
+
+    @GET("/message/chat/ofvendor/wcustomer/")
+    fun getMessagesFromSelectedFlowVendorWCustomer(@Header("Authorization") token :String, @Query("flow_id") flow_id:Int): Call<List<SingleMsgResponse>>
+
+    @FormUrlEncoded
+    @POST("/message/send/customer/tovendor/")
+    fun sendMsgFromCustomerToVendor(@Header("Authorization") token :String, @Field("message") message:String,@Field("flow_id") flow_id:Int):Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/message/send/vendor/tocustomer/")
+    fun sendMsgFromVendorToCustomer(@Header("Authorization") token :String, @Field("message") message:String,@Field("flow_id") flow_id:Int):Call<ResponseBody>
 }
