@@ -24,12 +24,7 @@ class Vendor(models.Model):
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     #def __str__(self):
     #    import json
-    #    this = Vendor.objects.get(
-    #                #location=self.location,
-    #                iban=self.iban,
-    #                #rating=self.rating,
-    #                is_verified=self.is_verified
-    #            )
+    #    this = Vendor.objects.get(id=self.id)
     #    user = this.user
     #    vend = {
     #        "@context": "TURSU.VENDOR",
