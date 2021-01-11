@@ -44,6 +44,9 @@ class CustomerChatFragment: Fragment() {
     lateinit var msgText:EditText
     lateinit var fabButton:FloatingActionButton
     var flow_id = 1
+    var messageLength:Int? = null
+    var toScroll = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -82,14 +85,17 @@ class CustomerChatFragment: Fragment() {
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
                     val msgs = ArrayList(response.body()!!)
-
+                    toScroll = messageLength != msgs.size
+                    messageLength = msgs.size
                     chatRecyclerView.apply {
                         val layoutManager = LinearLayoutManager(
                             context,
                             LinearLayoutManager.VERTICAL,
                             false
                         )
-                        layoutManager.stackFromEnd = true
+                        if(toScroll){
+                            layoutManager.stackFromEnd = true
+                        }
                         chatRecyclerView.layoutManager = layoutManager
                         chatRecyclerView.adapter = MessageAdapter(context, msgs)
 
@@ -101,6 +107,11 @@ class CustomerChatFragment: Fragment() {
 
 
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fabButton.visibility = View.VISIBLE
     }
     fun displayChat(){
         if(user_type=="customer"){

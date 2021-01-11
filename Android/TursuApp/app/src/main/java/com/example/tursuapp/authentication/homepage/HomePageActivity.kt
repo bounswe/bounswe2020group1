@@ -175,12 +175,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             lateinit var fragment: Fragment
             fragment = CustomerChatFragment()
 
-            supportFragmentManager.beginTransaction()
+            supportFragmentManager.beginTransaction().addToBackStack(null)
                 .replace(R.id.nav_host_fragment, fragment)
                 .commit()
             this.drawer.closeDrawer(GravityCompat.START)
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val pref = getSharedPreferences("UserPref", 0)
