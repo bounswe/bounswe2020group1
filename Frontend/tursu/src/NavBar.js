@@ -29,6 +29,16 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import Menu from "@material-ui/core/Menu";
 import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewSharpIcon from '@material-ui/icons/PowerSettingsNewSharp';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+
 
 /**
  * It is used for enabling Navbar to disappear/appear
@@ -120,6 +130,13 @@ const useStyles = makeStyles((theme)=> ({
         position: "absolute",
         right: "180px",
     },
+    avatar: {
+        backgroundColor: "#81c784",
+        color: "#388e3c",
+    },
+    notificationButton: {
+        marginLeft: "120px"
+    }
 }))
 
 const theme = createMuiTheme({
@@ -132,11 +149,71 @@ const theme = createMuiTheme({
         }
     }
 })
+const notifications = ['Your order has been shipped!', 'An item from your wishlist is back on stocks!',
+    'Discount on a product that is on your wishlist!', 'Your order has been shipped!', 'You have a new message!'];
+
+function SimpleDialog(props) {
+    const classes = useStyles();
+    const { onClose, selectedValue, open } = props;
+
+    const handleClose = () => {
+        onClose(selectedValue);
+    };
+
+    const handleListItemClick = (value) => {
+        onClose(value);
+    };
+
+    return (
+        <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+            <DialogTitle id="simple-dialog-title">Your Notifications</DialogTitle>
+            <List>
+                {notifications.map((notification) => (
+                    <ListItem button onClick={() => handleListItemClick(notification)} key={notification}>
+                        <ListItemAvatar>
+                            <Avatar className={classes.avatar}>
+                                <NotificationsActiveIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={notification} />
+                    </ListItem>
+                ))}
+
+                <br/>
+
+
+                <Link>
+                    <Button className={classes.notificationButton} variant="contained" color="secondary">
+                        All Notifications
+                    </Button>
+                </Link>
+
+            </List>
+        </Dialog>
+    );
+}
+
+SimpleDialog.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selectedValue: PropTypes.string.isRequired,
+};
 
 // TODO: implement search functionality
 export default function Navbar(props){
     const [search_type, setType] = React.useState('product');
     const [search_str, setStr] = React.useState();
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(notifications[1]);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (value) => {
+        setOpen(false);
+        setSelectedValue(value);
+    };
 
 
     const handleChange = (event) => {
@@ -189,6 +266,7 @@ export default function Navbar(props){
                                     <Grid item className={classes.searchGrid}>
                                         <InputBase placeholder="Search" id="search" className={classes.search} onChange={handleChangeStr}/>
                                     </Grid>
+
                                     <Grid item>
                                         <Link to={`/search/${search_str}/${search_type}`}>
                                             <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
@@ -197,8 +275,15 @@ export default function Navbar(props){
                                                 <SearchIcon/>
                                             </IconButton>
                                         </Link>
-
                                     </Grid>
+
+                                    <Grid item>
+                                        <IconButton onClick={handleClickOpen}>
+                                            <NotificationsIcon/>
+                                        </IconButton>
+                                        <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
+                                    </Grid>
+
                                     <Grid item className={classes.cart}>
                                         {window.sessionStorage.getItem("isLogged") && (window.sessionStorage.getItem("user_type")!=="vendor")?(
                                             <Link to='/shoppingCart'>
