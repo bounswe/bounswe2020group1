@@ -92,11 +92,13 @@ class SearchHelper:
             if vendor.location:
                 location = f"Latitude: {vendor.location.latitude}, " \
                            f"Longitude: {vendor.location.longitude}"
+                city = vendor.location.city
             else:
                 location = ""
             vendor_info ={"name": vendor.user.user.first_name,
                           "username": vendor.user.user.username,
                           "location": location,
+                          "city": city,
                           "is_verified": vendor.is_verified,
                           "rating": vendor.rating
                         }
