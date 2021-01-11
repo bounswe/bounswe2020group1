@@ -12,6 +12,8 @@ from registered_user.models import get_vendor_from_request
 from filter_sort.utils import product_filter, product_sort
 from search.views import SearchHelper
 
+import notifications.utils as notif
+
 
 def category(request):
     """Returns filtered products by category when GET request is made.
@@ -118,6 +120,8 @@ def edit_product(request):
     old_price = product.price
     if(vendor != product.vendor):
         return HttpResponse("You cannot edit products of other vendors", status=401)
+    old_price = product.price
+    old_stock = product.stock
     try:
         category = Category.objects.get(name=request.POST["category"])
         product.category = category
@@ -174,6 +178,12 @@ def edit_product(request):
             action.send(vendor, verb='discounted', action_object=product)
     except:
         pass
+    
+    if old_price != product.price:
+        notif.handle_price_change(product)
+    if old_stock != product.stock:
+        notif.handle_stock_change(product)
+
     return HttpResponse(message)
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])

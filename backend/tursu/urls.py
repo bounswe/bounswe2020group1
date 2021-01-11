@@ -36,4 +36,5 @@ urlpatterns = [
     path('comment/', include('comment.urls')),
     path('customerpage/', include('customer_page.urls')),
     path('vendorpage/', include('vendor_page.urls')),
+    path('notifications/', include('notifications.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

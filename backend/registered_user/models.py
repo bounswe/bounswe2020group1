@@ -55,6 +55,7 @@ def create_registered_user(sender, instance, created, **kwargs):
 def save_registered_user(sender, instance, **kwargs):
     instance.registereduser.save()
 
+
 def get_vendor_from_request(request):
     """Returns vendor from the request"""
     if(str(request.user) == "AnonymousUser"):
@@ -67,6 +68,7 @@ def get_vendor_from_request(request):
     except Exception:
         vendor = None
     return vendor
+
 
 def get_customer_from_request(request):
     """Returns customer from the request"""
@@ -81,6 +83,17 @@ def get_customer_from_request(request):
         customer = None
     return customer
 
+
+def get_registered_user_from_request(request):
+    """Returns registered user from the request"""
+    if(str(request.user) == "AnonymousUser"):
+        return None
+    ruser = RegisteredUser.objects.get(user=request.user)
+    if ruser.is_banned == True:
+        return None
+    return ruser
+
+
 def get_admin_from_request(request):
     """Returns admin from the request"""
     if(str(request.user) == "AnonymousUser"):
@@ -89,6 +102,7 @@ def get_admin_from_request(request):
         return request.user
     else:
         return None
+
 
 def get_admin():
     """Returns admin"""
