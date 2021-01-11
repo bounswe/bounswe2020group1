@@ -1,5 +1,6 @@
 """Views related to product"""
 import os
+from actstream import action
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from django import forms
@@ -94,6 +95,7 @@ def add_product(request):
             image.save()
     except Exception:
         pass
+    action.send(vendor, verb='added', action_object=product)
     return HttpResponse("success")
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -113,6 +115,7 @@ def edit_product(request):
         product = Product.objects.get(id=product_id)
     except Exception:
         return HttpResponse("There is no such product with the id", status=400)
+    old_price = product.price
     if(vendor != product.vendor):
         return HttpResponse("You cannot edit products of other vendors", status=401)
     try:
@@ -165,6 +168,11 @@ def edit_product(request):
             image.save()
             message += " Photo uploaded."
     except Exception:
+        pass
+    try:
+        if(old_price > product.price):
+            action.send(vendor, verb='discounted', action_object=product)
+    except:
         pass
     return HttpResponse(message)
 
