@@ -37,7 +37,7 @@ export default function MyNotifications() {
         <div className={classes.root}>
 
             {notifications.map((notification) => (
-                <Paper className={classes.paper}>
+                <Paper elevation={8} className={classes.paper}>
                     <Grid container wrap="nowrap" spacing={2}>
                         <Grid item>
                             <Avatar className={classes.avatar}>T</Avatar>

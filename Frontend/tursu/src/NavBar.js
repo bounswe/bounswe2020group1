@@ -136,7 +136,12 @@ const useStyles = makeStyles((theme)=> ({
     },
     notificationButton: {
         marginLeft: "120px"
-    }
+    },
+    dialog: {
+        position: 'absolute',
+        right: '18%', // not sure how it displays in different resolutions
+        top: 50
+    },
 }))
 
 const theme = createMuiTheme({
@@ -166,7 +171,7 @@ function SimpleDialog(props) {
 
     const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
     return (
-        <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+        <Dialog classes={{paper: classes.dialog}} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
             <DialogTitle id="simple-dialog-title">Your Notifications</DialogTitle>
             <List>
                 {notifications.map((notification) => (
