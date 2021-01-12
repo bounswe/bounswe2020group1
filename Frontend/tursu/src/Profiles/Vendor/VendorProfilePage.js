@@ -13,18 +13,20 @@ import EditProduct from "./EditProduct";
 import {Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Footer from "../../Footer";
+import MyNotifications from "./MyNotifications";
 
 
 export default class VendorProfilePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentTab : "info",
+            currentTab : "notifications",
             id : -1
         }
         this.infoChange = this.infoChange.bind(this);
         this.productsChange = this.productsChange.bind(this);
         this.ordersChange = this.ordersChange.bind(this);
+        this.notificationsChange = this.notificationsChange.bind(this)
         this.SelectPage = this.SelectPage.bind(this);
         this.SelectTitle = this.SelectTitle.bind(this);
         this.addProduct = this.addProduct.bind(this);
@@ -40,6 +42,8 @@ export default class VendorProfilePage extends Component {
                 return <MyProducts edit={this.editProduct} handleID={this.handleID} />
             case "orders":
                 return <MyOrders />
+            case "notifications":
+                return <MyNotifications />
             case "add":
                 return <AddProduct />
             case "edit":
@@ -69,6 +73,14 @@ export default class VendorProfilePage extends Component {
                     <Typography >
                         <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
                             My Orders
+                        </Box>
+                    </Typography>
+                </div>)
+            case "notifications":
+                return (<div className="stepper">
+                    <Typography className="stepper">
+                        <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                            My Notifications
                         </Box>
                     </Typography>
                 </div>)
@@ -105,6 +117,11 @@ export default class VendorProfilePage extends Component {
             currentTab:"orders"
         });
     }
+    notificationsChange(){
+        this.setState({
+            currentTab:"notifications"
+        });
+    }
     addProduct(){
         this.setState({
             currentTab:"add"
@@ -134,7 +151,7 @@ export default class VendorProfilePage extends Component {
                         {this.SelectTitle()}
                     </div>
                     <Grid container item direction="row" spacing={1}>
-                        <VendorSidebar info={this.infoChange} products={this.productsChange} orders={this.ordersChange} add={this.addProduct} />
+                        <VendorSidebar info={this.infoChange} products={this.productsChange} orders={this.ordersChange} notifications={this.notificationsChange} add={this.addProduct} />
                         {this.SelectPage()}
                     </Grid>
 

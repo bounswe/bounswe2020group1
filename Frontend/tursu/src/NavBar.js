@@ -164,6 +164,7 @@ function SimpleDialog(props) {
         onClose(value);
     };
 
+    const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
     return (
         <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
             <DialogTitle id="simple-dialog-title">Your Notifications</DialogTitle>
@@ -181,8 +182,7 @@ function SimpleDialog(props) {
 
                 <br/>
 
-
-                <Link>
+                <Link to={linkAddress}>
                     <Button className={classes.notificationButton} variant="contained" color="secondary">
                         All Notifications
                     </Button>
@@ -277,12 +277,29 @@ export default function Navbar(props){
                                         </Link>
                                     </Grid>
 
+
+
+
+
                                     <Grid item>
-                                        <IconButton onClick={handleClickOpen}>
-                                            <NotificationsIcon/>
-                                        </IconButton>
-                                        <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
+                                        {window.sessionStorage.getItem("isLogged")?(
+                                            <Grid item>
+                                                <IconButton onClick={handleClickOpen}>
+                                                    <NotificationsIcon/>
+                                                </IconButton>
+                                                <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
+                                            </Grid>
+                                        ):(
+                                            <Tooltip title={"You need to login to see your notifications."} placement={"top-start"}>
+                                                <span>
+                                                    <IconButton disabled={true}>
+                                                        <NotificationsIcon/>
+                                                    </IconButton>
+                                                </span>
+                                            </Tooltip>
+                                        )}
                                     </Grid>
+
 
                                     <Grid item className={classes.cart}>
                                         {window.sessionStorage.getItem("isLogged") && (window.sessionStorage.getItem("user_type")!=="vendor")?(
@@ -305,8 +322,8 @@ export default function Navbar(props){
                                                 </span>
                                             </Tooltip>
                                         )}
-
                                     </Grid>
+
                                     <Grid item className={classes.sign}>
                                         <Paper variant="outlined" elevation={3}  className={classes.sign_paper}
                                                style={{

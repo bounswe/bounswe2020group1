@@ -18,7 +18,7 @@ export default class CustomerProfilePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentTab : "info"
+            currentTab : "notifications"
         }
         this.infoChange = this.infoChange.bind(this);
         this.listsChange = this.listsChange.bind(this);

@@ -6,7 +6,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -35,7 +34,6 @@ export default function MyNotifications() {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-
             {notifications.map((notification) => (
                 <Paper className={classes.paper}>
                     <Grid container wrap="nowrap" spacing={2}>
@@ -47,7 +45,6 @@ export default function MyNotifications() {
                         </Grid>
                     </Grid>
                 </Paper>
-
             ))}
             <br/>
         </div>
