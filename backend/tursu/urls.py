@@ -29,6 +29,8 @@ urlpatterns = [
     path('helper/', include('helper.urls')),
     path('', include('home.urls')),
     path('shoppinglist/', include('shopping_list.urls')),
+    path('activity/', include('actstream.urls')),
+    path('as/', include('activity_streams.urls')),
     path('message/', include('messaging.urls')),
     path('order/', include('order.urls')),
     path('comment/', include('comment.urls')),

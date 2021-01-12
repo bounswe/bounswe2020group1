@@ -5,3 +5,5 @@ django-cors-headers==3.5.0
 Pillow==8.0.1
 nltk==3.5
 requests==2.22.0
+django-activity-stream==0.9.0
+django-jsonfield==1.4.1
