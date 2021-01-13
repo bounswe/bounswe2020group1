@@ -139,6 +139,7 @@ const theme = createMuiTheme({
 export default function Navbar(props){
     const [search_type, setType] = React.useState('product');
     const [search_str, setStr] = React.useState();
+    const [update, setUpdate] = React.useState(false);
 
 
     const handleChange = (event) => {
@@ -195,6 +196,8 @@ export default function Navbar(props){
                                         <Link to={`/search/${search_str}/${search_type}`}>
                                             <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
                                                 window.sessionStorage.setItem("search_type", search_type)
+                                                setUpdate(!update);
+                                                props.callbackSearched(update)
                                             }}>
                                                 <SearchIcon/>
                                             </IconButton>

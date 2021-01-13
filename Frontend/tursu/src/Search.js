@@ -33,7 +33,8 @@ class SearchPage extends React.Component{
         category_switch: null,
         vendor_switch: null,
         sort: null,
-        vendor_list: []
+        vendor_list: [],
+        searched: null,
 
     }
     handleCallbackdataRange = (childData) =>{
@@ -55,7 +56,9 @@ class SearchPage extends React.Component{
     handleCallbackdataVendorSwitch= (childData) =>{
         this.setState({vendor_switch: childData})
     }
-
+    handleCallbackSearch= (childData) =>{
+        this.setState({searched: childData})
+    }
     componentDidMount() {
         const array = window.location.href.split("/")
         Axios.get('http://3.232.20.250/search/',{
@@ -85,7 +88,7 @@ class SearchPage extends React.Component{
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         const array = window.location.href.split("/")
-        if((this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
+        if((this.state.searched !== prevState.searched)||(this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
             console.log(this.state.vendor)
             Axios.get('http://3.232.20.250/search/',{
                 params: {
@@ -116,7 +119,7 @@ class SearchPage extends React.Component{
                     <Grid container spacing={15} direction="column" className="HomePage">
                         <Grid item xs={12}>
                             <Paper>
-                                <Navbar />
+                                <Navbar callbackSearched = {this.handleCallbackSearch} />
                             </Paper>
                         </Grid>
                         <br/>
