@@ -367,11 +367,7 @@ function UserDropDown(){
                     </MenuItem>
                 </Link>
                 {window.sessionStorage.getItem("user_type")==="admin" && <Link to={"/admin"}>
-                    <MenuItem onClick={
-                        ()=>{
-                            window.sessionStorage.clear()
-                        }
-                    }>
+                    <MenuItem >
                         <ListItemIcon>
                             <SupervisorAccountIcon/>
                         </ListItemIcon>
