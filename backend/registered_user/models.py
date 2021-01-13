@@ -89,8 +89,6 @@ def get_registered_user_from_request(request):
     if(str(request.user) == "AnonymousUser"):
         return None
     ruser = RegisteredUser.objects.get(user=request.user)
-    if ruser.is_banned == True:
-        return None
     return ruser
 
 

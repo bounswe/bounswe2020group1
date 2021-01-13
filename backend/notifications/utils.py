@@ -3,7 +3,6 @@ import json
 """Views related to order"""
 import datetime
 
-from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 
 from product.models import Product
@@ -19,7 +18,8 @@ def get_notification_raw_data(notification_dict: dict):
     return json.dumps(notification_dict)
 
 def insert_notification(registered_user: RegisteredUser, type: int, raw_data: str):
-    notification = Notification.objects.create(registered_user=registered_user, 
+    print("anan yani neden save etmiyosun")
+    notification = Notification.objects.create(user=registered_user, 
                                                type=type,
                                                raw_data=raw_data, 
                                                read = False)
@@ -27,7 +27,7 @@ def insert_notification(registered_user: RegisteredUser, type: int, raw_data: st
 
 
 def set_notification_read(registered_user: RegisteredUser, type: int, raw_data: str):
-    item = Notification.objects.filter(Q(registered_user=registered_user,
+    item = Notification.objects.filter(Q(user=registered_user,
                                           type=type,
                                           raw_data=raw_data)).first()
     if item is None:
@@ -80,17 +80,16 @@ def insert_product_change(registered_user: RegisteredUser, product_name: str, pr
 def handle_stock_change(product: Product):
     items = Alert.objects.filter(Q(product=product, type=AlertType.STOCK_ABOVE_ALERT.value, value__lte=product.stock))
     for item in items:
-        insert_product_change(item.registered_user, product.name, product.stock, AlertType.STOCK_ABOVE_ALERT)
+        insert_product_change(item.user, product.name, product.id, product.stock, AlertType.STOCK_ABOVE_ALERT)
     items.delete()
 
 
 def handle_price_change(product: Product):
     items = Alert.objects.filter(Q(product=product, type=AlertType.PRICE_CHANGE_ALERT.value))
     for item in items:
-        insert_product_change(item.registered_user, product.name, product.price, AlertType.PRICE_CHANGE_ALERT)
+        insert_product_change(item.user, product.name, product.id, product.price, AlertType.PRICE_CHANGE_ALERT.value)
     items.delete()
-
     items = Alert.objects.filter(Q(product=product, type=AlertType.PRICE_BELOW_ALERT.value, value__gte=product.price))
     for item in items:
-        insert_product_change(item.registered_user, product.name, product.price, AlertType.PRICE_BELOW_ALERT)
+        insert_product_change(item.user, product.name, product.id, product.price, AlertType.PRICE_BELOW_ALERT.value)
     items.delete()

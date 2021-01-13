@@ -48,7 +48,7 @@ def create_orders(request):
         customer.money_spent += quantity * product.price
         product.save()
         order.save()
-        notif.insert_order_status_change(registered_user=vendor.user, order_id=order.id, status="new")
+        notif.insert_order_status_change(vendor.user, product.name, order.id, "new")
 
     ShoppingCarts.objects.filter(Q(customer=customer)).delete()
 
@@ -127,7 +127,7 @@ def set_delivered(request):
     order.save()
     
     # add notification for vendor
-    notif.insert_order_status_change(registered_user=order.vendor.user, order_id=order.id, status="delivered")
+    notif.insert_order_status_change(order.vendor.user, order.product.name, order.id, "delivered")
     
     return JsonResponse({}, safe=False)
 
@@ -156,7 +156,7 @@ def set_delivery(request):
     order.save()
 
     # add notification for customer
-    notif.insert_order_status_change(registered_user=order.customer.user, order_id=order.id, status="in delivery")
+    notif.insert_order_status_change(order.customer.user, order.product.name, order.id, "in delivery")
     
     return JsonResponse({}, safe=False)
 
@@ -194,8 +194,8 @@ def cancel_order(request):
 
     # add notification
     if vendor is None:
-        notif.insert_order_status_change(registered_user=order.vendor.user, order_id=order.id, status="cancelled")
+        notif.insert_order_status_change(order.vendor.user, order.product.name, order.id, "cancelled")
     if customer is None:
-        notif.insert_order_status_change(registered_user=order.customer.user, order_id=order.id, status="cancelled")
+        notif.insert_order_status_change(order.customer.user, order.product.name, order.id, "cancelled")
 
     return JsonResponse({}, safe=False)
