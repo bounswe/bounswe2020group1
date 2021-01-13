@@ -196,11 +196,11 @@ def google_signup(request):
         return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
     try:
         response = response.json()
-        email = response.get("email")
+        email = response["email"]
         username = email
-        password = response.get("at_hash")
-        first_name = response.get("given_name")
-        last_name = response.get("family_name")
+        password = response["sub"]+response["iat"]+response["exp"]
+        first_name = response["given_name"]
+        last_name = response["family_name"]
     except:
         return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
     is_vendor = request.POST.get('is_vendor')
