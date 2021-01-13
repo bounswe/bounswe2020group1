@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'helper',
     'actstream',
     'messaging',
+    'notifications',
     'tursu_admin',
 ]
 SITE_ID = 1

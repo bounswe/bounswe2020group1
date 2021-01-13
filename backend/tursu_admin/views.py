@@ -1,15 +1,19 @@
 """Views related to admin"""
 import os
+
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
-from django import forms
+
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
+
 from product.models import Product, Image
-from registered_user.models import get_admin_from_request, get_customer_from_request, get_vendor_from_request, RegisteredUser
+from registered_user.models import get_admin_from_request, RegisteredUser
 from search.views import SearchHelper
 from comment.models import Comment
+
+import notifications.utils as notif
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
@@ -64,6 +68,7 @@ def verify_product(request):
         return HttpResponse("There is no such product with the id", status=400)
     product.is_verified = True
     product.save()
+    notif.insert_product_verified(product.vendor.user, product.name, product.id)
     return HttpResponse("Successfully verified product")
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
