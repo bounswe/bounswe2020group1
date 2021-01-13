@@ -30,6 +30,7 @@ import Menu from "@material-ui/core/Menu";
 import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewSharpIcon from '@material-ui/icons/PowerSettingsNewSharp';
 import SmsIcon from '@material-ui/icons/Sms';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 /**
  * It is used for enabling Navbar to disappear/appear
@@ -349,14 +350,14 @@ function UserDropDown(){
                 }}
             >
                 {/*TODO: Convert this linkto structure to redirecting structure.*/}
-                <Link to={linkAddress}>
+                {window.sessionStorage.getItem("user_type") !=="admin" && <Link to={linkAddress}>
                     <MenuItem>
                         <ListItemIcon>
                            <PersonIcon></PersonIcon>
                         </ListItemIcon>
                         <Typography>My Profile</Typography>
                     </MenuItem>
-                </Link>
+                </Link>}
                 <Link to={messageAddress}>
                     <MenuItem>
                         <ListItemIcon>
@@ -365,6 +366,18 @@ function UserDropDown(){
                         <Typography>Messages</Typography>
                     </MenuItem>
                 </Link>
+                {window.sessionStorage.getItem("user_type")==="admin" && <Link to={"/admin"}>
+                    <MenuItem onClick={
+                        ()=>{
+                            window.sessionStorage.clear()
+                        }
+                    }>
+                        <ListItemIcon>
+                            <SupervisorAccountIcon/>
+                        </ListItemIcon>
+                        <Typography>Admin Panel</Typography>
+                    </MenuItem>
+                </Link>}
                 <Link to={"/"}>
                     <MenuItem onClick={
                         ()=>{

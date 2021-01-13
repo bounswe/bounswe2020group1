@@ -17,6 +17,9 @@ import NonverifiedProductBox from "./NonverifiedProductBox";
 import InputBase from "@material-ui/core/InputBase";
 import Navbar from "./NavBar";
 import "./NavBar.css";
+import { borders } from '@material-ui/system';
+import Box from '@material-ui/core/Box';
+
 
 class MessagingPage extends React.Component{
 
@@ -62,8 +65,14 @@ class MessagingPage extends React.Component{
                 })
         }
         if(window.sessionStorage.getItem("user_type")==="admin"){
-            //Get admin flows
-        }
+            Axios.get('http://3.232.20.250/message/flow/admin/',{
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+                .then(res => {
+                    this.setState({flows: res.data})
+                })        }
 
     }
 
@@ -123,6 +132,24 @@ class MessagingPage extends React.Component{
                     })
             }
         }
+
+
+        if(window.sessionStorage.getItem("user_type")==="admin" && (!this.state.to_admin)){
+            if((this.state.selected_flow_id!==prevState.selected_flow_id) || (this.state.sent!==prevState.sent) || (this.state.to_admin!==prevState.to_admin)){
+                Axios.get('http://3.232.20.250/message/chat/ofadmin/',{
+                    headers: {
+                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                    },
+                    params: {
+                        flow_id : this.state.selected_flow_id,
+                    }
+                })
+                    .then(res => {
+                        console.log(res)
+                        this.setState({message_info_list: res.data})
+                    })
+            }
+        }
     }
 
     handleChangeFlow = (flow_id) => {
@@ -158,6 +185,8 @@ class MessagingPage extends React.Component{
                     console.log(error.response)
                 })
         }
+
+
         if(window.sessionStorage.getItem("user_type")==="vendor"){
             if(!this.state.to_admin){
                 const formData = new FormData();
@@ -194,6 +223,24 @@ class MessagingPage extends React.Component{
                     })
             }
 
+        }
+
+        if(window.sessionStorage.getItem("user_type")==="admin"){
+            const formData = new FormData();
+            formData.append("message", this.state.message);
+            formData.append("flow_id", flow_id);
+            Axios.post('http://3.232.20.250/message/send/admin/tovendor/',formData,{
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                    this.setState({sent: !this.state.sent})
+                })
+                .catch(error =>{
+                    console.log(error.response)
+                })
         }
         this.setState({message: ""})
 
@@ -244,7 +291,7 @@ class MessagingPage extends React.Component{
 
                             <Divider />
                             <List>
-                                {window.sessionStorage.getItem("user_type")==="customer" && this.state.flows.map((flow) => (
+                                {(window.sessionStorage.getItem("user_type")==="admin" || window.sessionStorage.getItem("user_type")==="customer") && this.state.flows.map((flow) => (
                                     <ListItem button onClick={() => this.handleChangeFlow(flow.id)}>
                                         <ListItemIcon>
                                             <Avatar alt={flow.vendor_name}  src="https://material-ui.com/static/images/avatar/2.jpg" />
@@ -282,25 +329,41 @@ class MessagingPage extends React.Component{
                                     <Grid container>
 
                                         {(!this.state.to_admin) && this.state.message_info_list.map((message_info) => (
-                                            (message_info.sender === "self" &&
-                                                <Grid item xs={12}>
-                                                    <ListItemText align="right" primary={message_info.message }></ListItemText>
-                                                </Grid>) ||
-                                            (message_info.sender === "other" &&
-                                                <Grid item xs={12}>
-                                                    <ListItemText align="left" primary={message_info.message }></ListItemText>
-                                                </Grid>)
+                                            (message_info.message!=="" && message_info.sender === "self" &&
+                                                <Box bgcolor="#a5d6a7" style={{
+                                                    borderRadius: '10px',
+                                                    margin: '5px',
+                                                    marginLeft: '600px',
+                                                }}  item xs={12}>
+                                                    <ListItemText align="left" style={{margin: '10px'}} primary={message_info.message }></ListItemText>
+                                                </Box>) ||
+                                            (message_info.message!=="" && message_info.sender === "other" &&
+                                                <Box bgcolor="#aed581" style={{
+                                                    borderRadius: '10px',
+                                                    margin: '5px',
+                                                    marginRight: '500px',
+                                                    }} item xs={12}>
+                                                    <ListItemText align="left" style={{margin: '10px'}} primary={message_info.message }></ListItemText>
+                                                </Box>)
                                         ))}
 
                                         {(this.state.to_admin) && this.state.toadmin_message_info_list.map((message_info) => (
-                                            (message_info.sender === "self" &&
-                                                <Grid item xs={12}>
-                                                    <ListItemText align="right" primary={message_info.message }></ListItemText>
-                                                </Grid>) ||
-                                            (message_info.sender === "other" &&
-                                                <Grid item xs={12}>
-                                                    <ListItemText align="left" primary={message_info.message }></ListItemText>
-                                                </Grid>)
+                                            (message_info.message!=="" && message_info.sender === "self" &&
+                                                <Box bgcolor="#a5d6a7" style={{
+                                                    borderRadius: '10px',
+                                                    margin: '5px',
+                                                    marginLeft: '600px',
+                                                }} item xs={12}>
+                                                    <ListItemText align="left" style={{margin: '10px'}} primary={message_info.message }></ListItemText>
+                                                </Box>) ||
+                                            (message_info.message!=="" && message_info.sender === "other" &&
+                                                <Box bgcolor="#aed581" style={{
+                                                    borderRadius: '10px',
+                                                    margin: '5px',
+                                                    marginRight: '500px',
+                                                }} item xs={12}>
+                                                    <ListItemText align="left" style={{margin: '10px'}} primary={message_info.message }></ListItemText>
+                                                </Box>)
                                         ))}
                                     </Grid>
                                 </ListItem>

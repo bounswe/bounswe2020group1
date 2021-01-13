@@ -12,6 +12,7 @@ import Axios from "axios";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import ProductListNonverified from "./NonverifiedProductList"
 import Grid from "@material-ui/core/Grid";
+import NavBar from "./NavBar";
 
 
 
@@ -172,6 +173,8 @@ class AdminPanel extends React.Component{
 
             <ThemeProvider theme={theme} >
                 <div >
+                    <NavBar/>
+                    <br/><br/><br/><br/><br/><br/>
                     <AppBar position="center">
                         <Tabs value={this.state.value} onChange={this.handleChange} aria-label="simple tabs example">
                             <Tab label="Verify Vendor" {...a11yProps(0)} />
