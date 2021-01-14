@@ -12,8 +12,11 @@ import OptionList from "./OptionList";
 import SearchPage from "./Search";
 import Checkbox from '@material-ui/core/Checkbox';
 
-
 var res = "";
+var res2 = "";
+var res3 = "";
+
+
 const GreenRadio = withStyles({
     root: {
         color: green[400],
@@ -26,6 +29,17 @@ const GreenRadio = withStyles({
 
 
 
+const GreenCheckbox = withStyles({
+    root: {
+        color: green[400],
+        '&$checked': {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props) => <Checkbox color="default" {...props} />);
+
+
 export default function RadioButtons(props) {
 
 
@@ -35,14 +49,19 @@ export default function RadioButtons(props) {
     };
 
     const handleChangeFilterVendor = (event) => {
-        props.parentCallbackFV(event.target.value)
+        console.log(event.target.value)
+        if(event.target.checked)
+        {
+            res2 = res2.concat(event.target.value);
+            res2 = res2.concat("|")
+        }
+        else{
+            var deleted_vendor = event.target.value.concat("|")
+            res2 = res2.replace(deleted_vendor,'');
+        }
+        props.parentCallbackFV(res2)
     };
     const handleChangeFilterCategory = (event) => {
-
-
-
-        console.log(event.target.name)
-        console.log(event.target.checked)
 
         if(event.target.checked)
         {
@@ -53,8 +72,6 @@ export default function RadioButtons(props) {
             var deleted_category = event.target.name.concat("|")
             res = res.replace(deleted_category,'');
         }
-        console.log(res)
-
         props.parentCallbackFC(res)
     };
 
@@ -62,37 +79,53 @@ export default function RadioButtons(props) {
         SortBy: false,
         FilterCategory: false,
         FilterVendors: false,
+        checkedVendors: [],
 
     });
+
+    const [lastSelectedRadioButton, setlastSelectedRadioButton] =React.useState();
+
     const [cat, setCategory] = React.useState({
         gilad: false,
         jason: false,
         antoine: false,
     });
 
+
     const handleChange = (event) => {
         setCategory({ ...cat, [event.target.name]: event.target.checked });
     };
 
+    const handleChange2 = (event) => {
+
+
+        res3 = event.target.name;
+        console.log(res3)
+
+
+    };
+
     const { Electronics, Fashion, Home, Cosmetics, Sports, Office } = cat;
+
 
     const handleChangeSwitch = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
-        console.log(event.target.name)
-        console.log(event.target.checked)
+
         if(event.target.name === "FilterCategory")
         {
             props.parentCallbackSC(event.target.checked)
+
         }
         if(event.target.name === "FilterVendors")
         {
             props.parentCallbackSV(event.target.checked)
+
         }
     };
 
     return (
 
-        <div>
+        <div align={"left"}>
             <Switch
                 checked={state.SortBy}
                 onChange={handleChangeSwitch}
@@ -103,56 +136,56 @@ export default function RadioButtons(props) {
 
             {state.SortBy &&
             <RadioGroup aria-label="anonymous" name="anonymous" onChange={handleChangeSortBy} row>
-                <FormControlLabel value="bestseller" control={<GreenRadio />} label="Bestseller" />
-                <FormControlLabel value="newest" control={<GreenRadio />} label="Latest" />
-                <FormControlLabel value="priceDesc" control={<GreenRadio />} label="Highest price" />
-                <FormControlLabel value="priceAsc" control={<GreenRadio />} label="Lowest price" />
-                <FormControlLabel value="numComments" control={<GreenRadio />} label="Most commented" />
+                <FormControlLabel name={"bestseller"} value="bestseller" control={<GreenRadio checked={res3.includes("bestseller")} onChange={handleChange2} />} label="Bestseller" />
+                <FormControlLabel name={"newest"} value="newest" control={<GreenRadio checked={res3.includes("newest")} onChange={handleChange2}/>} label="Latest" />
+                <FormControlLabel name={"priceDesc"} value="priceDesc" control={<GreenRadio checked={res3.includes("priceDesc")} onChange={handleChange2} />} label="Highest price" />
+                <FormControlLabel name={"priceAsc"} value="priceAsc" control={<GreenRadio checked={res3.includes("priceAsc")} onChange={handleChange2}/>} label="Lowest price" />
+                <FormControlLabel name={"numComments"} value="numComments" control={<GreenRadio checked={res3.includes("numComments")} onChange={handleChange2}/>} label="Most commented" />
             </RadioGroup>}
 
             {props.inCategory &&
             <br/>}
             {props.inCategory &&
-                <Switch
+            <Switch
                 checked={state.FilterCategory}
                 onChange={handleChangeSwitch}
                 color="primary"
                 name="FilterCategory"
                 inputProps={{'aria-label': 'primary checkbox'}}
-                ></Switch>} {props.inCategory && "Filter Category"
-            }
+            ></Switch>} {props.inCategory && "Filter Category"
+        }
             {state.FilterCategory &&
             <br/>}
             {props.inCategory && state.FilterCategory &&
             <FormControl component="fieldset" onChange={handleChangeFilterCategory}>
                 <FormGroup  >
                     <FormControlLabel
-                        control={<Checkbox checked={Electronics} onChange={handleChange} name="Electronics" />}
+                        control={<GreenCheckbox checked={Electronics} onChange={handleChange} name="Electronics" />}
                         label="Electronics"
                         value={"Electronics"}
                     />
                     <FormControlLabel
-                        control={<Checkbox checked={Fashion} onChange={handleChange} name="Fashion" />}
+                        control={<GreenCheckbox checked={Fashion} onChange={handleChange} name="Fashion" />}
                         label="Fashion"
                         value={"Fashion"}
                     />
                     <FormControlLabel
-                        control={<Checkbox checked={Home} onChange={handleChange} name="Home" />}
+                        control={<GreenCheckbox checked={Home} onChange={handleChange} name="Home" />}
                         label="Home"
                         value={"Home"}
                     />
                     <FormControlLabel
-                        control={<Checkbox checked={Cosmetics} onChange={handleChange} name="Cosmetics" />}
+                        control={<GreenCheckbox checked={Cosmetics} onChange={handleChange} name="Cosmetics" />}
                         label="Cosmetics"
                         value={"Cosmetics"}
                     />
                     <FormControlLabel
-                        control={<Checkbox checked={Sports} onChange={handleChange} name="Sports" />}
+                        control={<GreenCheckbox checked={Sports} onChange={handleChange} name="Sports" />}
                         label="Sports"
                         value={"Sports"}
                     />
                     <FormControlLabel
-                        control={<Checkbox checked={Office} onChange={handleChange} name="Office" />}
+                        control={<GreenCheckbox checked={Office} onChange={handleChange} name="Office" />}
                         label="Office"
                         value={"Office"}
                     />
@@ -170,9 +203,19 @@ export default function RadioButtons(props) {
             ></Switch> Filter Vendors
 
             {state.FilterVendors &&
-            <RadioGroup aria-label="anonymous" name="anonymous" onChange={handleChangeFilterVendor} row>
-                <OptionList vendorList={props.vendorList}/>
-            </RadioGroup>}
+            <FormControl component="fieldset" onChange={handleChangeFilterVendor}>
+                <FormGroup  >
+
+                {props.vendorList.map((vendor) => (
+                    <FormControlLabel value= {vendor} control={<GreenCheckbox checked={res2.includes(vendor)}/>} label= {vendor}/>
+                ))}
+                    </FormGroup  >
+
+            </FormControl>
+
+
+            }
+
         </div>
     );
 }
