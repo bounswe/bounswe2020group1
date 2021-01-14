@@ -61,9 +61,11 @@ def add(request):
             product.rating = ((product.rating * product.number_of_raters) + product_rating) / (product.number_of_raters + 1)
             num_of_raters = Order.objects.filter(Q(vendor=vendor, comment_added=True))
             num_of_raters = len(num_of_raters)
-            vendor.rating = ((vendor.rating * num_of_raters) + vendor_rating) / (num_of_raters + 1)
+            order.vendor.rating = ((order.vendor.rating * num_of_raters) + vendor_rating) / (num_of_raters + 1)
             product.number_of_raters = product.number_of_raters + 1
             product.save()
+            order.save()
+            vendor.save()
         except Exception:
             return HttpResponse("Comment cannot be added.", status=400)
     
