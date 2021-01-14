@@ -29,9 +29,14 @@ def add(request):
         return HttpResponse("Comment not given or invalid", status=400)
         
     try:
-        rating = int(request.POST.get('rating'))
+        product_rating = int(request.POST.get('product_rating'))
     except (KeyError, ValueError):
-        return HttpResponse("Rating not given or invalid", status=400)
+        return HttpResponse("Product rating not given or invalid", status=400)
+    
+    try:
+        vendor_rating = int(request.POST.get('vendor_rating'))
+    except (KeyError, ValueError):
+        return HttpResponse("Vendor rating not given or invalid", status=400)
         
     product = Product.objects.filter(Q(id=product_id))
     if len(product) == 0:
@@ -53,7 +58,10 @@ def add(request):
             comment.save()
             order.comment_added = True
             order.save()
-            product.rating = ((product.rating * product.number_of_raters) + rating) / (product.number_of_raters + 1)
+            product.rating = ((product.rating * product.number_of_raters) + product_rating) / (product.number_of_raters + 1)
+            num_of_raters = Order.objects.filter(Q(vendor=vendor, comment_added=True))
+            num_of_raters = len(num_of_raters)
+            vendor.rating = ((vendor.rating * num_of_raters) + vendor_rating) / (num_of_raters + 1)
             product.number_of_raters = product.number_of_raters + 1
             product.save()
         except Exception:
