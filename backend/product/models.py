@@ -18,36 +18,24 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=2)
     date_added = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
-    #def __str__(self):
-    #    import json
-    #    vend = {
-    #        "context": "VENDOR",
-    #        "name": self.vendor.user.user.first_name,
-    #        "username": self.vendor.user.user.username,
-    #        "email": self.vendor.user.user.username,
-    #        "is_verified": self.vendor.is_verified,
-    #        "iban": self.vendor.iban,
-    #        "latitude": float(self.vendor.location.latitude),
-    #        "longitude": float(self.vendor.location.longitude),
-    #        "city": self.vendor.location.city,
-    #        "rating": float(self.vendor.rating)
-    #    }
-    #    product = {
-    #        "@context": "TURSU.PRODUCT",
-    #        #"vendor": vend,
-    #        "category": self.category.name,
-    #        "username": self.vendor.user.user.username,
-    #        "name": self.name,
-    #        "brand": self.brand,
-    #        "description": self.description,
-    #        "rating": float(self.rating),
-    #        "number_of_raters": self.number_of_raters,
-    #        "stock": self.stock,
-    #        "price": float(self.price),
-    #        "date_added": str(self.date_added),
-    #        "is_verified": self.is_verified
-    #    }
-    #    return str(product)
+    def __str__(self):
+        import json
+        product = {
+            "@context": "TURSU.PRODUCT",
+            "vendor": self.vendor,
+            "category": self.category.name,
+            "username": self.vendor.user.user.username,
+            "name": self.name,
+            "brand": self.brand,
+            "description": self.description,
+            "rating": float(self.rating),
+            "number_of_raters": self.number_of_raters,
+            "stock": self.stock,
+            "price": float(self.price),
+            "date_added": str(self.date_added),
+            "is_verified": self.is_verified
+        }
+        return str(product)
 
 
 class Image(models.Model):

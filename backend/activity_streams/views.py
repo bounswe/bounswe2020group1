@@ -9,12 +9,12 @@ from actstream.models import action_object_stream, actor_stream, any_stream
 from actstream.feeds import AbstractActivityStream
 from django.contrib.contenttypes.models import ContentType
 
-from django.contrib.sites.models import Site
-one = Site.objects.all()[0]
-one.domain = '3.232.20.250'
-#one.domain = 'localhost:8000'
-one.name = 'Tursu'
-one.save()
+#from django.contrib.sites.models import Site
+#one = Site.objects.all()[0]
+#one.domain = '3.232.20.250'
+##one.domain = 'localhost:8000'
+#one.name = 'Tursu'
+#one.save()
 class JSONActivity(AbstractActivityStream):
     def __init__(self):
         super(JSONActivity, self)
