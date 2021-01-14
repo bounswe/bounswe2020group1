@@ -137,7 +137,10 @@ const useStyles = makeStyles((theme)=> ({
     notificationButton: {
         marginLeft: "120px"
     },
-    dialog: {
+    notificationIcon: {
+        color: 'white'
+    },
+    dialog: { // TODO: check for different resolutions
         position: 'absolute',
         right: '18%', // not sure how it displays in different resolutions
         top: 50
@@ -154,9 +157,14 @@ const theme = createMuiTheme({
         }
     }
 })
+// mock notification data
+// TODO: make axios connection
 const notifications = ['Your order has been shipped!', 'An item from your wishlist is back on stocks!',
     'Discount on a product that is on your wishlist!', 'Your order has been shipped!', 'You have a new message!'];
 
+// following is the dialog that pops up when notification icon is clicked
+// maps the notification variable and displays them
+// depending on the user type, redirect address of the link is different
 function SimpleDialog(props) {
     const classes = useStyles();
     const { onClose, selectedValue, open } = props;
@@ -198,6 +206,7 @@ function SimpleDialog(props) {
     );
 }
 
+// no idea what this is lol
 SimpleDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
@@ -283,14 +292,11 @@ export default function Navbar(props){
                                     </Grid>
 
 
-
-
-
                                     <Grid item>
                                         {window.sessionStorage.getItem("isLogged")?(
                                             <Grid item>
                                                 <IconButton onClick={handleClickOpen}>
-                                                    <NotificationsIcon/>
+                                                    <NotificationsIcon className={classes.notificationIcon} />
                                                 </IconButton>
                                                 <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
                                             </Grid>
