@@ -19,7 +19,8 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
-import com.example.tursuapp.authentication.homepage.ui.message.CustomerChatFragment
+import com.example.tursuapp.authentication.homepage.ui.message.ChatFragment
+import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
 import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -173,7 +174,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     fun setMessageButton(){
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             lateinit var fragment: Fragment
-            fragment = CustomerChatFragment()
+            fragment = MessageFlowFragment()
 
             supportFragmentManager.beginTransaction().addToBackStack(null)
                 .replace(R.id.nav_host_fragment, fragment)

@@ -36,16 +36,17 @@ import kotlin.collections.ArrayList
 import kotlin.concurrent.timerTask
 
 
-class CustomerChatFragment: Fragment() {
+class ChatFragment: Fragment() {
     lateinit var auth_token :String
     lateinit var user_type :String
     lateinit var chatRecyclerView:RecyclerView
     lateinit var sendButton: Button
     lateinit var msgText:EditText
     lateinit var fabButton:FloatingActionButton
-    var flow_id = 1
+    var flow_id:Int = -1
     var messageLength:Int? = null
     var toScroll = true
+    var with:String?=null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,12 +57,17 @@ class CustomerChatFragment: Fragment() {
         val pref = context?.getSharedPreferences("UserPref", 0)
         auth_token = pref?.getString("auth_token", null).toString()
         user_type = pref?.getString("user_type", null).toString()
+
         val root = inflater.inflate(R.layout.fragment_customer_chat, container, false)
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        flow_id = arguments?.getInt("flow_id")!!
+        if(user_type=="vendor"){
+            with = requireArguments().getString("with")
+        }
         chatRecyclerView = view.findViewById(R.id.chatRecyclerView)
         sendButton = view.findViewById(R.id.send_msg_button)
         msgText = view.findViewById(R.id.editTextMessage)
@@ -72,7 +78,13 @@ class CustomerChatFragment: Fragment() {
 
     fun getVendorMessages(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        apiinterface.getMessagesFromSelectedFlowVendorWCustomer(auth_token, flow_id).enqueue(object :
+        var apiObject:Call<List<SingleMsgResponse>>
+        if(with=="customer") {
+            apiObject = apiinterface.getMessagesFromSelectedFlowVendorWCustomer(auth_token, flow_id)
+        } else{
+            apiObject = apiinterface.getMessagesFromSelectedFlowVendorWAdmin(auth_token, flow_id)
+        }
+        apiObject.enqueue(object :
             retrofit2.Callback<List<SingleMsgResponse>> {
             override fun onFailure(p0: Call<List<SingleMsgResponse>>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
@@ -136,9 +148,12 @@ class CustomerChatFragment: Fragment() {
 
                 }
             }
+            /*
             Timer().scheduleAtFixedRate(timerTask {
                 checkLastCustomer()
             },0,2000)
+
+             */
         }
         else if(user_type=="vendor"){
             getVendorMessages()
@@ -156,15 +171,23 @@ class CustomerChatFragment: Fragment() {
                     )
                     (adapter as MessageAdapter).addMessage(newMsg)
                     chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
-                    sendMsgFromVendorToCustomer(msgText.text.toString(), flow_id)
+                    if(with == "customer"){
+                        sendMsgFromVendorToCustomer(msgText.text.toString(), flow_id)
+                    }
+                    else{
+                        sendMsgFromVendorToAdmin(msgText.text.toString(), flow_id)
+                    }
                     msgText.text.clear()
                     //hideSoftKeyboard(activity as HomePageActivity)
 
                 }
             }
+            /*
             Timer().scheduleAtFixedRate(timerTask {
                 checkLastVendor()
             },0,2000)
+
+             */
         }
     }
     private fun checkLastCustomer() {
@@ -201,6 +224,31 @@ class CustomerChatFragment: Fragment() {
                         chatRecyclerView.layoutManager = layoutManager
                         chatRecyclerView.adapter = MessageAdapter(context, msgs)
 
+                    }
+
+                }
+
+            }
+
+
+        })
+    }
+    fun sendMsgFromVendorToAdmin(msg: String, flow_id: Int){
+        val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.sendMsgFromVendorToAdmin(auth_token, msg, flow_id).enqueue(object :
+                retrofit2.Callback<ResponseBody> {
+            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<ResponseBody>?,
+                    response: Response<ResponseBody>?
+            ) {
+                Log.i("MainFragment", "inside onResponse")
+                if (response != null) {
+                    if (response.code() != 200) {
+                        Toast.makeText(context, "Message cannot be sent", Toast.LENGTH_SHORT)
                     }
 
                 }
