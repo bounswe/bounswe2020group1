@@ -146,6 +146,16 @@ export default function Navbar(props){
         setType(event.target.value);
     };
 
+    const handleSearch = () => {
+        const array = window.location.href.split("/")
+        window.sessionStorage.setItem("searched", document.getElementById("search").value)
+        window.sessionStorage.setItem("search_type", search_type)
+        setUpdate(!update)
+        if(array[3] === "search"){
+            props.callbackSearched(update)
+        }
+    };
+
     const handleChangeStr = (event) => {
         setStr(event.target.value);
     };
@@ -194,10 +204,7 @@ export default function Navbar(props){
                                     </Grid>
                                     <Grid item>
                                         <Link to={`/search/${search_str}/${search_type}`}>
-                                            <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
-                                                window.sessionStorage.setItem("search_type", search_type)
-                                                setUpdate(!update);
-                                                props.callbackSearched(update)
+                                            <IconButton onClick={() => {handleSearch()
                                             }}>
                                                 <SearchIcon/>
                                             </IconButton>

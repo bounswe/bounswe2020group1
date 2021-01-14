@@ -57,6 +57,7 @@ class SearchPage extends React.Component{
         this.setState({vendor_switch: childData})
     }
     handleCallbackSearch= (childData) =>{
+        console.log(childData)
         this.setState({searched: childData})
     }
     componentDidMount() {
@@ -141,7 +142,7 @@ class SearchPage extends React.Component{
                     <Grid container spacing={15} direction="column" className="HomePage">
                         <Grid item xs={12}>
                             <Paper>
-                                <Navbar />
+                                <Navbar callbackSearched = {this.handleCallbackSearch} />
                             </Paper>
                         </Grid>
                         <br/>
