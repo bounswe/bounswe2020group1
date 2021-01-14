@@ -168,4 +168,7 @@ interface ApiService {
                    @Field("text") text:String,
                    @Field("rating") rating:Int): Call<ResponseBody>
 
+    @GET("/vendorpage/public")
+    fun getPublicVendorInfo(@Query("vendor_name") vendor_name:String):Call<PublicVendorResponse>
+
 }
