@@ -17,34 +17,36 @@ import { FormControlLabel } from '@material-ui/core';
 import { FormLabel } from '@material-ui/core';
 import { RadioGroup } from '@material-ui/core';
 
-export default function FormDialog(props) {
+export default function VendorFormDialog(props) {
     const [open, setOpen] = React.useState(false);
-    const [vendor, setVendor] = React.useState("");
-    const [list, setList] = React.useState([])
+    const [option, setOption] = React.useState("");
+    const [products, setProducts] = React.useState([])
+    const [orders, setOrders] = React.useState([])
     const [usedV, setUsedV] = React.useState(["asena_initial_value"])
 
     const handleClickOpen = () => {
         axios({
               method: 'get',
-              url: 'http://3.232.20.250/message/flow/customer/',
+              url: 'http://3.232.20.250/message/flow/vendor/',
               headers: {Authorization: 'Token ' + window.sessionStorage.getItem("authToken")}
               })
           .then(res => {
               console.log(res)
-              var usedVendors = []
-              for (var i=0; i<(res.data).length; i++){
-                  usedVendors.push((res.data)[i].vendor_name)
+              var usedObjects = []
+              for (var i=0; i<(res.data.admin_flows).length; i++){
+                  usedObjects.push((res.data.admin_flows)[i].context + " " + (res.data.admin_flows)[i].object_id)
               }
-              setUsedV (usedVendors)
+              setUsedV (usedObjects)
 
               axios({
                     method: 'get',
-                    url: 'http://3.232.20.250/helper/allvendors/',
+                    url: 'http://3.232.20.250/vendorpage',
                     headers: {Authorization: 'Token ' + window.sessionStorage.getItem("authToken")}
                     })
                 .then(res => {
                     console.log(res)
-                    setList (res.data)
+                    setProducts (res.data.products)
+                    setOrders (res.data.orders)
                     setOpen (true)
                 })
                 .catch(error =>{
@@ -66,18 +68,22 @@ export default function FormDialog(props) {
 
     const handleChange = (e) => {
         console.log(e.target.value)
-        setVendor(e.target.value)
+        setOption(e.target.value)
     };
 
 
     const handleSubmit = (e) => {
-    if(vendor!=""){
+    if (option!=""){
         var token = sessionStorage.getItem("authToken");
+        var splitData = option.split(" ");
+        console.log(splitData[0])
+        console.log(splitData[1])
         var bodyFormData = new FormData();
-        bodyFormData.append('vendor_name', vendor);
+        bodyFormData.append('context', splitData[0]);
+        bodyFormData.append('object_id', splitData[1]);
         axios({
             method: 'post',
-            url: 'http://3.232.20.250/message/startflow/customer/',
+            url: 'http://3.232.20.250/message/startflow/vendor/',
             data: bodyFormData,
             headers: {Authorization: 'Token ' + token}
             })
@@ -96,7 +102,7 @@ export default function FormDialog(props) {
     return (
         <div>
         <Grid>
-        <Tooltip title="Start a New Conversation">
+        <Tooltip title="Start a New Conversation with the Admin">
             <IconButton onClick={handleClickOpen} size="small">
                 <AddCommentIcon/>
                 <Typography>New Conversation</Typography>
@@ -105,20 +111,25 @@ export default function FormDialog(props) {
         </Grid>
 
           <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Start a New Conversation</DialogTitle>
+            <DialogTitle id="form-dialog-title">Start a New Chat</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Select a vendor with whom you would like to start a conversation.
+                Select a product or order about which you would like to start a conversation.
               </DialogContentText>
-                {(list!=[] && usedV!=["asena_initial_value"]) ?(
+                {(products!=[] && orders!=[] && usedV!=[{context: "asena_initial_value", id: 1}]) ?(
                 <FormControl component="fieldset">
-                  <FormLabel component="legend">Vendors:</FormLabel>
-                  <RadioGroup aria-label="gender" name="gender1" value={vendor} onChange={handleChange}>
-                  {console.log(list)}
+                  <FormLabel component="legend">Your Products and Orders:</FormLabel>
+                  <RadioGroup aria-label="gender" name="gender1" value={option} onChange={handleChange}>
+                  {console.log(products)}
+                  {console.log(orders)}
                   {console.log(usedV)}
-                  {list.map((list_item) => (
-                         (usedV.includes(list_item) && <FormControlLabel value="disabled" disabled control={<Radio />} label={list_item} />) ||
-                         (!usedV.includes(list_item) && <FormControlLabel value={list_item} control={<Radio />} label={list_item} />)
+                  {products.map((product_item) => (
+                         (usedV.includes("product " + product_item.id) && <FormControlLabel value="disabled" disabled control={<Radio />} label={"Product: " + product_item.name} />) ||
+                         (!usedV.includes("product " + product_item.id) && <FormControlLabel value={"product " + product_item.id} control={<Radio />} label={"Product: " + product_item.name} />)
+                  ))}
+                  {orders.map((order_item) => (
+                         (usedV.includes("order " + order_item.id) && <FormControlLabel value="disabled" disabled control={<Radio />} label={"Order: " + order_item.customer} />) ||
+                         (!usedV.includes("order " + order_item.id) && <FormControlLabel value={"order " + order_item.id} control={<Radio />} label={"Order: " + order_item.customer} />)
                   ))}
                   </RadioGroup>
                 </FormControl>
