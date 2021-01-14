@@ -9,6 +9,7 @@ import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Button from '@material-ui/core/Button';
+import ProductBox from "./ProductBox";
 
 
 
@@ -130,29 +131,21 @@ class SearchPage extends React.Component{
                             <Navbar />
                         </Paper>
                     </Grid>
-                    <Grid container xs={12} direction="column">
-                        <Grid item xs={3} direction="column">
-
-                            <SwipeableDrawer
-                                variant="temporary"
-                                anchor="left"
-                                open={this.state.filter_tab}
-                                onClose={this.toggleDrawer(false)}
-                                onOpen={this.toggleDrawer(true)}
-                            >
-
-                                <Filter inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list}/>
-                            </SwipeableDrawer>
+                    <br/><br/><br/><br/><br/><br/>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12} sm={3}>
+                            <Filter  inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list}/>
                         </Grid>
-                        <br/><br/><br/><br/><br/><br/><br/><br/>
-                        <Grid item>
-                            <Button variant="contained" color="primary" onClick={this.toggleDrawer(true)}>Filter</Button>
-                        </Grid>
-                        <br/><br/>
-                        <Grid item xs={12} direction="column">
+                        <Grid container xs={12} sm={8} spacing={1}>
 
-                            <ProductList products={this.state.products}/>
+                            {this.state.products.map((product) => (
+                                <Grid style={{margin: '30px'}} item xs={12} sm={3}>
+                                    <ProductBox product={product}/>
+                                </Grid>
+
+                            ))}
                         </Grid>
+
                     </Grid>
                 </ThemeProvider>
             );
