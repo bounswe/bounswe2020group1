@@ -11,7 +11,7 @@ import axios from 'axios'
 import { green } from '@material-ui/core/colors';
 import {Alert} from "@material-ui/lab";
 import Snackbar from "@material-ui/core/Snackbar";
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -162,12 +162,15 @@ class ProductDetail extends React.Component{
                     </Grid>
                     <Grid item  xs={6} alignItems="flex-start" justify="left">
 
-                        <Typography align="left">
-                            <h1>{this.state.product.name}</h1>
-                            <Typography variant="h4"><b>{this.state.product.price}₺</b></Typography>
-                            <b> Vendor: </b> {this.state.product.vendor_name}<br></br>
-                            <b> Description: </b> {this.state.product.description}<br></br>
-                        </Typography>
+                            <Typography align="left">
+                                <h1>{this.state.product.name}</h1>
+                                <Typography variant="h4"><b>{this.state.product.price}₺</b></Typography>
+                                <Link to={`/vendorPublicProfile/${this.state.product.vendor_name}`}>
+                                    <b> Vendor: </b> {this.state.product.vendor_name}<br></br>
+                                </Link>
+                                <b> Description: </b> {this.state.product.description}<br></br>
+                            </Typography>
+
                         <List>
                             {this.state.comments.map((comment) => (
                                 <ListItem alignItems="flex-start">
