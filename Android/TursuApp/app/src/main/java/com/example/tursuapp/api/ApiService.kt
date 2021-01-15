@@ -196,4 +196,9 @@ interface ApiService {
 
     @GET("/message/flow/customer/")
     fun getCustomerMsgFlow(@Header("Authorization") token :String): Call<List<CustomerMsgFlowResponse>>
+
+    @GET("/vendorpage/public")
+    fun getPublicVendorInfo(@Query("vendor_name") vendor_name:String):Call<PublicVendorResponse>
+
+
 }
