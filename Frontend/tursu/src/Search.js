@@ -3,14 +3,9 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
 import Filter from "./FilterBar";
-import ProductList from "./ProductList";
-import VendorList from "./VendorList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Button from '@material-ui/core/Button';
 import ProductBox from "./ProductBox";
-import { maxHeight } from '@material-ui/system';
 
 
 

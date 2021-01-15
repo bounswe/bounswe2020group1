@@ -2,13 +2,9 @@ import React from "react";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
-
-import ProductListVertical from "./ProductList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 import Filter from "./FilterBar";
-import {Typography} from "@material-ui/core";
-import Box from "@material-ui/core/Box";
 import ProductBox from "./ProductBox";
 
 const theme = createMuiTheme({
