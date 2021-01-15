@@ -8,6 +8,7 @@ import VendorList from "./VendorList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 import {Typography} from "@material-ui/core";
+import ProductBox from "./ProductBox";
 
 
 
@@ -110,47 +111,39 @@ class SearchPage extends React.Component{
 
     }
 
-    render(){
-        if("product"==this.state.search_url[1]){
-            return(
-                <ThemeProvider theme={theme} >
-                    <Grid container spacing={15} direction="column" className="HomePage">
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Navbar />
-                            </Paper>
-                        </Grid>
-                        <br/>
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Filter inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list}/>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} container>
-                            <ProductList products={this.state.products}/>
-                        </Grid>
+  render(){
+        return(
+            <ThemeProvider theme={theme} >
+                <Grid item xs={12}>
+                    <Paper>
+                        <Navbar />
+                    </Paper>
+                </Grid>
+                <br/><br/><br/><br/><br/><br/>
+                <Grid container spacing={1}>
+                    <Grid id={"11"} item xs={12} sm={3}>
+                        <Filter  inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list} callbackSearchType={this.handleCallbackdataSearchType}/>
                     </Grid>
-                </ThemeProvider>
-            );
-        }
-        else{
-            return(
-                <ThemeProvider theme={theme} >
-                    <Grid container spacing={15} direction="column" className="HomePage">
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Navbar />
-                            </Paper>
-                        </Grid>
-                        <br/>
-                        <Grid item xs={12} container>
-                            <VendorList vendors={this.state.products}/>
-                        </Grid>
-                    </Grid>
-                </ThemeProvider>
-            );
-        }
+                    {this.state.search_types.includes("product") && <Grid style={{margin: '30px'}} container xs={12} sm={8} spacing={1}>
+
+                        {this.state.products.map((product) => (
+
+
+                            <Grid style={{margin: '30px', display: 'static', }} item xs={12} sm={3}>
+                                <ProductBox product={product}/>
+                            </Grid>
+
+
+
+                        ))}
+                    </Grid>}
+
+                </Grid>
+            </ThemeProvider>
+        );
     }
+
+
 }
 
 export default SearchPage;
