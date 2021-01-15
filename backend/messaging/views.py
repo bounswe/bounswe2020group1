@@ -288,14 +288,20 @@ def get_vendor_flows(request):
         if flow.product is None:
             context = "order"
             object_id = flow.order.pk
+            product_name = flow.order.product.name
+            customer = flow.order.customer.user.user.username
         else:
             context = "product"
             object_id = flow.product.pk
+            product_name = flow.product.name
+            customer = None
         ainfo.append({
             "id": flow.pk,
             "notify": True if not flow.vendor_read else False,
             "context": context,
             "object_id": object_id,
+            "product": product_name,
+            "customer": customer,
             "type": "admin"
         })
     flow_dict["admin_flows"] =  ainfo
@@ -315,14 +321,20 @@ def get_admin_flows(request):
         if flow.product is None:
             context = "order"
             object_id = flow.order.pk
+            product_name = flow.order.product.name
+            customer = flow.order.customer.user.user.username
         else:
             context = "product"
             object_id = flow.product.pk
+            product_name = flow.product.name
+            customer = None
         info.append({
             "id": flow.pk,
             "notify": True if not flow.admin_read else False,
             "context": context,
             "object_id": object_id,
+            "product": product_name,
+            "customer": customer,
             "vendor_name": flow.vendor.user.user.first_name,
             "type": "admin"
         })
