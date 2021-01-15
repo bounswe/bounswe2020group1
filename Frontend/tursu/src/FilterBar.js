@@ -52,11 +52,15 @@ class Filter extends React.Component {
         this.props.callbackVendorSwitch(childData)
     }
 
+    handleCallbackSearchType = (childData) =>{
+        this.props.callbackSearchType(childData)
+    }
+
     render(){
         return (
             <div >
                 <div className="col-sm">
-                    <RadioButtons inCategory={this.props.inCategory} parentCallbackSB = {this.handleCallbackdataSortBy} parentCallbackFC = {this.handleCallbackdataFilterCategory} parentCallbackFV = {this.handleCallbackdataFilterVendor}  parentCallbackSC = {this.handleCallbackCategorySwitch} parentCallbackSV = {this.handleCallbackVendorSwitch} vendorList={this.props.vendorList}/>
+                    <RadioButtons inCategory={this.props.inCategory} parentCallbackSB = {this.handleCallbackdataSortBy} parentCallbackFC = {this.handleCallbackdataFilterCategory} parentCallbackFV = {this.handleCallbackdataFilterVendor}  parentCallbackSC = {this.handleCallbackCategorySwitch} parentCallbackSV = {this.handleCallbackVendorSwitch} parentCallbackST = {this.handleCallbackSearchType} vendorList={this.props.vendorList}/>
                 </div>
                 <div  className="col-sm">
                     <RangeSlider parentCallback = {this.handleCallbackSlider}/>

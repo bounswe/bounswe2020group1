@@ -15,6 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 var res = "";
 var res2 = "";
 var res3 = "";
+var res4 = "";
 
 
 const GreenRadio = withStyles({
@@ -48,6 +49,19 @@ export default function RadioButtons(props) {
         props.parentCallbackSB(event.target.value)
     };
 
+    const handleChangeFilterSearchType = (event) => {
+        if(event.target.checked)
+        {
+            res4 = res4.concat(event.target.value);
+            res4 = res4.concat("|")
+        }
+        else{
+            var deleted_checkbox = event.target.value.concat("|")
+            res4 = res4.replace(deleted_checkbox,'');
+        }
+        props.parentCallbackST(res4)
+    };
+
     const handleChangeFilterVendor = (event) => {
         console.log(event.target.value)
         if(event.target.checked)
@@ -79,6 +93,7 @@ export default function RadioButtons(props) {
         SortBy: false,
         FilterCategory: false,
         FilterVendors: false,
+        SearchType: false,
         checkedVendors: [],
 
     });
@@ -105,7 +120,7 @@ export default function RadioButtons(props) {
 
     };
 
-    const { Electronics, Fashion, Home, Cosmetics, Sports, Office } = cat;
+    const { Electronics, Fashion, Home, Cosmetics, Sports, Office, vendor, product } = cat;
 
 
     const handleChangeSwitch = (event) => {
@@ -126,6 +141,36 @@ export default function RadioButtons(props) {
     return (
 
         <div align={"left"}>
+
+            <Switch
+                checked={state.SearchType}
+                onChange={handleChangeSwitch}
+                color="primary"
+                name="SearchType"
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+            ></Switch>Search Type
+
+            {state.SearchType &&
+            <br/>}
+
+            {state.SearchType &&
+            <FormControl component="fieldset" onChange={handleChangeFilterSearchType}>
+                <FormGroup  >
+                    <FormControlLabel
+                        control={<GreenCheckbox checked={vendor} onChange={handleChange} name="vendor" />}
+                        label="Vendor"
+                        value={"vendor"}
+                    />
+                    <FormControlLabel
+                        control={<GreenCheckbox checked={product} onChange={handleChange} name="product" />}
+                        label="Product"
+                        value={"product"}
+                    />
+                </FormGroup>
+            </FormControl>
+            }
+
+            <br/>
             <Switch
                 checked={state.SortBy}
                 onChange={handleChangeSwitch}
@@ -209,11 +254,8 @@ export default function RadioButtons(props) {
                 {props.vendorList.map((vendor) => (
                     <FormControlLabel value= {vendor} control={<GreenCheckbox checked={res2.includes(vendor)}/>} label= {vendor}/>
                 ))}
-                    </FormGroup  >
-
+                    </FormGroup>
             </FormControl>
-
-
             }
 
         </div>
