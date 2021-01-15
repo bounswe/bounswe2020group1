@@ -5,7 +5,9 @@ import Navbar from "./NavBar";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 import Filter from "./FilterBar";
-
+import {Typography} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import Footer from "./Footer";
 import ProductBox from "./ProductBox";
 
 const theme = createMuiTheme({
