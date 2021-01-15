@@ -674,6 +674,7 @@ class HomeFragment : Fragment() {
 
 
     }
+
     private fun listAllProducts() {
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getProducts().enqueue(object : retrofit2.Callback<List<ProductResponse>> {

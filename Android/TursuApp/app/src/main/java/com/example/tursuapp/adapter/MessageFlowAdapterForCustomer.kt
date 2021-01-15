@@ -12,7 +12,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.tursuapp.R
 import com.example.tursuapp.api.responses.CustomerFlow
 import com.example.tursuapp.api.responses.CustomerMsgFlowResponse
-import com.google.android.material.internal.ViewUtils.dpToPx
 
 class MessageFlowAdapterForCustomer(context: Context, private var flows: List<CustomerMsgFlowResponse>) : BaseAdapter() {
     var context: Context? = context
