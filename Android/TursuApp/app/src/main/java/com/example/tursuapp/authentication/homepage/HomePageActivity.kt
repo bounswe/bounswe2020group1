@@ -19,7 +19,10 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
+import com.example.tursuapp.authentication.homepage.ui.message.ChatFragment
+import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
 import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Response
@@ -168,6 +171,18 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
 
     }
+    fun setMessageButton(){
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            lateinit var fragment: Fragment
+            fragment = MessageFlowFragment()
+
+            supportFragmentManager.beginTransaction().addToBackStack(null)
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
+            this.drawer.closeDrawer(GravityCompat.START)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val pref = getSharedPreferences("UserPref", 0)
@@ -180,6 +195,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         setExpandableSideMenu()
         setSearchFunction()
         setShoppingCart()
+        setMessageButton()
     }
     fun setShoppingCart(){
         val sc = findViewById<CardView>(R.id.shopping_cart)

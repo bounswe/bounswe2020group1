@@ -4,6 +4,8 @@ import com.example.tursuapp.api.responses.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
+import io.reactivex.Observable
+import io.reactivex.Observer
 
 interface ApiService {
     @FormUrlEncoded
@@ -168,7 +170,35 @@ interface ApiService {
                    @Field("text") text:String,
                    @Field("rating") rating:Int): Call<ResponseBody>
 
+    @GET("/message/chat/ofcustomer/")
+    fun getMessagesFromSelectedFlow(@Header("Authorization") token :String, @Query("flow_id") flow_id:Int): Call<List<SingleMsgResponse>>
+
+    @GET("/message/chat/ofvendor/wcustomer/")
+    fun getMessagesFromSelectedFlowVendorWCustomer(@Header("Authorization") token :String, @Query("flow_id") flow_id:Int): Call<List<SingleMsgResponse>>
+
+    @GET("/message/chat/ofvendor/wadmin/")
+    fun getMessagesFromSelectedFlowVendorWAdmin(@Header("Authorization") token :String, @Query("flow_id") flow_id:Int): Call<List<SingleMsgResponse>>
+
+    @FormUrlEncoded
+    @POST("/message/send/customer/tovendor/")
+    fun sendMsgFromCustomerToVendor(@Header("Authorization") token :String, @Field("message") message:String,@Field("flow_id") flow_id:Int):Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/message/send/vendor/tocustomer/")
+    fun sendMsgFromVendorToCustomer(@Header("Authorization") token :String, @Field("message") message:String,@Field("flow_id") flow_id:Int):Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/message/send/vendor/toadmin/")
+    fun sendMsgFromVendorToAdmin(@Header("Authorization") token :String, @Field("message") message:String,@Field("flow_id") flow_id:Int):Call<ResponseBody>
+
+    @GET("/message/flow/vendor/")
+    fun getVendorMsgFlow(@Header("Authorization") token :String): Call<VendorMsgFlowResponse>
+
+    @GET("/message/flow/customer/")
+    fun getCustomerMsgFlow(@Header("Authorization") token :String): Call<List<CustomerMsgFlowResponse>>
+
     @GET("/vendorpage/public")
     fun getPublicVendorInfo(@Query("vendor_name") vendor_name:String):Call<PublicVendorResponse>
+
 
 }
