@@ -14,7 +14,7 @@ import com.example.tursuapp.api.responses.CustomerFlow
 import com.example.tursuapp.api.responses.CustomerMsgFlowResponse
 import com.google.android.material.internal.ViewUtils.dpToPx
 
-class MessageFlowAdapter(context: Context, private var flows: List<CustomerMsgFlowResponse>) : BaseAdapter() {
+class MessageFlowAdapterForCustomer(context: Context, private var flows: List<CustomerMsgFlowResponse>) : BaseAdapter() {
     var context: Context? = context
 
     override fun getCount(): Int {
@@ -54,7 +54,7 @@ class MessageFlowAdapter(context: Context, private var flows: List<CustomerMsgFl
     }
 }
 
-class MessageFlowAdapterForAdminAndCustomer(context: Context, private var flows: List<CustomerFlow>) : BaseAdapter() {
+class MessageFlowAdapterForVendor(context: Context, private var flows: List<CustomerFlow>) : BaseAdapter() {
     var context: Context? = context
 
     override fun getCount(): Int {
@@ -74,14 +74,14 @@ class MessageFlowAdapterForAdminAndCustomer(context: Context, private var flows:
         val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val orderView = inflator.inflate(R.layout.message_flow_item_vendor, null)
         if(flows[position].type=="admin"){
-            orderView.findViewById<TextView>(R.id.context_msg).text = flows[position].context
+            orderView.findViewById<TextView>(R.id.context_msg).text = "About: "+flows[position].context
             orderView.findViewById<TextView>(R.id.messageTo_vendor).text = "Admin"
             orderView.findViewById<TextView>(R.id.type_msg).text = flows[position].type
         }
         else{
             orderView.findViewById<TextView>(R.id.context_msg).visibility = View.GONE
             orderView.findViewById<TextView>(R.id.messageTo_vendor).text = flows[position].username
-            orderView.findViewById<TextView>(R.id.type_msg).text = "Type: customer"
+            orderView.findViewById<TextView>(R.id.type_msg).text = flows[position].type
             orderView.findViewById<TextView>(R.id.context_msg).visibility = View.GONE
         }
         val img = orderView.findViewById<ImageView>(R.id.msg_icon_view_vendor)

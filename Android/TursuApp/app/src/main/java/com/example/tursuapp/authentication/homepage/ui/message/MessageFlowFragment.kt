@@ -5,16 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.tursuapp.R
-import com.example.tursuapp.adapter.MessageFlowAdapter
-import com.example.tursuapp.adapter.MessageFlowAdapterForAdminAndCustomer
+import com.example.tursuapp.adapter.MessageFlowAdapterForCustomer
+import com.example.tursuapp.adapter.MessageFlowAdapterForVendor
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.api.responses.*
+import com.example.tursuapp.api.responses.CustomerFlow
+import com.example.tursuapp.api.responses.CustomerMsgFlowResponse
+import com.example.tursuapp.api.responses.VendorMsgFlowResponse
 import retrofit2.Call
 import retrofit2.Response
 
@@ -24,16 +26,15 @@ class MessageFlowFragment: Fragment() {
     lateinit var user_type :String
     lateinit var flowListView:ListView
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         val pref = context?.getSharedPreferences("UserPref", 0)
-        auth_token = pref?.getString("auth_token",null).toString()
-        user_type = pref?.getString("user_type",null).toString()
-        val root = inflater.inflate(R.layout.fragment_message_flow,container,false)
-        return root
+        auth_token = pref?.getString("auth_token", null).toString()
+        user_type = pref?.getString("user_type", null).toString()
+        return inflater.inflate(R.layout.fragment_message_flow, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,7 +47,7 @@ class MessageFlowFragment: Fragment() {
             getMsgFlowOfVendor()
         }
     }
-    fun getMsgFlowOfCustomer(){
+    private fun getMsgFlowOfCustomer(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getCustomerMsgFlow(auth_token).enqueue(object :
                 retrofit2.Callback<List<CustomerMsgFlowResponse>> {
@@ -61,20 +62,29 @@ class MessageFlowFragment: Fragment() {
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
                     val flows = ArrayList(response.body()!!)
-                    val adapter = MessageFlowAdapter(context!!, flows)
+                    val adapter = MessageFlowAdapterForCustomer(context!!, flows)
                     flowListView.adapter = adapter
-                    flowListView.setOnItemClickListener { parent, view, position, id ->
+                    flowListView.setOnItemClickListener { _, _, position, _ ->
                         val clickedId = flows[position].id
                         val bundle = Bundle()
                         bundle.putInt("flow_id", clickedId)
-                        bundle.putString("user","customer")
+                        bundle.putString("user", "customer")
                         val newFragment = ChatFragment()
                         newFragment.arguments = bundle
                         val fragmentManager: FragmentManager? = fragmentManager
+                        /*
                         val fragmentTransaction: FragmentTransaction =
                                 fragmentManager!!.beginTransaction()
                         //nav_host_fragment olabilir
+
                         fragmentTransaction.replace(R.id.fragment_message_flow, newFragment).addToBackStack(null)
+                        fragmentTransaction.commit()
+
+                         */
+                        val fragmentTransaction: FragmentTransaction =
+                                fragmentManager!!.beginTransaction()
+                        fragmentTransaction.detach(this@MessageFlowFragment)
+                        fragmentTransaction.attach(this@MessageFlowFragment).replace(R.id.fragment_message_flow, newFragment).addToBackStack(null)
                         fragmentTransaction.commit()
                     }
 
@@ -86,7 +96,7 @@ class MessageFlowFragment: Fragment() {
 
         })
     }
-    fun getMsgFlowOfVendor(){
+    private fun getMsgFlowOfVendor(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getVendorMsgFlow(auth_token).enqueue(object :
                 retrofit2.Callback<VendorMsgFlowResponse> {
@@ -100,26 +110,26 @@ class MessageFlowFragment: Fragment() {
             ) {
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
-                    var adminFlows = (response.body()!!.admin_flows)
+                    val adminFlows = (response.body()!!.admin_flows)
                     val customerFlows = response.body()!!.customer_flows
                     val flows = mutableListOf<CustomerFlow>()
-                    flows+=customerFlows
-                    flows+=adminFlows
-                    val adapter = MessageFlowAdapterForAdminAndCustomer(context!!, flows)
+                    flows += customerFlows
+                    flows += adminFlows
+                    val adapter = MessageFlowAdapterForVendor(context!!, flows)
                     flowListView.adapter = adapter
-                    flowListView.setOnItemClickListener { parent, view, position, id ->
+                    flowListView.setOnItemClickListener { _, _, position, _ ->
                         val clickedId = flows[position].id
                         val bundle = Bundle()
                         bundle.putInt("flow_id", clickedId)
-                        bundle.putString("user","vendor")
-                        bundle.putString("with",flows[position].type)
+                        bundle.putString("user", "vendor")
+                        bundle.putString("with", flows[position].type)
                         val newFragment = ChatFragment()
                         newFragment.arguments = bundle
                         val fragmentManager: FragmentManager? = fragmentManager
                         val fragmentTransaction: FragmentTransaction =
                                 fragmentManager!!.beginTransaction()
-                        //nav_host_fragment olabilir
-                        fragmentTransaction.replace(R.id.fragment_message_flow, newFragment).addToBackStack(null)
+                        fragmentTransaction.detach(this@MessageFlowFragment)
+                        fragmentTransaction.attach(this@MessageFlowFragment).replace(R.id.fragment_message_flow, newFragment).addToBackStack(null)
                         fragmentTransaction.commit()
                     }
 
