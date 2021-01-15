@@ -71,10 +71,10 @@ class VendorOrderAdapter(context: Context, private var orderList: List<VendorOrd
                 val fragment = DayEstimatorFragment()
                 val bundle = Bundle()
                 bundle.putInt("orderID", orderList[position].id)
-                fragment.setArguments(bundle)
-                (context as HomePageActivity)?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.nav_host_fragment, fragment)
-                        ?.commit()
+                fragment.arguments = bundle
+                (context as HomePageActivity).supportFragmentManager.beginTransaction().addToBackStack(null)
+                        .replace(R.id.nav_vendor_order, fragment)
+                        .commit()
             }
 
         }
