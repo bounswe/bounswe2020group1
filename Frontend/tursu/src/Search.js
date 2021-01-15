@@ -111,7 +111,7 @@ class SearchPage extends React.Component{
 
     }
 
-  render(){
+    render(){
         return(
             <ThemeProvider theme={theme} >
                 <Grid item xs={12}>
