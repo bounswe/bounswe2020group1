@@ -20,9 +20,10 @@ import { RadioGroup } from '@material-ui/core';
 export default function VendorFormDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [option, setOption] = React.useState("");
-    const [products, setProducts] = React.useState([])
-    const [orders, setOrders] = React.useState([])
-    const [usedV, setUsedV] = React.useState(["asena_initial_value"])
+    const [products, setProducts] = React.useState(["initial_value"])
+    const [orders, setOrders] = React.useState(["initial_value"])
+    const [usedV, setUsedV] = React.useState(["initial_value"])
+    const [map, setMap] = React.useState({"initial_key":"initial_value"})
 
     const handleClickOpen = () => {
         axios({
@@ -45,6 +46,11 @@ export default function VendorFormDialog(props) {
                     })
                 .then(res => {
                     console.log(res)
+                    var names = {}
+                    for (var i=0; i<(res.data.products).length; i++){
+                        names[res.data.products[i].id]=res.data.products[i].name
+                    }
+                    setMap (names)
                     setProducts (res.data.products)
                     setOrders (res.data.orders)
                     setOpen (true)
@@ -116,20 +122,17 @@ export default function VendorFormDialog(props) {
               <DialogContentText>
                 Select a product or order about which you would like to start a conversation.
               </DialogContentText>
-                {(products!=[] && orders!=[] && usedV!=[{context: "asena_initial_value", id: 1}]) ?(
+                {(products!=["initial_value"] && orders!=["initial_value"] && usedV!=["initial_value"]) ?(
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Your Products and Orders:</FormLabel>
                   <RadioGroup aria-label="gender" name="gender1" value={option} onChange={handleChange}>
-                  {console.log(products)}
-                  {console.log(orders)}
-                  {console.log(usedV)}
                   {products.map((product_item) => (
                          (usedV.includes("product " + product_item.id) && <FormControlLabel value="disabled" disabled control={<Radio />} label={"Product: " + product_item.name} />) ||
                          (!usedV.includes("product " + product_item.id) && <FormControlLabel value={"product " + product_item.id} control={<Radio />} label={"Product: " + product_item.name} />)
                   ))}
                   {orders.map((order_item) => (
-                         (usedV.includes("order " + order_item.id) && <FormControlLabel value="disabled" disabled control={<Radio />} label={"Order: " + order_item.customer} />) ||
-                         (!usedV.includes("order " + order_item.id) && <FormControlLabel value={"order " + order_item.id} control={<Radio />} label={"Order: " + order_item.customer} />)
+                         (usedV.includes("order " + order_item.id) && <FormControlLabel value="disabled" disabled control={<Radio />} label={"Order-> Product: " + map[order_item.product] + " | Customer: " + order_item.customer} />) ||
+                         (!usedV.includes("order " + order_item.id) && <FormControlLabel value={"order " + order_item.id} control={<Radio />} label={"Order-> Product: " + map[order_item.product] + " | Customer: " + order_item.customer} />)
                   ))}
                   </RadioGroup>
                 </FormControl>

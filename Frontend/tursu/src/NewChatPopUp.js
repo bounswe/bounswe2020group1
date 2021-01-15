@@ -20,8 +20,8 @@ import { RadioGroup } from '@material-ui/core';
 export default function FormDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [vendor, setVendor] = React.useState("");
-    const [list, setList] = React.useState([])
-    const [usedV, setUsedV] = React.useState(["asena_initial_value"])
+    const [list, setList] = React.useState(["initial_value"])
+    const [usedV, setUsedV] = React.useState(["initial_value"])
 
     const handleClickOpen = () => {
         axios({
@@ -110,7 +110,7 @@ export default function FormDialog(props) {
               <DialogContentText>
                 Select a vendor with whom you would like to start a conversation.
               </DialogContentText>
-                {(list!=[] && usedV!=["asena_initial_value"]) ?(
+                {(list!=["initial_value"] && usedV!=["initial_value"]) ?(
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Vendors:</FormLabel>
                   <RadioGroup aria-label="gender" name="gender1" value={vendor} onChange={handleChange}>

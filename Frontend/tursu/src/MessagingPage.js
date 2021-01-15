@@ -207,6 +207,9 @@ class MessagingPage extends React.Component{
 
     createFlow = () => {
           console.log("New flow created.")
+          // TODO: Reload after new flow is created.
+          window.location.href = window.location.href
+
     };
 
 
@@ -273,7 +276,11 @@ class MessagingPage extends React.Component{
                                         <ListItemIcon>
                                             <Avatar alt={flow.id }  src="https://material-ui.com/static/images/avatar/2.jpg" />
                                         </ListItemIcon>
-                                        <ListItemText primary={"Admin"}></ListItemText>
+                                        {(flow.context==="product") ?(
+                                        <ListItemText primary={"Admin (About product-> " + flow.product + ")"}></ListItemText>
+                                        ):(
+                                        <ListItemText primary={"Admin (About order-> Product: " + flow.product + " Customer: " + flow.customer + ")"}></ListItemText>
+                                        )}
                                     </ListItem>
 
                                 ))}
