@@ -20,7 +20,7 @@ def add(request):
         
     try:
         product_id = int(request.POST.get('product_id'))
-    except (KeyError, ValueError):
+    except (KeyError, ValueError, TypeError):
         return HttpResponse("Product id (product_id) not given or invalid", status=400)
         
     try:
@@ -30,7 +30,7 @@ def add(request):
         
     try:
         product_rating = int(request.POST.get('product_rating'))
-    except (KeyError, ValueError):
+    except (KeyError, ValueError, TypeError):
         return HttpResponse("Product rating not given or invalid", status=400)
     
     try:
@@ -44,26 +44,22 @@ def add(request):
     else:
         product = product[0] 
         
-    order = Order.objects.filter(Q(customer=customer, product=product))
+    order = Order.objects.filter(Q(customer=customer, product=product, comment_added=False))
     if len(order) == 0:
-        return HttpResponse('The customer did not buy the product.',status=401)
+        return HttpResponse('The customer did not buy the product or comment already added.',status=401)
     else:
         order = order[0] 
-        
-    if order.comment_added == True:
-        return HttpResponse('Comment already added.',status=401)
-    else:
         try:
-            comment = Comment.objects.create(order=order, product = product, customer=customer, text=text, rating=rating)
+            comment = Comment.objects.create(order=order, product = product, customer=customer, text=text, rating=product_rating)
             comment.save()
-            order.comment_added = True
-            order.save()
             product.rating = ((product.rating * product.number_of_raters) + product_rating) / (product.number_of_raters + 1)
-            num_of_raters = Order.objects.filter(Q(vendor=vendor, comment_added=True))
-            num_of_raters = len(num_of_raters)
-            order.vendor.rating = ((order.vendor.rating * num_of_raters) + vendor_rating) / (num_of_raters + 1)
             product.number_of_raters = product.number_of_raters + 1
             product.save()
+            vendor = order.vendor
+            rated_orders = Order.objects.filter(Q(vendor=vendor, comment_added=True))
+            num_of_raters = len(rated_orders)
+            vendor.rating = ((vendor.rating * num_of_raters) + vendor_rating) / (num_of_raters + 1)
+            order.comment_added = True
             order.save()
             vendor.save()
         except Exception:
