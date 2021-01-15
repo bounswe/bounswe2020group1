@@ -8,6 +8,7 @@ import CustomerSidebar from "./CustomerSidebar";
 import MyInfo from "./MyInfo";
 import MyLists from "./MyLists";
 import MyOrders from "./MyOrders";
+import MyNotifications from "./MyNotifications";
 import {Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Footer from "../../Footer";
@@ -17,11 +18,12 @@ export default class CustomerProfilePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentTab : "info"
+            currentTab : "notifications"
         }
         this.infoChange = this.infoChange.bind(this);
         this.listsChange = this.listsChange.bind(this);
         this.ordersChange = this.ordersChange.bind(this);
+        this.notificationsChange = this.notificationsChange.bind(this)
         this.SelectPage = this.SelectPage.bind(this);
         this.SelectTitle = this.SelectTitle.bind(this);
     }
@@ -34,6 +36,8 @@ export default class CustomerProfilePage extends Component {
                 return <MyLists />
             case "orders":
                  return <MyOrders />
+            case "notifications":
+                return <MyNotifications />
         }
     }
     SelectTitle(){
@@ -62,6 +66,14 @@ export default class CustomerProfilePage extends Component {
                      </Box>
                  </Typography>
                 </div>)
+            case "notifications":
+                return (<div className="stepper">
+                    <Typography className="stepper">
+                        <Box fontWeight={"fontWeightBold"}  fontStyle="italic">
+                            My Notifications
+                        </Box>
+                    </Typography>
+                </div>)
             default:
                 return <div></div>
         }
@@ -81,6 +93,11 @@ export default class CustomerProfilePage extends Component {
                  currentTab:"orders"
              });
     }
+    notificationsChange(){
+            this.setState({
+                currentTab:"notifications"
+            });
+    }
     render() {
         return (
             <ThemeProvider>
@@ -94,7 +111,7 @@ export default class CustomerProfilePage extends Component {
                         {this.SelectTitle()}
                     </div>
                     <Grid container item direction="row" spacing={1}>
-                        <CustomerSidebar info={this.infoChange} lists={this.listsChange} orders={this.ordersChange}/>
+                        <CustomerSidebar info={this.infoChange} lists={this.listsChange} orders={this.ordersChange} notifications={this.notificationsChange} />
                         {this.SelectPage()}
                     </Grid>
                 </Grid>

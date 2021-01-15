@@ -17,6 +17,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const useStyles = makeStyles((theme)=> ({
     root: {
@@ -57,6 +58,14 @@ export default function CustomerSidebar(props){
                         <Typography>My Lists</Typography>
                      </IconButton>
                  </Paper>
+            </Grid>
+            <Grid item className="sidebar">
+                <Paper elevation="4">
+                    <IconButton onClick={props.notifications}>
+                        <NotificationsIcon/>
+                        <Typography>My Notifications</Typography>
+                    </IconButton>
+                </Paper>
             </Grid>
         </Grid>
     );
