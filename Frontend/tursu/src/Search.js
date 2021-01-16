@@ -36,6 +36,7 @@ class SearchPage extends React.Component{
         vendor_list: [],
         filter_tab: false,
         search_types: "",
+        searched: null,
 
     }
     handleCallbackdataRange = (childData) =>{
@@ -57,12 +58,13 @@ class SearchPage extends React.Component{
     handleCallbackdataVendorSwitch= (childData) =>{
         this.setState({vendor_switch: childData})
     }
-
-
     handleCallbackdataSearchType= (childData) =>{
         this.setState({search_types: childData})
     }
-
+    handleCallbackSearch= (childData) =>{
+        console.log(childData)
+        this.setState({searched: childData})
+    }
     componentDidMount() {
         const array = window.location.href.split("/")
         Axios.get('http://3.232.20.250/search/',{
@@ -135,15 +137,6 @@ class SearchPage extends React.Component{
 
         }
     }
-
-    toggleDrawer = (open) => (event) => {
-        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-
-        this.setState({filter_tab: open});
-    };
-
     render(){
         return(
             <ThemeProvider theme={theme} >
