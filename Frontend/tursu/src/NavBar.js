@@ -29,8 +29,18 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import Menu from "@material-ui/core/Menu";
 import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewSharpIcon from '@material-ui/icons/PowerSettingsNewSharp';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import SmsIcon from '@material-ui/icons/Sms';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+
 
 /**
  * It is used for enabling Navbar to disappear/appear
@@ -140,7 +150,17 @@ export default function Navbar(props){
     const [search_type, setType] = React.useState('product');
     const [search_str, setStr] = React.useState();
     const [update, setUpdate] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(notifications[1]);
 
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (value) => {
+        setOpen(false);
+        setSelectedValue(value);
+    };
 
     const handleChange = (event) => {
         setType(event.target.value);
