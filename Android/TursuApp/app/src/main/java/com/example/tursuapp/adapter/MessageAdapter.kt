@@ -65,13 +65,11 @@ class MessageAdapter(val context: Context,
 
     inner class OtherMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageText: TextView = view.findViewById(R.id.txtOtherMessage)
-        private var userText: TextView = view.findViewById(R.id.txtOtherUser)
         private var timeText: TextView = view.findViewById(R.id.txtOtherMessageTime)
 
         @RequiresApi(Build.VERSION_CODES.O)
         override fun bind(message: SingleMsgResponse) {
             messageText.text = message.message
-            userText.text = message.sender
             timeText.text = DateUtils.fromMillisToTimeString(message.date_sent)
 
         }

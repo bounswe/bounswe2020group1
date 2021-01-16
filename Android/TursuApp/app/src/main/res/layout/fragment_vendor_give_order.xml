@@ -4,7 +4,9 @@
     android:id="@+id/nav_vendor_order"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:layout_gravity="center"
+    android:background="#FFFFFF"
+    android:foregroundGravity="center">
 
     <ListView
         android:id="@+id/vendor_order_list_view"
