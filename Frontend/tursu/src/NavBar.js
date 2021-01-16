@@ -38,6 +38,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import SmsIcon from '@material-ui/icons/Sms';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 
 /**
@@ -217,6 +219,7 @@ SimpleDialog.propTypes = {
 export default function Navbar(props){
     const [search_type, setType] = React.useState('product');
     const [search_str, setStr] = React.useState();
+    const [update, setUpdate] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState(notifications[1]);
 
@@ -228,7 +231,6 @@ export default function Navbar(props){
         setOpen(false);
         setSelectedValue(value);
     };
-
 
     const handleChange = (event) => {
         setType(event.target.value);
