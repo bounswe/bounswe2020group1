@@ -229,13 +229,10 @@ export default function Navbar(props){
         setOpen(false);
         setSelectedValue(value);
     };
-    const handleChange = (event) => {
-        setType(event.target.value);
-    };
     const handleSearch = () => {
         const array = window.location.href.split("/")
         window.sessionStorage.setItem("searched", document.getElementById("search").value)
-        window.sessionStorage.setItem("search_type", search_type)
+        window.sessionStorage.setItem("search_type", "product")
         setUpdate(!update)
         if(array[3] === "search"){
             props.callbackSearched(update)
@@ -273,15 +270,6 @@ export default function Navbar(props){
 
                                 <Grid item xs sm className={classes.upperLeft} container direction="row" >
 
-                                    <Select className={classes.searchType}
-                                        id="search-type-id"
-                                        value={search_type}
-                                        onChange={handleChange}
-                                        IconComponent={FindReplaceIcon}
-                                    >
-                                        <MenuItem value={"product"}>Products</MenuItem>
-                                        <MenuItem value={"vendor"}>Vendors</MenuItem>
-                                    </Select>
                                     <Grid item className={classes.searchGrid}>
                                         <InputBase placeholder="Search" id="search" className={classes.search} onChange={handleChangeStr}/>
                                     </Grid>

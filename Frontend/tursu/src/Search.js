@@ -7,6 +7,9 @@ import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 import {Typography} from "@material-ui/core";
 import ProductBox from "./ProductBox";
+import Divider from '@material-ui/core/Divider';
+import VendorBox from "./VendorBox";
+
 
 
 
@@ -26,7 +29,6 @@ class SearchPage extends React.Component{
     state = {
         products : [],
         vendors : [],
-        search_url: [],
         range: [],
         vendor: null,
         category: null,
@@ -37,6 +39,7 @@ class SearchPage extends React.Component{
         filter_tab: false,
         search_types: "",
         searched: null,
+        search_type_switch: null,
 
     }
     handleCallbackdataRange = (childData) =>{
@@ -54,7 +57,6 @@ class SearchPage extends React.Component{
     handleCallbackdataCategorySwitch= (childData) =>{
         this.setState({category_switch: childData})
     }
-
     handleCallbackdataVendorSwitch= (childData) =>{
         this.setState({vendor_switch: childData})
     }
@@ -62,15 +64,17 @@ class SearchPage extends React.Component{
         this.setState({search_types: childData})
     }
     handleCallbackSearch= (childData) =>{
-        console.log(childData)
         this.setState({searched: childData})
+    }
+    handleCallbackdataSwitchType= (childData) =>{
+        this.setState({search_type_switch: childData})
     }
     componentDidMount() {
         const array = window.location.href.split("/")
         Axios.get('http://3.232.20.250/search/',{
             params: {
                 search_string : array[4],
-                search_type : array[5],
+                search_type : "product",
                 ...( array[6] !== null ? { fprice_lower: array[6] } : {}),
                 ...( array[7] !== null ? { fprice_upper: array[7] } : {}),
                 ...( array[8] !== null ? { fvendor: array[8] } : {}),
@@ -82,9 +86,24 @@ class SearchPage extends React.Component{
             .then(res => {
                 console.log(res)
                 this.setState({products: res.data});
-                this.setState({search_url: array.slice(4,11)});
             })
 
+        Axios.get('http://3.232.20.250/search/',{
+            params: {
+                search_string : array[4],
+                search_type : "vendor",
+                ...( array[6] !== null ? { fprice_lower: array[6] } : {}),
+                ...( array[7] !== null ? { fprice_upper: array[7] } : {}),
+                ...( array[8] !== null ? { fvendor: array[8] } : {}),
+                ...( array[9] !== null ? { fcategory: array[9] } : {}),
+                ...( array[10] !== null ? { sort_by: array[10] } : {}),
+            }
+
+        })
+            .then(res => {
+                console.log(res)
+                this.setState({vendors: res.data});
+            })
         Axios.get('http://3.232.20.250/helper/allvendors',{
         })
             .then(res => {
@@ -93,7 +112,7 @@ class SearchPage extends React.Component{
                     .setState({vendor_list: res.data})
             })
     }
-   componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         const array = window.location.href.split("/")
 
         console.log(this.state.search_types)
@@ -113,7 +132,6 @@ class SearchPage extends React.Component{
                     .then(res => {
                         console.log(res)
                         this.setState({vendors: res.data});
-                        this.setState({search_url: array.slice(4,11)});
                     })
             }
             if(this.state.search_types.includes("product")){
@@ -131,7 +149,6 @@ class SearchPage extends React.Component{
                     .then(res => {
                         console.log(res)
                         this.setState({products: res.data});
-                        this.setState({search_url: array.slice(4,11)});
                     })
             }
 
@@ -142,26 +159,45 @@ class SearchPage extends React.Component{
             <ThemeProvider theme={theme} >
                 <Grid item xs={12}>
                     <Paper>
-                        <Navbar />
+                        <Navbar callbackSearched={this.handleCallbackSearch}/>
                     </Paper>
                 </Grid>
                 <br/><br/><br/><br/><br/><br/>
                 <Grid container spacing={1}>
-                    <Grid id={"11"} item xs={12} sm={3}>
-                        <Filter  inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list} callbackSearchType={this.handleCallbackdataSearchType}/>
+                    <Grid item xs={12} sm={3}>
+                        <Filter callbackSwitchType={this.handleCallbackdataSwitchType} inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list} callbackSearchType={this.handleCallbackdataSearchType}/>
                     </Grid>
-                    {this.state.search_types.includes("product") && <Grid style={{margin: '30px'}} container xs={12} sm={8} spacing={1}>
+                    {<Grid style={{margin: '30px'}} container xs={12} sm={8} spacing={1}>
 
                         {this.state.products.map((product) => (
 
 
                             <Grid style={{margin: '30px', display: 'static', }} item xs={12} sm={3}>
-                                <ProductBox product={product}/>
+                                {(!this.state.search_type_switch || this.state.search_types.includes("product") )&&  <ProductBox product={product}/>
+                                }
                             </Grid>
 
 
 
                         ))}
+
+                        {this.state.vendors.map((vendor) => (
+
+
+                            <Grid style={{margin: '30px', display: 'static', }} item xs={12} sm={3}>
+                                {(!this.state.search_type_switch || this.state.search_types.includes("vendor") )&&   <VendorBox vendor={vendor}/>}
+                            </Grid>
+
+
+
+                        ))}
+                    </Grid>}
+                    <Divider />
+
+
+                    {this.state.search_types.includes("vendor") && <Grid style={{margin: '30px'}} container xs={12} sm={8} spacing={1}>
+
+
                     </Grid>}
 
                 </Grid>

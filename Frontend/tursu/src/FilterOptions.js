@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState, useEffect}  from 'react';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import Radio from '@material-ui/core/Radio';
@@ -16,7 +17,6 @@ var res = "";
 var res2 = "";
 var res3 = "";
 var res4 = "";
-
 
 const GreenRadio = withStyles({
     root: {
@@ -43,6 +43,19 @@ const GreenCheckbox = withStyles({
 
 export default function RadioButtons(props) {
 
+    const [count, setCount] = useState(0);
+        useEffect(() => {
+            if(count < 2){
+                console.log(count)
+                setCount(count + 1)
+                res = "";
+                res2 = "";
+                res3 = "";
+                res4 = "";
+            }
+
+
+        });
 
 
     const handleChangeSortBy = (event) => {
@@ -134,6 +147,12 @@ export default function RadioButtons(props) {
         if(event.target.name === "FilterVendors")
         {
             props.parentCallbackSV(event.target.checked)
+
+        }
+        if(event.target.name === "SearchType")
+        {
+            console.log(res4)
+            props.parentCallbackSwitchType(event.target.checked)
 
         }
     };
