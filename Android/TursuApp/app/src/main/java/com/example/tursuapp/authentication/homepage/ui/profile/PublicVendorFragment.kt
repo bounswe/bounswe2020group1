@@ -52,6 +52,7 @@ class PublicVendorFragment: Fragment()  {
                         Log.i("MainFragment", "inside onResponse")
                         view.findViewById<TextView>(R.id.public_name_view).text = response.body()!!.first_name
                         view.findViewById<TextView>(R.id.public_city_view).text = response.body()!!.city
+                        Log.i("rating: ", response.body()!!.rating)
                         view.findViewById<RatingBar>(R.id.public_ratingBar).rating = response.body()!!.rating.toFloat()
                         if (verifiedVendors.find { vendor -> response.body()!!.first_name == vendor } != null) { //then the vendor is verified
                             view.findViewById<ImageView>(R.id.is_verified).visibility=View.VISIBLE

@@ -237,12 +237,13 @@ class ProductPageFragment : Fragment() {
         if(view.findViewById<TextView>(R.id.addComment_text).text.isEmpty() || view.findViewById<RatingBar>(R.id.addComment_ratingBar).rating == 0.0f){
             Toast.makeText(context, "Please input your comment and rating", Toast.LENGTH_SHORT).show()
         }else {
-            val commentRating = view.findViewById<RatingBar>(R.id.addComment_ratingBar).rating
+            val productRating = view.findViewById<RatingBar>(R.id.addComment_ratingBar).rating
+            val vendorRating = view.findViewById<RatingBar>(R.id.addComment_ratingBarVendor).rating
             val commentText = view.findViewById<TextView>(R.id.addComment_text).text
             val productId = product.id
             Log.i("Product Id: ", productId.toString())
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.addComment(auth_token, productId, commentText.toString(), commentRating.toInt()).enqueue(object :
+            apiInterface.addComment(auth_token, productId, commentText.toString(), productRating.toInt(),vendorRating.toInt()).enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                 override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
