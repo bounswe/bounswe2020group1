@@ -3,8 +3,6 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
 import Filter from "./FilterBar";
-import ProductList from "./ProductList";
-import VendorList from "./VendorList";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 import {Typography} from "@material-ui/core";
@@ -35,7 +33,9 @@ class SearchPage extends React.Component{
         category_switch: null,
         vendor_switch: null,
         sort: null,
-        vendor_list: []
+        vendor_list: [],
+        filter_tab: false,
+        search_types: "",
 
     }
     handleCallbackdataRange = (childData) =>{
@@ -56,6 +56,11 @@ class SearchPage extends React.Component{
 
     handleCallbackdataVendorSwitch= (childData) =>{
         this.setState({vendor_switch: childData})
+    }
+
+
+    handleCallbackdataSearchType= (childData) =>{
+        this.setState({search_types: childData})
     }
 
     componentDidMount() {
@@ -82,34 +87,62 @@ class SearchPage extends React.Component{
         })
             .then(res => {
                 console.log(res)
-                this.setState({vendor_list: res.data})
+                this
+                    .setState({vendor_list: res.data})
             })
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         const array = window.location.href.split("/")
-        if((this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
-            console.log(this.state.vendor)
-            Axios.get('http://3.232.20.250/search/',{
-                params: {
-                    search_string : array[4],
-                    search_type : array[5],
-                    fprice_lower: this.state.range[0],
-                    fprice_upper: this.state.range[1],
-                    ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
-                    ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
-                    sort_by:this.state.sort
-                }
-            })
-                .then(res => {
-                    console.log(res)
-                    this.setState({products: res.data});
-                    this.setState({search_url: array.slice(4,11)});
+
+        console.log(this.state.search_types)
+        if((this.state.search_types !== prevState.search_types)||(array[4] !== prevProps.match.params.search_string)||(this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
+            if(this.state.search_types.includes("vendor")){
+                Axios.get('http://3.232.20.250/search/',{
+                    params: {
+                        search_string : array[4],
+                        search_type : "vendor",
+                        fprice_lower: this.state.range[0],
+                        fprice_upper: this.state.range[1],
+                        ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
+                        ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
+                        sort_by:this.state.sort
+                    }
                 })
+                    .then(res => {
+                        console.log(res)
+                        this.setState({vendors: res.data});
+                        this.setState({search_url: array.slice(4,11)});
+                    })
+            }
+            if(this.state.search_types.includes("product")){
+                Axios.get('http://3.232.20.250/search/',{
+                    params: {
+                        search_string : array[4],
+                        search_type : array[5],
+                        fprice_lower: this.state.range[0],
+                        fprice_upper: this.state.range[1],
+                        ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
+                        ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
+                        sort_by:this.state.sort
+                    }
+                })
+                    .then(res => {
+                        console.log(res)
+                        this.setState({products: res.data});
+                        this.setState({search_url: array.slice(4,11)});
+                    })
+            }
+
+        }
+    }
+
+    toggleDrawer = (open) => (event) => {
+        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
         }
 
-
-
-    }
+        this.setState({filter_tab: open});
+    };
 
     render(){
         return(
