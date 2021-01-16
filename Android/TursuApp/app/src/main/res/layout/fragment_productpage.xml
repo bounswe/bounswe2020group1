@@ -72,7 +72,6 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="316dp"
         android:layout_marginRight="20dp"
         android:background="@color/TursuGreen"
         android:clickable="false"
@@ -89,6 +88,7 @@
         android:layout_width="0dp"
         android:layout_height="317dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/Reviews"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_name">
@@ -157,7 +157,7 @@
         android:id="@+id/ProductInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
         android:background="@color/TursuGreen"
         android:minWidth="150dp"
@@ -186,11 +186,11 @@
 
             <TextView
                 android:id="@+id/price"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
                 android:text=""
-                android:textColor="#0091D3"
+                android:textColor="#0915EF"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -262,29 +262,30 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.289" />
+            app:layout_constraintVertical_bias="0.141" />
 
         <TextView
             android:id="@+id/vendor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="157dp"
-            android:layout_marginBottom="125dp"
+            android:layout_marginBottom="115dp"
             android:fontFamily="@font/poppins_semibold"
             android:text=""
-            android:textColor="#FFFFFF"
+            android:textColor="#0915EF"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1" />
 
         <TextView
             android:id="@+id/stock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="207dp"
-            android:layout_marginBottom="75dp"
+            android:layout_marginBottom="65dp"
             android:fontFamily="@font/poppins_semibold"
             android:text=""
             android:textColor="#E80606"
@@ -300,7 +301,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="128dp"
-            android:layout_marginBottom="154dp"
+            android:layout_marginBottom="145dp"
             android:fontFamily="@font/poppins_semibold"
             android:text=""
             android:textColor="#0915EF"
@@ -308,7 +309,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"

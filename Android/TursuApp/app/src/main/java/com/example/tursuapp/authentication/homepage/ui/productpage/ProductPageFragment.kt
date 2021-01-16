@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
@@ -22,6 +23,7 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.Comments
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.ui.profile.PublicVendorFragment
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -55,6 +57,19 @@ class ProductPageFragment : Fragment() {
         }
         root.findViewById<ImageView>(R.id.add_comment_image)?.setOnClickListener {
             showPopupAddComment(it)
+        }
+        root.findViewById<TextView>(R.id.vendor)?.setOnClickListener {
+            val vendorName = product.vendor_name
+            Log.i("vendorName:", vendorName)
+            val bundle = Bundle()
+            bundle.putString("vendor_name", vendorName)
+            val newFragment = PublicVendorFragment()
+            newFragment.arguments = bundle
+            val fragmentManager: FragmentManager? = fragmentManager
+            val fragmentTransaction: FragmentTransaction =
+                    fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+            fragmentTransaction.commit()
         }
 
         return root
