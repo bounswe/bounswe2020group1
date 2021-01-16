@@ -13,15 +13,17 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView4"
         android:layout_width="49dp"
-        android:layout_height="30dp"
+        android:layout_height="48dp"
         android:layout_marginStart="240dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="7dp"
         app:cardBackgroundColor="#E8E7E7"
         app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/commentListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/Reviews"
-        app:layout_constraintTop_toBottomOf="@+id/ProductInfo">
+        app:layout_constraintTop_toBottomOf="@+id/ProductInfo"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/add_comment_image"
@@ -71,7 +73,7 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="199dp"
         android:layout_marginRight="20dp"
         android:background="@color/TursuGreen"
         android:clickable="false"
@@ -81,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView4" />
+        app:layout_constraintTop_toBottomOf="@+id/send_msg_to_vendor_button" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/const1"
@@ -308,5 +310,20 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/send_msg_to_vendor_button"
+        style="@style/ButtonSendMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="msg to vendor"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/commentListView"
+        app:layout_constraintEnd_toStartOf="@+id/cardView4"
+        app:layout_constraintHorizontal_bias="0.901"
+        app:layout_constraintStart_toEndOf="@+id/Reviews"
+        app:layout_constraintTop_toBottomOf="@+id/ProductInfo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

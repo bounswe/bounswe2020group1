@@ -11,28 +11,34 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.tursuapp.R
 import com.example.tursuapp.adapter.PublicVendorInfoAdapter
-import com.example.tursuapp.adapter.VendorProductAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.CustomerMsgFlowResponse
 import com.example.tursuapp.api.responses.PublicVendorProductLists
 import com.example.tursuapp.api.responses.PublicVendorResponse
-import com.example.tursuapp.api.responses.VendorDataResponse
-import com.example.tursuapp.api.responses.VendorProductLists
 import com.example.tursuapp.authentication.homepage.HomePageActivity
-import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
+import com.example.tursuapp.authentication.homepage.ui.message.ChatFragment
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
 class PublicVendorFragment: Fragment()  {
     var vendorProductList = ArrayList<PublicVendorProductLists>()
     lateinit var gridView: GridView
+    lateinit var msgButton: TextView
+    lateinit var vendor_name:String
+    lateinit var auth_token:String
+    lateinit var user_type:String
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_publicvendorpage, container, false)
-        return root
+        val pref = context?.getSharedPreferences("UserPref", 0)
+        auth_token = pref?.getString("auth_token", null).toString()
+        user_type = pref?.getString("user_type", null).toString()
+        return inflater.inflate(R.layout.fragment_publicvendorpage, container, false)
     }
     private fun listVendorProducts(vendor_name:String,view: View){
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -78,11 +84,86 @@ class PublicVendorFragment: Fragment()  {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val vendor_name = requireArguments().getString("vendor_name")
+        vendor_name = requireArguments().getString("vendor_name")!!
         gridView = view.findViewById(R.id.public_gridView)
-        listVendorProducts(vendor_name.toString(),view)
+
+        msgButton = view.findViewById(R.id.msg_to_vendor)
+        msgButton.setOnClickListener {
+            startChatWithVendor()
+        }
+        listVendorProducts(vendor_name,view)
         view.findViewById<ImageView>(R.id.public_back_img).setOnClickListener {
             (activity as HomePageActivity).displayFragment(R.id.nav_home,0,"",null)
         }
     }
+    fun startNewChat(){
+        val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiinterface.getCustomerMsgFlow(auth_token).enqueue(object :
+                retrofit2.Callback<List<CustomerMsgFlowResponse>> {
+            override fun onFailure(p0: Call<List<CustomerMsgFlowResponse>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<List<CustomerMsgFlowResponse>>?,
+                    response: Response<List<CustomerMsgFlowResponse>>?
+            ) {
+                Log.i("MainFragment", "inside onResponse")
+                if (response != null) {
+                    val flows = ArrayList(response.body()!!)
+                    for(flow in flows){
+                        if(flow.vendor_name == vendor_name){
+                            val clickedId = flow.id
+                            val bundle = Bundle()
+                            bundle.putInt("flow_id", clickedId)
+                            bundle.putString("user", "customer")
+                            val newFragment = ChatFragment()
+                            newFragment.arguments = bundle
+                            val fragmentManager: FragmentManager? = fragmentManager
+                            val fragmentTransaction: FragmentTransaction =
+                                    fragmentManager!!.beginTransaction()
+                            .replace(R.id.nav_profile_detail_vendor, newFragment).addToBackStack(null)
+                            fragmentTransaction.commit()
+                        }
+                    }
+
+
+
+                }
+
+            }
+
+
+        })
+    }
+    fun startChatWithVendor(){
+        msgButton.setOnClickListener {
+            var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiinterface.startFlowForCustomerWithVendor(auth_token,vendor_name).enqueue(object :
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
+
+                override fun onResponse(
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
+                ) {
+                    if (response != null) {
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "chat initiated", Toast.LENGTH_SHORT).show()
+                            startNewChat()
+                        } else {
+                            Toast.makeText(context, "chat NOT initiated", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                }
+
+
+            })
+        }
+    }
+
+
 }

@@ -200,5 +200,8 @@ interface ApiService {
     @GET("/vendorpage/public")
     fun getPublicVendorInfo(@Query("vendor_name") vendor_name:String):Call<PublicVendorResponse>
 
+    @FormUrlEncoded
+    @POST("/message/startflow/customer/")
+    fun startFlowForCustomerWithVendor(@Header("Authorization") token :String,@Field("vendor_name") vendor_name: String):Call<ResponseBody>
 
 }

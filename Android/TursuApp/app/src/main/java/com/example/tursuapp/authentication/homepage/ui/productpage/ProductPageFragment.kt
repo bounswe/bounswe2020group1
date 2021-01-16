@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -22,6 +23,7 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.Comments
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -74,6 +76,40 @@ class ProductPageFragment : Fragment() {
             addComment.visibility = View.INVISIBLE
         }
     }
+    /*
+    fun setMessageButon(msgType:String){
+        msgButton.setOnClickListener {
+            var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+            apiinterface.startFlowWithVendor(auth_token, msgType,product.id).enqueue(object :
+                    retrofit2.Callback<ResponseBody> {
+                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                    Log.i("MainFragment", "error" + p1?.message.toString())
+                }
+
+                override fun onResponse(
+                        p0: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
+                ) {
+                    if (response != null) {
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "chat initiated", Toast.LENGTH_SHORT).show()
+                            val fragment = MessageFlowFragment()
+                            activity?.supportFragmentManager?.beginTransaction()?.addToBackStack(null)
+                                    ?.replace(R.id.nav_host_fragment, fragment)
+                                    ?.commit()
+                        } else {
+                            Toast.makeText(context, "chat NOT initiated", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                }
+
+
+            })
+        }
+    }
+
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id_str = requireArguments().getString("id")

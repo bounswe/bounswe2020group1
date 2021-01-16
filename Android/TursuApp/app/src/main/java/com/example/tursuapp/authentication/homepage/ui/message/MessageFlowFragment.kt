@@ -25,6 +25,8 @@ class MessageFlowFragment: Fragment() {
     lateinit var auth_token :String
     lateinit var user_type :String
     lateinit var flowListView:ListView
+    lateinit var flows:ArrayList<CustomerMsgFlowResponse>
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -47,7 +49,7 @@ class MessageFlowFragment: Fragment() {
             getMsgFlowOfVendor()
         }
     }
-    private fun getMsgFlowOfCustomer(){
+    fun getMsgFlowOfCustomer(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getCustomerMsgFlow(auth_token).enqueue(object :
                 retrofit2.Callback<List<CustomerMsgFlowResponse>> {
@@ -61,7 +63,7 @@ class MessageFlowFragment: Fragment() {
             ) {
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
-                    val flows = ArrayList(response.body()!!)
+                    flows = ArrayList(response.body()!!)
                     val adapter = MessageFlowAdapterForCustomer(context!!, flows)
                     flowListView.adapter = adapter
                     flowListView.setOnItemClickListener { _, _, position, _ ->
@@ -96,7 +98,8 @@ class MessageFlowFragment: Fragment() {
 
         })
     }
-    private fun getMsgFlowOfVendor(){
+
+    fun getMsgFlowOfVendor(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getVendorMsgFlow(auth_token).enqueue(object :
                 retrofit2.Callback<VendorMsgFlowResponse> {
