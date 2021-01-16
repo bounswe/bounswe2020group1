@@ -13,6 +13,7 @@ import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import Axios from "axios";
 import FormDialog from "./NewChatPopUp"
+import VendorFormDialog from "./VendorNewChatPopUp"
 import NonverifiedProductBox from "./NonverifiedProductBox";
 import InputBase from "@material-ui/core/InputBase";
 import Navbar from "./NavBar";
@@ -253,6 +254,9 @@ class MessagingPage extends React.Component{
 
     createFlow = () => {
           console.log("New flow created.")
+          // TODO: Reload after new flow is created.
+          window.location.href = window.location.href
+
     };
 
 
@@ -269,7 +273,11 @@ class MessagingPage extends React.Component{
                 <div className="stepper">
                 <Grid container>
                     <Grid item xs={14} >
+                    {(window.sessionStorage.getItem("user_type")==="customer") ?(
                         <FormDialog onSubmit={this.createFlow}/>
+                        ):(
+                        <VendorFormDialog onSubmit={this.createFlow}/>
+                    )}
                     </Grid>
                 </Grid>
                     <Grid container>
@@ -315,7 +323,11 @@ class MessagingPage extends React.Component{
                                         <ListItemIcon>
                                             <Avatar alt={flow.id }  src="https://material-ui.com/static/images/avatar/2.jpg" />
                                         </ListItemIcon>
-                                        <ListItemText primary={"Admin"}></ListItemText>
+                                        {(flow.context==="product") ?(
+                                        <ListItemText primary={"Admin (About product-> " + flow.product + ")"}></ListItemText>
+                                        ):(
+                                        <ListItemText primary={"Admin (About order-> Product: " + flow.product + " Customer: " + flow.customer + ")"}></ListItemText>
+                                        )}
                                     </ListItem>
 
                                 ))}
