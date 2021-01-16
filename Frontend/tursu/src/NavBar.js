@@ -152,16 +152,13 @@ export default function Navbar(props){
     const [update, setUpdate] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState(notifications[1]);
-
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const handleClose = (value) => {
         setOpen(false);
         setSelectedValue(value);
     };
-
     const handleChange = (event) => {
         setType(event.target.value);
     };
