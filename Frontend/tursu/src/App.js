@@ -15,6 +15,7 @@ import Checkout from "./Checkout";
 import EditProduct from "./Profiles/Vendor/EditProduct";
 import DeleteProduct from "./Profiles/Vendor/DeleteProduct";
 import AdminPanel from "./AdminPanel"
+import VendorPublicProfile from "./VendorPublicProfile";
 import MessagingPage from "./MessagingPage";
 
 
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/deleteProduct" exact component={DeleteProduct} />
                 <Route path="/checkout" exact component={Checkout} />
                 <Route path="/admin" exact component={AdminPanel} />
+                <Route path="/vendorPublicProfile/:vendor_name" exact component={VendorPublicProfile} />
                 <Route path="/message" exact component={MessagingPage} />
             </div>
         </Router>
