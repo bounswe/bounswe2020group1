@@ -165,7 +165,6 @@ export default function Navbar(props){
     const handleChange = (event) => {
         setType(event.target.value);
     };
-
     const handleSearch = () => {
         const array = window.location.href.split("/")
         window.sessionStorage.setItem("searched", document.getElementById("search").value)
@@ -175,11 +174,9 @@ export default function Navbar(props){
             props.callbackSearched(update)
         }
     };
-
     const handleChangeStr = (event) => {
         setStr(event.target.value);
     };
-
     const classes = useStyles();
     var option;
     if (window.sessionStorage.getItem("isLogged") === "true" ){
@@ -188,7 +185,6 @@ export default function Navbar(props){
     else {
         option = "Sign In | Sign Up"
     }
-
     return(
         <ThemeProvider theme={theme} >
             <div className={classes.root}>
