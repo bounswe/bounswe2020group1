@@ -232,6 +232,15 @@ export default function Navbar(props){
     const handleChange = (event) => {
         setType(event.target.value);
     };
+    const handleSearch = () => {
+        const array = window.location.href.split("/")
+        window.sessionStorage.setItem("searched", document.getElementById("search").value)
+        window.sessionStorage.setItem("search_type", search_type)
+        setUpdate(!update)
+        if(array[3] === "search"){
+            props.callbackSearched(update)
+        }
+    };
     const handleChangeStr = (event) => {
         setStr(event.target.value);
     };
