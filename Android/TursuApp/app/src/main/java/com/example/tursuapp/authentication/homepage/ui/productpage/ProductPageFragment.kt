@@ -66,7 +66,7 @@ class ProductPageFragment : Fragment() {
         if(user_type=="customer"){
             addToCart.visibility = View.VISIBLE
             addToList.visibility = View.VISIBLE
-            addComment.visibility = View.VISIBLE
+      //      addComment.visibility = View.VISIBLE
         }
         else{
             addToCart.visibility = View.INVISIBLE
@@ -80,30 +80,35 @@ class ProductPageFragment : Fragment() {
         setVisibilities(view)
         getDetails(id_str!!.toInt(), view)
         view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
-            var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            val quantity = 1
-            apiinterface.addToShoppingCart(auth_token, product.id).enqueue(object :
-                    retrofit2.Callback<ResponseBody> {
-                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
-                    Log.i("MainFragment", "error" + p1?.message.toString())
-                }
-
-                override fun onResponse(
-                        p0: Call<ResponseBody>?,
-                        response: Response<ResponseBody>?
-                ) {
-                    if (response != null) {
-                        if (response.code() == 200) {
-                            Toast.makeText(context, "added to shopping cart", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(context, "NOT added to shopping cart", Toast.LENGTH_SHORT).show()
-                        }
+            Log.i("stock:",product.stock.toString())
+            if(product.stock<=0) {
+                Log.i("Stock Status:","Out of Stock")
+            } else {
+                var apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+                val quantity = 1
+                apiinterface.addToShoppingCart(auth_token, product.id).enqueue(object :
+                        retrofit2.Callback<ResponseBody> {
+                    override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                        Log.i("MainFragment", "error" + p1?.message.toString())
                     }
 
-                }
+                    override fun onResponse(
+                            p0: Call<ResponseBody>?,
+                            response: Response<ResponseBody>?
+                    ) {
+                        if (response != null) {
+                            if (response.code() == 200) {
+                                Toast.makeText(context, "added to shopping cart", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "NOT added to shopping cart", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                    }
 
 
-            })
+                })
+            }
         }
 
 
@@ -473,7 +478,13 @@ class ProductPageFragment : Fragment() {
         view.findViewById<TextView>(R.id.price).text = product.price+" TL"
         view.findViewById<TextView>(R.id.vendor).text = "Vendor: "+product.vendor_name
         view.findViewById<TextView>(R.id.brand).text = "Brand: "+product.brand
-
+        val addToCart = view.findViewById<CardView>(R.id.addCart)
+        if(product.stock<=0) {
+            view.findViewById<TextView>(R.id.stock).text="Out of Stock"
+            addToCart.visibility = View.INVISIBLE
+        }else if(product.stock<10){
+            view.findViewById<TextView>(R.id.stock).text = "Only " + product.stock.toString() + " left in stock"
+        }
         val image  = view.findViewById<ImageView>(R.id.productImage)
         if(product.photo_url!="") {
             Picasso

@@ -17,6 +17,7 @@
         android:layout_marginStart="240dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="7dp"
+        android:visibility="gone"
         app:cardBackgroundColor="#E8E7E7"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +72,7 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="316dp"
         android:layout_marginRight="20dp"
         android:background="@color/TursuGreen"
         android:clickable="false"
@@ -81,7 +82,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView4" />
+        app:layout_constraintTop_toBottomOf="@+id/Reviews" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/const1"
@@ -170,27 +171,27 @@
 
         <LinearLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="22dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:layout_marginTop="133dp"
+            android:layout_marginBottom="39dp"
             android:gravity="center_horizontal|center_vertical"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/cardView2"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_description"
+            app:layout_constraintVertical_bias="0.758">
 
             <TextView
                 android:id="@+id/price"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
                 android:text=""
                 android:textColor="#0091D3"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="140dp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -261,14 +262,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.435" />
+            app:layout_constraintVertical_bias="0.289" />
 
         <TextView
             android:id="@+id/vendor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="176dp"
-            android:layout_marginBottom="104dp"
+            android:layout_marginTop="157dp"
+            android:layout_marginBottom="125dp"
             android:fontFamily="@font/poppins_semibold"
             android:text=""
             android:textColor="#FFFFFF"
@@ -279,14 +280,30 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="207dp"
+            android:layout_marginBottom="75dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text=""
+            android:textColor="#E80606"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/brand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="154dp"
-            android:layout_marginBottom="126dp"
+            android:layout_marginTop="128dp"
+            android:layout_marginBottom="154dp"
             android:fontFamily="@font/poppins_semibold"
             android:text=""
-            android:textColor="#E17B5B"
+            android:textColor="#0915EF"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
