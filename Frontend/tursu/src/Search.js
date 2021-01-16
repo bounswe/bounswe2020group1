@@ -93,7 +93,7 @@ class SearchPage extends React.Component{
                     .setState({vendor_list: res.data})
             })
     }
-    componentDidUpdate(prevProps, prevState, snapshot) {
+   componentDidUpdate(prevProps, prevState, snapshot) {
         const array = window.location.href.split("/")
 
         console.log(this.state.search_types)

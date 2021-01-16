@@ -288,8 +288,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to={`/search/${search_str}/${search_type}`}>
-                                            <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
-                                                window.sessionStorage.setItem("search_type", search_type)
+                                            <IconButton onClick={() => {handleSearch()
                                             }}>
                                                 <SearchIcon/>
                                             </IconButton>
@@ -442,6 +441,7 @@ function UserDropDown(){
     };
 
     const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
+    const messageAddress = "/message"
     return(
         <div>
             <IconButton
@@ -465,14 +465,30 @@ function UserDropDown(){
                 }}
             >
                 {/*TODO: Convert this linkto structure to redirecting structure.*/}
-                <Link to={linkAddress}>
+                {window.sessionStorage.getItem("user_type") !=="admin" && <Link to={linkAddress}>
                     <MenuItem>
                         <ListItemIcon>
                            <PersonIcon></PersonIcon>
                         </ListItemIcon>
                         <Typography>My Profile</Typography>
                     </MenuItem>
+                </Link>}
+                <Link to={messageAddress}>
+                    <MenuItem>
+                        <ListItemIcon>
+                           <SmsIcon></SmsIcon>
+                        </ListItemIcon>
+                        <Typography>Messages</Typography>
+                    </MenuItem>
                 </Link>
+                {window.sessionStorage.getItem("user_type")==="admin" && <Link to={"/admin"}>
+                    <MenuItem >
+                        <ListItemIcon>
+                            <SupervisorAccountIcon/>
+                        </ListItemIcon>
+                        <Typography>Admin Panel</Typography>
+                    </MenuItem>
+                </Link>}
                 <Link to={"/"}>
                     <MenuItem onClick={
                         ()=>{

@@ -12,6 +12,7 @@ import Axios from "axios";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import ProductListNonverified from "./NonverifiedProductList"
 import Grid from "@material-ui/core/Grid";
+import NavBar from "./NavBar";
 
 
 
@@ -142,10 +143,8 @@ class AdminPanel extends React.Component{
     };
 
     handleBanUser = () => {
-        console.log(this.state.username)
-
         const formData = new FormData();
-        formData.append("username", "bilibili");
+        formData.append("username", this.state.username);
         Axios.post('http://3.232.20.250/admin/banuser/',formData,{
             headers: {
                 'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
@@ -174,6 +173,8 @@ class AdminPanel extends React.Component{
 
             <ThemeProvider theme={theme} >
                 <div >
+                    <NavBar/>
+                    <br/><br/><br/><br/><br/><br/>
                     <AppBar position="center">
                         <Tabs value={this.state.value} onChange={this.handleChange} aria-label="simple tabs example">
                             <Tab label="Verify Vendor" {...a11yProps(0)} />
