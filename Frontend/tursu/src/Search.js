@@ -34,6 +34,8 @@ class SearchPage extends React.Component{
         vendor_switch: null,
         sort: null,
         vendor_list: [],
+        filter_tab: false,
+        search_types: "",
         searched: null,
 
     }
@@ -55,6 +57,9 @@ class SearchPage extends React.Component{
 
     handleCallbackdataVendorSwitch= (childData) =>{
         this.setState({vendor_switch: childData})
+    }
+    handleCallbackdataSearchType= (childData) =>{
+        this.setState({search_types: childData})
     }
     handleCallbackSearch= (childData) =>{
         console.log(childData)
@@ -87,78 +92,83 @@ class SearchPage extends React.Component{
                 this.setState({vendor_list: res.data})
             })
     }
-    componentDidUpdate(prevProps, prevState, snapshot) {
+   componentDidUpdate(prevProps, prevState, snapshot) {
         const array = window.location.href.split("/")
-        if((this.state.searched !== prevState.searched)||(this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
-            console.log(this.state.vendor)
-            Axios.get('http://3.232.20.250/search/',{
-                params: {
-                    search_string : array[4],
-                    search_type : array[5],
-                    fprice_lower: this.state.range[0],
-                    fprice_upper: this.state.range[1],
-                    ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
-                    ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
-                    sort_by:this.state.sort
-                }
-            })
-                .then(res => {
-                    console.log(res)
-                    this.setState({products: res.data});
-                    this.setState({search_url: array.slice(4,11)});
+
+        console.log(this.state.search_types)
+        if((this.state.search_types !== prevState.search_types)||(array[4] !== prevProps.match.params.search_string)||(this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
+            if(this.state.search_types.includes("vendor")){
+                Axios.get('http://3.232.20.250/search/',{
+                    params: {
+                        search_string : array[4],
+                        search_type : "vendor",
+                        fprice_lower: this.state.range[0],
+                        fprice_upper: this.state.range[1],
+                        ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
+                        ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
+                        sort_by:this.state.sort
+                    }
                 })
+                    .then(res => {
+                        console.log(res)
+                        this.setState({vendors: res.data});
+                        this.setState({search_url: array.slice(4,11)});
+                    })
+            }
+            if(this.state.search_types.includes("product")){
+                Axios.get('http://3.232.20.250/search/',{
+                    params: {
+                        search_string : array[4],
+                        search_type : array[5],
+                        fprice_lower: this.state.range[0],
+                        fprice_upper: this.state.range[1],
+                        ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
+                        ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
+                        sort_by:this.state.sort
+                    }
+                })
+                    .then(res => {
+                        console.log(res)
+                        this.setState({products: res.data});
+                        this.setState({search_url: array.slice(4,11)});
+                    })
+            }
+
         }
-
-
-
     }
-
     render(){
-        if("product"==this.state.search_url[1]){
-            return(
-                <ThemeProvider theme={theme} >
-                    <Grid container spacing={15} direction="column" className="HomePage">
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Navbar callbackSearched = {this.handleCallbackSearch} />
-                            </Paper>
-                        </Grid>
-                        <br/>
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Filter inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list}/>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} container>
-                            <ProductList products={this.state.products}/>
-                        </Grid>
+        return(
+            <ThemeProvider theme={theme} >
+                <Grid item xs={12}>
+                    <Paper>
+                        <Navbar />
+                    </Paper>
+                </Grid>
+                <br/><br/><br/><br/><br/><br/>
+                <Grid container spacing={1}>
+                    <Grid id={"11"} item xs={12} sm={3}>
+                        <Filter  inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list} callbackSearchType={this.handleCallbackdataSearchType}/>
                     </Grid>
-                </ThemeProvider>
-            );
-        }
-        else{
-            return(
-                <ThemeProvider theme={theme} >
-                    <Grid container spacing={15} direction="column" className="HomePage">
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Navbar callbackSearched = {this.handleCallbackSearch} />
-                            </Paper>
-                        </Grid>
-                        <br/>
-                        <Grid item xs={12}>
-                            <Paper>
-                                <Filter />
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} container>
-                            <VendorList vendors={this.state.products}/>
-                        </Grid>
-                    </Grid>
-                </ThemeProvider>
-            );
-        }
+                    {this.state.search_types.includes("product") && <Grid style={{margin: '30px'}} container xs={12} sm={8} spacing={1}>
+
+                        {this.state.products.map((product) => (
+
+
+                            <Grid style={{margin: '30px', display: 'static', }} item xs={12} sm={3}>
+                                <ProductBox product={product}/>
+                            </Grid>
+
+
+
+                        ))}
+                    </Grid>}
+
+                </Grid>
+            </ThemeProvider>
+        );
     }
+
+
 }
 
 export default SearchPage;
