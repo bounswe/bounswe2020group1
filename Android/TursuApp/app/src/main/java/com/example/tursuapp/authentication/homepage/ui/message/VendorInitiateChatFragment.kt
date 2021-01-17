@@ -12,11 +12,8 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.api.responses.CustomerMsgFlowResponse
 import com.example.tursuapp.api.responses.VendorMsgFlowResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
-import okhttp3.ResponseBody
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Response
 
@@ -66,7 +63,6 @@ class VendorInitiateChatFragment : Fragment(){
                     response: Response<String>?
             ) {
                 if (response != null) {
-                    val s = response.body()
                     Log.i("Status code", response.code().toString())
                     if(response.code()==200) {
                         startNewChatFragment()

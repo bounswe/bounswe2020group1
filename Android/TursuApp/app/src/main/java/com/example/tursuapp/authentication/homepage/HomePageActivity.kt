@@ -22,6 +22,10 @@ import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.example.tursuapp.authentication.homepage.ui.message.ChatFragment
 import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
 import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
+import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
+import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
+import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
+import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -96,8 +100,16 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
             if (groupPosition == 0) {
                 when (childPosition) {
+                    /*
                     0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
                     1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
+                    2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
+                    3 -> displayFragment(R.id.nav_home, 5, "Payment", null)
+
+                     */
+                    0 -> displaySideMenuPages("Profile")
+                    1 -> displaySideMenuPages("Orders")
+                    // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
                     2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
                     3 -> displayFragment(R.id.nav_home, 5, "Payment", null)
                 }
@@ -134,10 +146,18 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
                 if (groupPosition == 0) {
                     when (childPosition) {
+                        /*
                         0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
                         1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
                        // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
                         2 -> displayFragment(R.id.nav_home, 5, "Product Add", null)
+                        3 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+
+                         */
+                        0 -> displaySideMenuPages("Profile")
+                        1 -> displaySideMenuPages("Orders")
+                        // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
+                        2 -> displaySideMenuPages("Product Add")
                         3 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
                     }
                 }
@@ -155,7 +175,31 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
         expListView!!.setSelectedGroup(0)
     }
+    private fun displaySideMenuPages(fragmentName:String){
+        lateinit var fragment: Fragment
+        if(fragmentName == "Profile"){
+            fragment = ProfileFragment()
+        }
+        else if(fragmentName == "Orders"){
+            if(userType=="vendor"){
+                fragment = VendorOrderFragment()
+            }
+            else{
+                fragment = CustomerOrdersFragment()
+            }
+        }
+        else if(fragmentName == "Product Add"){
+            fragment = ProductAddFragment()
+        }
+        else if(fragmentName == "Products On Sale"){
+            fragment = VendorOrderFragment()
+        }
 
+        supportFragmentManager.beginTransaction().addToBackStack(null)
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
+        this.drawer.closeDrawer(GravityCompat.START)
+    }
     private fun setSearchFunction(){
         this.findViewById<Button>(R.id.search_button).setOnClickListener {
             val editText: EditText? = findViewById(R.id.editMobileNo)

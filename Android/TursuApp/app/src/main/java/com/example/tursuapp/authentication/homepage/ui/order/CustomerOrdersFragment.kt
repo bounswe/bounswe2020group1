@@ -105,8 +105,8 @@ class CustomerOrdersFragment : Fragment() {
         }
         else if(id == R.id.nav_customer_orders){
             fragment = CustomerOrdersFragment()
-            activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.nav_host_fragment, fragment)
+            activity?.supportFragmentManager?.beginTransaction()?.addToBackStack(null)
+                    ?.replace(R.id.nav_customer_orders, fragment)
                     ?.commit()
             (activity as HomePageActivity).drawer.closeDrawer(GravityCompat.START)
         }
