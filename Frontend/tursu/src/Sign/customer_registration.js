@@ -41,7 +41,10 @@ export default class Customer extends Component {
                     .then(res =>{
                         console.log(res);
                         console.log(res.data);
-                        this.props.login()
+                        this.props.setU(this.state.email)
+                        this.props.setP(this.state.password)
+                        this.props.setM("We have sent you a verification code to verify your email. Please enter the code in the field below.")
+                        this.props.verif()
                     })
                     .catch(error =>{
                         console.log(error.response.status)
