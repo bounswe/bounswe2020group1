@@ -80,10 +80,8 @@ class AdminPanel extends React.Component{
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log(this.state.update)
-        console.log(prevState.update)
 
-        if((this.state.update!==prevState.update) || (this.state.nonverified_list.length !==prevState.nonverified_list.length)){
+        if((this.state.update!==prevState.update) || (this.state.nonverified_list.length !== prevState.nonverified_list.length)){
             Axios.get('http://3.232.20.250/admin/verificationpending/products/',{
                 headers: {
                     'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
@@ -93,6 +91,9 @@ class AdminPanel extends React.Component{
                     console.log(res)
                     this.setState({nonverified_list: res.data})
                 })
+        }
+        else{
+
         }
 
     }
@@ -108,7 +109,7 @@ class AdminPanel extends React.Component{
             comment_id: null,
             username:null,
             nonverified_list: [],
-            update : null
+            update : 0
         };
 
     }
