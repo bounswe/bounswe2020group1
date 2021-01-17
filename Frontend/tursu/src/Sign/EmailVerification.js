@@ -72,7 +72,7 @@ export default class Verification extends Component {
             return(
                 <div className="login">
                     <img src={logo} alt="Tursu Logo"></img>
-                    <h4>{this.props.message}</h4>
+                    <h4 className="messages">{this.props.message}</h4>
                     <form onSubmit={this.handleSubmit}>
                         <input className="tursu_input" type="text" name="code" id="code" placeholder="Verification Code" value={this.state.code} onChange={this.handleChange} required />
                         <br/>
