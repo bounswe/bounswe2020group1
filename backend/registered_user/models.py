@@ -8,7 +8,8 @@ class RegisteredUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(unique=True)
     is_banned = models.BooleanField(default=False)
-
+    is_verified = models.BooleanField(default=False)
+    
 
 class Location(models.Model):
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
@@ -43,6 +44,11 @@ class Vendor(models.Model):
 class Customer(models.Model):
     user = models.OneToOneField(RegisteredUser, on_delete=models.CASCADE)
     money_spent = models.DecimalField(max_digits=15, decimal_places=2)
+
+
+class VerificationCode(models.Model):
+    registered_user = models.ForeignKey(RegisteredUser, on_delete=models.CASCADE)
+    verification_code = models.CharField(max_length=16, null=True)
 
 
 @receiver(post_save, sender=User)

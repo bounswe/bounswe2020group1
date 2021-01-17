@@ -1,8 +1,12 @@
 import requests
+import random
+import string
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.core.mail import send_mail
 
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -14,7 +18,8 @@ from rest_framework import status
 
 from registered_user.models import get_vendor_from_request, get_customer_from_request
 
-from .models import RegisteredUser, Vendor, Customer, Location
+from .models import RegisteredUser, Vendor, Customer, Location, VerificationCode
+from tursu.settings import EMAIL_HOST_USER
 
 
 @csrf_exempt
@@ -23,6 +28,7 @@ from .models import RegisteredUser, Vendor, Customer, Location
 def login(request):
     username = request.POST.get('email')
     password = request.POST.get('password')
+    verification_code = request.POST.get('verification_code', None)
 
     if (not username) or (not password):
         return Response({'error': 'Please provide both username and password.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -38,6 +44,15 @@ def login(request):
     user_type = 'admin'
     
     registered_user = RegisteredUser.objects.filter(user=user).first()
+    if not registered_user.is_verified:
+        verification = VerificationCode.objects.filter(registered_user=registered_user,
+                                                          verification_code=verification_code).first()
+        if verification is not None:
+            registered_user.is_verified = True
+            registered_user.save()
+        if not registered_user.is_verified:
+            return Response({'error': 'Not Verified'}, status=status.HTTP_401_UNAUTHORIZED)
+
     vendor = Vendor.objects.filter(user=registered_user).first()
     customer = Customer.objects.filter(user=registered_user).first()
     if vendor is not None:
@@ -90,7 +105,6 @@ def signup(request):
                         location.save()
                         vendor = Vendor(user=registered_user, iban=iban, rating=0, location=location, is_verified=True)
                         vendor.save()
-                        user_type = "vendor"
                     else:
                         return Response({'error': 'Missing fields for the vendor.'}, status=status.HTTP_400_BAD_REQUEST)
                 # is_vendor returns false: create customer
@@ -102,16 +116,9 @@ def signup(request):
                     registered_user.save()
                     customer = Customer(user=registered_user, money_spent=0)
                     customer.save()
-                    user_type = "customer"
-
-                user = authenticate(request, username=username, password=password)
-                token, _ = Token.objects.get_or_create(user=user)
-                return Response({
-                        'auth_token': token.key,
-                        'first_name': user.first_name,
-                        'last_name': user.last_name,
-                        'user_type': user_type},
-                        status=status.HTTP_200_OK)
+                
+                resend_verification(email)
+                return Response({}, status=status.HTTP_200_OK)
 
     else:
         return Response({'error': 'All fields should be filled.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -231,6 +238,7 @@ def google_signup(request):
                                                         last_name=last_name, password=password)
                         registered_user = user.registereduser
                         registered_user.email = email
+                        registered_user.is_verified = True
                         registered_user.save()
                         location = Location(latitude=latitude, longitude=longitude, city=city)
                         location.save()
@@ -245,6 +253,7 @@ def google_signup(request):
                                                     last_name=last_name, password=password)
                     registered_user = user.registereduser
                     registered_user.email = email
+                    registered_user.is_verified = True
                     registered_user.save()
                     customer = Customer(user=registered_user, money_spent=0)
                     customer.save()
@@ -260,3 +269,33 @@ def google_signup(request):
                         status=status.HTTP_200_OK)
     else:
         return Response({'error': 'All fields should be filled.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_random_string(length):
+    return ''.join((random.choice(string.ascii_letters + string.digits) for i in range(length)))
+
+
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def resend_verification_code(request):
+    email = request.POST.get('email', None)
+    if email is None:
+        return Response({'error': 'Missing email parameter'}, status=status.HTTP_400_BAD_REQUEST)
+    if resend_verification(email) == True:
+        return Response({}, status=status.HTTP_200_OK)
+    return Response({'error': 'Invalid Email'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def resend_verification(email):
+    if email is None:
+        return False
+    registered_user = RegisteredUser.objects.filter(email=email).first()
+    if registered_user is not None:
+        code = get_random_string(10)
+        message =  "To complete your registration please enter your verification code: " + code
+        send_mail("Your Verification Code - Tursu", 
+            message, EMAIL_HOST_USER, [email], fail_silently = False)
+        verification_code = VerificationCode.objects.create(registered_user=registered_user, verification_code=code)
+        verification_code.save()
+        return True
+    return False

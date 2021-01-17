@@ -60,8 +60,8 @@ def add(request):
             num_of_raters = len(rated_orders)
             vendor.rating = ((vendor.rating * num_of_raters) + vendor_rating) / (num_of_raters + 1)
             order.comment_added = True
-            order.save()
             vendor.save()
+            order.save()
         except Exception:
             return HttpResponse("Comment cannot be added.", status=400)
     
