@@ -122,7 +122,7 @@ class HomeFragment : Fragment() {
             }
             //search screen
             2 -> {
-                filterImage!!.visibility = View.GONE
+                filterImage!!.visibility = View.VISIBLE
                 searchBar!!.visibility = View.VISIBLE
                 searchButton!!.visibility = View.VISIBLE
             }
@@ -230,7 +230,7 @@ class HomeFragment : Fragment() {
                 selectedVendors.add(vendor.text.toString())
             }
         }
-        Log.i("selectedVendors:",selectedVendors.toString())
+        //Log.i("selectedVendors:",selectedVendors.toString())
 
         //get checked brand names
         for (brand in (activity as HomePageActivity).checkboxBrands)  {
@@ -238,7 +238,7 @@ class HomeFragment : Fragment() {
                 selectedBrands.add(brand.text.toString())
             }
         }
-        Log.i("selectedBrands:",selectedBrands.toString())
+        //Log.i("selectedBrands:",selectedBrands.toString())
 
         //get checked category names
         for (category in (activity as HomePageActivity).checkboxCategories)  {
@@ -246,7 +246,7 @@ class HomeFragment : Fragment() {
                 selectedCategories.add(category.text.toString())
             }
         }
-        Log.i("selectedCategories:",selectedCategories.toString())
+        //Log.i("selectedCategories:",selectedCategories.toString())
 
         if(selectedVendors.isNotEmpty()) {
             var concatenateVendors = ""
@@ -254,7 +254,7 @@ class HomeFragment : Fragment() {
                 concatenateVendors += "$vendor|" //concatenate items with |
             }
             val concatenatedVendors = concatenateVendors.subSequence(0, (concatenateVendors.length - 1)).toString() //get rid of the last char(|)
-            Log.i("concatenatedVendors:", concatenatedVendors)
+            //Log.i("concatenatedVendors:", concatenatedVendors)
             filters?.set("fvendor_name", concatenatedVendors)
         }else if(selectedVendors.size==1){ //selected only one vendor
             filters?.set("fvendor_name", selectedVendors[0])
@@ -266,7 +266,7 @@ class HomeFragment : Fragment() {
                 concatenateBrands += "$brand|" //concatenate items with |
             }
             val concatenatedBrands = concatenateBrands.subSequence(0, (concatenateBrands.length - 1)).toString() //get rid of the last char(|)
-            Log.i("concatenatedBrands:", concatenatedBrands)
+            //Log.i("concatenatedBrands:", concatenatedBrands)
             filters?.set("fbrand", concatenatedBrands)
         }else if(selectedBrands.size==1){ //selected only one brand
             filters?.set("fbrand", selectedBrands[0])
@@ -278,7 +278,7 @@ class HomeFragment : Fragment() {
                 concatenateCategories += "$category|" //concatenate items with |
             }
             val concatenatedCategories = concatenateCategories.subSequence(0, (concatenateCategories.length - 1)).toString() //get rid of the last char(|)
-            Log.i("concatenatedCategories:", concatenatedCategories)
+            //Log.i("concatenatedCategories:", concatenatedCategories)
             filters?.set("fcategory", concatenatedCategories)
         }else if(selectedCategories.size==1){ //selected only one category
             filters?.set("fcategory", selectedCategories[0])
