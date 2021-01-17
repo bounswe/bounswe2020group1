@@ -50,11 +50,12 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     var allCategories = listOf<String>()
     lateinit var userType:String
     private lateinit var linearVendors:LinearLayout
-    private lateinit var checkboxVendor:CheckBox
     private lateinit var linearCategories:LinearLayout
-    private lateinit var checkboxCategory:CheckBox
     private lateinit var linearBrands:LinearLayout
-    private lateinit var checkboxBrand:CheckBox
+    var checkboxVendors: MutableList<CheckBox> = mutableListOf<CheckBox>()
+    var checkboxBrands: MutableList<CheckBox> = mutableListOf<CheckBox>()
+    var checkboxCategories: MutableList<CheckBox> = mutableListOf<CheckBox>()
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
@@ -288,12 +289,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     }
     fun setVendorCheckBoxes(view: View) {
         linearVendors=view.findViewById(R.id.linear_vendors) as LinearLayout
+        checkboxVendors.clear()
         for(vendor in allVendors){
             if(vendor.isNotEmpty()) {
-                checkboxVendor = CheckBox(this)
-                checkboxVendor.text = vendor
-                checkboxVendor.isChecked = false
-                linearVendors.addView(checkboxVendor)
+                checkboxVendors.add(CheckBox(this))
+                checkboxVendors.last().text=vendor
+                checkboxVendors.last().isChecked=false
+                linearVendors.addView( checkboxVendors.last())
             }
         }
     }
@@ -309,12 +311,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
      */
     fun setBrandCheckBoxes(view: View) {
         linearBrands=view.findViewById(R.id.linear_brands) as LinearLayout
+        checkboxBrands.clear()
         for(brand in allBrands){
             if(brand.isNotEmpty()) {
-                checkboxBrand = CheckBox(this)
-                checkboxBrand.text = brand
-                checkboxBrand.isChecked = false
-                linearBrands.addView(checkboxBrand)
+                checkboxBrands.add(CheckBox(this))
+                checkboxBrands.last().text=brand
+                checkboxBrands.last().isChecked=false
+                linearBrands.addView( checkboxBrands.last())
             }
         }
     }
@@ -330,12 +333,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
      */
     fun setCategoryCheckBoxes(view: View) {
         linearCategories=view.findViewById(R.id.linear_categories) as LinearLayout
+        checkboxCategories.clear()
         for(category in allCategories){
             if(category.isNotEmpty()) {
-                checkboxCategory = CheckBox(this)
-                checkboxCategory.text = category
-                checkboxCategory.isChecked = false
-                linearCategories.addView(checkboxCategory)
+                checkboxCategories.add(CheckBox(this))
+                checkboxCategories.last().text=category
+                checkboxCategories.last().isChecked=false
+                linearCategories.addView( checkboxCategories.last())
             }
         }
     }
