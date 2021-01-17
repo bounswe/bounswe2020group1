@@ -160,15 +160,14 @@ export default function RadioButtons(props) {
     return (
 
         <div align={"left"}>
-
+            {!props.inCategory &&
             <Switch
                 checked={state.SearchType}
                 onChange={handleChangeSwitch}
                 color="primary"
                 name="SearchType"
                 inputProps={{ 'aria-label': 'primary checkbox' }}
-            ></Switch>Search Type
-
+            ></Switch>}{!props.inCategory && "Search Type"}
             {state.SearchType &&
             <br/>}
 
@@ -206,20 +205,18 @@ export default function RadioButtons(props) {
                 <FormControlLabel name={"priceAsc"} value="priceAsc" control={<GreenRadio checked={res3.includes("priceAsc")} onChange={handleChange2}/>} label="Lowest price" />
                 <FormControlLabel name={"numComments"} value="numComments" control={<GreenRadio checked={res3.includes("numComments")} onChange={handleChange2}/>} label="Most commented" />
             </RadioGroup>}
+            {!props.inCategory && <br/>}
 
-            {props.inCategory &&
-            <br/>}
-            {props.inCategory &&
+            {!props.inCategory &&
             <Switch
                 checked={state.FilterCategory}
                 onChange={handleChangeSwitch}
                 color="primary"
                 name="FilterCategory"
                 inputProps={{'aria-label': 'primary checkbox'}}
-            ></Switch>} {props.inCategory && "Filter Category"
+            ></Switch>} {!props.inCategory && "Filter Category"
         }
-            {state.FilterCategory &&
-            <br/>}
+
             {props.inCategory && state.FilterCategory &&
             <FormControl component="fieldset" onChange={handleChangeFilterCategory}>
                 <FormGroup  >
