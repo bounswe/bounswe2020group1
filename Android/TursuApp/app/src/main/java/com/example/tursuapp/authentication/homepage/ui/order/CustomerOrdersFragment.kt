@@ -263,13 +263,14 @@ class CustomerOrdersFragment : Fragment() {
             }
             popupView.findViewById<Button>(R.id.addComment_button).setOnClickListener {
                 Log.i("orderID: ", orderID.toString())
-                if(popupView.findViewById<TextView>(R.id.addComment_text).text.isEmpty() || popupView.findViewById<RatingBar>(R.id.addComment_ratingBar).rating == 0.0f){
+                if(popupView.findViewById<TextView>(R.id.addComment_text).text.isEmpty() || popupView.findViewById<RatingBar>(R.id.addComment_ratingBar).rating == 0.0f || popupView.findViewById<RatingBar>(R.id.addComment_ratingBarVendor).rating == 0.0f){
                     Toast.makeText(context, "Please input your comment and rating", Toast.LENGTH_SHORT).show()
                 }else {
-                    val commentRating = popupView.findViewById<RatingBar>(R.id.addComment_ratingBar).rating
+                    val productRating = popupView.findViewById<RatingBar>(R.id.addComment_ratingBar).rating
+                    val vendorRating = popupView.findViewById<RatingBar>(R.id.addComment_ratingBarVendor).rating
                     val commentText = popupView.findViewById<TextView>(R.id.addComment_text).text
                     val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-                    apiInterface.addComment(auth_token, orderID, commentText.toString(), commentRating.toInt()).enqueue(object :
+                    apiInterface.addComment(auth_token, orderID, commentText.toString(), productRating.toInt(),vendorRating.toInt()).enqueue(object :
                             retrofit2.Callback<ResponseBody> {
                         override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                             Log.i("MainFragment", "error" + p1?.message.toString())
@@ -287,7 +288,7 @@ class CustomerOrdersFragment : Fragment() {
                                     popupWindow.dismiss()
 
                                 } else if (response.code() == 401) {
-                                    Toast.makeText(context, "The customer did not buy the product.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Comment already is added", Toast.LENGTH_SHORT).show()
 
                                 } else {
                                     Toast.makeText(context, response.code(), Toast.LENGTH_SHORT).show()

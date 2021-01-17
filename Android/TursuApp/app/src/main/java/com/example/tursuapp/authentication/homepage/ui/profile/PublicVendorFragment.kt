@@ -19,10 +19,13 @@ import com.example.tursuapp.api.responses.PublicVendorResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.message.ChatFragment
 import okhttp3.ResponseBody
+import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
+import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import retrofit2.Call
 import retrofit2.Response
 
 class PublicVendorFragment: Fragment()  {
+    var verifiedVendors = listOf<String>() //verified vendor list
     var vendorProductList = ArrayList<PublicVendorProductLists>()
     lateinit var gridView: GridView
     lateinit var msgButton: TextView
@@ -38,7 +41,9 @@ class PublicVendorFragment: Fragment()  {
         val pref = context?.getSharedPreferences("UserPref", 0)
         auth_token = pref?.getString("auth_token", null).toString()
         user_type = pref?.getString("user_type", null).toString()
-        return inflater.inflate(R.layout.fragment_publicvendorpage, container, false)
+        val root = inflater.inflate(R.layout.fragment_publicvendorpage, container, false)
+        getVerifiedVendors()
+        return root
     }
     private fun listVendorProducts(vendor_name:String,view: View){
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -55,17 +60,21 @@ class PublicVendorFragment: Fragment()  {
                         Log.i("MainFragment", "inside onResponse")
                         view.findViewById<TextView>(R.id.public_name_view).text = response.body()!!.first_name
                         view.findViewById<TextView>(R.id.public_city_view).text = response.body()!!.city
+                        Log.i("rating: ", response.body()!!.rating)
                         view.findViewById<RatingBar>(R.id.public_ratingBar).rating = response.body()!!.rating.toFloat()
-
+                        if (verifiedVendors.find { vendor -> response.body()!!.first_name == vendor } != null) { //then the vendor is verified
+                            view.findViewById<ImageView>(R.id.is_verified).visibility=View.VISIBLE
+                        }else{
+                            view.findViewById<ImageView>(R.id.is_verified).visibility=View.INVISIBLE
+                        }
                         vendorProductList=ArrayList(response.body()!!.products)
                         val adapter = context?.let { PublicVendorInfoAdapter(it, vendorProductList) }
                         gridView.adapter = adapter
-                        /*
                         gridView.setOnItemClickListener { _, view, _, _ ->
                             val clickedId = view.findViewById<TextView>(R.id.product_id).text
                             val bundle = Bundle()
                             bundle.putString("id", clickedId.toString())
-                            val newFragment = VendorProductPageFragment()
+                            val newFragment = ProductPageFragment()
                             newFragment.arguments = bundle
                             val fragmentManager: FragmentManager? = fragmentManager
                             val fragmentTransaction: FragmentTransaction =
@@ -73,7 +82,7 @@ class PublicVendorFragment: Fragment()  {
                             fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
                             fragmentTransaction.commit()
 
-                        }*/
+                        }
                     }else{
                         Log.i("Vendor Products: ", "have not any product")
                         Toast.makeText(context, "have not any product", Toast.LENGTH_SHORT).show()
@@ -102,6 +111,7 @@ class PublicVendorFragment: Fragment()  {
             (activity as HomePageActivity).displayFragment(R.id.nav_home,0,"",null)
         }
     }
+  
     fun startNewChat(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getCustomerMsgFlow(auth_token).enqueue(object :
@@ -133,12 +143,25 @@ class PublicVendorFragment: Fragment()  {
                         }
                     }
 
+        })
+    }
 
-
+    //take verified vendors
+    private fun getVerifiedVendors(){
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.getAllVendors().enqueue(object : retrofit2.Callback<List<String>> {
+            override fun onFailure(p0: Call<List<String>>?, p1: Throwable?) {
+                Log.i("MainFragment", "error" + p1?.message.toString())
+            }
+            override fun onResponse(
+                    p0: Call<List<String>>?,
+                    response: Response<List<String>>?
+            ) {
+                if (response != null) {
+                    verifiedVendors = response.body()!!
                 }
 
             }
-
 
         })
     }
@@ -170,6 +193,5 @@ class PublicVendorFragment: Fragment()  {
             })
         }
     }
-
 
 }
