@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.core.mail import send_mail
 
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -15,6 +16,7 @@ from rest_framework import status
 from registered_user.models import get_vendor_from_request, get_customer_from_request
 
 from .models import RegisteredUser, Vendor, Customer, Location
+from tursu.settings import EMAIL_HOST_USER
 
 
 @csrf_exempt

@@ -8,7 +8,8 @@ class RegisteredUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(unique=True)
     is_banned = models.BooleanField(default=False)
-
+    is_verified = models.BooleanField(default=False)
+    
 
 class Location(models.Model):
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
