@@ -100,13 +100,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
             if (groupPosition == 0) {
                 when (childPosition) {
-                    /*
-                    0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
-                    1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
-                    2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
-                    3 -> displayFragment(R.id.nav_home, 5, "Payment", null)
-
-                     */
                     0 -> displaySideMenuPages("Profile")
                     1 -> displaySideMenuPages("Orders")
                     // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
@@ -115,6 +108,32 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 }
             }
             if (groupPosition == 2) {
+                when (childPosition) {
+                    0 -> displayFragment(R.id.nav_home, 1, "Electronics", null)
+                    1 -> displayFragment(R.id.nav_home, 1, "Fashion", null)
+                    2 -> displayFragment(R.id.nav_home, 1, "Home", null)
+                    3 -> displayFragment(R.id.nav_home, 1, "Cosmetics", null)
+                    4 -> displayFragment(R.id.nav_home, 1, "Sports", null)
+                }
+            }
+
+            false
+        }
+        expListView!!.setSelectedGroup(0)
+    }
+    private fun setExpandableSideMenuGuest(){
+        expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
+        prepareListData()
+        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
+        expListView!!.setAdapter(listAdapter)
+        expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
+            if (groupPosition == 0) {
+                displayFragment(R.id.nav_home, 0, "", null)
+            }
+            false
+        }
+        expListView!!.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
+            if (groupPosition == 1) {
                 when (childPosition) {
                     0 -> displayFragment(R.id.nav_home, 1, "Electronics", null)
                     1 -> displayFragment(R.id.nav_home, 1, "Fashion", null)
@@ -146,14 +165,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
                 if (groupPosition == 0) {
                     when (childPosition) {
-                        /*
-                        0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
-                        1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
-                       // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
-                        2 -> displayFragment(R.id.nav_home, 5, "Product Add", null)
-                        3 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
-
-                         */
                         0 -> displaySideMenuPages("Profile")
                         1 -> displaySideMenuPages("Orders")
                         // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
@@ -225,14 +236,20 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     }
     fun setMessageButton(){
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            lateinit var fragment: Fragment
-            fragment = MessageFlowFragment()
+        val fabButton = findViewById<FloatingActionButton>(R.id.fab)
+        if(!(userType=="customer" || userType=="vendor")){
+            fabButton.visibility = View.GONE
+        }
+        else {
+            fabButton.setOnClickListener {
+                lateinit var fragment: Fragment
+                fragment = MessageFlowFragment()
 
-            supportFragmentManager.beginTransaction().addToBackStack(null)
-                .replace(R.id.nav_host_fragment, fragment)
-                .commit()
-            this.drawer.closeDrawer(GravityCompat.START)
+                supportFragmentManager.beginTransaction().addToBackStack(null)
+                        .replace(R.id.nav_host_fragment, fragment)
+                        .commit()
+                this.drawer.closeDrawer(GravityCompat.START)
+            }
         }
     }
 
@@ -263,8 +280,11 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         if(userType=="customer"){
             setExpandableSideMenuCustomer()
         }
-        else{
+        else if(userType == "vendor"){
             setExpandableSideMenuVendor()
+        }
+        else{
+            setExpandableSideMenuGuest()
         }
     }
     private fun getAllVendors(){
@@ -407,7 +427,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         listDataChild = HashMap()
 
         // Adding child data
+
         (listDataHeader as ArrayList<String>).add("My Account")
+
 
         (listDataHeader as ArrayList<String>).add("Home")
 
@@ -439,7 +461,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         if(userType=="vendor"){
             listDataChild!![(listDataHeader as ArrayList<String>)[3]] = ArrayList()
         }
-
+        if (!(userType == "vendor" || userType == "customer")){
+            (listDataHeader as ArrayList<String>).remove("My Account")
+        }
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
     }
     fun menuItemsForVendor():MutableList<String>{

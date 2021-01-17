@@ -52,8 +52,10 @@ class ProductPageFragment : Fragment() {
         activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
         productPageViewModel = ViewModelProvider(this).get(ProductPageModel::class.java)
         val root = inflater.inflate(R.layout.fragment_productpage, container, false)
-        root.findViewById<ImageView>(R.id.add_list_image)?.setOnClickListener {
-            showPopupWindow(it)
+        if(user_type=="customer") {
+            root.findViewById<ImageView>(R.id.add_list_image)?.setOnClickListener {
+                showPopupWindow(it)
+            }
         }
         root.findViewById<ImageView>(R.id.add_comment_image)?.setOnClickListener {
             showPopupAddComment(it)
@@ -70,76 +72,56 @@ class ProductPageFragment : Fragment() {
             addToList.visibility = View.VISIBLE
             addComment.visibility = View.VISIBLE
         }
-        else{
+        else if(user_type == "vendor"){
             addToCart.visibility = View.INVISIBLE
             addToList.visibility = View.INVISIBLE
             addComment.visibility = View.INVISIBLE
         }
-    }
-    /*
-    fun setMessageButon(msgType:String){
-        msgButton.setOnClickListener {
-            var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiinterface.startFlowWithVendor(auth_token, msgType,product.id).enqueue(object :
-                    retrofit2.Callback<ResponseBody> {
-                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
-                    Log.i("MainFragment", "error" + p1?.message.toString())
-                }
-
-                override fun onResponse(
-                        p0: Call<ResponseBody>?,
-                        response: Response<ResponseBody>?
-                ) {
-                    if (response != null) {
-                        if (response.code() == 200) {
-                            Toast.makeText(context, "chat initiated", Toast.LENGTH_SHORT).show()
-                            val fragment = MessageFlowFragment()
-                            activity?.supportFragmentManager?.beginTransaction()?.addToBackStack(null)
-                                    ?.replace(R.id.nav_host_fragment, fragment)
-                                    ?.commit()
-                        } else {
-                            Toast.makeText(context, "chat NOT initiated", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                }
-
-
-            })
+        else{
+            addComment.visibility = View.INVISIBLE
+            addToCart.visibility = View.VISIBLE
+            addToList.visibility = View.VISIBLE
+            addToCart.setOnClickListener {
+                Toast.makeText(context,"You need to login first",Toast.LENGTH_SHORT).show()
+            }
+            addToList.setOnClickListener {
+                Toast.makeText(context,"You need to login first",Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id_str = requireArguments().getString("id")
         setVisibilities(view)
         getDetails(id_str!!.toInt(), view)
-        view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
-            var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            val quantity = 1
-            apiinterface.addToShoppingCart(auth_token, product.id).enqueue(object :
-                    retrofit2.Callback<ResponseBody> {
-                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
-                    Log.i("MainFragment", "error" + p1?.message.toString())
-                }
-
-                override fun onResponse(
-                        p0: Call<ResponseBody>?,
-                        response: Response<ResponseBody>?
-                ) {
-                    if (response != null) {
-                        if (response.code() == 200) {
-                            Toast.makeText(context, "added to shopping cart", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(context, "NOT added to shopping cart", Toast.LENGTH_SHORT).show()
-                        }
+        if(user_type == "customer") {
+            view.findViewById<CardView>(R.id.addCart).setOnClickListener() {
+                var apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+                val quantity = 1
+                apiinterface.addToShoppingCart(auth_token, product.id).enqueue(object :
+                        retrofit2.Callback<ResponseBody> {
+                    override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                        Log.i("MainFragment", "error" + p1?.message.toString())
                     }
 
-                }
+                    override fun onResponse(
+                            p0: Call<ResponseBody>?,
+                            response: Response<ResponseBody>?
+                    ) {
+                        if (response != null) {
+                            if (response.code() == 200) {
+                                Toast.makeText(context, "added to shopping cart", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "NOT added to shopping cart", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                    }
 
 
-            })
+                })
+            }
         }
 
 
