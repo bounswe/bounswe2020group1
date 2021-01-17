@@ -182,9 +182,9 @@ class HomeFragment : Fragment() {
         //Create a View object yourself through inflater
         val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView: View = inflater.inflate(R.layout.filter_popup_layout, null)
-        (activity as HomePageActivity).setVendorRadioButtons(popupView)
-        (activity as HomePageActivity).setBrandRadioButtons(popupView)
-        (activity as HomePageActivity).setCategoryRadioButtons(popupView)
+        (activity as HomePageActivity).setVendorCheckBoxes(popupView)
+        (activity as HomePageActivity).setBrandCheckBoxes(popupView)
+        (activity as HomePageActivity).setCategoryCheckBoxes(popupView)
         (activity as HomePageActivity).setRatingRadioButtons(popupView)
         //Specify the length and width through constants
         val width = LinearLayout.LayoutParams.MATCH_PARENT

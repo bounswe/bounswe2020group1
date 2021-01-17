@@ -49,6 +49,12 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     var allBrands = listOf<String>()
     var allCategories = listOf<String>()
     lateinit var userType:String
+    private lateinit var linearVendors:LinearLayout
+    private lateinit var checkboxVendor:CheckBox
+    private lateinit var linearCategories:LinearLayout
+    private lateinit var checkboxCategory:CheckBox
+    private lateinit var linearBrands:LinearLayout
+    private lateinit var checkboxBrand:CheckBox
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
@@ -280,6 +286,18 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             fragmentManager.popBackStack()
         }
     }
+    fun setVendorCheckBoxes(view: View) {
+        linearVendors=view.findViewById(R.id.linear_vendors) as LinearLayout
+        for(vendor in allVendors){
+            if(vendor.isNotEmpty()) {
+                checkboxVendor = CheckBox(this)
+                checkboxVendor.text = vendor
+                checkboxVendor.isChecked = false
+                linearVendors.addView(checkboxVendor)
+            }
+        }
+    }
+    /*
     fun setVendorRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVendors)
         for(vendor in allVendors){
@@ -288,6 +306,19 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             radioGroup.addView(btn1)
         }
     }
+     */
+    fun setBrandCheckBoxes(view: View) {
+        linearBrands=view.findViewById(R.id.linear_brands) as LinearLayout
+        for(brand in allBrands){
+            if(brand.isNotEmpty()) {
+                checkboxBrand = CheckBox(this)
+                checkboxBrand.text = brand
+                checkboxBrand.isChecked = false
+                linearBrands.addView(checkboxBrand)
+            }
+        }
+    }
+    /*
     fun setBrandRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupBrands)
         for(brand in allBrands){
@@ -296,6 +327,19 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             radioGroup.addView(btn1)
         }
     }
+     */
+    fun setCategoryCheckBoxes(view: View) {
+        linearCategories=view.findViewById(R.id.linear_categories) as LinearLayout
+        for(category in allCategories){
+            if(category.isNotEmpty()) {
+                checkboxCategory = CheckBox(this)
+                checkboxCategory.text = category
+                checkboxCategory.isChecked = false
+                linearCategories.addView(checkboxCategory)
+            }
+        }
+    }
+    /*
     fun setCategoryRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
         for(cat in allCategories){
@@ -304,6 +348,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             radioGroup.addView(btn1)
         }
     }
+     */
     fun setRatingRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupRating)
         val btn1 = RadioButton(this)
