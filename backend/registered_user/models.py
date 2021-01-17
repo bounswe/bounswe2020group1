@@ -46,6 +46,11 @@ class Customer(models.Model):
     money_spent = models.DecimalField(max_digits=15, decimal_places=2)
 
 
+class VerificationCode(models.Model):
+    registered_user = models.ForeignKey(RegisteredUser, on_delete=models.CASCADE)
+    verification_code = models.CharField(max_length=16, null=True)
+
+
 @receiver(post_save, sender=User)
 def create_registered_user(sender, instance, created, **kwargs):
     if created:
