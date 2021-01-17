@@ -11,12 +11,21 @@ interface ApiService {
     fun login(@Field("email") email: String,@Field("password") password:String): Call<LoginResponse>
 
     @FormUrlEncoded
+    @POST("/user/login/google")
+    fun google_login(@Field("tokenId") id_token: String): Call<LoginResponse>
+
+    @FormUrlEncoded
     @POST("/user/signup")
     fun signup(@Field("first_name") first_name: String,
                @Field("last_name") last_name: String,
                @Field("username") username: String,
                @Field("email") email: String,
                @Field("password") password: String): Call<LoginResponse>
+
+    @FormUrlEncoded
+    @POST("/user/signup/google")
+    fun google_signup(@Field("tokenId") id_token: String,
+                      @Field("is_vendor") is_vendor: String): Call<LoginResponse>
 
     @FormUrlEncoded
     @POST("/user/signup")
