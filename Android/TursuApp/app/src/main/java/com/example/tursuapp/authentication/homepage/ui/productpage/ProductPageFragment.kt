@@ -3,7 +3,6 @@ package com.example.tursuapp.authentication.homepage.ui.productpage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.provider.DocumentsContract
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -11,10 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.adapter.CommentAdapter
@@ -23,7 +20,6 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.Comments
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
-import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -96,9 +92,8 @@ class ProductPageFragment : Fragment() {
         setVisibilities(view)
         getDetails(id_str!!.toInt(), view)
         if(user_type == "customer") {
-            view.findViewById<CardView>(R.id.addCart).setOnClickListener() {
-                var apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-                val quantity = 1
+            view.findViewById<CardView>(R.id.addCart).setOnClickListener {
+                val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
                 apiinterface.addToShoppingCart(auth_token, product.id).enqueue(object :
                         retrofit2.Callback<ResponseBody> {
                     override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
@@ -454,27 +449,7 @@ class ProductPageFragment : Fragment() {
                     val adapter = context?.let { CommentAdapter(it, commentList) }
                     commentListView = view.findViewById(R.id.commentListView)
                     displayProductInfo(view)
-                    if (commentListView != null) {
-                        commentListView.adapter = adapter
-
-                        /*
-                            commentListView.setOnItemClickListener { _, view, _, _ ->
-                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                                val bundle = Bundle()
-                                bundle.putString("id", clickedId.toString())
-                                val newFragment = VendorProductPageFragment()
-                                newFragment.arguments = bundle
-                                val fragmentManager: FragmentManager? = fragmentManager
-                                val fragmentTransaction: FragmentTransaction =
-                                        fragmentManager!!.beginTransaction()
-                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                                fragmentTransaction.commit()
-                            }*/
-                        // }
-                    } else {
-                        Log.i("Customer Comments: ", "have not any comment")
-                        // Toast.makeText(context, "have not any comment", Toast.LENGTH_SHORT).show()
-                    }
+                    commentListView.adapter = adapter
 
                 }
 
@@ -484,6 +459,7 @@ class ProductPageFragment : Fragment() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     fun displayProductInfo(view: View){
         view.findViewById<TextView>(R.id.product_name).text = product.name
         view.findViewById<TextView>(R.id.product_description).text = product.description

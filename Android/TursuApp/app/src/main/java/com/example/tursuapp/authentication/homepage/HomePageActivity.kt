@@ -19,7 +19,6 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
-import com.example.tursuapp.authentication.homepage.ui.message.ChatFragment
 import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
 import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
@@ -54,7 +53,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     var allVendors = listOf<String>()
     var allBrands = listOf<String>()
     var allCategories = listOf<String>()
-    lateinit var userType:String
+    private lateinit var userType:String
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
@@ -157,7 +156,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 displayFragment(R.id.nav_home, 0, "", null)
             }
             else if (groupPosition == 3) {
-                displayContacAdminFragment()
+                displayContactAdminFragment()
             }
             false
         }
@@ -235,7 +234,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
 
     }
-    fun setMessageButton(){
+    private fun setMessageButton(){
         val fabButton = findViewById<FloatingActionButton>(R.id.fab)
         if(!(userType=="customer" || userType=="vendor")){
             fabButton.visibility = View.GONE
@@ -267,7 +266,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         setShoppingCart()
         setMessageButton()
     }
-    fun setShoppingCart(){
+    private fun setShoppingCart(){
         val sc = findViewById<CardView>(R.id.shopping_cart)
         if(userType=="customer"){
             sc.visibility = View.VISIBLE
@@ -276,15 +275,17 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             sc.visibility = View.GONE
         }
     }
-    fun setExpandableSideMenu(){
-        if(userType=="customer"){
-            setExpandableSideMenuCustomer()
-        }
-        else if(userType == "vendor"){
-            setExpandableSideMenuVendor()
-        }
-        else{
-            setExpandableSideMenuGuest()
+    private fun setExpandableSideMenu(){
+        when (userType) {
+            "customer" -> {
+                setExpandableSideMenuCustomer()
+            }
+            "vendor" -> {
+                setExpandableSideMenuVendor()
+            }
+            else -> {
+                setExpandableSideMenuGuest()
+            }
         }
     }
     private fun getAllVendors(){
@@ -415,7 +416,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     /*
      * Preparing the list data
      */
-    fun displayContacAdminFragment(){
+    fun displayContactAdminFragment(){
         val fragment = VendorInitiateChatFragment()
         supportFragmentManager.beginTransaction().addToBackStack(null)
                 .replace(R.id.nav_host_fragment, fragment)
