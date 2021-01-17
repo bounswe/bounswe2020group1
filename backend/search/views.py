@@ -34,7 +34,7 @@ class SearchHelper:
         keywords = [word for word in words if len(word)>1 and word not in stop]
         try:
             keywords += SearchHelper.get_semantically_similar_words(keywords)
-        except (ConnectionError, KeyError):
+        except:
             pass
         return keywords
 
