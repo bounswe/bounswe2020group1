@@ -25,6 +25,7 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
 import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment

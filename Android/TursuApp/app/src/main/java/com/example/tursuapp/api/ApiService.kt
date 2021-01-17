@@ -204,4 +204,8 @@ interface ApiService {
     @POST("/message/startflow/customer/")
     fun startFlowForCustomerWithVendor(@Header("Authorization") token :String,@Field("vendor_name") vendor_name: String):Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("/message/startflow/vendor/")
+    fun startFlowForVendorWithAdmin(@Header("Authorization") token :String,@Field("context") context : String,@Field("object_id") object_id:Int):Call<String>
+
 }

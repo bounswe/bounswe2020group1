@@ -88,6 +88,12 @@ class PublicVendorFragment: Fragment()  {
         gridView = view.findViewById(R.id.public_gridView)
 
         msgButton = view.findViewById(R.id.msg_to_vendor)
+        if(user_type=="vendor"){
+            msgButton.visibility = View.INVISIBLE
+        }
+        else{
+            msgButton.visibility = View.VISIBLE
+        }
         msgButton.setOnClickListener {
             startChatWithVendor()
         }

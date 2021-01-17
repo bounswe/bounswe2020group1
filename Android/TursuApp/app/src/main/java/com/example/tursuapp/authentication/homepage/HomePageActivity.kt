@@ -21,6 +21,7 @@ import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.example.tursuapp.authentication.homepage.ui.message.ChatFragment
 import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
+import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
 import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -35,6 +36,7 @@ Type 2 -> search
 Type 3 -> filter
 Type 4 -> sort
 Type 5 -> account
+Type 6 -> contact admin
  */
 @Suppress("DEPRECATION")
 class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -69,12 +71,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         toolbar.setNavigationIcon(R.drawable.hamburger)
         supportActionBar?.setHomeButtonEnabled(true)
     }
-    private fun hideSoftKeyboard(activity: Activity) {
+    fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager: InputMethodManager = activity.getSystemService(
                 INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
                 activity.currentFocus!!.windowToken, 0)
     }
+
     private fun setExpandableSideMenuCustomer(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
@@ -84,6 +87,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
             if (groupPosition == 1) {
                 displayFragment(R.id.nav_home, 0, "", null)
+            }
+            else if(groupPosition == 3){
+                displayFragment(R.id.nav_home, 6, "", null)
             }
             false
         }
@@ -118,6 +124,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
             if (groupPosition == 1) {
                 displayFragment(R.id.nav_home, 0, "", null)
+            }
+            else if (groupPosition == 3) {
+                displayContacAdminFragment()
             }
             false
         }
@@ -342,6 +351,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     /*
      * Preparing the list data
      */
+    fun displayContacAdminFragment(){
+        val fragment = VendorInitiateChatFragment()
+        supportFragmentManager.beginTransaction().addToBackStack(null)
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
+        this.drawer.closeDrawer(GravityCompat.START)
+    }
     private fun prepareListData() {
         listDataHeader = ArrayList()
         listDataChild = HashMap()
@@ -353,6 +369,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         (listDataHeader as ArrayList<String>).add("Categories")
 
+        if(userType=="vendor"){
+            (listDataHeader as ArrayList<String>).add("Contact Admin")
+        }
         // Adding child data
         val categoryNames: MutableList<String> = ArrayList()
 
@@ -373,6 +392,10 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         listDataChild!![(listDataHeader as ArrayList<String>)[0]] = accountSubItems
         listDataChild!![(listDataHeader as ArrayList<String>)[1]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[2]] = categoryNames
+        if(userType=="vendor"){
+            listDataChild!![(listDataHeader as ArrayList<String>)[3]] = ArrayList()
+        }
+
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
     }
     fun menuItemsForVendor():MutableList<String>{
