@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_profile_detail"
+    android:id="@+id/nav_profile_detail_vendor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:clickable="true">
+    android:clickable="true"
+    android:focusable="true">
 
 
     <LinearLayout
@@ -45,6 +46,24 @@
         app:layout_constraintEnd_toStartOf="@+id/public_name_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutBack" />
+
+    <TextView
+        android:id="@+id/msg_to_vendor"
+        style="@android:style/Widget.DeviceDefault.Light.TextView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@color/purple_500"
+        android:drawableLeft="@android:drawable/stat_notify_chat"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="msg to vendor"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/public_rating" />
 
     <TextView
         android:id="@+id/public_name_view"
@@ -127,7 +146,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/public_rating" />
+        app:layout_constraintTop_toBottomOf="@id/msg_to_vendor">
+
+    </GridView>
 
     <ImageView
         android:id="@+id/is_verified"

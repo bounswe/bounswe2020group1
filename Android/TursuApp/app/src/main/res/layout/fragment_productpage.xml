@@ -13,16 +13,18 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView4"
         android:layout_width="49dp"
-        android:layout_height="30dp"
+        android:layout_height="48dp"
         android:layout_marginStart="240dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="7dp"
         android:visibility="gone"
         app:cardBackgroundColor="#E8E7E7"
         app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/commentListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/Reviews"
-        app:layout_constraintTop_toBottomOf="@+id/ProductInfo">
+        app:layout_constraintTop_toBottomOf="@+id/ProductInfo"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/add_comment_image"

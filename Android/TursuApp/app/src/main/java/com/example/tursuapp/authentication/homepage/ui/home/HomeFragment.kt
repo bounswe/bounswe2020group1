@@ -25,6 +25,7 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
 import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
@@ -306,7 +307,6 @@ class HomeFragment : Fragment() {
             val radioButton5 = view.findViewById<RadioButton>(selectedId5)
             filters?.set("frating_gte", radioButton5.text.toString())
         }
-        //displayFragment(R.id.nav_home,2,searchString,filters)
         if (type == 2) {
             search(keys)
         } else if (type == 1) {
@@ -646,7 +646,7 @@ class HomeFragment : Fragment() {
             }
         }
         activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.nav_host_fragment, fragment)
+                ?.replace(R.id.nav_host_fragment, fragment)?.addToBackStack(null)
                 ?.commit()
         (activity as HomePageActivity).drawer.closeDrawer(GravityCompat.START)
     }
