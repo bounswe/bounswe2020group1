@@ -311,7 +311,7 @@ def resend_verification(email):
     registered_user = RegisteredUser.objects.filter(email=email).first()
     if registered_user is not None:
         code = get_random_string(10)
-        message =  "To complete your registration please enter your verification code: ".format(code)
+        message =  "To complete your registration please enter your verification code: {}".format(code)
         send_mail("Your Verification Code - Tursu", 
             message, EMAIL_HOST_USER, [email], fail_silently = False)
         verification_code = VerificationCode.objects.create(registered_user=registered_user, verification_code=code)
