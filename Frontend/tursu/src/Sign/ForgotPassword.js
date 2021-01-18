@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import "./sign_components.css";
 import logo from '../rsz_11logo.png';
+import axios from 'axios';
 
 export default class ForgotPassword extends Component {
     constructor(props) {
@@ -15,9 +16,18 @@ export default class ForgotPassword extends Component {
         this.goToLogin = this.goToLogin.bind(this);
     }
     handleSubmit(event){
-        console.log("form submitted");
-        console.log(this.state.email);
-        //API request goes here
+        const formData = new FormData();
+        formData.append("email", this.state.email);
+        axios.post('http://3.232.20.250/user/forgot_password',  formData)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error =>{
+            if (error.response){
+                console.log(error.response)
+            }
+        })
+        this.props.onLoginChange();
         event.preventDefault();
     }
     handleChange(event){
