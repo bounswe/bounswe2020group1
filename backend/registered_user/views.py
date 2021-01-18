@@ -286,13 +286,32 @@ def resend_verification_code(request):
     return Response({'error': 'Invalid Email'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def forgot_password(request):
+    email = request.POST.get('email', None)
+    if email is None:
+        return Response({'error': 'Missing email parameter'}, status=status.HTTP_400_BAD_REQUEST)
+    registered_user = RegisteredUser.objects.filter(email=email).first()
+    if registered_user is None:
+        return Response({'error': 'Invalid Email'}, status=status.HTTP_400_BAD_REQUEST)
+    new_password = get_random_string(12)
+    registered_user.user.set_password(new_password)
+    registered_user.user.save()
+    registered_user.save()
+    message =  "Here is your new password, please change it after you login: {}".format(new_password)
+    send_mail("Forgot Password - Tursu", 
+            message, EMAIL_HOST_USER, [email], fail_silently = False)
+    return Response({}, status=status.HTTP_200_OK)
+         
+
 def resend_verification(email):
     if email is None:
         return False
     registered_user = RegisteredUser.objects.filter(email=email).first()
     if registered_user is not None:
         code = get_random_string(10)
-        message =  "To complete your registration please enter your verification code: " + code
+        message =  "To complete your registration please enter your verification code: {}".format(code)
         send_mail("Your Verification Code - Tursu", 
             message, EMAIL_HOST_USER, [email], fail_silently = False)
         verification_code = VerificationCode.objects.create(registered_user=registered_user, verification_code=code)
