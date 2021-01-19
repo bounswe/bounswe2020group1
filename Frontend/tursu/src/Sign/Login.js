@@ -102,8 +102,14 @@ export default class Login extends Component {
 
             })
             .catch(error =>{
-                console.log(error.response.status)
-                alert ("There has been an error. Please try again.");
+                if (error.response){
+                    if (error.response.status == 401){
+                        alert ("Please sign up with Google before signing in!");
+                    }
+                    else{
+                        alert ("There has been an error. Please try again.");
+                    }
+                }
             })
 
 

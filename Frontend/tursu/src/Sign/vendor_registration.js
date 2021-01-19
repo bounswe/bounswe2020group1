@@ -93,6 +93,9 @@ export default class Vendor extends Component {
         const formData = new FormData();
         formData.append("is_vendor", "1")
         formData.append("tokenId", response.tokenId)
+        formData.append("IBAN", "TR730006271333541288459635")
+        formData.append("latitude", "40.095397")
+        formData.append("longitude", "31.229421")
         formData.append("city", "Istanbul/Turkey")
 
         axios.post('http://3.232.20.250/user/signup/google', formData)
@@ -100,6 +103,8 @@ export default class Vendor extends Component {
                 console.log(res);
                 console.log(res.data);
                 window.sessionStorage.setItem("authToken", res.data.auth_token);
+                alert ("You have successfully signed up! Please sign in.");
+                this.props.login()
 
             })
             .catch(error =>{

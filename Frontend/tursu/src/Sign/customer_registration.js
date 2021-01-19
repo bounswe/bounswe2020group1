@@ -98,6 +98,8 @@ export default class Customer extends Component {
                 console.log(res);
                 console.log(res.data);
                 window.sessionStorage.setItem("authToken", res.data.auth_token);
+                alert ("You have successfully signed up! Please sign in.");
+                this.props.login()
 
             })
             .catch(error =>{
