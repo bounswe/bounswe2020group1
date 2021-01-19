@@ -31,6 +31,8 @@ import Divider from "@material-ui/core/Divider";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
+import Slider from "@material-ui/core/Slider";
+import Input from "@material-ui/core/Input";
 
 const theme = createMuiTheme({
     palette:{
@@ -304,6 +306,9 @@ const alertMenuStyles =  makeStyles((theme) => ({
     textField:{
         fontSize:15
     },
+    input:{
+        width: 70
+    },
 }));
 
 
@@ -311,20 +316,21 @@ export function AlertMenu(props){
     const classes = alertMenuStyles()
 
     const { open, onClose} = props;
-    const [isCreatingNewList, setIsCreatingNewList] = React.useState(false);
     const [isLoaded, setIsLoaded] = React.useState(false)
-    const [nameOfNewList, setNameOfNewList] = React.useState("")
 
     const [priceChangeAlert, setPriceChangeAlert] = React.useState(false);
     const [priceBelowAlert, setPriceBelowAlert] = React.useState(false);
     const [stockAlert, setStockAlert] = React.useState(false);
+
+    const [priceLevel, setPriceLevel] = React.useState(30);
+    const [stockLevel, setStockLevel] = React.useState(30);
+
 
     useEffect(() => {
 
     }, [])
 
     const handleClose = () => {
-        setIsCreatingNewList(false)
         setIsLoaded(false)
         onClose();
     };
@@ -361,7 +367,7 @@ export function AlertMenu(props){
             const formData = new FormData();
             formData.append("product_id", props.productId);
             formData.append("type", "0");
-            formData.append("value", "0");
+            formData.append("value", priceLevel.toString());
             axios.post('http://3.232.20.250/notifications/create_alert',
                 formData, {
                     headers: {
@@ -389,7 +395,7 @@ export function AlertMenu(props){
             const formData = new FormData();
             formData.append("product_id", props.productId);
             formData.append("type", "2");
-            formData.append("value", "0");
+            formData.append("value", stockLevel.toString());
             axios.post('http://3.232.20.250/notifications/create_alert',
                 formData, {
                     headers: {
@@ -402,7 +408,7 @@ export function AlertMenu(props){
                 })
                 .catch(error =>{
                     console.log(error)
-                    alert ("There has been an error. Please try again.");
+                    alert ("Alert for stock could not be set.");
                 })
         }
         else{
@@ -428,6 +434,15 @@ export function AlertMenu(props){
                 alert ("There has been an error. Please try again.");
             })
     }
+
+    const handlePriceLevelSlider = (event, newValue) => {
+        setPriceLevel(newValue);
+    };
+
+    const handleStockLevelSlider = (event, newValue) => {
+        setStockLevel(newValue);
+    };
+
     return (
         <Dialog open={open} onClose={handleClose}>
             <div style={{
@@ -452,19 +467,91 @@ export function AlertMenu(props){
                               onClick={setAlertForPriceChanges}/>
                     <Typography variant={"body2"}>Alert me for price changes.</Typography>
                 </ListItem>
-                <ListItem>
+                <Divider/>
+                <ListItem style={{marginTop:10, marginBottom: 10}}>
                     <Checkbox checked={priceBelowAlert}
                               onClick={setAlertBelowPrice}/>
-                    <Typography variant={"body2"}>Alert me below a certain price.</Typography>
+                    <Grid container direction={"column"}>
+                        <Grid item>
+                            <Typography variant={"body2"}>Alert me below a <b>price level.</b></Typography>
+                        </Grid>
+                            <Grid item style={{marginTop: 40}} >
+                                <Tooltip title={"To change, please uncheck first."} disableHoverListener={!priceBelowAlert}>
+                                    <span>
+                                        <Slider
+                                            value={typeof priceLevel === 'number' ? priceLevel : 0}
+                                            aria-labelledby="input-slider"
+                                            onChange={handlePriceLevelSlider}
+                                            valueLabelDisplay="on"
+                                            min={0}
+                                            max={10000}
+                                            color={"primary"}
+                                        />
+                                    </span>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item style={{margin: "auto"}}>
+                                    <Input
+                                        className={classes.input}
+                                        value={priceLevel}
+                                        margin="dense"
+                                        onChange={handlePriceLevelSlider}
+                                        inputProps={{
+                                            step: 10,
+                                            min: 0,
+                                            max: 10000,
+                                            type: 'number',
+                                            'aria-labelledby': 'input-slider',
+                                        }}
+                                        disabled={priceBelowAlert}
+                                    />
+                            </Grid>
+                    </Grid>
                 </ListItem>
-                <ListItem>
+                <Divider/>
+                <ListItem style={{marginTop: 10}}>
                     <Checkbox checked={stockAlert}
                              onClick={setAlertForStock}/>
-                    <Typography variant={"body2"}>Set Alarm for a stock level.</Typography>
+                     <Grid container direction={"column"}>
+                         <Grid item>
+                             <Typography variant={"body2"}>Alert me above a <b>stock level</b></Typography>
+                         </Grid>
+                             <Grid item style={{marginTop: 40}}>
+                                 <Tooltip title={"To change, please uncheck first."} disableHoverListener={!stockAlert}>
+                                     <span>
+                                         <Slider
+                                             value={typeof stockLevel === 'number' ? stockLevel : 0}
+                                             aria-labelledby="input-slider"
+                                             onChange={handleStockLevelSlider}
+                                             valueLabelDisplay="on"
+                                             min={0}
+                                             max={500}
+                                         />
+                                     </span>
+                                 </Tooltip>
+                             </Grid>
+                             <Grid item style={{margin: "auto"}}>
+                                     <Input
+                                         className={classes.input}
+                                         value={stockLevel}
+                                         margin="dense"
+                                         onChange={handleStockLevelSlider}
+                                         inputProps={{
+                                             step: 10,
+                                             min: 0,
+                                             max: 10000,
+                                             type: 'number',
+                                             'aria-labelledby': 'input-slider',
+                                         }}
+                                         disabled={stockAlert}/>
+                             </Grid>
+                     </Grid>
                 </ListItem>
             </List>
             <Divider/>
         </Dialog>
     )
 }
+
+
 
