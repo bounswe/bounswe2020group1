@@ -56,7 +56,15 @@ export default class Login extends Component {
             .catch(error =>{
                 if (error.response){
                     if (error.response.status == 401){
-                        alert ("The email or password you have entered is incorrect. Please try again.");
+                        if(error.response.data.error === "Not Verified"){
+                            this.props.setU(this.state.email)
+                            this.props.setP(this.state.password)
+                            this.props.setM("You have not verified your email yet. Please enter the verification code we have sent you to proceed.")
+                            this.props.onVerifChange()
+                        }
+                        else{
+                            alert ("The email or password you have entered is incorrect. Please try again.");
+                        }
                     }
                     else{
                         console.log(error.response.message);
