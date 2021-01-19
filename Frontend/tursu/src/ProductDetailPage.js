@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Button from '@material-ui/core/Button';
 import Avatar from "@material-ui/core/Avatar";
-import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import {ThemeProvider, createMuiTheme, makeStyles} from "@material-ui/core/styles";
 import Navbar from "./NavBar";
 import axios from 'axios'
 import { green } from '@material-ui/core/colors';
@@ -22,6 +22,15 @@ import {IconButton} from "@material-ui/core";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import withStyles from "@material-ui/core/styles/withStyles";
+import AddAlertIcon from '@material-ui/icons/AddAlert';
+import Tooltip from "@material-ui/core/Tooltip";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import CloseIcon from "@material-ui/icons/Close";
+import Divider from "@material-ui/core/Divider";
+import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "@material-ui/core/TextField";
+import AddIcon from "@material-ui/icons/Add";
 
 const theme = createMuiTheme({
     palette:{
@@ -74,10 +83,13 @@ class ProductDetail extends React.Component{
             product_not_found : true,
             isAlertOpen: false,
             isListOpen: false,
+            isAlertMenuOpen: false,
         }
 
         this.addToShoppingCart = this.addToShoppingCart.bind(this);
         this.handleAlertClose = this.handleAlertClose.bind(this)
+        this.openNotificationMenu = this.openNotificationMenu.bind(this)
+        this.handleAlertMenuClose = this.handleAlertMenuClose.bind(this)
     }
 
     componentDidMount() {
@@ -145,6 +157,10 @@ class ProductDetail extends React.Component{
             })
     }
 
+    openNotificationMenu(){
+        this.setState({isAlertMenuOpen: true})
+    }
+
     handleAlertClose(){
         this.setState({isAlertOpen: false})
     }
@@ -154,6 +170,9 @@ class ProductDetail extends React.Component{
 
     handleListsClose = () => {
         this.setState({isListOpen: false})
+    }
+    handleAlertMenuClose= () => {
+        this.setState({isAlertMenuOpen: false})
     }
 
     render(){
@@ -210,31 +229,53 @@ class ProductDetail extends React.Component{
                         </Grid>
                         <Grid  item container xs={12} spacing={5}>
                             <Grid item>
-                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    <Button variant="contained" color="secondary" onClick={this.addToShoppingList}
-                                            disabled={(window.sessionStorage.getItem("user_type")==="vendor")}>
-                                        <PlaylistAddIcon/>
-                                        <CustomTypography>
-                                            Add To List
-                                        </CustomTypography>
-                                    </Button>
-                                    {this.state.isListOpen? (
-                                        <ListsDialog open={this.state.isListOpen} productId={this.state.product.id} onClose={this.handleListsClose}/>
-                                    ):(
-                                        <div></div>
-                                    )}
-                                </Typography>
+                                <Tooltip title={window.sessionStorage.getItem("isLogged") ? "" : "You need to login."}>
+                                    <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                                        <Button variant="contained" color="secondary" onClick={this.addToShoppingList}
+                                                disabled={!window.sessionStorage.getItem("isLogged")}>
+                                            <PlaylistAddIcon/>
+                                            <CustomTypography>
+                                                Add To List
+                                            </CustomTypography>
+                                        </Button>
+                                        {this.state.isListOpen? (
+                                            <ListsDialog open={this.state.isListOpen} productId={this.state.product.id} onClose={this.handleListsClose}/>
+                                        ):(
+                                            <div></div>
+                                        )}
+                                    </Typography>
+                                </Tooltip>
                             </Grid>
                             <Grid item>
-                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    <Button variant="contained" color="secondary" onClick={this.addToShoppingCart}
-                                            disabled={(window.sessionStorage.getItem("user_type")==="vendor")}>
-                                        <AddShoppingCartIcon/>
-                                        <CustomTypography>
-                                            Add to Cart
-                                        </CustomTypography>
-                                    </Button>
-                                </Typography>
+                                <Tooltip title={window.sessionStorage.getItem("isLogged") ? "" : "You need to login."}>
+                                    <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                                        <Button variant="contained" color="secondary" onClick={this.addToShoppingCart}
+                                                disabled={!window.sessionStorage.getItem("isLogged")} >
+                                            <AddShoppingCartIcon/>
+                                            <CustomTypography>
+                                                Add to Cart
+                                            </CustomTypography>
+                                        </Button>
+                                    </Typography>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item>
+                                <Tooltip title={window.sessionStorage.getItem("isLogged") ? "" : "You need to login."}>
+                                    <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                                        <Button variant="contained" color="secondary" onClick={this.openNotificationMenu}
+                                                disabled={!window.sessionStorage.getItem("isLogged")}>
+                                            <AddAlertIcon/>
+                                            <CustomTypography>
+                                                 Alert Me
+                                            </CustomTypography>
+                                        </Button>
+                                        {this.state.isAlertMenuOpen? (
+                                            <AlertMenu open={true} productId={this.state.product.id} onClose={this.handleAlertMenuClose}/>
+                                        ):(
+                                            <div></div>
+                                        )}
+                                    </Typography>
+                                </Tooltip>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -256,5 +297,71 @@ class ProductDetail extends React.Component{
             </div>
         )
     }
+}
+
+
+const alertMenuStyles =  makeStyles((theme) => ({
+    textField:{
+        fontSize:15
+    },
+}));
+
+
+export function AlertMenu(props){
+    const classes = alertMenuStyles()
+
+    const { open, onClose} = props;
+    const [isCreatingNewList, setIsCreatingNewList] = React.useState(false);
+    const [isLoaded, setIsLoaded] = React.useState(false)
+    const [nameOfNewList, setNameOfNewList] = React.useState("")
+
+    useEffect(() => {
+
+    }, [])
+
+    const handleClose = () => {
+        setIsCreatingNewList(false)
+        setIsLoaded(false)
+        onClose();
+    };
+
+    return (
+        <Dialog open={open} onClose={handleClose}>
+            <div style={{
+                display: "flex",
+                flexWrap: 'nowrap',
+                justifyContent: 'space-around',
+                height: "auto",
+                width: "200px",
+
+            }}>
+                <DialogTitle>
+                    <Typography>Set Alerts:</Typography>
+                </DialogTitle>
+                <IconButton onClick={handleClose}>
+                    <CloseIcon/>
+                </IconButton>
+            </div>
+            <Divider/>
+            <List>
+                <ListItem>
+                    <Checkbox checked={false}
+                              />
+                    <Typography variant={"body2"}>Alert me for price changes.</Typography>
+                </ListItem>
+                <ListItem>
+                    <Checkbox checked={false}
+                              />
+                    <Typography variant={"body2"}>Alert me below a certain price.</Typography>
+                </ListItem>
+                <ListItem>
+                    <Checkbox checked={false}
+                             />
+                    <Typography variant={"body2"}>Set Alarm for Price Changes</Typography>
+                </ListItem>
+            </List>
+            <Divider/>
+        </Dialog>
+    )
 }
 
