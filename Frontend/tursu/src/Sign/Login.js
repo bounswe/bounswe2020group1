@@ -82,8 +82,31 @@ export default class Login extends Component {
         this.props.onForgotPChange();
     }
     responseGoogleSuccess = response => {
+        console.log("here i come")
         console.log(response)
-        this.setState({ redirect: "True" });
+        console.log(response.tokenId)
+        const formData = new FormData();
+        formData.append("tokenId", response.tokenId)
+
+        axios.post('http://3.232.20.250/user/login/google', formData)
+            .then(res =>{
+                console.log(res);
+                console.log(res.data);
+
+                window.sessionStorage.setItem("authToken", res.data.auth_token);
+                window.sessionStorage.setItem("first_name", res.data.first_name);
+                window.sessionStorage.setItem("last_name", res.data.last_name);
+                window.sessionStorage.setItem("user_type", res.data.user_type);
+
+                this.setState({ redirect: "True" });
+
+            })
+            .catch(error =>{
+                console.log(error.response.status)
+                alert ("There has been an error. Please try again.");
+            })
+
+
     }
     render() {
         if(this.state.redirect === "False"){
@@ -107,7 +130,7 @@ export default class Login extends Component {
                     <div>
                         <GoogleLogin
                             clientId='872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com'
-                            buttonText='Login'
+                            buttonText='Sign In with Google'
                             onSuccess={this.responseGoogleSuccess}
                             onFailure={responseGoogleFailure}
                             cookiePolicy={'single_host_origin'}
