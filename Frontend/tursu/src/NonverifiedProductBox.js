@@ -39,7 +39,6 @@ export default function NonverifiedProductBox(props) {
 
     const handleDelete = () => {
         console.log("delete")
-        props.callbackUpdateList(window.sessionStorage.getItem("update"))
         window.sessionStorage.setItem("update", 1+parseInt(window.sessionStorage.getItem("update")))
         props.callbackUpdateList(window.sessionStorage.getItem("update"))
         console.log(window.sessionStorage.getItem("update"))
