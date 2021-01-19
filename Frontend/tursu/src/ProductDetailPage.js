@@ -315,6 +315,10 @@ export function AlertMenu(props){
     const [isLoaded, setIsLoaded] = React.useState(false)
     const [nameOfNewList, setNameOfNewList] = React.useState("")
 
+    const [priceChangeAlert, setPriceChangeAlert] = React.useState(false);
+    const [priceBelowAlert, setPriceBelowAlert] = React.useState(false);
+    const [stockAlert, setStockAlert] = React.useState(false);
+
     useEffect(() => {
 
     }, [])
@@ -325,6 +329,105 @@ export function AlertMenu(props){
         onClose();
     };
 
+    function setAlertForPriceChanges() {
+        if (!priceChangeAlert){
+            const formData = new FormData();
+            formData.append("product_id", props.productId);
+            formData.append("type", "1");
+            axios.post('http://3.232.20.250/notifications/create_alert',
+                formData, {
+                    headers: {
+                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                    }
+                })
+                .then(res => {
+                    console.log(res);
+                    console.log(res.status);
+                })
+                .catch(error =>{
+                    console.log(error)
+                    alert ("There has been an error. Please try again.");
+                })
+        }
+        else{
+            deleteAlert("")
+        }
+        setPriceChangeAlert(!priceChangeAlert);
+    }
+
+    function setAlertBelowPrice()
+    {
+        if (!priceBelowAlert){
+            const formData = new FormData();
+            formData.append("product_id", props.productId);
+            formData.append("type", "0");
+            formData.append("value", "0");
+            axios.post('http://3.232.20.250/notifications/create_alert',
+                formData, {
+                    headers: {
+                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                    }
+                })
+                .then(res => {
+                    console.log(res);
+                    console.log(res.status);
+                })
+                .catch(error =>{
+                    console.log(error)
+                    alert ("There has been an error. Please try again.");
+                })
+        }
+        else{
+            deleteAlert("")
+        }
+        setPriceBelowAlert(!priceBelowAlert);
+    }
+
+    function setAlertForStock()
+    {
+        if (!stockAlert){
+            const formData = new FormData();
+            formData.append("product_id", props.productId);
+            formData.append("type", "2");
+            formData.append("value", "0");
+            axios.post('http://3.232.20.250/notifications/create_alert',
+                formData, {
+                    headers: {
+                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                    }
+                })
+                .then(res => {
+                    console.log(res);
+                    console.log(res.status);
+                })
+                .catch(error =>{
+                    console.log(error)
+                    alert ("There has been an error. Please try again.");
+                })
+        }
+        else{
+            deleteAlert("")
+        }
+        setStockAlert(!stockAlert);
+    }
+    function deleteAlert(alert_id){
+        const formData = new FormData()
+        formData.append("id", alert_id)
+        axios.post('http://3.232.20.250/notifications/delete_alert',
+            formData, {
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.status);
+            })
+            .catch(error =>{
+                console.log(error)
+                alert ("There has been an error. Please try again.");
+            })
+    }
     return (
         <Dialog open={open} onClose={handleClose}>
             <div style={{
@@ -332,7 +435,7 @@ export function AlertMenu(props){
                 flexWrap: 'nowrap',
                 justifyContent: 'space-around',
                 height: "auto",
-                width: "200px",
+                width: "270px",
 
             }}>
                 <DialogTitle>
@@ -345,19 +448,19 @@ export function AlertMenu(props){
             <Divider/>
             <List>
                 <ListItem>
-                    <Checkbox checked={false}
-                              />
+                    <Checkbox checked={priceChangeAlert}
+                              onClick={setAlertForPriceChanges}/>
                     <Typography variant={"body2"}>Alert me for price changes.</Typography>
                 </ListItem>
                 <ListItem>
-                    <Checkbox checked={false}
-                              />
+                    <Checkbox checked={priceBelowAlert}
+                              onClick={setAlertBelowPrice}/>
                     <Typography variant={"body2"}>Alert me below a certain price.</Typography>
                 </ListItem>
                 <ListItem>
-                    <Checkbox checked={false}
-                             />
-                    <Typography variant={"body2"}>Set Alarm for Price Changes</Typography>
+                    <Checkbox checked={stockAlert}
+                             onClick={setAlertForStock}/>
+                    <Typography variant={"body2"}>Set Alarm for a stock level.</Typography>
                 </ListItem>
             </List>
             <Divider/>
