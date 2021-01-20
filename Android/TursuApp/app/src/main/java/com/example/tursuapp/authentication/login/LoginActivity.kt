@@ -16,6 +16,7 @@ import com.example.tursuapp.api.responses.LoginResponse
 import com.example.tursuapp.authentication.forgotpassword.ForgotPasswordActivity
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.signup.SignUpActivity
+import com.example.tursuapp.authentication.verification.VerificationActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -29,10 +30,13 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
     private lateinit var email : EditText
     private lateinit var password: EditText
+    private lateinit var loginButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        loginButton = findViewById(R.id.login_button)
 
         // Check if the user is logged in.
         val pref = applicationContext.getSharedPreferences("UserPref", 0)
@@ -66,12 +70,12 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
 
-        findViewById<Button>(R.id.login_button).setOnClickListener {
+        loginButton.setOnClickListener {
             val emailString = email.text.toString()
             val passwordString = password.text.toString()
 
-            if (emailString.isNullOrEmpty() || passwordString.isNullOrEmpty()) {
-                Toast.makeText(getApplicationContext(), "Please fill both fields!", Toast.LENGTH_SHORT).show()
+            if (emailString.isEmpty() || passwordString.isEmpty()) {
+                Toast.makeText(applicationContext, "Please fill both fields!", Toast.LENGTH_SHORT).show()
             }
             else {
                 login()
@@ -89,18 +93,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        // Check for existing Google Sign In account, if the user is already signed in
-//        // the GoogleSignInAccount will be non-null.
-//        val account = GoogleSignIn.getLastSignedInAccount(this)
-//        if (account != null) {
-//            val intent = Intent(applicationContext, HomePageActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -117,7 +109,7 @@ class LoginActivity : AppCompatActivity() {
             val task = completedTask.getResult(ApiException::class.java)
 
             // Signed in successfully, show authenticated UI.
-            google_login(task.idToken.toString())
+            googleLogin(task.idToken.toString())
 
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
@@ -128,8 +120,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login(){
-        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        val call: Call<LoginResponse> = apiinterface.login(
+        loginButton.isClickable = false
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        val call: Call<LoginResponse> = apiInterface.login(
             email.text.toString(),
             password.text.toString()
         )
@@ -142,7 +135,9 @@ class LoginActivity : AppCompatActivity() {
                 response: Response<LoginResponse?>
             ) {
                 val userResponse: LoginResponse? = response.body()
-                Log.i("Status code", response.code().toString())
+                Log.i("LoginResponseStatus", response.code().toString())
+                Log.i("LoginResponseBody", response.body().toString())
+                loginButton.isClickable = true
 
                 if (userResponse != null) {
                     val pref = applicationContext.getSharedPreferences("UserPref", 0)
@@ -160,24 +155,35 @@ class LoginActivity : AppCompatActivity() {
                     finish()
 
                 } else {
-                    Toast.makeText(applicationContext, "Invalid credentials!", Toast.LENGTH_SHORT)
-                        .show()
+                    val errorMessage = response.errorBody()?.string()
+                    Log.e("LoginError", errorMessage)
+                    if (errorMessage != null) {
+                        if (errorMessage.contains("Not Verified")) {
+                            Toast.makeText(applicationContext, "You are not verified, please verify your email address!",
+                                    Toast.LENGTH_SHORT).show()
+
+                            val intent = Intent(applicationContext, VerificationActivity::class.java)
+                            intent.putExtra("email", email.text.toString())
+                            intent.putExtra("password", password.text.toString())
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(applicationContext, "Invalid credentials!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
-
-                Log.i("Failure", t.message)
-
+                loginButton.isClickable = true
+                Toast.makeText(applicationContext, "There was an error, please try again!", Toast.LENGTH_SHORT).show()
             }
-
 
         })
     }
 
-    private fun google_login(id_token: String){
-        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        val call: Call<LoginResponse> = apiinterface.google_login(id_token)
+    private fun googleLogin(id_token: String){
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        val call: Call<LoginResponse> = apiInterface.googleLogin(id_token)
 
         Log.w("request", call.request().toString())
 
@@ -211,13 +217,10 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
-
-                Log.i("Failure", t.message)
-
+                Toast.makeText(applicationContext, "There was an error, please try again!", Toast.LENGTH_SHORT).show()
             }
 
 
         })
     }
-
 }

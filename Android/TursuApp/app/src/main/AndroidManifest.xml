@@ -34,8 +34,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".authentication.signup.SignUpActivity" />
-        <activity android:name=".authentication.signup.VendorSignUpActivity" />
+        <activity android:name=".authentication.signup.VendorSignupActivity" />
         <activity android:name=".authentication.forgotpassword.ForgotPasswordActivity" />
+        <activity android:name=".authentication.verification.VerificationActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"

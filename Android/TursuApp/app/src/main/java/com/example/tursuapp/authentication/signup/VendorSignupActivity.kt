@@ -17,7 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class VendorSignUpActivity : AppCompatActivity() {
+class VendorSignupActivity : AppCompatActivity() {
     private lateinit var userName : EditText
     private lateinit var name : EditText
     private lateinit var surname : EditText
@@ -81,7 +81,7 @@ class VendorSignUpActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.signup_vendor_text).let { view ->
             view.setOnClickListener {
-                startActivity(Intent(this, VendorSignUpActivity::class.java))
+                startActivity(Intent(this, VendorSignupActivity::class.java))
             }
         }
 

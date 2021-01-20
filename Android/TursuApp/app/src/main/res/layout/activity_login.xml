@@ -44,6 +44,7 @@
         android:background="@drawable/enter_email"
         android:gravity="center|left"
         android:hint="Email or username"
+        android:inputType="textEmailAddress"
         android:paddingLeft="50dp"
         android:textColor="@color/TursuGreen"
         android:textColorHint="@color/TursuGreen"

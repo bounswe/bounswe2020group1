@@ -12,8 +12,8 @@ import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.LoginResponse
-import com.example.tursuapp.api.responses.TokenResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.verification.VerificationActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -55,27 +55,37 @@ class SignUpActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.signup_button)?.apply {
             setOnClickListener {
-                val first_name = name.text.toString()
-                val last_name = surname.text.toString()
+                val firstName = name.text.toString()
+                val lastName = surname.text.toString()
                 val username = userName.text.toString()
                 val email = eMail.text.toString()
                 val password1 = password.text.toString()
                 val password2 = passwordConfirmation.text.toString()
 
-                if (username.isNullOrEmpty() || first_name.isNullOrEmpty() ||
-                        last_name.isNullOrEmpty() || email.isNullOrEmpty() ||
-                        password1.isNullOrEmpty() || password2.isNullOrEmpty()) {
-                    Toast.makeText(getApplicationContext(),
+                if (username.isEmpty() || firstName.isEmpty() ||
+                        lastName.isEmpty() || email.isEmpty() ||
+                        password1.isEmpty() || password2.isEmpty()) {
+                    Toast.makeText(applicationContext,
                             "Please complete all the fields!", Toast.LENGTH_SHORT).show()
                 }
                 else {
                     if (password1 != password2) {
-                        Toast.makeText(getApplicationContext(),
+                        Toast.makeText(applicationContext,
                                 "The passwords don't match, please check your password!",
                                 Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        signUp(this, first_name, last_name, username, email, password1)
+                        val strongPasswordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}\$".toRegex()
+                        if(password1.matches(strongPasswordPattern)) {
+                            signUp(this, firstName, lastName, username, email, password1)
+                        }
+                        else {
+                            Toast.makeText(applicationContext,
+                                    "Your password is not strong enough! It should have minimum " +
+                                            "8 characters, at least one uppercase letter, one lowercase " +
+                                            "letter and one number!", Toast.LENGTH_SHORT).show()
+                        }
+
                     }
                 }
 
@@ -89,7 +99,7 @@ class SignUpActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.signup_vendor_text).let { view ->
             view.setOnClickListener {
-                startActivity(Intent(this, VendorSignUpActivity::class.java))
+                startActivity(Intent(this, VendorSignupActivity::class.java))
             }
         }
 
@@ -111,7 +121,7 @@ class SignUpActivity : AppCompatActivity() {
             val task = completedTask.getResult(ApiException::class.java)
 
             // Signed in successfully, show authenticated UI.
-            google_signup(task.idToken.toString(), is_vendor="")
+            googleSignup(task.idToken.toString())
 
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
@@ -123,47 +133,42 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun signUp(button: Button, first_name: String, last_name: String, username: String,
                        email: String, password: String){
-        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        val call: Call<LoginResponse> = apiinterface.signup(first_name, last_name, username, email, password)
+        button.isClickable = false
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        val call: Call<Void> = apiInterface.signup(first_name, last_name, username, email, password)
 
-        Log.w("request", call.request().toString())
+        Log.i("SignupRequest", call.request().toString())
 
-        call.enqueue(object : Callback<LoginResponse?> {
-            override fun onResponse(call: Call<LoginResponse?>, response: Response<LoginResponse?>) {
-                val userResponse: LoginResponse? = response.body()
-                Log.i("Status code",response.code().toString())
+        call.enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                val userResponse: Void? = response.body()
+                Log.i("SignupResponseStatus", response.code().toString())
+                button.isClickable = true
 
-                if (userResponse != null) {
-                    val pref = applicationContext.getSharedPreferences("UserPref", 0)
-                    with (pref.edit()) {
-                        putString("first_name", userResponse.first_name)
-                        putString("last_name", userResponse.last_name)
-                        putString("user_type", userResponse.user_type)
-                        putString("auth_token", "Token "+userResponse.auth_token)
-                        putBoolean("logged_in", true)
-                        apply()
-                    }
-
-                    val intent = Intent(applicationContext, HomePageActivity::class.java)
+                if (userResponse == null) {
+                    Toast.makeText(applicationContext, "Signup successful, please verify your email now!", Toast.LENGTH_LONG).show()
+                    val intent = Intent(applicationContext, VerificationActivity::class.java)
+                    intent.putExtra("email", email)
+                    intent.putExtra("password", password)
+                    Log.i("SignupIntent", intent.extras.toString())
                     startActivity(intent)
-                    finish()
-
                 } else {
+                    Log.e("SignupError",response.toString())
                     Toast.makeText(applicationContext, "Could not sign up, there was an error!", Toast.LENGTH_SHORT).show()
                 }
 
             }
 
-            override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
-                Log.i("Failure",t.message)
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                button.isClickable = true
+                Toast.makeText(applicationContext, "There was an error, please try again!", Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
-    private fun google_signup(id_token: String, is_vendor: String){
-        var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        val call: Call<LoginResponse> = apiinterface.google_signup(id_token, is_vendor="")
+    private fun googleSignup(id_token: String){
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        val call: Call<LoginResponse> = apiInterface.googleSignup(id_token, is_vendor="")
 
         Log.w("token", id_token)
         Log.w("request", call.request().toString())
@@ -199,11 +204,8 @@ class SignUpActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
-
-                Log.i("Failure", t.message)
-
+                Toast.makeText(applicationContext, "Could not sign up, there was an error!", Toast.LENGTH_SHORT).show()
             }
-
 
         })
     }
