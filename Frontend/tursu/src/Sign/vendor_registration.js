@@ -2,6 +2,15 @@ import React, { Component} from 'react';
 import "./sign_components.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import GoogleLogin from "react-google-login";
+
+const clientId = '872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com';
+
+const responseGoogleFailure = response => {
+    console.log(response)
+    console.log("FAILURE")
+    //alert("There has been an error with the Google Sign In")
+}
 
 export default class Vendor extends Component {
     constructor(props) {
@@ -80,6 +89,38 @@ export default class Vendor extends Component {
         }
         //thanks to: https://stackoverflow.com/questions/50547523/how-can-i-use-javascript-to-test-for-password-strength-in-a-way-that-returns-the
     }
+    responseGoogleSuccess = response => {
+        console.log("here i come")
+        console.log(response)
+        console.log(response.tokenId)
+        const formData = new FormData();
+        formData.append("is_vendor", "1")
+        formData.append("tokenId", response.tokenId)
+        formData.append("IBAN", "TR730006271333541288459635")
+        formData.append("latitude", "40.095397")
+        formData.append("longitude", "31.229421")
+        formData.append("city", "Istanbul/Turkey")
+
+        axios.post('http://3.232.20.250/user/signup/google', formData)
+            .then(res =>{
+                console.log(res);
+                console.log(res.data);
+                window.sessionStorage.setItem("authToken", res.data.auth_token);
+                alert ("You have successfully signed up! Please sign in.");
+                this.props.login()
+
+            })
+            .catch(error =>{
+                if (error.response){
+                    if (error.response.status == 400){
+                        alert ("You have already signed up using Google. Please Sign In.");
+                    }
+                    else{
+                        alert ("There has been an error. Please try again.");
+                    }
+                }
+            })
+    }
     render() {
 
             return(
@@ -108,6 +149,16 @@ export default class Vendor extends Component {
 
                         <button type="submit" className="tursu_button">Sign Up</button>
                     </form>
+                    <br/>
+                    <div>
+                        <GoogleLogin
+                            clientId='872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com'
+                            buttonText='Sign Up with Google'
+                            onSuccess={this.responseGoogleSuccess}
+                            onFailure={responseGoogleFailure}
+                            cookiePolicy={'single_host_origin'}
+                        />
+                    </div>
 
                 </div>
             )
