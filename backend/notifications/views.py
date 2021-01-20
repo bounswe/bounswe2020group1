@@ -54,16 +54,20 @@ def set_read(request):
     return JsonResponse({}, safe=False)
 
 
-
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
 @api_view(['GET'])
 def get_alerts(request):
-    """Gets all active alerts"""
+    """Gets all active alerts, If product_id is given, returns corresponding ones"""
     registered_user = get_registered_user_from_request(request)
     if registered_user is None:
         return HttpResponse("Non existing user", status=401)
-    alerts = Alert.objects.filter(Q(user=registered_user))
+    if "product_id" in request.GET:
+        product_id = request.GET["product_id"]
+        product = Product.objects.filter(Q(id=product_id)).first()
+        alerts = Alert.objects.filter(Q(user=registered_user, product=product))
+    else:
+        alerts = Alert.objects.filter(Q(user=registered_user))
     alerts_list = []
     for alert in alerts:
         alerts_list.append({
