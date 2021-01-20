@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -70,6 +71,15 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
             activity?.finish()
 
+        }
+        val lastNameTitle: TextView = root!!.findViewById(R.id.lastName) as TextView
+        val lastNameEditButton: ImageView = root!!.findViewById(R.id.surnameEdit) as ImageView
+
+        if(user_type=="customer"){
+        }
+        else{
+            lastNameTitle.isVisible=false
+            lastNameEditButton.isVisible=false
         }
 
         return root
