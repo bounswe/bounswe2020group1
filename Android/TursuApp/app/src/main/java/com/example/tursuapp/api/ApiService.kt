@@ -2,6 +2,7 @@ package com.example.tursuapp.api
 
 import com.example.tursuapp.api.responses.*
 import okhttp3.MultipartBody
+import retrofit2.http.Multipart;
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -129,7 +130,7 @@ interface ApiService {
 
     @POST("/order/create_orders/")
     fun createOrders(@Header("Authorization") auth_token: String):Call<CreateOrderResponse>
-  
+
     @GET("/vendorpage")
     fun getProductsOfVendor(@Header("Authorization") token: String):Call<VendorDataResponse>
 
@@ -148,7 +149,7 @@ interface ApiService {
                       @Field("stock") stock: Int,
                       @Field("price") price: Float,
                       @Field("photo") photo: String): Call<ResponseBody>
-                    //image file @multipart
+    //image file @multipart
 
     @FormUrlEncoded
     @POST("/product/add/")
@@ -163,7 +164,7 @@ interface ApiService {
 
     @GET("/recommendation/recommendation_pack")
     fun getRecommendedProducts(@Header("Authorization") token: String): Call<RecommendationPackResponse>
-  
+
     @FormUrlEncoded
     @POST("/comment/")
     fun addComment(@Header("Authorization") token: String,
@@ -171,18 +172,21 @@ interface ApiService {
                    @Field("text") text: String,
                    @Field("rating") rating: Int): Call<ResponseBody>
 
-   @Multipart
-   @POST("/product/add/")
-   fun addProductWithPhoto(@Header("Authorization") token: String,
-                  @Part("name") name: String,
-                  @Part("category") category: String,
-                  @Part("description") description: String,
-                  @Part("brand") brand: String,
-                  @Part("stock") stock: Int,
-                  @Part("price") price: Float,
-                  @Part photo: MultipartBody.Part) : Call<ResponseBody>
+
+    @POST("/product/add/")
+    @Multipart
+    fun addProductWithPhoto(@Header("Authorization") token: String,
+                            @Part("name") name: RequestBody ,
+                            @Part("category") category: RequestBody ,
+                            @Part("description") description: RequestBody ,
+                            @Part("brand") brand: RequestBody ,
+                            @Part("stock") stock: RequestBody ,
+                            @Part("price") price: RequestBody ,
+                            @Part photo: MultipartBody.Part
+    ) : Call<ResponseBody>
 
 
 
 
 }
+

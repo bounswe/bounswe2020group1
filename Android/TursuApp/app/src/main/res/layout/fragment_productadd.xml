@@ -158,7 +158,7 @@
 
                 <EditText
                     android:id="@+id/addProduct_stock"
-                    android:layout_width="match_parent"
+                    android:layout_width="90dp"
                     android:layout_height="match_parent"
                     android:background="@color/white"
                     android:ems="10"
@@ -166,6 +166,13 @@
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
                     android:textColorHint="#7777" />
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -180,7 +187,7 @@
 
                 <EditText
                     android:id="@+id/addProduct_price"
-                    android:layout_width="match_parent"
+                    android:layout_width="90dp"
                     android:layout_height="match_parent"
                     android:background="@color/white"
                     android:ems="10"
@@ -188,6 +195,18 @@
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
                     android:textColorHint="#7777" />
+
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:text="TL"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="#EDEDED"
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <Button
