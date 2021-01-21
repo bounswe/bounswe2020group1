@@ -74,7 +74,7 @@ class MessageFlowAdapterForVendor(context: Context, private var flows: List<Cust
         val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val orderView = inflator.inflate(R.layout.message_flow_item_vendor, null)
         if(flows[position].type=="admin"){
-            orderView.findViewById<TextView>(R.id.context_msg).text = "About: "+flows[position].context + " " + flows[position].id
+            orderView.findViewById<TextView>(R.id.context_msg).text = "About: "+flows[position].context + " " + flows[position].object_id
             orderView.findViewById<TextView>(R.id.messageTo_vendor).text = "Admin"
             orderView.findViewById<TextView>(R.id.type_msg).text = flows[position].type
         }

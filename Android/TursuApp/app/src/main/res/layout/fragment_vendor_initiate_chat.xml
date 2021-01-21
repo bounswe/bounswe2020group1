@@ -8,23 +8,6 @@
     android:layout_gravity="center"
     android:background="#FFFFFF">
 
-    <EditText
-        android:id="@+id/object_id"
-        android:layout_width="210dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:fontFamily="@font/poppins"
-        android:hint="Please type Order or Product ID"
-        android:inputType="number"
-        android:textColorHighlight="#FFFFFF"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/radioButtonGroup"
-        app:layout_constraintVertical_bias="0.037" />
-
     <RadioGroup
         android:id="@+id/radioButtonGroup"
         android:layout_width="match_parent"
@@ -57,21 +40,6 @@
             app:layout_constraintTop_toBottomOf="@+id/radioButtonProduct" />
     </RadioGroup>
 
-    <TextView
-        android:id="@+id/start_chat_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:background="@color/purple_700"
-        android:fontFamily="@font/poppins"
-        android:padding="10dp"
-        android:text="Start chat with admin"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/object_id" />
-
 
     <TextView
         android:id="@+id/textView14"
@@ -84,4 +52,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/start_chat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="54dp"
+        android:background="@color/purple_700"
+        android:fontFamily="@font/poppins"
+        android:padding="10dp"
+        android:text="Start chat with admin"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButtonGroup"
+        app:layout_constraintVertical_bias="0.946" />
+
+    <ListView
+        android:id="@+id/object_id"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/start_chat_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButtonGroup" />
 </androidx.constraintlayout.widget.ConstraintLayout>
