@@ -40,6 +40,7 @@ import PropTypes from 'prop-types';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import SmsIcon from '@material-ui/icons/Sms';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import DnsIcon from '@material-ui/icons/Dns';
 
 
 /**
@@ -475,6 +476,14 @@ function UserDropDown(){
                             <SupervisorAccountIcon/>
                         </ListItemIcon>
                         <Typography>Admin Panel</Typography>
+                    </MenuItem>
+                </Link>}
+                {window.sessionStorage.getItem("user_type")==="admin" && <Link to={"/activityStream"}>
+                    <MenuItem >
+                        <ListItemIcon>
+                            <DnsIcon/>
+                        </ListItemIcon>
+                        <Typography>Act. Stream</Typography>
                     </MenuItem>
                 </Link>}
                 <Link to={"/"}>
