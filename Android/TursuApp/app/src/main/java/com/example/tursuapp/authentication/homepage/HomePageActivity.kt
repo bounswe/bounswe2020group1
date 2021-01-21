@@ -2,6 +2,7 @@ package com.example.tursuapp.authentication.homepage
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -28,6 +29,7 @@ import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
 import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartFragment
+import com.example.tursuapp.authentication.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
@@ -189,6 +191,45 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                     4 -> displayFragment(R.id.nav_home, 1, "Sports", null)
                 }
             }
+            if(userType=="vendor"){
+                if (groupPosition == 4) {
+                     val pref = applicationContext?.getSharedPreferences("UserPref", 0)
+                     if (pref != null) {
+                         with(pref.edit()) {
+                             remove("first_name")
+                             remove("last_name")
+                             remove("user_type")
+                             remove("auth_token")
+                             putBoolean("logged_in", false)
+                             apply()
+                         }
+                     }
+                     val intent = Intent(applicationContext, LoginActivity::class.java)
+                     startActivity(intent)
+                     finish()
+
+                }
+            }
+            if(userType=="customer"){
+                if (groupPosition == 3) {
+                     val pref = applicationContext?.getSharedPreferences("UserPref", 0)
+                     if (pref != null) {
+                         with(pref.edit()) {
+                             remove("first_name")
+                             remove("last_name")
+                             remove("user_type")
+                             remove("auth_token")
+                             putBoolean("logged_in", false)
+                             apply()
+                         }
+                     }
+                     val intent = Intent(applicationContext, LoginActivity::class.java)
+                     startActivity(intent)
+                   finish()
+
+                }
+            }
+
 
             false
         }
@@ -505,6 +546,10 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         if(userType=="vendor"){
             (listDataHeader as ArrayList<String>).add("Contact Admin")
         }
+
+        (listDataHeader as ArrayList<String>).add("Log Out")
+
+
         // Adding child data
         val categoryNames: MutableList<String> = ArrayList()
 
@@ -525,8 +570,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         listDataChild!![(listDataHeader as ArrayList<String>)[0]] = accountSubItems
         listDataChild!![(listDataHeader as ArrayList<String>)[1]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[2]] = categoryNames
+        listDataChild!![(listDataHeader as ArrayList<String>)[3]] = ArrayList()
         if(userType=="vendor"){
-            listDataChild!![(listDataHeader as ArrayList<String>)[3]] = ArrayList()
+            listDataChild!![(listDataHeader as ArrayList<String>)[4]] = ArrayList()
         }
         if (!(userType == "vendor" || userType == "customer")){
             (listDataHeader as ArrayList<String>).remove("My Account")
