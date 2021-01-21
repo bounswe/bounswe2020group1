@@ -121,19 +121,19 @@ class PaymentFragment : Fragment() {
         view.findViewById<Button>(R.id.confirmandpay).setOnClickListener {
 
             if (view.findViewById<TextInputEditText>(R.id.nameinputtext).text.toString() == "") {
-                Toast.makeText(context, "Lütfen geçerli bir isim giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid name.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.cardnumberinputtext).text.toString().length != 19|| !isAllNumber((view.findViewById<TextInputEditText>(R.id.cardnumberinputtext).text.toString()))) {
-                Toast.makeText(context, "Lütfen geçerli bir kart numarası giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid card number.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.cvcinputtext).text.toString().length != 3 || !isAllNumber(view.findViewById<TextInputEditText>(R.id.cvcinputtext).text.toString())) {
-                Toast.makeText(context, "Lütfen geçerli bir CVC numarası giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid CVC number.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString()==""||view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString().length != 5 ||!isLegidDate(view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString())) {
-                Toast.makeText(context, "Lütfen geçerli bir tarih giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid expire date.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.addressinputtext).text.toString() == "") {
-                Toast.makeText(context, "Lütfen geçerli bir adres giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid address.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.cityinputtext).text.toString() == "") {
-                Toast.makeText(context, "Lütfen geçerli bir şehir giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid city.", Toast.LENGTH_SHORT).show()
             } else if (!view.findViewById<CheckBox>(R.id.checkBox).isChecked) {
-                Toast.makeText(context, "Lütfen koşulları kabul ediniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please accept term and conditions.", Toast.LENGTH_SHORT).show()
             } else {
                 createOrder()
 
