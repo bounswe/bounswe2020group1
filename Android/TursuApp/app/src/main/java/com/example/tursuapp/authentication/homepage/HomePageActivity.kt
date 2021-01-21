@@ -1,6 +1,7 @@
 package com.example.tursuapp.authentication.homepage
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -218,6 +219,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 .commit()
         this.drawer.closeDrawer(GravityCompat.START)
     }
+
     private fun setSearchFunction(){
         this.findViewById<Button>(R.id.search_button).setOnClickListener {
             val editText: EditText? = findViewById(R.id.editMobileNo)
@@ -235,7 +237,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             lateinit var fragment: Fragment
             fragment = ShoppingCartFragment()
 
-            supportFragmentManager.beginTransaction()
+            supportFragmentManager.beginTransaction().addToBackStack(null)
                     .replace(R.id.nav_host_fragment, fragment)
                     .commit()
             this.drawer.closeDrawer(GravityCompat.START)
@@ -355,12 +357,26 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         })
     }
     override fun onBackPressed() {
-        val count = fragmentManager.backStackEntryCount
+
+        val count = supportFragmentManager.backStackEntryCount
         if (count == 0) {
-            super.onBackPressed()
+            //super.onBackPressed()
+            AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Closing Activity")
+                    .setMessage("Are you sure you want to exit Tursu?")
+                    .setPositiveButton("Yes") { dialog, which -> super.onBackPressed() }
+                    .setNegativeButton("No", null)
+                    .show()
+
+
+//you can add your alertdialog code here and after pressing positive button of alertdialog you can call super.onBackPressed()
         } else {
-            fragmentManager.popBackStack()
+            supportFragmentManager.popBackStack()
         }
+
+
+
     }
     fun setVendorCheckBoxes(view: View) {
         linearVendors=view.findViewById(R.id.linear_vendors) as LinearLayout
@@ -370,7 +386,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 checkboxVendors.add(CheckBox(this))
                 checkboxVendors.last().text=vendor
                 checkboxVendors.last().isChecked=false
-                linearVendors.addView( checkboxVendors.last())
+                linearVendors.addView(checkboxVendors.last())
             }
         }
     }
@@ -392,7 +408,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 checkboxBrands.add(CheckBox(this))
                 checkboxBrands.last().text=brand
                 checkboxBrands.last().isChecked=false
-                linearBrands.addView( checkboxBrands.last())
+                linearBrands.addView(checkboxBrands.last())
             }
         }
     }
@@ -414,7 +430,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 checkboxCategories.add(CheckBox(this))
                 checkboxCategories.last().text=category
                 checkboxCategories.last().isChecked=false
-                linearCategories.addView( checkboxCategories.last())
+                linearCategories.addView(checkboxCategories.last())
             }
         }
     }

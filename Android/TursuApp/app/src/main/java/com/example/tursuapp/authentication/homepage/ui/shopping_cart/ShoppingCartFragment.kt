@@ -108,11 +108,7 @@ class ShoppingCartFragment : Fragment() {
 
     private fun setButtonVisibilities() {
         val filterImage = activity?.findViewById<ImageView>(R.id.filter_image)
-        val searchBar = activity?.findViewById<EditText>(R.id.editMobileNo)
-        val searchButton = activity?.findViewById<Button>(R.id.search_button)
         //listing all products
         filterImage!!.visibility = View.INVISIBLE
-        searchBar!!.visibility = View.INVISIBLE
-        searchButton!!.visibility = View.INVISIBLE
     }
 }

@@ -3,6 +3,7 @@ package com.example.tursuapp.authentication.homepage.ui.productpage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.Comments
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.profile.PublicVendorFragment
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
@@ -47,8 +49,6 @@ class ProductPageFragment : Fragment() {
         auth_token = pref?.getString("auth_token", null).toString()
         user_type = pref?.getString("user_type", null).toString()
         activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
-        activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
-        activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
         productPageViewModel = ViewModelProvider(this).get(ProductPageModel::class.java)
         val root = inflater.inflate(R.layout.fragment_productpage, container, false)
         if(user_type=="customer") {
@@ -75,6 +75,7 @@ class ProductPageFragment : Fragment() {
 
         return root
     }
+
     fun setVisibilities(view: View){
         val addToCart = view.findViewById<CardView>(R.id.addCart)
         val addToList = view.findViewById<CardView>(R.id.cardView3)
