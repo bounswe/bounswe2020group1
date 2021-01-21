@@ -17,15 +17,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tursuapp.R
-import com.example.tursuapp.adapter.ProductAdapter
-import com.example.tursuapp.adapter.RecommendationProductAdapter
-import com.example.tursuapp.adapter.VendorAdapter
-import com.example.tursuapp.adapter.VendorProductAdapter
+import com.example.tursuapp.adapter.*
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.*
 import com.example.tursuapp.authentication.homepage.HomePageActivity
-import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
 import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
@@ -57,6 +53,7 @@ class HomeFragment : Fragment() {
     lateinit var user_type:String
     var productList = ArrayList<ProductResponse>()
     var allLists = listOf<String>()
+    lateinit var recyclerView:RecyclerView
     var vendorList = ArrayList<VendorResponse>()
     private var filters: HashMap<String, String>? = null
     private var type = 0
@@ -68,7 +65,7 @@ class HomeFragment : Fragment() {
     private val filterDictionary = mapOf("Bestsellers" to "bestseller", "Newest" to "newest", "Ascending Price" to "priceAsc", "Descending Price" to "priceDesc", "Number of Comments" to "numComments")
     var vendorProductList = ArrayList<VendorProductLists>()
     lateinit var gridView:GridView
-    private lateinit var recommendationView:ScrollView
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setFilterFunction()
@@ -92,17 +89,6 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    fun makeHeadingsVisible(view:View,isRecommended:Boolean){
-        if(isRecommended){
-            view.findViewById<TextView>(R.id.recommendedProductsText).visibility = View.VISIBLE
-        }
-        else{
-            view.findViewById<TextView>(R.id.recommendedProductsText).visibility = View.GONE
-        }
-        view.findViewById<TextView>(R.id.bestsellerProductsText).visibility = View.VISIBLE
-        view.findViewById<TextView>(R.id.topratedProductsText).visibility = View.VISIBLE
-        view.findViewById<TextView>(R.id.newestProductsText).visibility = View.VISIBLE
-    }
     private fun setButtonVisibilities(type: Int) {
         val filterImage = activity?.findViewById<ImageView>(R.id.filter_image)
         val searchBar = activity?.findViewById<EditText>(R.id.editMobileNo)
@@ -139,14 +125,14 @@ class HomeFragment : Fragment() {
     }
     fun disableRecommendationEnableGrid(){
         gridView.visibility = View.VISIBLE
-        recommendationView.visibility = View.GONE
+        recyclerView.visibility = View.GONE
     }
     @SuppressLint("InflateParams")
     private fun showPopupWindowForLists(view: View) {
         Log.i("showPopup:", "here")
         //Create a View object yourself through inflater
         val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView: View = inflater.inflate(R.layout.h_lists_popup_layout, null)
+        val popupView: View = inflater.inflate(R.layout.fragment_shopping_lists, null)
         //Specify the length and width through constants
         val width = LinearLayout.LayoutParams.MATCH_PARENT
         val height = LinearLayout.LayoutParams.MATCH_PARENT
@@ -622,59 +608,86 @@ class HomeFragment : Fragment() {
     }
     private fun enableRecommendationDisableGrid(){
         gridView.visibility = View.GONE
-        recommendationView.visibility = View.VISIBLE
+        recyclerView.visibility = View.VISIBLE
     }
+
     private fun listRecommendedProducts(){
+        /*
         val recommRecyclerView = view?.findViewById(R.id.recommRecylerView) as RecyclerView
         val bestsellerRecyclerView = view?.findViewById(R.id.bestsellerRecyclerView) as RecyclerView
         val topratedRecyclerView = view?.findViewById(R.id.topRatedRecyclerView) as RecyclerView
         val newestRecyclerView = view?.findViewById(R.id.newestRecyclerView) as RecyclerView
+        recommRecyclerView.addOnScrollListener(scrollListener)
+        bestsellerRecyclerView.addOnScrollListener(scrollListener)
+        newestRecyclerView.addOnScrollListener(scrollListener)
+        topratedRecyclerView.addOnScrollListener(scrollListener)
+        recommRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        topratedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        newestRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        bestsellerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        val bestsellerAdapter = RecommendationProductAdapter(bestsellerList, requireContext(),this@HomeFragment)
+        val topRatedAdapter = RecommendationProductAdapter(topratedList, requireContext(),this@HomeFragment)
+        val newstAdapter = RecommendationProductAdapter(newestList, requireContext(),this@HomeFragment)
+        val recommAdapter = RecommendationProductAdapter(recommList, requireContext(),this@HomeFragment)
+        recommRecyclerView.adapter = recommAdapter
+        topratedRecyclerView.adapter = topRatedAdapter
+        newestRecyclerView.adapter = newstAdapter
+        bestsellerRecyclerView.adapter = bestsellerAdapter
+        */
+
+        var bestsellerList = arrayListOf<ProductResponse>()
+        var topratedList = arrayListOf<ProductResponse>()
+        var newestList = arrayListOf<ProductResponse>()
+        var recommList = arrayListOf<ProductResponse>()
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         enableRecommendationDisableGrid()
+
+        val parentList = mutableListOf<ParentModel>()
         apiinterface.getRecommendedProducts(auth_token).enqueue(object : retrofit2.Callback<RecommendationPackResponse> {
+
             override fun onFailure(p0: Call<RecommendationPackResponse>?, p1: Throwable?) {
                 Log.i("MainFragment", "error" + p1?.message.toString())
             }
 
+            @SuppressLint("WrongConstant")
             override fun onResponse(
                 p0: Call<RecommendationPackResponse>?,
                 response: Response<RecommendationPackResponse>?
             ) {
+
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
-                    val recommList = ArrayList(response.body()?.recommended!!)
-                    var isRecommended = true
-                    if(recommList.size==0){
-                        isRecommended = false
-                    }
-                    makeHeadingsVisible(view!!,isRecommended)
-                    val bestsellerList = ArrayList(response.body()?.bestseller!!)
-                    val topratedList = ArrayList(response.body()?.toprated!!)
-                    val newestList = ArrayList(response.body()?.newest!!)
-                    recommRecyclerView.apply {
-                        recommRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        recommRecyclerView.adapter = RecommendationProductAdapter(recommList, context,this@HomeFragment)
-                    }
-                    topratedRecyclerView.apply {
-                        topratedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        topratedRecyclerView.adapter = RecommendationProductAdapter(topratedList, context,this@HomeFragment)
-                    }
-                    newestRecyclerView.apply {
-                        newestRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        newestRecyclerView.adapter = RecommendationProductAdapter(newestList, context,this@HomeFragment)
-                    }
-                    bestsellerRecyclerView.apply {
-                        bestsellerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        bestsellerRecyclerView.adapter = RecommendationProductAdapter(bestsellerList, context,this@HomeFragment)
+                    val body = response.body()
+                    if (body != null) {
+                        if (body.recommended.isNotEmpty()) {
+                            val parent1 = ParentModel(title = "Recommended Products", ArrayList(response.body()?.recommended!!))
+                            parentList.add(parent1)
+                        }
+                        val parent2 = ParentModel(title = "Bestsellers", ArrayList(response.body()?.bestseller!!))
+                        val parent3 = ParentModel(title = "Top Rated Products", ArrayList(response.body()?.toprated!!))
+                        val parent4 = ParentModel(title = "Newest Arrivals", ArrayList(response.body()?.newest!!))
+
+                        parentList.add(parent2)
+                        parentList.add(parent3)
+                        parentList.add(parent4)
+                        recyclerView.apply {
+                            layoutManager = LinearLayoutManager(context,
+                                    LinearLayout.VERTICAL, false)
+                            adapter = ParentAdapter(context, parentList)
+                        }
+                        /*
+                        var isRecommended = true
+                        if(recommList.size==0){
+                            isRecommended = false
+                        }
+
+                         */
+
                     }
                 }
-
             }
-
-
         })
-
-
     }
 
     private fun listAllProducts() {
@@ -723,7 +736,7 @@ class HomeFragment : Fragment() {
         btnProduct = view.findViewById(R.id.btn_product)
         btnVendor = view.findViewById(R.id.btn_vendor)
         gridView = view.findViewById(R.id.gridView)
-        recommendationView = view.findViewById(R.id.horizontalLists)
+        recyclerView = view.findViewById(R.id.rv_parent)
         toggleGroup.check(btnProduct.id)
         toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
@@ -775,3 +788,7 @@ class HomeFragment : Fragment() {
 
 }
 
+data class ParentModel (
+        val title : String = "",
+        val children : List<ProductResponse>
+)
