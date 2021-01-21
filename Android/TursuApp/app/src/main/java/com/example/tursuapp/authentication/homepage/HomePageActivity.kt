@@ -14,10 +14,11 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.tursuapp.R
+import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
 import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
@@ -192,7 +193,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
         expListView!!.setSelectedGroup(0)
     }
-    private fun displaySideMenuPages(fragmentName:String){
+    private fun displaySideMenuPages(fragmentName: String){
         lateinit var fragment: Fragment
         if(fragmentName == "Profile"){
             fragment = ProfileFragment()
@@ -262,7 +263,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val pref = getSharedPreferences("UserPref", 0)
-        userType = pref?.getString("user_type",null).toString()
+        userType = pref?.getString("user_type", null).toString()
         getAllBrands()
         getAllCategories()
         getAllVendors()
@@ -515,6 +516,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             (listDataHeader as ArrayList<String>).remove("My Account")
         }
         //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
+    }
+
+    fun switchContent(id: Int, fragment: Fragment) {
+        val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+        ft.replace(id, fragment, fragment.toString())
+        ft.addToBackStack(null)
+        ft.commit()
     }
     fun menuItemsForVendor():MutableList<String>{
         val accountSubItems: MutableList<String> = ArrayList()
