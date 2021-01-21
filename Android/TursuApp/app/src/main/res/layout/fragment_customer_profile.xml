@@ -106,22 +106,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:textSize="20dp"
+        android:paddingBottom="8dp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/firstName"
         app:layout_constraintStart_toEndOf="@+id/firstName"
         app:layout_constraintTop_toTopOf="@+id/firstName"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/lastNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:textSize="20dp"
+        android:layout_marginStart="40dp"
+        android:paddingBottom="8dp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/lastName"
         app:layout_constraintStart_toEndOf="@+id/lastName"
         app:layout_constraintTop_toTopOf="@+id/lastName"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/Email"
@@ -151,11 +153,12 @@
         android:id="@+id/emailView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:textSize="20dp"
+        android:layout_marginStart="24dp"
+        android:paddingBottom="8dp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/Email"
         app:layout_constraintStart_toEndOf="@+id/Email"
         app:layout_constraintTop_toTopOf="@+id/Email"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
