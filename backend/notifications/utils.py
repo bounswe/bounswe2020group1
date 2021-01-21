@@ -18,7 +18,6 @@ def get_notification_raw_data(notification_dict: dict):
     return json.dumps(notification_dict)
 
 def insert_notification(registered_user: RegisteredUser, type: int, raw_data: str):
-    print("anan yani neden save etmiyosun")
     notification = Notification.objects.create(user=registered_user, 
                                                type=type,
                                                raw_data=raw_data, 
