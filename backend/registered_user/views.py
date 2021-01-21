@@ -69,7 +69,7 @@ def login(request):
 def signup(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
-    email = request.POST.get('email')
+    email = request.POST.get('email').strip()
     first_name = request.POST.get('first_name')
     last_name = request.POST.get('last_name')
     is_vendor = request.POST.get('is_vendor')
