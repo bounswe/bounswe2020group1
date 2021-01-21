@@ -135,6 +135,7 @@ class VendorInitiateChatFragment : Fragment(){
                 ) {
                     if (response != null) {
                         orders = response.body()?.orders!!
+                        products = response.body()?.products!!
                         createOrderProductDict()
                         val orderList = mutableListOf<String>()
                         ordersDictionary.forEach{
