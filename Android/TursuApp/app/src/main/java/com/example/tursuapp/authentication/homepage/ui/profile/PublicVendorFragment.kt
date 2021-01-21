@@ -127,8 +127,8 @@ class PublicVendorFragment: Fragment()  {
                 Log.i("MainFragment", "inside onResponse")
                 if (response != null) {
                     val flows = ArrayList(response.body()!!)
-                    for(flow in flows){
-                        if(flow.vendor_name == vendor_name){
+                    for (flow in flows) {
+                        if (flow.vendor_name == vendor_name) {
                             val clickedId = flow.id
                             val bundle = Bundle()
                             bundle.putInt("flow_id", clickedId)
@@ -138,11 +138,12 @@ class PublicVendorFragment: Fragment()  {
                             val fragmentManager: FragmentManager? = fragmentManager
                             val fragmentTransaction: FragmentTransaction =
                                     fragmentManager!!.beginTransaction()
-                            .replace(R.id.nav_profile_detail_vendor, newFragment).addToBackStack(null)
+                                            .replace(R.id.nav_profile_detail_vendor, newFragment).addToBackStack(null)
                             fragmentTransaction.commit()
                         }
                     }
-
+                }
+            }
         })
     }
 

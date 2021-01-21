@@ -109,10 +109,10 @@ class ProductPageFragment : Fragment() {
         getDetails(id_str!!.toInt(), view)        
             
         if(user_type == "customer") {
-          view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
-              Log.i("stock:",product.stock.toString())
-              if(product.stock<=0) {
-                  Log.i("Stock Status:","Out of Stock")
+          view.findViewById<CardView>(R.id.addCart).setOnClickListener() {
+              Log.i("stock:", product.stock.toString())
+              if (product.stock <= 0) {
+                  Log.i("Stock Status:", "Out of Stock")
               } else {
                   var apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
                   val quantity = 1
@@ -140,6 +140,7 @@ class ProductPageFragment : Fragment() {
 
                   })
               }
+          }
         }
 
 
