@@ -67,6 +67,7 @@ class HomeFragment : Fragment() {
     lateinit var gridView:GridView
 
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setFilterFunction()
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
@@ -108,7 +109,7 @@ class HomeFragment : Fragment() {
             }
             //search screen
             2 -> {
-                filterImage!!.visibility = View.GONE
+                filterImage!!.visibility = View.VISIBLE
                 searchBar!!.visibility = View.VISIBLE
                 searchButton!!.visibility = View.VISIBLE
             }
@@ -169,9 +170,9 @@ class HomeFragment : Fragment() {
         //Create a View object yourself through inflater
         val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView: View = inflater.inflate(R.layout.filter_popup_layout, null)
-        (activity as HomePageActivity).setVendorRadioButtons(popupView)
-        (activity as HomePageActivity).setBrandRadioButtons(popupView)
-        (activity as HomePageActivity).setCategoryRadioButtons(popupView)
+        (activity as HomePageActivity).setVendorCheckBoxes(popupView)
+        (activity as HomePageActivity).setBrandCheckBoxes(popupView)
+        (activity as HomePageActivity).setCategoryCheckBoxes(popupView)
         (activity as HomePageActivity).setRatingRadioButtons(popupView)
         //Specify the length and width through constants
         val width = LinearLayout.LayoutParams.MATCH_PARENT
@@ -206,6 +207,71 @@ class HomeFragment : Fragment() {
             val radioButton = view.findViewById<RadioButton>(selectedId)
             filterDictionary[radioButton.text.toString()]?.let { filters?.put("sort_by", it) }
         }
+
+        val selectedVendors: MutableList<String> = mutableListOf<String>()
+        val selectedBrands: MutableList<String> = mutableListOf<String>()
+        val selectedCategories: MutableList<String> = mutableListOf<String>()
+        //get checked vendor names
+        for (vendor in (activity as HomePageActivity).checkboxVendors)  {
+            if (vendor.isChecked){
+                selectedVendors.add(vendor.text.toString())
+            }
+        }
+        //Log.i("selectedVendors:",selectedVendors.toString())
+
+        //get checked brand names
+        for (brand in (activity as HomePageActivity).checkboxBrands)  {
+            if (brand.isChecked){
+                selectedBrands.add(brand.text.toString())
+            }
+        }
+        //Log.i("selectedBrands:",selectedBrands.toString())
+
+        //get checked category names
+        for (category in (activity as HomePageActivity).checkboxCategories)  {
+            if (category.isChecked){
+                selectedCategories.add(category.text.toString())
+            }
+        }
+        //Log.i("selectedCategories:",selectedCategories.toString())
+
+        if(selectedVendors.isNotEmpty()) {
+            var concatenateVendors = ""
+            for (vendor in selectedVendors) {
+                concatenateVendors += "$vendor|" //concatenate items with |
+            }
+            val concatenatedVendors = concatenateVendors.subSequence(0, (concatenateVendors.length - 1)).toString() //get rid of the last char(|)
+            //Log.i("concatenatedVendors:", concatenatedVendors)
+            filters?.set("fvendor_name", concatenatedVendors)
+        }else if(selectedVendors.size==1){ //selected only one vendor
+            filters?.set("fvendor_name", selectedVendors[0])
+        }
+
+        if(selectedBrands.isNotEmpty()) {
+            var concatenateBrands = ""
+            for (brand in selectedBrands) {
+                concatenateBrands += "$brand|" //concatenate items with |
+            }
+            val concatenatedBrands = concatenateBrands.subSequence(0, (concatenateBrands.length - 1)).toString() //get rid of the last char(|)
+            //Log.i("concatenatedBrands:", concatenatedBrands)
+            filters?.set("fbrand", concatenatedBrands)
+        }else if(selectedBrands.size==1){ //selected only one brand
+            filters?.set("fbrand", selectedBrands[0])
+        }
+
+        if(selectedCategories.isNotEmpty()) {
+            var concatenateCategories = ""
+            for (category in selectedCategories) {
+                concatenateCategories += "$category|" //concatenate items with |
+            }
+            val concatenatedCategories = concatenateCategories.subSequence(0, (concatenateCategories.length - 1)).toString() //get rid of the last char(|)
+            //Log.i("concatenatedCategories:", concatenatedCategories)
+            filters?.set("fcategory", concatenatedCategories)
+        }else if(selectedCategories.size==1){ //selected only one category
+            filters?.set("fcategory", selectedCategories[0])
+        }
+
+        /*
         val selectedId2 = view.findViewById<RadioGroup>(R.id.radioGroupVendors).checkedRadioButtonId
         if (selectedId2 != -1) {
             val radioButton2 = view.findViewById<RadioButton>(selectedId2)
@@ -221,6 +287,7 @@ class HomeFragment : Fragment() {
             val radioButton4 = view.findViewById<RadioButton>(selectedId4)
             filters?.set("fbrand", radioButton4.text.toString())
         }
+         */
         val selectedId5 = view.findViewById<RadioGroup>(R.id.radioGroupRating).checkedRadioButtonId
         if (selectedId5 != -1) {
             val radioButton5 = view.findViewById<RadioButton>(selectedId5)
@@ -287,6 +354,7 @@ class HomeFragment : Fragment() {
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         filters!!["search_type"] = searchType
         filters!!["search_string"] = search_string
+        Log.i("filter: ",filters!!.toString())
         apiinterface.getSearchedProducts(filters!!).enqueue(object : retrofit2.Callback<List<ProductResponse>> {
             override fun onFailure(p0: Call<List<ProductResponse>>?, p1: Throwable?) {
                 Log.i("SearchFragment", "error" + p1?.message.toString())

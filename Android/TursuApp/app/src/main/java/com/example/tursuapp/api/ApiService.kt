@@ -168,7 +168,8 @@ interface ApiService {
     fun addComment(@Header("Authorization") token: String,
                    @Field("product_id") product_id: Int,
                    @Field("text") text:String,
-                   @Field("rating") rating:Int): Call<ResponseBody>
+                   @Field("product_rating") product_rating:Int,
+                   @Field("vendor_rating") vendor_rating:Int): Call<ResponseBody>
 
     @GET("/message/chat/ofcustomer/")
     fun getMessagesFromSelectedFlow(@Header("Authorization") token :String, @Query("flow_id") flow_id:Int): Call<List<SingleMsgResponse>>
