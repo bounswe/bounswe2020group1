@@ -13,11 +13,15 @@ export default class Acknowledgements extends Component {
 
     render() {
         return(
-            <div className="sign-component">
-                <div className="customerRegistration">
+            <div className="third-component">
+                <div className="acknowledgements">
                     <img src={logo} alt="Tursu Logo"></img>
                     <h1>Third Party Software Acknowledgements of Turşu</h1>
-
+                    <ul className="lst">
+                        <li><a href="https://github.com/axios/axios">Axios</a></li>
+                        <li><a href="https://material-ui.com/">Material UI</a></li>
+                        <li><a href="https://www.datamuse.com/api/">Datamuse API</a></li>
+                    </ul>
                 </div>
             </div>
         )
