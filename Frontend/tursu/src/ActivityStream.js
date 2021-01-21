@@ -74,7 +74,7 @@ class ActivityStream extends React.Component{
             console.log( JSON.stringify(res.data, null, 2))
             this.setState({stream: JSON.stringify(res.data, null, 2)})
             document.getElementById("act_stream").innerHTML = '<pre style="color:green; font-size: 15px; font-weight: bold;">' + JSON.stringify(res.data, undefined, 1) +'</pre>'
-
+            //reference: https://www.geeksforgeeks.org/how-to-pretty-print-json-string-in-javascript/
         })
         .catch(error =>{
             if (error.response){
