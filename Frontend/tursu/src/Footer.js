@@ -3,7 +3,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-
+import {Link, Redirect} from "react-router-dom";
 
 const footerStyles = makeStyles((theme)=>({
     root:{
@@ -61,8 +61,14 @@ export default function Footer(props){
                     </CustomTypography>
                     <CustomTypography>
                         It is a school project that is developed for <br/>
-                        CMPE 352 & 451 courses, at Bogazici University.
+                        CMPE 352 & 451 courses, at Bogazici University.<br/><br/>
                     </CustomTypography>
+                    <Link to='/acknowledgement'>
+                        <CustomTypography>
+                            Third Party Software Acknowledgements
+                        </CustomTypography>
+                    </Link>
+
                 </Grid>
             </Grid>
         </div>
