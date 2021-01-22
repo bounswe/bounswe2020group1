@@ -64,6 +64,27 @@
     display: inline;
     margin: 5px;
 }
+.acknowledgements {
+    height: 550px;
+    width: 600px;
+    background: #b2fab4;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.third-component {
+    height: 100vh;
+    background: #519657;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.lst {
+    margin-bottom: 100px
+}
 .messages {
     margin: 5px
 }
