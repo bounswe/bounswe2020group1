@@ -42,6 +42,7 @@ import SmsIcon from '@material-ui/icons/Sms';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import axios from "axios";
 import DnsIcon from '@material-ui/icons/Dns';
+import Axios from "axios";
 
 
 /**
@@ -175,6 +176,7 @@ function SimpleDialog(props) {
     const classes = useStyles();
     const { onClose, selectedValue, open } = props;
     const [updated, setUpdated] = React.useState(false);
+    const [rawNotifications, setRawNotifications] = React.useState([])
 
     useEffect(() => {
         axios.get("http://3.232.20.250/notifications/get_notifications",{
@@ -185,6 +187,8 @@ function SimpleDialog(props) {
             fillNotifications(res.data)
             console.log("NOTIFICATIONS")
             console.log(res.data)
+            setRawNotifications(res.data)
+            console.log("raw: ", rawNotifications.length)
         })
     }, [])
 
@@ -193,6 +197,8 @@ function SimpleDialog(props) {
         notifications = []
         for(const item of data)
         {
+            if(item.read) continue;
+
             let text = "";
             switch (item.type) {
                 case 1:
@@ -221,7 +227,24 @@ function SimpleDialog(props) {
             }
         }
     }
-    const handleClose = () => {
+
+    function handleClose(){
+        for(let notification of rawNotifications)
+        {
+            const formData = new FormData();
+            formData.append("id", notification.id);
+            Axios.post('http://3.232.20.250/notifications/set_read',
+                formData,{
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res.status)
+                console.log("Notification: ", notification.id, " is set as read.")
+            })
+        }
+        notifications = [];
         onClose(selectedValue);
     };
 
