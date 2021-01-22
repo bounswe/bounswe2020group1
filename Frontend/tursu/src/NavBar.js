@@ -132,7 +132,7 @@ const useStyles = makeStyles((theme)=> ({
         left: "85%"
     },
     cart:{
-        position: "absolute",
+        //position: "absolute",
         right: "180px",
     },
     avatar: {
@@ -164,7 +164,7 @@ const theme = createMuiTheme({
     }
 })
 
-
+// TODO: I couldn't find why it is global.
 let notifications = [];
 
 /*
