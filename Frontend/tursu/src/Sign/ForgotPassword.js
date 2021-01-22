@@ -4,6 +4,7 @@ import logo from '../rsz_11logo.png';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import axios from 'axios';
+import Typography from "@material-ui/core/Typography";
 
 export default class ForgotPassword extends Component {
     constructor(props) {
@@ -35,7 +36,7 @@ export default class ForgotPassword extends Component {
         return(
             <div className="login">
                 <img src={logo} alt="Tursu Logo"></img>
-                <h1>Reset Password</h1>
+                <Typography variant={"h4"}>Reset Password</Typography>
                 <form onSubmit={this.handleSubmit}>
 
                     <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
