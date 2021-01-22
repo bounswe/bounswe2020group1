@@ -10,7 +10,6 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tursuapp.MainActivity
 import com.example.tursuapp.R
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
@@ -18,8 +17,8 @@ import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFr
 import com.squareup.picasso.Picasso
 
 
-class ChildAdapter(val mContext: Context, private val children: List<ProductResponse>)
-    : RecyclerView.Adapter<ChildAdapter.ViewHolder>(){
+class SingleProductAdapter(val mContext: Context, private val children: List<ProductResponse>)
+    : RecyclerView.Adapter<SingleProductAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): ViewHolder {
@@ -51,11 +50,7 @@ class ChildAdapter(val mContext: Context, private val children: List<ProductResp
             holder.product_img.setImageResource(R.drawable.ic_menu_camera)
         }
         holder.itemView.setOnClickListener {
-            val clickedId = holder.product_id.text
-            val bundle = Bundle()
-            bundle.putString("id", clickedId.toString())
-            val newFragment = ProductPageFragment()
-            newFragment.arguments = bundle
+
             fragmentJump(product);
             /*
             .activity?.supportFragmentManager?.beginTransaction()
@@ -70,7 +65,7 @@ class ChildAdapter(val mContext: Context, private val children: List<ProductResp
         bundle.putString("id", mItemSelected.id.toString())
         val newFragment = ProductPageFragment()
         newFragment.arguments = bundle
-        switchContent(R.id.fragment_home, newFragment)
+        switchContent(R.id.nav_host_fragment, newFragment)
     }
     fun switchContent(id: Int, fragment: Fragment) {
         if (mContext == null) return

@@ -554,7 +554,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         accountSubItems.add("Profile")
         accountSubItems.add("Orders")
         accountSubItems.add("Shopping Lists")
-        accountSubItems.add("Payment")
         return accountSubItems
     }
 }

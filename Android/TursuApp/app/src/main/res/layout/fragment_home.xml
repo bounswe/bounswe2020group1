@@ -52,7 +52,7 @@
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
 
-    <GridView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -60,7 +60,6 @@
         android:layout_marginBottom="20dp"
         android:background="#FFFFFF"
         android:clickable="true"
-        android:horizontalSpacing="15dp"
         android:numColumns="2"
         android:verticalSpacing="10dp"
         android:visibility="gone"
