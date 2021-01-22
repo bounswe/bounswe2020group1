@@ -366,7 +366,7 @@ export default function Navbar(props){
                                 <Grid container spacing={2} className={classes.category}  >
                                     <Grid item>
                                         <Link to='/categories/Electronics'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Electronics
                                             </Button>
                                         </Link>
@@ -374,7 +374,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to='/categories/Fashion'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Fashion
                                             </Button>
                                         </Link>
@@ -382,7 +382,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to='/categories/Home'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Home
                                             </Button>
                                         </Link>
@@ -390,7 +390,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to='/categories/Sports'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Sports&Outdoors
                                             </Button>
                                         </Link>
@@ -398,7 +398,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to='/categories/Cosmetics'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Cosmetics
                                             </Button>
                                         </Link>
