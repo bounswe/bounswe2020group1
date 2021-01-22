@@ -95,27 +95,71 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/lin2"
-                android:layout_width="368dp"
+                android:id="@+id/line5"
+                android:layout_width="0dp"
                 android:layout_height="47dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/linear0">
 
+                <TextView
+                    android:id="@+id/product_text"
+                    android:layout_width="65dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center"
+                    android:text="Product :"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
                 <RatingBar
                     android:id="@+id/addComment_ratingBar"
                     style="@style/Widget.AppCompat.RatingBar"
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:layout_height="match_parent"
                     android:background="@color/white"
                     android:isIndicator="false"
-                    android:rating="0.0"
                     android:numStars="5"
+                    android:rating="0.0"
+                    android:theme="@style/RatingBar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin2"
+                android:layout_width="0dp"
+                android:layout_height="47dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line5">
+
+                <TextView
+                    android:id="@+id/vendor_text"
+                    android:layout_width="65dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center"
+                    android:text="Vendor :"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <RatingBar
+                    android:id="@+id/addComment_ratingBarVendor"
+                    style="@style/Widget.AppCompat.RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:isIndicator="false"
+                    android:numStars="5"
+                    android:rating="0.0"
                     android:theme="@style/RatingBar" />
             </LinearLayout>
 
@@ -153,6 +197,8 @@
                 app:layout_constraintHorizontal_bias="0.072"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lin3" />
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

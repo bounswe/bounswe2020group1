@@ -7,6 +7,13 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:background">#E0E0E0</item>
     </style>
+    <style name="ButtonSendMsg" >
+        <item name="android:textSize">19dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">#E8E7E7</item>
+    </style>
     <style name="normal_text">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.04</item>

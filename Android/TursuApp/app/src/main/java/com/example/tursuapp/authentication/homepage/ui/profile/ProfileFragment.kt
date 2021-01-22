@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.LoginResponse
 import com.example.tursuapp.api.responses.ProfileInfoResponse
 import com.example.tursuapp.api.responses.VendorDataResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
@@ -36,6 +38,7 @@ class ProfileFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+
         galleryViewModel =
                 ViewModelProvider(this).get(ProfileViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_customer_profile, container, false)
@@ -120,9 +123,11 @@ class ProfileFragment : Fragment() {
 
             override fun onResponse(
                     p0: Call<VendorDataResponse>?,
-                    response: Response<VendorDataResponse>?
+                    response: Response<VendorDataResponse?>
             ) {
-                if (response != null) {
+                val profileResponse: VendorDataResponse? = response.body()
+
+                if (profileResponse != null) {
                     Log.i("Status code",response.code().toString())
                     val profileInfo = response.body()!!
                     view.findViewById<TextView>(R.id.profileUsername).text = profileInfo.username

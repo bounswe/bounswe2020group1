@@ -3,7 +3,7 @@ package com.example.tursuapp.authentication.homepage.ui.productpage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.provider.DocumentsContract
+import android.text.Editable
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.tursuapp.R
@@ -22,6 +23,8 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.Comments
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
+import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.profile.PublicVendorFragment
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -46,19 +49,33 @@ class ProductPageFragment : Fragment() {
         auth_token = pref?.getString("auth_token", null).toString()
         user_type = pref?.getString("user_type", null).toString()
         activity?.findViewById<ImageView>(R.id.filter_image)!!.visibility = View.INVISIBLE
-        activity?.findViewById<EditText>(R.id.editMobileNo)!!.visibility = View.INVISIBLE
-        activity?.findViewById<Button>(R.id.search_button)!!.visibility = View.INVISIBLE
         productPageViewModel = ViewModelProvider(this).get(ProductPageModel::class.java)
         val root = inflater.inflate(R.layout.fragment_productpage, container, false)
-        root.findViewById<ImageView>(R.id.add_list_image)?.setOnClickListener {
-            showPopupWindow(it)
+        if(user_type=="customer") {
+            root.findViewById<ImageView>(R.id.add_list_image)?.setOnClickListener {
+                showPopupWindow(it)
+            }
         }
         root.findViewById<ImageView>(R.id.add_comment_image)?.setOnClickListener {
             showPopupAddComment(it)
         }
+        root.findViewById<TextView>(R.id.vendor)?.setOnClickListener {
+            val vendorName = product.vendor_name
+            Log.i("vendorName:", vendorName)
+            val bundle = Bundle()
+            bundle.putString("vendor_name", vendorName)
+            val newFragment = PublicVendorFragment()
+            newFragment.arguments = bundle
+            val fragmentManager: FragmentManager? = fragmentManager
+            val fragmentTransaction: FragmentTransaction =
+                    fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+            fragmentTransaction.commit()
+        }
 
         return root
     }
+
     fun setVisibilities(view: View){
         val addToCart = view.findViewById<CardView>(R.id.addCart)
         val addToList = view.findViewById<CardView>(R.id.cardView3)
@@ -66,44 +83,65 @@ class ProductPageFragment : Fragment() {
         if(user_type=="customer"){
             addToCart.visibility = View.VISIBLE
             addToList.visibility = View.VISIBLE
-            addComment.visibility = View.VISIBLE
+      //      addComment.visibility = View.VISIBLE
         }
-        else{
+        else if(user_type == "vendor"){
             addToCart.visibility = View.INVISIBLE
             addToList.visibility = View.INVISIBLE
             addComment.visibility = View.INVISIBLE
         }
+        else{
+            addComment.visibility = View.INVISIBLE
+            addToCart.visibility = View.VISIBLE
+            addToList.visibility = View.VISIBLE
+            addToCart.setOnClickListener {
+                Toast.makeText(context,"You need to login first",Toast.LENGTH_SHORT).show()
+            }
+            addToList.setOnClickListener {
+                Toast.makeText(context,"You need to login first",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id_str = requireArguments().getString("id")
         setVisibilities(view)
-        getDetails(id_str!!.toInt(), view)
-        view.findViewById<CardView>(R.id.addCart).setOnClickListener(){
-            var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            val quantity = 1
-            apiinterface.addToShoppingCart(auth_token, product.id).enqueue(object :
-                    retrofit2.Callback<ResponseBody> {
-                override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
-                    Log.i("MainFragment", "error" + p1?.message.toString())
-                }
+        getDetails(id_str!!.toInt(), view)        
+            
+        if(user_type == "customer") {
+          view.findViewById<CardView>(R.id.addCart).setOnClickListener() {
+              Log.i("stock:", product.stock.toString())
+              if (product.stock <= 0) {
+                  Log.i("Stock Status:", "Out of Stock")
+              } else {
+                  var apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+                  val quantity = 1
 
-                override fun onResponse(
-                        p0: Call<ResponseBody>?,
-                        response: Response<ResponseBody>?
-                ) {
-                    if (response != null) {
-                        if (response.code() == 200) {
-                            Toast.makeText(context, "added to shopping cart", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(context, "NOT added to shopping cart", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                  apiinterface.addToShoppingCart(auth_token, product.id).enqueue(object :
+                          retrofit2.Callback<ResponseBody> {
+                      override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                          Log.i("MainFragment", "error" + p1?.message.toString())
+                      }
 
-                }
+                      override fun onResponse(
+                              p0: Call<ResponseBody>?,
+                              response: Response<ResponseBody>?
+                      ) {
+                          if (response != null) {
+                              if (response.code() == 200) {
+                                  Toast.makeText(context, "added to shopping cart", Toast.LENGTH_SHORT).show()
+                              } else {
+                                  Toast.makeText(context, "NOT added to shopping cart", Toast.LENGTH_SHORT).show()
+                              }
+                          }
+
+                      }
 
 
-            })
+                  })
+              }
+          }
         }
 
 
@@ -217,12 +255,13 @@ class ProductPageFragment : Fragment() {
         if(view.findViewById<TextView>(R.id.addComment_text).text.isEmpty() || view.findViewById<RatingBar>(R.id.addComment_ratingBar).rating == 0.0f){
             Toast.makeText(context, "Please input your comment and rating", Toast.LENGTH_SHORT).show()
         }else {
-            val commentRating = view.findViewById<RatingBar>(R.id.addComment_ratingBar).rating
+            val productRating = view.findViewById<RatingBar>(R.id.addComment_ratingBar).rating
+            val vendorRating = view.findViewById<RatingBar>(R.id.addComment_ratingBarVendor).rating
             val commentText = view.findViewById<TextView>(R.id.addComment_text).text
             val productId = product.id
             Log.i("Product Id: ", productId.toString())
             val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-            apiInterface.addComment(auth_token, productId, commentText.toString(), commentRating.toInt()).enqueue(object :
+            apiInterface.addComment(auth_token, productId, commentText.toString(), productRating.toInt(),vendorRating.toInt()).enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                 override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
                     Log.i("MainFragment", "error" + p1?.message.toString())
@@ -436,27 +475,7 @@ class ProductPageFragment : Fragment() {
                     val adapter = context?.let { CommentAdapter(it, commentList) }
                     commentListView = view.findViewById(R.id.commentListView)
                     displayProductInfo(view)
-                    if (commentListView != null) {
-                        commentListView.adapter = adapter
-
-                        /*
-                            commentListView.setOnItemClickListener { _, view, _, _ ->
-                                val clickedId = view.findViewById<TextView>(R.id.product_id).text
-                                val bundle = Bundle()
-                                bundle.putString("id", clickedId.toString())
-                                val newFragment = VendorProductPageFragment()
-                                newFragment.arguments = bundle
-                                val fragmentManager: FragmentManager? = fragmentManager
-                                val fragmentTransaction: FragmentTransaction =
-                                        fragmentManager!!.beginTransaction()
-                                fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
-                                fragmentTransaction.commit()
-                            }*/
-                        // }
-                    } else {
-                        Log.i("Customer Comments: ", "have not any comment")
-                        // Toast.makeText(context, "have not any comment", Toast.LENGTH_SHORT).show()
-                    }
+                    commentListView.adapter = adapter
 
                 }
 
@@ -466,6 +485,7 @@ class ProductPageFragment : Fragment() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     fun displayProductInfo(view: View){
         view.findViewById<TextView>(R.id.product_name).text = product.name
         view.findViewById<TextView>(R.id.product_description).text = product.description
@@ -473,7 +493,13 @@ class ProductPageFragment : Fragment() {
         view.findViewById<TextView>(R.id.price).text = product.price+" TL"
         view.findViewById<TextView>(R.id.vendor).text = "Vendor: "+product.vendor_name
         view.findViewById<TextView>(R.id.brand).text = "Brand: "+product.brand
-
+        val addToCart = view.findViewById<CardView>(R.id.addCart)
+        if(product.stock<=0) {
+            view.findViewById<TextView>(R.id.stock).text="Out of Stock"
+            addToCart.visibility = View.INVISIBLE
+        }else if(product.stock<10){
+            view.findViewById<TextView>(R.id.stock).text = "Only " + product.stock.toString() + " left in stock"
+        }
         val image  = view.findViewById<ImageView>(R.id.productImage)
         if(product.photo_url!="") {
             Picasso

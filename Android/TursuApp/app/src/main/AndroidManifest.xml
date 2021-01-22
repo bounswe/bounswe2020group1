@@ -25,6 +25,7 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".authentication.homepage.HomePageActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_home_page"
             android:theme="@style/Theme.TursuApp.NoActionBar" />
         <activity android:name=".authentication.login.LoginActivity">
@@ -35,8 +36,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".authentication.signup.SignUpActivity" />
-        <activity android:name=".authentication.signup.VendorSignUpActivity" />
+        <activity android:name=".authentication.signup.VendorSignupActivity" />
         <activity android:name=".authentication.forgotpassword.ForgotPasswordActivity" />
+        <activity android:name=".authentication.verification.VerificationActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"

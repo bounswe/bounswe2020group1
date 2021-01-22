@@ -48,6 +48,9 @@ class DayEstimatorFragment : Fragment() {
             cargoID = view.findViewById<EditText>(R.id.cargoIDEditText).text.toString()
             setInDeliveryMode(orderID, cargoID, estimatedDayCount, auth_token)
         }
+        view.findViewById<Button>(R.id.button_cancel_order).setOnClickListener {
+            activity?.onBackPressed()
+        }
 
     }
     fun setInDeliveryMode(orderID: Int, cargoID: String, dayCount: Int, auth_token: String){

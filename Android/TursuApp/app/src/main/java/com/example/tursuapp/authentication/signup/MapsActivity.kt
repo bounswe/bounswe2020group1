@@ -113,7 +113,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(getApplicationContext(), "Location not selected!", Toast.LENGTH_SHORT).show()
             }
             else {
-                val intent = Intent(baseContext, VendorSignUpActivity::class.java)
+                val intent = Intent(baseContext, VendorSignupActivity::class.java)
                 intent.putExtra("latitude", selectedLatitude!!)
                 intent.putExtra("longitude", selectedLongitude!!)
                 setResult(1, intent)

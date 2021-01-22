@@ -3,6 +3,8 @@ package com.example.tursuapp.authentication.homepage.ui.payment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +22,6 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.CreateOrderResponse
 import com.example.tursuapp.api.responses.ShoppingCartProductResponse
 import com.google.android.material.textfield.TextInputEditText
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
@@ -60,6 +61,38 @@ class PaymentFragment : Fragment() {
         imm?.showSoftInput(nameinputtext, InputMethodManager.SHOW_IMPLICIT)
 
         val cardnumberinputtext = view.findViewById<EditText>(R.id.cardnumberinputtext)
+
+        cardnumberinputtext.addTextChangedListener(object : TextWatcher {
+
+            private val DIVIDER = '-'
+            private var x=0
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+                if((s.length==5||s.length==10||s.length==15)){
+                    x=1
+                }
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                // noop
+            }
+
+            override fun afterTextChanged(s: Editable) {
+
+                if((s.length==4||s.length==9||s.length==14)&&(x==0)){
+                    s.append('-')
+                }
+                x=0
+
+            }
+
+
+
+
+
+
+        })
+
         nameinputtext.requestFocus()
         imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm?.showSoftInput(cardnumberinputtext, InputMethodManager.SHOW_IMPLICIT)
@@ -88,25 +121,25 @@ class PaymentFragment : Fragment() {
         view.findViewById<Button>(R.id.confirmandpay).setOnClickListener {
 
             if (view.findViewById<TextInputEditText>(R.id.nameinputtext).text.toString() == "") {
-                Toast.makeText(context, "Lütfen geçerli bir isim giriniz.", Toast.LENGTH_SHORT).show()
-            } else if (view.findViewById<TextInputEditText>(R.id.cardnumberinputtext).text.toString().length != 16|| !isAllNumber((view.findViewById<TextInputEditText>(R.id.cardnumberinputtext).text.toString()))) {
-                Toast.makeText(context, "Lütfen geçerli bir kart numarası giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid name.", Toast.LENGTH_SHORT).show()
+            } else if (view.findViewById<TextInputEditText>(R.id.cardnumberinputtext).text.toString().length != 19|| !isAllNumber((view.findViewById<TextInputEditText>(R.id.cardnumberinputtext).text.toString()))) {
+                Toast.makeText(context, "Please enter a valid card number.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.cvcinputtext).text.toString().length != 3 || !isAllNumber(view.findViewById<TextInputEditText>(R.id.cvcinputtext).text.toString())) {
-                Toast.makeText(context, "Lütfen geçerli bir CVC numarası giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid CVC number.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString()==""||view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString().length != 5 ||!isLegidDate(view.findViewById<TextInputEditText>(R.id.expirationdateinputtext).text.toString())) {
-                Toast.makeText(context, "Lütfen geçerli bir tarih giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid expire date.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.addressinputtext).text.toString() == "") {
-                Toast.makeText(context, "Lütfen geçerli bir adres giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid address.", Toast.LENGTH_SHORT).show()
             } else if (view.findViewById<TextInputEditText>(R.id.cityinputtext).text.toString() == "") {
-                Toast.makeText(context, "Lütfen geçerli bir şehir giriniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid city.", Toast.LENGTH_SHORT).show()
             } else if (!view.findViewById<CheckBox>(R.id.checkBox).isChecked) {
-                Toast.makeText(context, "Lütfen koşulları kabul ediniz.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please accept term and conditions.", Toast.LENGTH_SHORT).show()
             } else {
                 createOrder()
 
             }
 
-    }
+        }
 
     }
     fun createOrder(){
@@ -183,9 +216,10 @@ class PaymentFragment : Fragment() {
     }
     fun  isAllNumber(number: String):Boolean{
         for (item in number) {
-            try{
-               var x= item.toInt()
-            }catch (e: Exception){
+
+            if(item=='-'||item=='1'||item=='2'||item=='3'||item=='4'||item=='5'||item=='6'||item=='7'||item=='8'||item=='9'){
+
+            }else{
                 return false
             }
 
@@ -193,20 +227,23 @@ class PaymentFragment : Fragment() {
         return true
     }
     fun  isLegidDate(date: String):Boolean{
-       try {
-           if(date.length!=5){
-               return false
-           }
-           if(date.substring(0, 2).toInt()>12){
-               return false
-           }
-           if(date.substring(3, 5).toInt() >= 99){
-               return false
-           }
-           return true
-       }catch (e: Exception){
-           return false
-       }
+        try {
+            if(date.length!=5){
+                return false
+            }
+            if(date.substring(0, 2).toInt()>12){
+                return false
+            }
+            if(date.substring(3, 5).toInt() >= 99){
+                return false
+            }
+            if(!(date.substring(2, 3)== "."||date.substring(2, 3)== "/"||date.substring(2, 3)== "-")){
+                return false
+            }
+            return true
+        }catch (e: Exception){
+            return false
+        }
 
     }
 }
