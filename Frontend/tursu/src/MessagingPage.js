@@ -339,7 +339,7 @@ class MessagingPage extends React.Component{
                         <Grid item xs={9}>
                             <List>
                                 <ListItem key="1">
-                                    <Grid container>
+                                    <Grid style={{minHeight: 300}} container>
 
                                         {(!this.state.to_admin) && this.state.message_info_list.map((message_info) => (
                                             (message_info.message!=="" && message_info.sender === "self" &&
