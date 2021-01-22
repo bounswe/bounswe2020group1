@@ -117,6 +117,10 @@ def create_alert(request):
     value = 0
     if 'value' in request.POST:
         value = request.POST["value"]
+    alerts = Alert.objects.filter(Q(user=registered_user,product=product,type=type)).first()
+    if alerts is not None:
+        return HttpResponse("Alert type already exists for given product", status=400)
+
     alert = Alert.objects.create(user=registered_user, 
                                  type=type,
                                  value=value,
