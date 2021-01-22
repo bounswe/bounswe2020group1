@@ -15,6 +15,7 @@ export default class Registration extends Component {
         this.handleChangeCustomer = this.handleChangeCustomer.bind(this);
         this.handleChangeVendor = this.handleChangeVendor.bind(this);
         this.goToLogin = this.goToLogin.bind(this);
+        this.goToVerif = this.goToVerif.bind(this);
     }
 
     handleChangeCustomer(event){
@@ -29,6 +30,9 @@ export default class Registration extends Component {
     }
     goToLogin(){
         this.props.onLoginChange();
+    }
+    goToVerif(){
+        this.props.onVerifChange();
     }
     render() {
         if (this.state.user_type === "customer"){
@@ -48,7 +52,7 @@ export default class Registration extends Component {
                     <img src={logo} alt="Tursu Logo"></img>
                     <h1>Sign Up for Customers</h1>
                     </div>
-                    <Customer login={this.goToLogin}/>
+                    <Customer login={this.goToLogin} verif={this.goToVerif} setM={this.props.setM} setP={this.props.setP} setU={this.props.setU}/>
                     <button type="button" onClick={this.goToLogin} className="smallButton">Already have an account? Sign in.</button>
 
 
@@ -72,7 +76,7 @@ export default class Registration extends Component {
                         <img src={logo} alt="Tursu Logo"></img>
                         <h1>Sign Up for Vendors</h1>
                     </div>
-                    <Vendor login={this.goToLogin}/>
+                    <Vendor login={this.goToLogin} verif={this.goToVerif} setM={this.props.setM} setP={this.props.setP} setU={this.props.setU}/>
                     <button type="button" onClick={this.goToLogin} className="smallButton">Already have an account? Sign in.</button>
 
 
