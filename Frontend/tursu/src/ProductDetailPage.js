@@ -323,17 +323,19 @@ export function AlertMenu(props){
     const [priceBelowAlert, setPriceBelowAlert] = React.useState(false);
     const [stockAlert, setStockAlert] = React.useState(false);
 
-    const [priceChangeId, setPriceChangeAlertId] = React.useState(-1);
     const [priceBelowAlertId, setPriceBelowAlertId] = React.useState(-1);
+    const [priceChangeAlertId, setPriceChangeAlertId] = React.useState(-1);
     const [stockAlertId, setStockAlertId] = React.useState(-1);
 
+    const [update, setUpdate] = React.useState(false);
+    const [alertsList, setAlertsList] = React.useState([]);
 
     const [priceLevel, setPriceLevel] = React.useState(30);
     const [stockLevel, setStockLevel] = React.useState(30);
 
 
     useEffect(() => {
-
+       getAlerts()
     }, [])
 
     const handleClose = () => {
@@ -351,38 +353,28 @@ export function AlertMenu(props){
                 'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
             }
         })
-            .then(res => {
-                console.log("ALERTS:")
-                console.log(res)
-            })
-    }
-
-    function setAlertForPriceChanges() {
-        if (!priceChangeAlert){
-            const formData = new FormData();
-            formData.append("product_id", props.productId);
-            formData.append("type", "2");
-            axios.post('http://3.232.20.250/notifications/create_alert',
-                formData, {
-                    headers: {
-                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
-                    }
-                })
-                .then(res => {
-                    console.log("Alert set.")
-                    console.log(res);
-                    console.log(res.status);
-                    getAlerts()
-                })
-                .catch(error =>{
-                    console.log(error)
-                    alert ("There has been an error. Please try again.");
-                })
-        }
-        else{
-            deleteAlert("")
-        }
-        setPriceChangeAlert(!priceChangeAlert);
+        .then(res => {
+            console.log("ALERTS:")
+            console.log(res.data)
+            for(const alert of res.data)
+            {
+                switch (alert.type) {
+                    case 1:
+                        setPriceBelowAlertId(alert.id)
+                        setPriceBelowAlert(true)
+                        break;
+                    case 2:
+                        setPriceChangeAlertId(alert.id)
+                        setPriceChangeAlert(true)
+                        break;
+                    case 3:
+                        setStockAlertId(alert.id)
+                        setStockAlert(true)
+                        break;
+                    default:
+                }
+            }
+        })
     }
 
     function setAlertBelowPrice()
@@ -401,16 +393,44 @@ export function AlertMenu(props){
                 .then(res => {
                     console.log(res);
                     console.log(res.status);
-                })
-                .catch(error =>{
-                    console.log(error)
-                    alert ("There has been an error. Please try again.");
+                    setPriceBelowAlert(true);
+                    setPriceBelowAlertId(res.data);
                 })
         }
         else{
-            deleteAlert("")
+            setPriceBelowAlert(false);
+            deleteAlert(priceBelowAlertId)
+            setPriceBelowAlertId(-1);
+
         }
         setPriceBelowAlert(!priceBelowAlert);
+    }
+
+    function setAlertForPriceChanges() {
+        if (!priceChangeAlert){
+            const formData = new FormData();
+            formData.append("product_id", props.productId);
+            formData.append("type", "2");
+            axios.post('http://3.232.20.250/notifications/create_alert',
+                formData, {
+                    headers: {
+                        'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                    }
+                })
+                .then(res => {
+                    console.log("Price change alert is created");
+                    console.log(res)
+                    console.log(res.status);
+                    setPriceChangeAlert(true);
+                    setPriceChangeAlertId(res.data)
+                })
+        }
+        else{
+            setPriceChangeAlert(false)
+            deleteAlert(priceChangeAlertId)
+            setPriceChangeAlertId(-1)
+        }
+        setPriceChangeAlert(!priceChangeAlert);
     }
 
     function setAlertForStock()
@@ -429,18 +449,20 @@ export function AlertMenu(props){
                 .then(res => {
                     console.log(res);
                     console.log(res.status);
-                })
-                .catch(error =>{
-                    console.log(error)
-                    alert ("Alert for stock could not be set.");
+                    setStockAlert(true)
+                    setStockAlertId(res.data)
                 })
         }
         else{
-            deleteAlert("")
+            setStockAlert(false)
+            deleteAlert(stockAlertId)
+            setStockAlertId(-1)
         }
         setStockAlert(!stockAlert);
     }
+
     function deleteAlert(alert_id){
+        console.log("Will be deleted ", alert_id)
         const formData = new FormData()
         formData.append("id", alert_id)
         axios.post('http://3.232.20.250/notifications/delete_alert',
@@ -452,10 +474,7 @@ export function AlertMenu(props){
             .then(res => {
                 console.log(res);
                 console.log(res.status);
-            })
-            .catch(error =>{
-                console.log(error)
-                alert ("There has been an error. Please try again.");
+                console.log("Alert is deleted.")
             })
     }
 
