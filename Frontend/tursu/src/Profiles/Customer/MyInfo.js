@@ -39,6 +39,7 @@ export default class myInfo extends Component {
                     editable : 'True'}
                 ],
         }
+        this.checkPassword = this.checkPassword.bind(this);
         this.routeName = this.routeName.bind(this);
         this.nameChange = this.nameChange.bind(this);
         this.surnameChange = this.surnameChange.bind(this);
@@ -85,6 +86,18 @@ export default class myInfo extends Component {
                 console.log(error.response.message);
             }
         })
+    }
+    checkPassword(password){
+        if(password.length < 8){
+            return "Your password is too short, it should at least be 8 characters long!"
+        }
+        if(!(password.match(/[a-z]+/) && password.match(/[A-Z]+/) && password.match(/[0-9]+/))){
+            return "This password is too weak. Your password should include one uppercase letter, one lowercase letter and one digit."
+        }
+        else{
+            return "ok"
+        }
+        //thanks to: https://stackoverflow.com/questions/50547523/how-can-i-use-javascript-to-test-for-password-strength-in-a-way-that-returns-the
     }
     nameChange(){
         if (this.state.editName==="false"){
@@ -136,6 +149,7 @@ export default class myInfo extends Component {
         }
     }
     handleEdit(key,value){
+        var isAlright = true
         var token = sessionStorage.getItem("authToken");
         var bodyFormData = new FormData();
         if (key==="Name"){
@@ -144,42 +158,50 @@ export default class myInfo extends Component {
                 bodyFormData.append('last_name', value)}
         else if (key==="Password"){
                 bodyFormData.append('password', value);
+                var m = this.checkPassword(value)
+                if (m != "ok"){
+                    isAlright = false
+                    this.passwordChange()
+                    alert(m)
+                }
         }
-        axios({
-            method: 'post',
-            url: 'http://3.232.20.250/user/edit_profile',
-            data: bodyFormData,
-            headers: {Authorization: 'Token ' + token}
+        if (isAlright){
+            axios({
+                method: 'post',
+                url: 'http://3.232.20.250/user/edit_profile',
+                data: bodyFormData,
+                headers: {Authorization: 'Token ' + token}
+                })
+            .then(res => {
+                console.log(res)
+                if (key==="Name"){
+                     this.setState({name: value})
+                     var newFields = this.state.fields
+                     newFields[0].value = value
+                     this.setState({fields: newFields})
+                     this.nameChange()
+                }
+                else if (key=== "Surname"){
+                     this.setState({surname: value})
+                     var newFields = this.state.fields
+                     newFields[1].value = value
+                     this.setState({fields: newFields})
+                     this.surnameChange()
+                }
+                else if (key==="Password"){
+                     this.setState({password: "****"})
+                     var newFields = this.state.fields
+                     newFields[5].value = "****"
+                     this.setState({fields: newFields})
+                     this.passwordChange()
+                }
             })
-        .then(res => {
-            console.log(res)
-            if (key==="Name"){
-                 this.setState({name: value})
-                 var newFields = this.state.fields
-                 newFields[0].value = value
-                 this.setState({fields: newFields})
-                 this.nameChange()
-            }
-            else if (key=== "Surname"){
-                 this.setState({surname: value})
-                 var newFields = this.state.fields
-                 newFields[1].value = value
-                 this.setState({fields: newFields})
-                 this.surnameChange()
-            }
-            else if (key==="Password"){
-                 this.setState({password: "****"})
-                 var newFields = this.state.fields
-                 newFields[5].value = "****"
-                 this.setState({fields: newFields})
-                 this.passwordChange()
-            }
-        })
-        .catch(error =>{
-            if (error.response){
-                console.log(error.response.message);
-            }
-        })
+            .catch(error =>{
+                if (error.response){
+                    console.log(error.response.message);
+                }
+            })
+        }
     }
 
     render() {
