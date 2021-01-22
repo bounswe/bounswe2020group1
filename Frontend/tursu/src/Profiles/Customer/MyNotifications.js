@@ -5,6 +5,9 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import axios from "axios";
+import ListItem from "@material-ui/core/ListItem";
+import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 
 
@@ -31,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MyNotifications() {
     const classes = useStyles();
 
-    const [notifications, setNotifications] = React.useState([]);
+    const [rawNotifications, setRawNotifications] = React.useState([])
 
     useEffect(() => {
         axios.get("http://3.232.20.250/notifications/get_notifications",{
@@ -39,61 +42,59 @@ export default function MyNotifications() {
                 'Authorization': "Token " + window.sessionStorage.getItem("authToken")
             }
         }).then(res =>{
-            fillNotifications(res.data)
             console.log("NOTIFICATIONS")
             console.log(res.data)
+            setRawNotifications(res.data)
         })
     }, [])
-    function fillNotifications(data)
+
+    function getNotificationText(item)
     {
-        let newList = []
-        for(const item of data)
-        {
-            let text = "";
-            switch (item.type) {
-                case 1:
-                    text += "Your order " + item.product_name + " is in delivery now."
-                    newList.push(text)
-                    break;
-                case 2:
-                    text += "Your product " + item.product_name + " is verified now."
-                    newList.push(text)
-                    break;
-                case 3:
-                    text += "Price Drop: " + item.product_name + " is " + item.new_value + "₺ now."
-                    newList.push(text)
-                    break;
-                case 4:
-                    text += "Price Change: " + item.product_name + " is " + item.new_value + "₺ now."
-                    newList.push(text)
-                    break;
-                case 5:
-                    text += "Stock Change: " + item.product_name + " has " + item.new_value + "products in the stock now."
-                    newList.push(text)
-                    break;
-                default:
-                    console.log(item.type)
-                    break;
-            }
+        let text = "";
+        switch (item.type) {
+            case 1:
+                text += "Your order " + item.product_name + " is in delivery now."
+                return text;
+                break;
+            case 2:
+                text += "Your product " + item.product_name + " is verified now."
+                return text;
+                break;
+            case 3:
+                text += "Price Drop: " + item.product_name + " is " + item.new_value + "₺ now."
+                return text;
+                break;
+            case 4:
+                text += "Price Change: " + item.product_name + " is " + item.new_value + "₺ now."
+                return text;
+                break;
+            case 5:
+                text += "Stock Change: " + item.product_name + " has " + item.new_value + "products in the stock now."
+                return text;
+                break;
+            default:
+                console.log(item.type)
+                break;
         }
-        setNotifications(newList)
+        return text;
     }
 
     return (
         <div className={classes.root}>
 
-            {notifications.map((notification) => (
+            {rawNotifications.map((notification) => (
                 <Paper elevation={8} className={classes.paper}>
-                    <Grid container wrap="nowrap" spacing={2}>
-                        <Grid item>
-                            <Avatar className={classes.avatar}>T</Avatar>
+                    <Link to={`/product/${notification.product_id}`} style={{ textDecoration: 'none'}}>
+                        <Grid container wrap="nowrap" spacing={2}>
+                            <Grid item>
+                                <Avatar className={classes.avatar}>T</Avatar>
+                            </Grid>
+                            <Grid item xs zeroMinWidth>
+                                <Typography noWrap>{getNotificationText(notification)}</Typography>
+                            </Grid>
                         </Grid>
-                        <Grid item xs zeroMinWidth>
-                            <Typography noWrap>{notification}</Typography>
-                        </Grid>
-                    </Grid>
+                    </Link>
                 </Paper>
-
             ))}
             <br/>
         </div>

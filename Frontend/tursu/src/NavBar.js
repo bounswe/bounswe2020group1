@@ -184,48 +184,50 @@ function SimpleDialog(props) {
                 'Authorization': "Token " + window.sessionStorage.getItem("authToken")
             }
         }).then(res =>{
-            fillNotifications(res.data)
             console.log("NOTIFICATIONS")
             console.log(res.data)
-            setRawNotifications(res.data)
+            let temp = []
+            for(const item of res.data)
+            {
+                if(!item.read)
+                {
+                    temp.push(item)
+                }
+            }
+            setRawNotifications(temp)
             console.log("raw: ", rawNotifications.length)
         })
     }, [])
 
-    function fillNotifications(data)
+    function getNotificationText(item)
     {
-        notifications = []
-        for(const item of data)
-        {
-            if(item.read) continue;
-
-            let text = "";
-            switch (item.type) {
-                case 1:
-                    text += "Your order " + item.product_name + " is in delivery now."
-                    notifications.push(text)
-                    break;
-                case 2:
-                    text += "Your product " + item.product_name + " is verified now."
-                    notifications.push(text)
-                    break;
-                case 3:
-                    text += "Price Drop: " + item.product_name + " is " + item.new_value + "₺ now."
-                    notifications.push(text)
-                    break;
-                case 4:
-                    text += "Price Change: " + item.product_name + " is " + item.new_value + "₺ now."
-                    notifications.push(text)
-                    break;
-                case 5:
-                    text += "Stock Change: " + item.product_name + " has " + item.new_value + "products in the stock now."
-                    notifications.push(text)
-                    break;
-                default:
-                    console.log(item.type)
-                    break;
-            }
+        let text = "";
+        switch (item.type) {
+            case 1:
+                text += "Your order " + item.product_name + " is in delivery now."
+                return text;
+                break;
+            case 2:
+                text += "Your product " + item.product_name + " is verified now."
+                return text;
+                break;
+            case 3:
+                text += "Price Drop: " + item.product_name + " is " + item.new_value + "₺ now."
+                return text;
+                break;
+            case 4:
+                text += "Price Change: " + item.product_name + " is " + item.new_value + "₺ now."
+                return text;
+                break;
+            case 5:
+                text += "Stock Change: " + item.product_name + " has " + item.new_value + "products in the stock now."
+                return text;
+                break;
+            default:
+                console.log(item.type)
+                break;
         }
+        return text;
     }
 
     function handleClose(){
@@ -244,12 +246,8 @@ function SimpleDialog(props) {
                 console.log("Notification: ", notification.id, " is set as read.")
             })
         }
-        notifications = [];
+        setRawNotifications([]);
         onClose(selectedValue);
-    };
-
-    const handleListItemClick = (value) => {
-        onClose(value);
     };
 
     const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
@@ -257,17 +255,18 @@ function SimpleDialog(props) {
         <Dialog classes={{paper: classes.dialog}} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
             <DialogTitle id="simple-dialog-title">Your Notifications</DialogTitle>
             <List>
-                {notifications.map((notification) => (
-                    <ListItem button onClick={() => handleListItemClick(notification)} key={notification}>
-                        <ListItemAvatar>
-                            <Avatar className={classes.avatar}>
-                                <NotificationsActiveIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={notification} />
-                    </ListItem>
+                {rawNotifications.map((notification) => (
+                    <Link to={`/product/${notification.product_id}`} style={{ textDecoration: 'none'}}>
+                        <ListItem key={notification}>
+                            <ListItemAvatar>
+                                    <Avatar className={classes.avatar}>
+                                        <NotificationsActiveIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                            <ListItemText primary={getNotificationText(notification)} />
+                        </ListItem>
+                    </Link>
                 ))}
-
                 <br/>
 
                 <Link to={linkAddress}>
