@@ -216,8 +216,8 @@ export default function RadioButtons(props) {
                 inputProps={{'aria-label': 'primary checkbox'}}
             ></Switch>} {!props.inCategory && "Filter Category"
         }
-
-            {props.inCategory && state.FilterCategory &&
+            {!props.inCategory && <br/>}
+            {!props.inCategory && state.FilterCategory &&
             <FormControl component="fieldset" onChange={handleChangeFilterCategory}>
                 <FormGroup  >
                     <FormControlLabel
