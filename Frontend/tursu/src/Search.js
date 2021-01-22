@@ -165,7 +165,7 @@ class SearchPage extends React.Component{
                 <br/><br/><br/><br/><br/><br/>
                 <Grid container spacing={1}>
                     <Grid item xs={12} sm={3}>
-                        <Filter callbackSwitchType={this.handleCallbackdataSwitchType} inCategory={true} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list} callbackSearchType={this.handleCallbackdataSearchType}/>
+                        <Filter callbackSwitchType={this.handleCallbackdataSwitchType} inCategory={false} callbackRange = {this.handleCallbackdataRange} callbackVendor= {this.handleCallbackdataVendor} callbackCategory = {this.handleCallbackdataCategory} callbackSort = {this.handleCallbackdataSort} callbackCategorySwitch={this.handleCallbackdataCategorySwitch} callbackVendorSwitch={this.handleCallbackdataVendorSwitch} vendorList={this.state.vendor_list} callbackSearchType={this.handleCallbackdataSearchType}/>
                     </Grid>
                     {<Grid style={{margin: '30px'}} container xs={12} sm={8} spacing={1}>
 
