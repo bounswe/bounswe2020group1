@@ -1,6 +1,8 @@
 import React, { Component} from 'react';
 import "./sign_components.css";
 import logo from '../rsz_11logo.png';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
 import axios from 'axios';
 
 export default class ForgotPassword extends Component {
