@@ -17,6 +17,7 @@ import DeleteProduct from "./Profiles/Vendor/DeleteProduct";
 import AdminPanel from "./AdminPanel"
 import VendorPublicProfile from "./VendorPublicProfile";
 import MessagingPage from "./MessagingPage";
+import ActivityStream from "./ActivityStream"
 import Acknowledgements from "./Acknowledgements";
 
 
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/admin" exact component={AdminPanel} />
                 <Route path="/vendorPublicProfile/:vendor_name" exact component={VendorPublicProfile} />
                 <Route path="/message" exact component={MessagingPage} />
+                <Route path="/activityStream" exact component={ActivityStream} />
                 <Route path="/acknowledgement" exact component={Acknowledgements} />
             </div>
         </Router>
