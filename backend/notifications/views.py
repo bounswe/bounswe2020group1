@@ -122,4 +122,4 @@ def create_alert(request):
                                  value=value,
                                  product=product)
     alert.save()
-    return JsonResponse({}, safe=False)
+    return JsonResponse(alert.id, safe=False)
