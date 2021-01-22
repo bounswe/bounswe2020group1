@@ -3,6 +3,9 @@ import "./sign_components.css";
 import logo from '../rsz_11logo.png';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import Typography from "@material-ui/core/Typography";
 
 
 export default class Verification extends Component {
@@ -72,11 +75,11 @@ export default class Verification extends Component {
             return(
                 <div className="login">
                     <img src={logo} alt="Tursu Logo"></img>
-                    <h4 className="messages">{this.props.message}</h4>
+                    <Typography variant={"h7"}>{this.props.message}</Typography>
                     <form onSubmit={this.handleSubmit}>
-                        <input className="tursu_input" type="text" name="code" id="code" placeholder="Verification Code" value={this.state.code} onChange={this.handleChange} required />
+                        <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="text" name="code" id="code" placeholder="Verification Code" value={this.state.code} onChange={this.handleChange} required />
                         <br/>
-                        <button type="submit" className="tursu_button">Verify</button>
+                        <Button style={{backgroundColor: "#3CBC8D", width:'100px'}} type="submit" className="tursu_button">Verify</Button>
                     </form>
                     <button type="button" onClick={this.resendCode} className="smallButton">Cannot find the verification code? Resend.</button>
                     <button type="button" onClick={this.goToRegistration} className="smallButton">Sign up for a new account</button>

@@ -4,6 +4,10 @@ import logo from '../rsz_11logo.png';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 import GoogleLogin from "react-google-login";
+import Input from '@material-ui/core/Input';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+
 
 const clientId = '872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com';
 
@@ -46,7 +50,9 @@ export default class Login extends Component {
                 window.sessionStorage.setItem("first_name", res.data.first_name);
                 window.sessionStorage.setItem("last_name", res.data.last_name);
                 window.sessionStorage.setItem("user_type", res.data.user_type);
-
+                if(res.data.user_type === "admin"){
+                    window.sessionStorage.setItem("first_name", "A dmin");
+                }
 
                 this.setState({ redirect: "True" });
 
@@ -106,6 +112,7 @@ export default class Login extends Component {
                 window.sessionStorage.setItem("last_name", res.data.last_name);
                 window.sessionStorage.setItem("user_type", res.data.user_type);
 
+
                 this.setState({ redirect: "True" });
 
             })
@@ -127,20 +134,21 @@ export default class Login extends Component {
             return(
                 <div className="login">
                     <img src={logo} alt="Tursu Logo"></img>
-                    <h1>Sign In</h1>
+
+                    <Typography variant={"h4"}>Sign In</Typography>
                     <form onSubmit={this.handleSubmit}>
 
-                        <input className="tursu_input" type="text" name="email" id="email" placeholder="Email or Username" value={this.state.email} onChange={this.handleChange} required />
+                        <Input style={{borderRadius: '10px',backgroundColor: "#b2fab4"}} className="tursu_input" type="text" name="email" id="email" placeholder="  Email or Username" value={this.state.email} onChange={this.handleChange} required />
 
                         <br/>
 
-                        <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
+                        <Input style={{borderRadius: '10px',backgroundColor: "#b2fab4"}} className="tursu_input" type="password" name="password" id="password" placeholder="  Password" value={this.state.password} onChange={this.handleChange} required />
 
                         <br/>
-                        <button type="submit" className="tursu_button">Sign In</button>
+                        <Button  variant="contained" style={{backgroundColor: "#3CBC8D", width:'100px'}} type="submit" className="tursu_button">Sign In</Button>
                     </form>
-                    <button type="button" onClick={this.goToRegistration} className="smallButton">New to Turşu? Sign up.</button>
-                    <button type="button" onClick={this.goToForgotP} className="smallButton">I forgot my password.</button>
+                    <Button variant="contained"  style={{backgroundColor: "#3CBC8D"}} type="button" onClick={this.goToRegistration} className="smallButton">New to Turşu? Sign up</Button>
+                    <Button variant="contained" style={{backgroundColor: "#3CBC8D"}} type="button" onClick={this.goToForgotP} className="smallButton">I forgot my password</Button>
                     <div>
                         <GoogleLogin
                             clientId='872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com'
