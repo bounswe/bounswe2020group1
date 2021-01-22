@@ -38,7 +38,7 @@ class VendorAdapter(val mContext: Context, private var vendorList: ArrayList<Ven
         bundle.putString("vendor_name", mItemSelected.name)
         val newFragment = PublicVendorFragment()
         newFragment.arguments = bundle
-        switchContent(R.id.nav_home, newFragment)
+        switchContent(R.id.nav_host_fragment, newFragment)
     }
     fun switchContent(id: Int, fragment: Fragment) {
         if (mContext == null) return
