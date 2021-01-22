@@ -48,8 +48,6 @@ Type 5 -> account
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
-
-    //var adapter: ProductAdapter? = null
     lateinit var auth_token:String
     lateinit var user_type:String
     var productList = ArrayList<ProductResponse>()
@@ -85,8 +83,18 @@ class HomeFragment : Fragment() {
         val args = arguments
         filters = hashMapOf()
         if (args != null) {
+            // get operation type from the arguments
+            /*
+            Type 0 -> all products
+            Type 1 -> category
+            Type 2 -> search
+            Type 3 -> filter
+            Type 4 -> sort
+            Type 5 -> account
+             */
             type = args.getInt("type")
             setButtonVisibilities(type)
+            //if the type is not listing all products -> there must be a key like "Sports"
             if (type != 0) {
                 keys = args.getString("keys").toString()
             }
@@ -135,10 +143,13 @@ class HomeFragment : Fragment() {
 
 
     }
+    //Home fragment contains both a nested recycler view for recommended products
+    // and a grid view to list products in a category or coming from a search
     fun disableRecommendationEnableGrid(){
         gridView.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
     }
+    // Pop up for shopping lists
     @SuppressLint("InflateParams")
     private fun showPopupWindowForLists(view: View) {
         Log.i("showPopup:", "here")
@@ -175,7 +186,7 @@ class HomeFragment : Fragment() {
 
         }
     }
-
+    // Pop up for filtering function
     @SuppressLint("InflateParams")
     private fun showPopupWindow(view: View) {
         //Create a View object yourself through inflater
@@ -202,7 +213,7 @@ class HomeFragment : Fragment() {
             popupWindow.dismiss()
         }
     }
-
+    // get chosen filters
     private fun applyFilters(view: View) {
         filters = hashMapOf()
         if (view.findViewById<EditText>(R.id.editminPrice).text.isNotEmpty()) {
@@ -330,7 +341,7 @@ class HomeFragment : Fragment() {
         toggleGroup.visibility = View.VISIBLE
 
     }
-
+    // searhing for vendor names
     private fun searchVendor(search_string: String) {
 
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -357,7 +368,7 @@ class HomeFragment : Fragment() {
         })
 
     }
-
+    //searching for products
     private fun searchProduct(search_string: String) {
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         filters!!["search_type"] = searchType
@@ -387,7 +398,7 @@ class HomeFragment : Fragment() {
 
 
     }
-
+    //get shopping lists of customer
     private fun getLists(view: View) {
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getLists(auth_token).enqueue(object :
@@ -425,7 +436,7 @@ class HomeFragment : Fragment() {
         })
 
     }
-
+    // adding a new shopping list
     private fun addList(view: View, window: PopupWindow){
         if(view.findViewById<EditText>(R.id.h_new_list_txt).text.isNotEmpty()){
             val listName = view.findViewById<EditText>(R.id.h_new_list_txt).text.toString()
@@ -467,7 +478,7 @@ class HomeFragment : Fragment() {
             Toast.makeText(context, "Please input a list name", Toast.LENGTH_SHORT).show()
         }
     }
-
+    // deleting a shopping list
     private fun deleteList(view: View, window: PopupWindow){
         if(view.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId!=-1) {
             val selectedList = view.findViewById<RadioGroup>(R.id.h_radioGroupLists).checkedRadioButtonId
@@ -659,37 +670,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun listRecommendedProducts(){
-        /*
-        val recommRecyclerView = view?.findViewById(R.id.recommRecylerView) as RecyclerView
-        val bestsellerRecyclerView = view?.findViewById(R.id.bestsellerRecyclerView) as RecyclerView
-        val topratedRecyclerView = view?.findViewById(R.id.topRatedRecyclerView) as RecyclerView
-        val newestRecyclerView = view?.findViewById(R.id.newestRecyclerView) as RecyclerView
-        recommRecyclerView.addOnScrollListener(scrollListener)
-        bestsellerRecyclerView.addOnScrollListener(scrollListener)
-        newestRecyclerView.addOnScrollListener(scrollListener)
-        topratedRecyclerView.addOnScrollListener(scrollListener)
-        recommRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        topratedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        newestRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        bestsellerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-        val bestsellerAdapter = RecommendationProductAdapter(bestsellerList, requireContext(),this@HomeFragment)
-        val topRatedAdapter = RecommendationProductAdapter(topratedList, requireContext(),this@HomeFragment)
-        val newstAdapter = RecommendationProductAdapter(newestList, requireContext(),this@HomeFragment)
-        val recommAdapter = RecommendationProductAdapter(recommList, requireContext(),this@HomeFragment)
-        recommRecyclerView.adapter = recommAdapter
-        topratedRecyclerView.adapter = topRatedAdapter
-        newestRecyclerView.adapter = newstAdapter
-        bestsellerRecyclerView.adapter = bestsellerAdapter
-        */
-
-        var bestsellerList = arrayListOf<ProductResponse>()
-        var topratedList = arrayListOf<ProductResponse>()
-        var newestList = arrayListOf<ProductResponse>()
-        var recommList = arrayListOf<ProductResponse>()
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         enableRecommendationDisableGrid()
-
         val parentList = mutableListOf<ParentModel>()
         apiinterface.getRecommendedProducts(auth_token).enqueue(object :
             retrofit2.Callback<RecommendationPackResponse> {

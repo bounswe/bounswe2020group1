@@ -63,7 +63,7 @@ class ChatFragment: Fragment() {
         fabButton.visibility = View.GONE
         displayChat()
     }
-
+    //get vendor message flow
     private fun getVendorMessages(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         val apiObject:Call<List<SingleMsgResponse>>
@@ -108,11 +108,12 @@ class ChatFragment: Fragment() {
 
         })
     }
-
+    // when going back to previous fragment, make FAB visible
     override fun onDestroyView() {
         super.onDestroyView()
         fabButton.visibility = View.VISIBLE
     }
+    //display messages and texting area
     @SuppressLint("SimpleDateFormat")
     private fun displayChat(){
         if(user_type=="customer"){
@@ -179,6 +180,7 @@ class ChatFragment: Fragment() {
              */
         }
     }
+    //get customer message flow
     private fun getCustomerMessages(){
         val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.getMessagesFromSelectedFlow(auth_token, flow_id).enqueue(object :
