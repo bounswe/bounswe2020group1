@@ -33,6 +33,7 @@ import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
 import Slider from "@material-ui/core/Slider";
 import Input from "@material-ui/core/Input";
+import Axios from "axios";
 
 const theme = createMuiTheme({
     palette:{
@@ -322,6 +323,11 @@ export function AlertMenu(props){
     const [priceBelowAlert, setPriceBelowAlert] = React.useState(false);
     const [stockAlert, setStockAlert] = React.useState(false);
 
+    const [priceChangeId, setPriceChangeAlertId] = React.useState(-1);
+    const [priceBelowAlertId, setPriceBelowAlertId] = React.useState(-1);
+    const [stockAlertId, setStockAlertId] = React.useState(-1);
+
+
     const [priceLevel, setPriceLevel] = React.useState(30);
     const [stockLevel, setStockLevel] = React.useState(30);
 
@@ -335,11 +341,27 @@ export function AlertMenu(props){
         onClose();
     };
 
+    function getAlerts()
+    {
+        Axios.get('http://3.232.20.250/notifications/get_alerts',{
+            params: {
+                product_id:  props.productId
+            },
+            headers: {
+                'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+            }
+        })
+            .then(res => {
+                console.log("ALERTS:")
+                console.log(res)
+            })
+    }
+
     function setAlertForPriceChanges() {
         if (!priceChangeAlert){
             const formData = new FormData();
             formData.append("product_id", props.productId);
-            formData.append("type", "1");
+            formData.append("type", "2");
             axios.post('http://3.232.20.250/notifications/create_alert',
                 formData, {
                     headers: {
@@ -347,8 +369,10 @@ export function AlertMenu(props){
                     }
                 })
                 .then(res => {
+                    console.log("Alert set.")
                     console.log(res);
                     console.log(res.status);
+                    getAlerts()
                 })
                 .catch(error =>{
                     console.log(error)
@@ -366,7 +390,7 @@ export function AlertMenu(props){
         if (!priceBelowAlert){
             const formData = new FormData();
             formData.append("product_id", props.productId);
-            formData.append("type", "0");
+            formData.append("type", "1");
             formData.append("value", priceLevel.toString());
             axios.post('http://3.232.20.250/notifications/create_alert',
                 formData, {
@@ -394,7 +418,7 @@ export function AlertMenu(props){
         if (!stockAlert){
             const formData = new FormData();
             formData.append("product_id", props.productId);
-            formData.append("type", "2");
+            formData.append("type", "3");
             formData.append("value", stockLevel.toString());
             axios.post('http://3.232.20.250/notifications/create_alert',
                 formData, {
