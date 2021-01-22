@@ -20,6 +20,7 @@ import Navbar from "./NavBar";
 import "./NavBar.css";
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
+import { GridList } from '@material-ui/core';
 
 
 class MessagingPage extends React.Component{
@@ -282,7 +283,7 @@ class MessagingPage extends React.Component{
                 </Grid>
                     <Grid container>
                         <Grid item xs={12} >
-                            <Typography variant="h5" className="header-message">Chat</Typography>
+                            <Typography variant="h5" className="header-message">Messages</Typography>
 
                         </Grid>
                     </Grid>
@@ -291,9 +292,9 @@ class MessagingPage extends React.Component{
                             <List>
                                 <ListItem button key="RemySharp">
                                     <ListItemIcon>
-                                        <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                                        <Avatar alt="Remy Sharp"  >{window.sessionStorage.getItem("first_name")}</Avatar>
                                     </ListItemIcon>
-                                    <ListItemText primary={window.sessionStorage.getItem("first_name")}></ListItemText>
+                                    <ListItemText primary={window.sessionStorage.getItem("first_name")}> {window.sessionStorage.getItem("first_name")}</ListItemText>
                                 </ListItem>
                             </List>
 
@@ -302,7 +303,7 @@ class MessagingPage extends React.Component{
                                 {(window.sessionStorage.getItem("user_type")==="admin" || window.sessionStorage.getItem("user_type")==="customer") && this.state.flows.map((flow) => (
                                     <ListItem button onClick={() => this.handleChangeFlow(flow.id)}>
                                         <ListItemIcon>
-                                            <Avatar alt={flow.vendor_name}  src="https://material-ui.com/static/images/avatar/2.jpg" />
+                                            <Avatar alt={flow.vendor_name} >{flow.username }</Avatar>
                                         </ListItemIcon>
                                         <ListItemText primary={flow.vendor_name}>{flow.vendor_name}</ListItemText>
                                     </ListItem>
@@ -311,7 +312,7 @@ class MessagingPage extends React.Component{
                                 {window.sessionStorage.getItem("user_type")==="vendor" && this.state.customer_flows.map((flow) => (
                                     <ListItem button onClick={() => this.handleChangeFlow(flow.id)}>
                                         <ListItemIcon>
-                                            <Avatar alt={flow.username }  src="https://material-ui.com/static/images/avatar/2.jpg" />
+                                            <Avatar alt={flow.username }  >{flow.username }</Avatar>
                                         </ListItemIcon>
                                         <ListItemText primary={flow.username }>{flow.username }</ListItemText>
                                     </ListItem>
@@ -321,7 +322,7 @@ class MessagingPage extends React.Component{
                                 {window.sessionStorage.getItem("user_type")==="vendor" && this.state.admin_flows.map((flow) => (
                                     <ListItem button onClick={() => this.handleChangeAdminFlow(flow.id)}>
                                         <ListItemIcon>
-                                            <Avatar alt={flow.id }  src="https://material-ui.com/static/images/avatar/2.jpg" />
+                                            <Avatar alt={flow.id } ></Avatar>
                                         </ListItemIcon>
                                         {(flow.context==="product") ?(
                                         <ListItemText primary={"Admin (About product-> " + flow.product + ")"}></ListItemText>
@@ -342,7 +343,7 @@ class MessagingPage extends React.Component{
 
                                         {(!this.state.to_admin) && this.state.message_info_list.map((message_info) => (
                                             (message_info.message!=="" && message_info.sender === "self" &&
-                                                <Box bgcolor="#a5d6a7" style={{
+                                                <Box  bgcolor="#a5d6a7" style={{
                                                     borderRadius: '10px',
                                                     margin: '5px',
                                                     marginLeft: '600px',
@@ -350,7 +351,8 @@ class MessagingPage extends React.Component{
                                                     <ListItemText align="left" style={{margin: '10px'}} primary={message_info.message }></ListItemText>
                                                 </Box>) ||
                                             (message_info.message!=="" && message_info.sender === "other" &&
-                                                <Box bgcolor="#aed581" style={{
+                                                <Box  bgcolor="#aed581" style={{
+                                                    height:40,
                                                     borderRadius: '10px',
                                                     margin: '5px',
                                                     marginRight: '500px',
