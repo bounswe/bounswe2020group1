@@ -1,5 +1,5 @@
 // import and use AppBar.js here, can be changed tho
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar";
 import {Button, ButtonGroup, fade, IconButton} from "@material-ui/core";
@@ -40,7 +40,9 @@ import PropTypes from 'prop-types';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import SmsIcon from '@material-ui/icons/Sms';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import axios from "axios";
 import DnsIcon from '@material-ui/icons/Dns';
+import Axios from "axios";
 
 
 /**
@@ -146,7 +148,8 @@ const useStyles = makeStyles((theme)=> ({
     dialog: { // TODO: check for different resolutions
         position: 'absolute',
         right: '18%', // not sure how it displays in different resolutions
-        top: 50
+        top: 50,
+        width: 400
     },
 }))
 
@@ -160,24 +163,91 @@ const theme = createMuiTheme({
         }
     }
 })
-// mock notification data
-// TODO: make axios connection
-const notifications = ['Your order has been shipped!', 'An item from your wishlist is back on stocks!',
-    'Discount on a product that is on your wishlist!', 'Your order has been shipped!', 'You have a new message!'];
 
-// following is the dialog that pops up when notification icon is clicked
-// maps the notification variable and displays them
-// depending on the user type, redirect address of the link is different
+
+let notifications = [];
+
+/*
+ * - It is the dialog that pops up when notification icon is clicked.
+ * - Maps the notification variable and displays them depending on the user type.
+ * - Redirect address of the link is different
+ */
 function SimpleDialog(props) {
     const classes = useStyles();
     const { onClose, selectedValue, open } = props;
+    const [updated, setUpdated] = React.useState(false);
+    const [rawNotifications, setRawNotifications] = React.useState([])
 
-    const handleClose = () => {
+    useEffect(() => {
+        axios.get("http://3.232.20.250/notifications/get_notifications",{
+            headers: {
+                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            }
+        }).then(res =>{
+            console.log("NOTIFICATIONS")
+            console.log(res.data)
+            let temp = []
+            for(const item of res.data)
+            {
+                if(!item.read)
+                {
+                    temp.push(item)
+                }
+            }
+            setRawNotifications(temp)
+            console.log("raw: ", rawNotifications.length)
+        })
+    }, [])
+
+    function getNotificationText(item)
+    {
+        let text = "";
+        switch (item.type) {
+            case 1:
+                text += "Your order " + item.product_name + " is in delivery now."
+                return text;
+                break;
+            case 2:
+                text += "Your product " + item.product_name + " is verified now."
+                return text;
+                break;
+            case 3:
+                text += "Price Drop: " + item.product_name + " is " + item.new_value + "₺ now."
+                return text;
+                break;
+            case 4:
+                text += "Price Change: " + item.product_name + " is " + item.new_value + "₺ now."
+                return text;
+                break;
+            case 5:
+                text += "Stock Change: " + item.product_name + " has " + item.new_value + "products in the stock now."
+                return text;
+                break;
+            default:
+                console.log(item.type)
+                break;
+        }
+        return text;
+    }
+
+    function handleClose(){
+        for(let notification of rawNotifications)
+        {
+            const formData = new FormData();
+            formData.append("id", notification.id);
+            Axios.post('http://3.232.20.250/notifications/set_read',
+                formData,{
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res.status)
+                console.log("Notification: ", notification.id, " is set as read.")
+            })
+        }
+        setRawNotifications([]);
         onClose(selectedValue);
-    };
-
-    const handleListItemClick = (value) => {
-        onClose(value);
     };
 
     const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
@@ -185,17 +255,18 @@ function SimpleDialog(props) {
         <Dialog classes={{paper: classes.dialog}} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
             <DialogTitle id="simple-dialog-title">Your Notifications</DialogTitle>
             <List>
-                {notifications.map((notification) => (
-                    <ListItem button onClick={() => handleListItemClick(notification)} key={notification}>
-                        <ListItemAvatar>
-                            <Avatar className={classes.avatar}>
-                                <NotificationsActiveIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={notification} />
-                    </ListItem>
+                {rawNotifications.map((notification) => (
+                    <Link to={`/product/${notification.product_id}`} style={{ textDecoration: 'none'}}>
+                        <ListItem key={notification}>
+                            <ListItemAvatar>
+                                    <Avatar className={classes.avatar}>
+                                        <NotificationsActiveIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                            <ListItemText primary={getNotificationText(notification)} />
+                        </ListItem>
+                    </Link>
                 ))}
-
                 <br/>
 
                 <Link to={linkAddress}>
@@ -216,7 +287,7 @@ SimpleDialog.propTypes = {
     selectedValue: PropTypes.string.isRequired,
 };
 
-// TODO: implement search functionality
+
 export default function Navbar(props){
     const [search_type, setType] = React.useState('product');
     const [search_str, setStr] = React.useState();
