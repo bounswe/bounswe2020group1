@@ -14,9 +14,30 @@ export default class myInfo extends Component {
             username : "",
             money : "",
             email : "",
+            password : "****",
             editName: "false",
             editSurname: "false",
             editPassword: "false",
+            fields: [
+                {key: 'Name',
+                    value: "",
+                    editable : 'True'},
+                {key: 'Surname',
+                    value: "",
+                    editable : 'True'},
+                {key: 'Username',
+                    value: "",
+                    editable : 'False'},
+                {key: 'Email',
+                    value: "",
+                    editable : 'False'},
+                {key: 'Money spent on Turşu',
+                    value: "",
+                    editable : 'False'},
+                {key: 'Password',
+                    value: '****',
+                    editable : 'True'}
+                ],
         }
         this.routeName = this.routeName.bind(this);
         this.nameChange = this.nameChange.bind(this);
@@ -37,6 +58,26 @@ export default class myInfo extends Component {
             this.setState({ username: res.data.username});
             this.setState({ money: res.data.money_spent});
             this.setState({ email: res.data.email});
+            this.setState({ fields: [
+            {key: 'Name',
+                value: res.data.first_name,
+                editable : 'True'},
+            {key: 'Surname',
+                value: res.data.last_name,
+                editable : 'True'},
+            {key: 'Username',
+                value: res.data.username,
+                editable : 'False'},
+            {key: 'Email',
+                value: res.data.email,
+                editable : 'False'},
+            {key: 'Money spent on Turşu',
+                value: res.data.money_spent,
+                editable : 'False'},
+            {key: 'Password',
+                value: '****',
+                editable : 'True'}
+            ]});
 
         })
         .catch(error =>{
@@ -112,45 +153,45 @@ export default class myInfo extends Component {
             })
         .then(res => {
             console.log(res)
+            if (key==="Name"){
+                 this.setState({name: value})
+                 var newFields = this.state.fields
+                 newFields[0].value = value
+                 this.setState({fields: newFields})
+                 this.nameChange()
+            }
+            else if (key=== "Surname"){
+                 this.setState({surname: value})
+                 var newFields = this.state.fields
+                 newFields[1].value = value
+                 this.setState({fields: newFields})
+                 this.surnameChange()
+            }
+            else if (key==="Password"){
+                 this.setState({password: "****"})
+                 var newFields = this.state.fields
+                 newFields[5].value = "****"
+                 this.setState({fields: newFields})
+                 this.passwordChange()
+            }
         })
         .catch(error =>{
             if (error.response){
                 console.log(error.response.message);
             }
         })
-        window.location.href = window.location.href
     }
 
     render() {
-        var fields = [
-        {key: 'Name',
-            value: this.state.name,
-            editable : 'True'},
-        {key: 'Surname',
-            value: this.state.surname,
-            editable : 'True'},
-        {key: 'Username',
-            value: this.state.username,
-            editable : 'False'},
-        {key: 'Email',
-            value: this.state.email,
-            editable : 'False'},
-        {key: 'Money spent on Turşu',
-            value: this.state.money,
-            editable : 'False'},
-        {key: 'Password',
-            value: '****',
-            editable : 'True'}
-        ];
         return(
             <Grid item>
                 <div>
-                    {this.routeName(fields[0])}
-                    {this.routeName(fields[1])}
-                    <InfoBox field={fields[2]}/>
-                    <InfoBox field={fields[3]}/>
-                    <InfoBox field={fields[4]}/>
-                    {this.routeName(fields[5])}
+                    {this.routeName(this.state.fields[0])}
+                    {this.routeName(this.state.fields[1])}
+                    <InfoBox field={this.state.fields[2]}/>
+                    <InfoBox field={this.state.fields[3]}/>
+                    <InfoBox field={this.state.fields[4]}/>
+                    {this.routeName(this.state.fields[5])}
                 </div>
             </Grid>
         )
