@@ -500,6 +500,12 @@ function UserDropDown(){
         setAnchorEl(null);
     };
 
+    const handleSignOut = () => {
+        var temp_type = window.sessionStorage.getItem("user_type")
+        window.sessionStorage.clear()
+        window.sessionStorage.setItem("user_type",  temp_type)
+    };
+
     const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
     const messageAddress = "/message"
     return(
@@ -558,11 +564,7 @@ function UserDropDown(){
                     </MenuItem>
                 </Link>}
                 <Link to={"/"}>
-                    <MenuItem onClick={
-                        ()=>{
-                            window.sessionStorage.clear()
-                        }
-                    }>
+                    <MenuItem onClick={handleSignOut}>
                         <ListItemIcon>
                             <PowerSettingsNewSharpIcon/>
                         </ListItemIcon>

@@ -51,7 +51,7 @@ export default class Login extends Component {
                 window.sessionStorage.setItem("last_name", res.data.last_name);
                 window.sessionStorage.setItem("user_type", res.data.user_type);
                 if(res.data.user_type === "admin"){
-                    window.sessionStorage.setItem("first_name", "A dmin");
+                    window.sessionStorage.setItem("first_name", "Admin");
                 }
 
                 this.setState({ redirect: "True" });
