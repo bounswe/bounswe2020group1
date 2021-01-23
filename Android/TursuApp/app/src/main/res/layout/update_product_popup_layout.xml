@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_product_add"
+    android:id="@+id/nav_product_update"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/TursuGreen"
@@ -80,7 +80,8 @@
                     android:hint="Category"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
-                    android:textColorHint="#7777" />
+                    android:textColorHint="#7777"
+                    style="@android:style/Widget.EditText"/>
 
 
             </LinearLayout>
@@ -256,7 +257,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_menu_gallery" />
+                    app:srcCompat="@android:drawable/ic_menu_camera"
+                    tools:ignore="MissingConstraints" />
 
 
             </LinearLayout>

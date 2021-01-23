@@ -241,4 +241,16 @@ interface ApiService {
                             @Part("price") price: RequestBody,
                             @Part photo: MultipartBody.Part) : Call<ResponseBody>
 
+    @Multipart
+    @POST("/product/edit/")
+    fun updateProductWithPhoto(@Header("Authorization") token: String,
+                               @Part("id") id: RequestBody,
+                               @Part("name") name: RequestBody,
+                               @Part("category") category: RequestBody,
+                               @Part("description") description: RequestBody,
+                               @Part("brand") brand: RequestBody,
+                               @Part("stock") stock: RequestBody,
+                               @Part("price") price: RequestBody,
+                               @Part photo: MultipartBody.Part) : Call<ResponseBody>
+
 }
