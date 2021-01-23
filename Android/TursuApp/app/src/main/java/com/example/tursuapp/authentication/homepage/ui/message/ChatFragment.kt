@@ -59,7 +59,7 @@ class ChatFragment: Fragment() {
         chatRecyclerView = view.findViewById(R.id.chatRecyclerView)
         sendButton = view.findViewById(R.id.send_msg_button)
         msgText = view.findViewById(R.id.editTextMessage)
-        fabButton = activity?.findViewById(R.id.fab)!!
+        fabButton = activity?.findViewById(R.id.message_floating_button)!!
         fabButton.visibility = View.GONE
         displayChat()
     }

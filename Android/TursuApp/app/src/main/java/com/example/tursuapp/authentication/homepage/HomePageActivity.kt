@@ -245,7 +245,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     }
     private fun setMessageButton(){
-        val fabButton = findViewById<FloatingActionButton>(R.id.fab)
+        val fabButton = findViewById<FloatingActionButton>(R.id.message_floating_button)
         if(!(userType=="customer" || userType=="vendor")){
             fabButton.visibility = View.GONE
         }
