@@ -24,6 +24,9 @@
         <item name="android:letterSpacing">0.04</item>
         <item name="android:textColor">#FB7181</item>
     </style>
+    <style name="floating_action_button">
+        <item name="android:backgroundTint">@color/tursu_green</item>
+    </style>
     <style name="profile">
 
         <item name="android:textSize">

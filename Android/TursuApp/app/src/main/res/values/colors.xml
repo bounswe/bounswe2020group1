@@ -14,5 +14,6 @@
     <color name="duskYellow">#FFC107</color>
     <color name="lightGrey">#BDBDB9</color>
     <color name="hintColor">#7777</color>
+    <color name="alertPink">#FFFF9898</color>
 
 </resources>
