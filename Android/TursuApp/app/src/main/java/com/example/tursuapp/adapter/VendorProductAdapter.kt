@@ -16,6 +16,7 @@ import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.VendorProductLists
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
+import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import com.squareup.picasso.Picasso
 
 
@@ -64,7 +65,7 @@ class VendorProductAdapter(val mContext: Context, private val children: List<Ven
     private fun fragmentJump(mItemSelected: VendorProductLists) {
         val bundle = Bundle()
         bundle.putString("id", mItemSelected.id.toString())
-        val newFragment = ProductPageFragment()
+        val newFragment = VendorProductPageFragment()
         newFragment.arguments = bundle
         switchContent(R.id.nav_host_fragment, newFragment)
     }

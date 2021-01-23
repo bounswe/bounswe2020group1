@@ -11,7 +11,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-109dp"
+        tools:layout_editor_absoluteY="16dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,8 +30,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="#3F51B5">
+                    android:background="#3F51B5"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/back_img"
@@ -42,8 +44,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
                         android:layout_marginTop="1dp"
+                        android:layout_marginRight="20dp"
                         android:background="#3F51B5"
                         android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
@@ -74,8 +76,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:spinnerMode="dropdown"
                     android:popupBackground="@color/white"
+                    android:spinnerMode="dropdown"
                     android:theme="@style/Spinner2" />
 
 
@@ -146,79 +148,116 @@
 
             <LinearLayout
                 android:id="@+id/lin7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="118dp"
+                android:layout_height="39dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lin6">
 
                 <EditText
                     android:id="@+id/addProduct_stock"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
                     android:background="@color/white"
                     android:ems="10"
                     android:hint="Stock"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
                     android:textColorHint="#7777" />
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lin8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/lin9"
+                android:layout_width="118dp"
+                android:layout_height="39dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lin7">
 
                 <EditText
                     android:id="@+id/addProduct_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
                     android:background="@color/white"
                     android:ems="10"
                     android:hint="Price"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
                     android:textColorHint="#7777" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/lin9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/lin8">
-
-                <EditText
-                    android:id="@+id/addProduct_photo"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:ems="10"
-                    android:hint="Photo"
-                    android:padding="10dp"
-                    android:textColor="@color/tursu_green"
-                    android:textColorHint="#7777" />
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:text="TL"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="#EDEDED"
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <Button
+                android:id="@+id/product_add_pick_image"
+                android:layout_width="116dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="30dp"
+                android:background="#EEF2F5"
+                android:text="CHOOSE IMAGE"
+                app:layout_constraintEnd_toStartOf="@+id/linear10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lin9" />
+
+            <Button
                 android:id="@+id/addProduct_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="232dp"
+                android:layout_height="61dp"
                 android:layout_marginLeft="70dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="70dp"
                 android:text="ADD PRODUCT"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.072"
+                app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lin9" />
+                app:layout_constraintTop_toBottomOf="@+id/linear10" />
+
+            <LinearLayout
+                android:id="@+id/linear10"
+                android:layout_width="208dp"
+                android:layout_height="198dp"
+                android:layout_marginStart="27dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingTop="20dp"
+                android:paddingRight="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/lin7"
+                app:layout_constraintTop_toBottomOf="@+id/lin6">>
+
+                <ImageView
+                    android:id="@+id/product_add_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_menu_gallery" />
+
+
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
