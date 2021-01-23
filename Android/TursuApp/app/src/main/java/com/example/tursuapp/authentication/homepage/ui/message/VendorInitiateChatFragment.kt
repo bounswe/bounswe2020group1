@@ -21,6 +21,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
+// To start chat with the admin
 class VendorInitiateChatFragment : Fragment(){
     lateinit var auth_token:String
     var products = listOf<VendorProductLists>()
@@ -39,7 +40,7 @@ class VendorInitiateChatFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioButtonGroup)
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
-
+            // choose an object id to start a chat about
             val radioButton: View = radioGroup.findViewById(checkedId)
             if(radioGroup.indexOfChild(radioButton)==0){
                 listView.setOnItemClickListener { _, view, position, _ ->
@@ -78,6 +79,7 @@ class VendorInitiateChatFragment : Fragment(){
 
         }
     }
+    //list products of the vendor
     private fun getProducts(){
         if(products.isEmpty()) {
             val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -109,6 +111,7 @@ class VendorInitiateChatFragment : Fragment(){
                 }
             })
         }
+        // if they are already recorded, dont call api
         else{
             val productMap = mutableListOf<String>()
             products.forEach {
@@ -119,7 +122,7 @@ class VendorInitiateChatFragment : Fragment(){
             adapter.notifyDataSetChanged()
         }
     }
-
+    //get orders of vendor
     private fun getOrders(){
         if(orders.isEmpty()) {
             val apiinterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
@@ -152,6 +155,7 @@ class VendorInitiateChatFragment : Fragment(){
 
             })
         }
+        // if they are already recorded, dont call api
         else{
             val orderList = mutableListOf<String>()
             ordersDictionary.forEach{
@@ -162,6 +166,7 @@ class VendorInitiateChatFragment : Fragment(){
             adapter.notifyDataSetChanged()
         }
     }
+    //math product ids with the product field in orders list and create a map like Order: Product
     fun createOrderProductDict(){
         for(order in orders){
             for(product in products){

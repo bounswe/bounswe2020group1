@@ -20,7 +20,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
-
+// For vendor, choose an estimated date for arrival of the order
 class DayEstimatorFragment : Fragment() {
     lateinit var auth_token: String
     var estimatedDayCount = -1
@@ -53,6 +53,7 @@ class DayEstimatorFragment : Fragment() {
         }
 
     }
+    // to put order in delivery status
     fun setInDeliveryMode(orderID: Int, cargoID: String, dayCount: Int, auth_token: String){
         val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiinterface.setDelivery(auth_token, orderID, cargoID, dayCount).enqueue(object :
