@@ -90,6 +90,7 @@ class AddProduct extends React.Component{
             alert("Please enter a valid stock!")
             return ;
         }
+        const newToken = window.sessionStorage.getItem("authToken")
         const formData = new FormData();
         e.preventDefault()
         console.log("anelka")
@@ -106,7 +107,7 @@ class AddProduct extends React.Component{
         axios
             .post("http://3.232.20.250/product/add/", formData, {
                 headers: {
-                    'Authorization': "Token " + token //the token is a variable which holds the token
+                    'Authorization': "Token " + newToken //the token is a variable which holds the token
                 },
             }).then((response) => {
 

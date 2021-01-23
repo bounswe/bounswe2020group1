@@ -104,6 +104,7 @@ class EditProduct extends React.Component{
             alert("Please enter a valid stock!")
             return ;
         }
+        const newToken = window.sessionStorage.getItem("authToken")
         const formData = new FormData();
         e.preventDefault()
         formData.append("id", this.props.id);
@@ -118,7 +119,7 @@ class EditProduct extends React.Component{
         axios
             .post("http://3.232.20.250/product/edit/", formData, {
                 headers: {
-                    'Authorization': "Token " + token //the token is a variable which holds the token
+                    'Authorization': "Token " + newToken //the token is a variable which holds the token
                 },
             }).then((response) => {
 
@@ -133,6 +134,7 @@ class EditProduct extends React.Component{
                 }
 
             });
+
 
     }
 
