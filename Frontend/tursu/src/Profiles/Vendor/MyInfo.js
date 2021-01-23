@@ -16,10 +16,38 @@ export default class myInfo extends Component {
             longitude: "",
             iban: "",
             rating: 0.0,
+            password: "****",
             editName: "false",
             editIban: "false",
             editPassword: "false",
+            fields : [
+                    {key: 'Name',
+                        value: "",
+                        editable : 'True'},
+                    {key: 'Username',
+                        value: "",
+                        editable : 'False'},
+                    {key: 'Email',
+                        value: "",
+                        editable : 'False'},
+                    {key: 'IBAN',
+                        value: "",
+                        editable : 'True'},
+                    {key: 'Latitude',
+                        value: "",
+                        editable : 'False'},
+                    {key: 'Longitude',
+                        value: "",
+                        editable : 'False'},
+                    {key: 'Rating',
+                        value: 0.0,
+                        editable : 'False'},
+                    {key: 'Password',
+                        value: '****',
+                        editable : 'True'}
+            ],
         }
+        this.checkPassword = this.checkPassword.bind(this);
         this.routeName = this.routeName.bind(this);
         this.nameChange = this.nameChange.bind(this);
         this.ibanChange = this.ibanChange.bind(this);
@@ -40,6 +68,32 @@ export default class myInfo extends Component {
             this.setState({ longitude: res.data.longitude});
             this.setState({ iban: res.data.iban});
             this.setState({ rating: res.data.rating});
+            this.setState({fields : [
+                    {key: 'Name',
+                        value: res.data.first_name,
+                        editable : 'True'},
+                    {key: 'Username',
+                        value: res.data.username,
+                        editable : 'False'},
+                    {key: 'Email',
+                        value: res.data.email,
+                        editable : 'False'},
+                    {key: 'IBAN',
+                        value: res.data.iban,
+                        editable : 'True'},
+                    {key: 'Latitude',
+                        value: res.data.latitude,
+                        editable : 'False'},
+                    {key: 'Longitude',
+                        value: res.data.longitude,
+                        editable : 'False'},
+                    {key: 'Rating',
+                        value: res.data.rating,
+                        editable : 'False'},
+                    {key: 'Password',
+                        value: '****',
+                        editable : 'True'}
+            ]});
 
         })
         .catch(error =>{
@@ -47,6 +101,18 @@ export default class myInfo extends Component {
                 console.log(error.response.message);
             }
         })
+    }
+    checkPassword(password){
+        if(password.length < 8){
+            return "Your password is too short, it should at least be 8 characters long!"
+        }
+        if(!(password.match(/[a-z]+/) && password.match(/[A-Z]+/) && password.match(/[0-9]+/))){
+            return "This password is too weak. Your password should include one uppercase letter, one lowercase letter and one digit."
+        }
+        else{
+            return "ok"
+        }
+        //thanks to: https://stackoverflow.com/questions/50547523/how-can-i-use-javascript-to-test-for-password-strength-in-a-way-that-returns-the
     }
     nameChange(){
         if (this.state.editName==="false"){
@@ -98,6 +164,7 @@ export default class myInfo extends Component {
         }
     }
     handleEdit(key,value){
+        var isAlright = true
         var token = sessionStorage.getItem("authToken");
         var bodyFormData = new FormData();
         //alert(key);
@@ -107,62 +174,64 @@ export default class myInfo extends Component {
                 bodyFormData.append('iban', value)}
         else if (key==="Password"){
                 bodyFormData.append('password', value);
+                var m = this.checkPassword(value)
+                if (m != "ok"){
+                    isAlright = false
+                    this.passwordChange()
+                    alert(m)
+                }
         }
-        axios({
-            method: 'post',
-            url: 'http://3.232.20.250/user/edit_profile',
-            data: bodyFormData,
-            headers: {Authorization: 'Token ' + token}
+        if (isAlright){
+            axios({
+                method: 'post',
+                url: 'http://3.232.20.250/user/edit_profile',
+                data: bodyFormData,
+                headers: {Authorization: 'Token ' + token}
+                })
+            .then(res => {
+                console.log(res)
+                if (key==="Name"){
+                     this.setState({name: value})
+                     var newFields = this.state.fields
+                     newFields[0].value = value
+                     this.setState({fields: newFields})
+                     this.nameChange()
+                }
+                else if (key=== "IBAN"){
+                     this.setState({iban: "value"})
+                     var newFields = this.state.fields
+                     newFields[3].value = value
+                     this.setState({fields: newFields})
+                     this.ibanChange()
+                }
+                else if (key==="Password"){
+                     this.setState({password: "****"})
+                     var newFields = this.state.fields
+                     newFields[7].value = "****"
+                     this.setState({fields: newFields})
+                     this.passwordChange()
+                }
             })
-        .then(res => {
-            console.log(res)
-        })
-        .catch(error =>{
-            if (error.response){
-                console.log(error.response.message);
-            }
-        })
-        window.location.href = window.location.href
+            .catch(error =>{
+                if (error.response){
+                    console.log(error.response.message);
+                }
+            })
+        }
     }
 
     render() {
-        var fields = [
-        {key: 'Name',
-            value: this.state.name,
-            editable : 'True'},
-        {key: 'Username',
-            value: this.state.username,
-            editable : 'False'},
-        {key: 'Email',
-            value: this.state.email,
-            editable : 'False'},
-        {key: 'IBAN',
-            value: this.state.iban,
-            editable : 'True'},
-        {key: 'Latitude',
-            value: this.state.latitude,
-            editable : 'False'},
-        {key: 'Longitude',
-            value: this.state.longitude,
-            editable : 'False'},
-        {key: 'Rating',
-            value: this.state.rating,
-            editable : 'False'},
-        {key: 'Password',
-            value: '****',
-            editable : 'True'}
-        ];
         return(
             <Grid item>
                 <div>
-                    {this.routeName(fields[0])}
-                    <InfoBox field={fields[1]}/>
-                    <InfoBox field={fields[2]}/>
-                    {this.routeName(fields[3])}
-                    <InfoBox field={fields[4]}/>
-                    <InfoBox field={fields[5]}/>
-                    <InfoBox field={fields[6]}/>
-                    {this.routeName(fields[7])}
+                    {this.routeName(this.state.fields[0])}
+                    <InfoBox field={this.state.fields[1]}/>
+                    <InfoBox field={this.state.fields[2]}/>
+                    {this.routeName(this.state.fields[3])}
+                    <InfoBox field={this.state.fields[4]}/>
+                    <InfoBox field={this.state.fields[5]}/>
+                    <InfoBox field={this.state.fields[6]}/>
+                    {this.routeName(this.state.fields[7])}
                 </div>
             </Grid>
         )
