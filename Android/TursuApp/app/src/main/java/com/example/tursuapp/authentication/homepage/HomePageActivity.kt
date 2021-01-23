@@ -103,8 +103,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 displayFragment(R.id.nav_home, 0, "", null)
             }
             else if(groupPosition == 3){
-                displayFragment(R.id.nav_home, 6, "", null)
+                logout()
             }
+
             false
         }
         expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
@@ -140,6 +141,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             if (groupPosition == 0) {
                 displayFragment(R.id.nav_home, 0, "", null)
             }
+            else if(groupPosition == 2){
+                startLogin()
+            }
             false
         }
         expListView!!.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
@@ -157,6 +161,22 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
         expListView!!.setSelectedGroup(0)
     }
+    fun logout(){
+        val pref = applicationContext.getSharedPreferences("UserPref", 0)
+        if (pref != null) {
+            with(pref.edit()) {
+                remove("first_name")
+                remove("last_name")
+                remove("user_type")
+                remove("auth_token")
+                putBoolean("logged_in", false)
+                apply()
+            }
+        }
+        val intent = Intent(applicationContext, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
     private fun setExpandableSideMenuVendor(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
@@ -168,6 +188,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
             else if (groupPosition == 3) {
                 displayContactAdminFragment()
+            }
+            else if (groupPosition == 4){
+                logout()
             }
             false
         }
@@ -190,44 +213,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                     3 -> displayFragment(R.id.nav_home, 1, "Cosmetics", null)
                     4 -> displayFragment(R.id.nav_home, 1, "Sports", null)
                 }
-            }
-            if(userType=="vendor"){
-                if (groupPosition == 4) {
-                     val pref = applicationContext?.getSharedPreferences("UserPref", 0)
-                     if (pref != null) {
-                         with(pref.edit()) {
-                             remove("first_name")
-                             remove("last_name")
-                             remove("user_type")
-                             remove("auth_token")
-                             putBoolean("logged_in", false)
-                             apply()
-                         }
-                     }
-                     val intent = Intent(applicationContext, LoginActivity::class.java)
-                     startActivity(intent)
-                     finish()
 
-                }
-            }
-            if(userType=="customer"){
-                if (groupPosition == 3) {
-                     val pref = applicationContext?.getSharedPreferences("UserPref", 0)
-                     if (pref != null) {
-                         with(pref.edit()) {
-                             remove("first_name")
-                             remove("last_name")
-                             remove("user_type")
-                             remove("auth_token")
-                             putBoolean("logged_in", false)
-                             apply()
-                         }
-                     }
-                     val intent = Intent(applicationContext, LoginActivity::class.java)
-                     startActivity(intent)
-                   finish()
-
-                }
             }
 
 
@@ -546,8 +532,10 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         if(userType=="vendor"){
             (listDataHeader as ArrayList<String>).add("Contact Admin")
         }
-
-        (listDataHeader as ArrayList<String>).add("Log Out")
+        if(userType!="vendor" && userType != "customer"){
+            (listDataHeader as ArrayList<String>).add("Log in")
+        }
+        (listDataHeader as ArrayList<String>).add("Log out")
 
 
         // Adding child data
@@ -566,7 +554,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         else{
             accountSubItems = menuItemsForVendor()
         }
-        //listDataChild!![(listDataHeader as ArrayList<String>)[0]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[0]] = accountSubItems
         listDataChild!![(listDataHeader as ArrayList<String>)[1]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[2]] = categoryNames
@@ -576,10 +563,14 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
         if (!(userType == "vendor" || userType == "customer")){
             (listDataHeader as ArrayList<String>).remove("My Account")
+            (listDataHeader as ArrayList<String>).remove("Log out")
         }
-        //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
     }
-
+    fun startLogin(){
+        val intent = Intent(applicationContext, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
     fun switchContent(id: Int, fragment: Fragment) {
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
         ft.replace(id, fragment, fragment.toString())

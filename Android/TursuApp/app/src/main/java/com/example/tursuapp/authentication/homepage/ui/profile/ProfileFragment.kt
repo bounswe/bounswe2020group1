@@ -48,21 +48,7 @@ class ProfileFragment : Fragment() {
 
         val button: Button = root!!.findViewById(R.id.logout_button) as Button
         button.setOnClickListener {
-            val pref = activity?.applicationContext?.getSharedPreferences("UserPref", 0)
-            if (pref != null) {
-                with(pref.edit()) {
-                    remove("first_name")
-                    remove("last_name")
-                    remove("user_type")
-                    remove("auth_token")
-                    putBoolean("logged_in", false)
-                    apply()
-                }
-            }
-            val intent = Intent(activity?.applicationContext, LoginActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
-
+            (activity as HomePageActivity).logout()
         }
 
         return root
