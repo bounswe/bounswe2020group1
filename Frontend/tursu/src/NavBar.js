@@ -132,7 +132,7 @@ const useStyles = makeStyles((theme)=> ({
         left: "85%"
     },
     cart:{
-        position: "absolute",
+        //position: "absolute",
         right: "180px",
     },
     avatar: {
@@ -164,7 +164,7 @@ const theme = createMuiTheme({
     }
 })
 
-
+// TODO: I couldn't find why it is global.
 let notifications = [];
 
 /*
@@ -348,8 +348,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to={`/search/${search_str}/${search_type}`}>
-                                            <IconButton onClick={() => {handleSearch()
-                                            }}>
+                                            <IconButton type="submit" onClick={handleSearch}>
                                                 <SearchIcon/>
                                             </IconButton>
                                         </Link>
@@ -500,6 +499,12 @@ function UserDropDown(){
         setAnchorEl(null);
     };
 
+    const handleSignOut = () => {
+        var temp_type = window.sessionStorage.getItem("user_type")
+        window.sessionStorage.clear()
+        window.sessionStorage.setItem("user_type",  temp_type)
+    };
+
     const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
     const messageAddress = "/message"
     return(
@@ -558,11 +563,7 @@ function UserDropDown(){
                     </MenuItem>
                 </Link>}
                 <Link to={"/"}>
-                    <MenuItem onClick={
-                        ()=>{
-                            window.sessionStorage.clear()
-                        }
-                    }>
+                    <MenuItem onClick={handleSignOut}>
                         <ListItemIcon>
                             <PowerSettingsNewSharpIcon/>
                         </ListItemIcon>

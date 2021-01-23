@@ -82,7 +82,7 @@ export default function VendorPublicProfile(props){
                             <VerifiedUserIcon style={{color: "#388e3c"}}/>
                         </Tooltip>
                         <Typography>
-                            Istanbul/Turkey<br/><br/>
+                            {vendorInfo.city}<br/><br/>
                         </Typography>
                     </Grid>
                     <Grid item>

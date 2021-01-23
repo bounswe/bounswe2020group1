@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme)=> ({
         // display: "flex",
         // flexGrow: 1
         width: 250,
-        marginRight: 75
+        marginRight: 10
     },
 }))
 

@@ -111,7 +111,6 @@ class EditProduct extends React.Component{
         } else {
             var legitStock = this.checkStock(this.state.stock)
         }
-
         if (legitPrice==="ok" && legitStock==="ok"){
             const formData = new FormData();
             e.preventDefault()
@@ -160,7 +159,6 @@ class EditProduct extends React.Component{
             return "ok"
         }
     }
-
     checkStock(stock){
         if(stock < 0){
             return "Stock can not be less than 0!"

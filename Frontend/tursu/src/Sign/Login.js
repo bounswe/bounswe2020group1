@@ -51,7 +51,7 @@ export default class Login extends Component {
                 window.sessionStorage.setItem("last_name", res.data.last_name);
                 window.sessionStorage.setItem("user_type", res.data.user_type);
                 if(res.data.user_type === "admin"){
-                    window.sessionStorage.setItem("first_name", "A dmin");
+                    window.sessionStorage.setItem("first_name", "Admin");
                 }
 
                 this.setState({ redirect: "True" });
@@ -63,6 +63,7 @@ export default class Login extends Component {
                 if (error.response){
                     if (error.response.status == 401){
                         if(error.response.data.error === "Not Verified"){
+                            //Sends user to email verification page when email is not verified yet
                             this.props.setU(this.state.email)
                             this.props.setP(this.state.password)
                             this.props.setM("You have not verified your email yet. Please enter the verification code we have sent you to proceed.")
