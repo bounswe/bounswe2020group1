@@ -57,6 +57,14 @@ interface ApiService {
     @GET("/customerpage")
     fun getCustomerProfileInfo(@Header("Authorization") token: String): Call<ProfileInfoResponse>
 
+    @FormUrlEncoded
+    @POST("/user/edit_profile")
+    fun editName(@Header("Authorization") token: String,@Field("first_name") list_name: String): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/user/edit_profile")
+    fun editSurname(@Header("Authorization") token: String,@Field("last_name") list_name: String): Call<ResponseBody>
+
     @GET("/product")
     fun getProductDetails(@Query("id") userId: Int): Call<ProductDetailsResponse>
 
