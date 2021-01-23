@@ -16,4 +16,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="add_list">Add to List</string>
     <string name="select">SELECT</string>
+
+    <string name="oauth_client_id">296299084628-nq5rfg07k2tvjmgjjmd6ir1b2d0bccg7.apps.googleusercontent.com</string>
 </resources>

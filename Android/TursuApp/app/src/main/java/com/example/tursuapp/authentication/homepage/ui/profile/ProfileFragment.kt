@@ -19,6 +19,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tursuapp.R
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.LoginResponse
 import com.example.tursuapp.api.responses.ProfileInfoResponse
 import com.example.tursuapp.api.responses.VendorDataResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
@@ -46,6 +47,7 @@ class ProfileFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+
         galleryViewModel =
                 ViewModelProvider(this).get(ProfileViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_customer_profile, container, false)
@@ -56,21 +58,7 @@ class ProfileFragment : Fragment() {
         val button: Button = root!!.findViewById(R.id.logout_button) as Button
 
         button.setOnClickListener {
-            val pref = activity?.applicationContext?.getSharedPreferences("UserPref", 0)
-            if (pref != null) {
-                with(pref.edit()) {
-                    remove("first_name")
-                    remove("last_name")
-                    remove("user_type")
-                    remove("auth_token")
-                    putBoolean("logged_in", false)
-                    apply()
-                }
-            }
-            val intent = Intent(activity?.applicationContext, LoginActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
-
+            (activity as HomePageActivity).logout()
         }
         val lastNameTitle: TextView = root!!.findViewById(R.id.lastName) as TextView
         val lastNameEditButton: ImageView = root!!.findViewById(R.id.surnameEdit) as ImageView
@@ -266,9 +254,11 @@ class ProfileFragment : Fragment() {
 
             override fun onResponse(
                     p0: Call<VendorDataResponse>?,
-                    response: Response<VendorDataResponse>?
+                    response: Response<VendorDataResponse?>
             ) {
-                if (response != null) {
+                val profileResponse: VendorDataResponse? = response.body()
+
+                if (profileResponse != null) {
                     Log.i("Status code",response.code().toString())
                     val profileInfo = response.body()!!
                     view.findViewById<TextView>(R.id.profileUsername).text = profileInfo.username

@@ -1,6 +1,8 @@
 package com.example.tursuapp.authentication.homepage
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -14,14 +16,20 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.tursuapp.R
+import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
-import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
-import com.example.tursuapp.authentication.homepage.ui.message.ChatFragment
 import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
+import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
+import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
+import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
+import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
+import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartFragment
+import com.example.tursuapp.authentication.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
@@ -35,6 +43,7 @@ Type 2 -> search
 Type 3 -> filter
 Type 4 -> sort
 Type 5 -> account
+Type 6 -> contact admin
  */
 @Suppress("DEPRECATION")
 class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -48,7 +57,14 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     var allVendors = listOf<String>()
     var allBrands = listOf<String>()
     var allCategories = listOf<String>()
-    lateinit var userType:String
+    private lateinit var userType:String
+    private lateinit var linearVendors:LinearLayout
+    private lateinit var linearCategories:LinearLayout
+    private lateinit var linearBrands:LinearLayout
+    var checkboxVendors: MutableList<CheckBox> = mutableListOf<CheckBox>()
+    var checkboxBrands: MutableList<CheckBox> = mutableListOf<CheckBox>()
+    var checkboxCategories: MutableList<CheckBox> = mutableListOf<CheckBox>()
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //otomatik kapanması için
@@ -69,12 +85,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         toolbar.setNavigationIcon(R.drawable.hamburger)
         supportActionBar?.setHomeButtonEnabled(true)
     }
-    private fun hideSoftKeyboard(activity: Activity) {
+    fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager: InputMethodManager = activity.getSystemService(
                 INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
                 activity.currentFocus!!.windowToken, 0)
     }
+
     private fun setExpandableSideMenuCustomer(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
@@ -85,13 +102,18 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             if (groupPosition == 1) {
                 displayFragment(R.id.nav_home, 0, "", null)
             }
+            else if(groupPosition == 3){
+                logout()
+            }
+
             false
         }
         expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
             if (groupPosition == 0) {
                 when (childPosition) {
-                    0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
-                    1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
+                    0 -> displaySideMenuPages("Profile")
+                    1 -> displaySideMenuPages("Orders")
+                    // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
                     2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
                     3 -> displayFragment(R.id.nav_home, 5, "Payment", null)
                 }
@@ -110,29 +132,22 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
         expListView!!.setSelectedGroup(0)
     }
-    private fun setExpandableSideMenuVendor(){
+    private fun setExpandableSideMenuGuest(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
         listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
         expListView!!.setAdapter(listAdapter)
         expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
-            if (groupPosition == 1) {
+            if (groupPosition == 0) {
                 displayFragment(R.id.nav_home, 0, "", null)
+            }
+            else if(groupPosition == 2){
+                startLogin()
             }
             false
         }
-        expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
-
-                if (groupPosition == 0) {
-                    when (childPosition) {
-                        0 -> displayFragment(R.id.nav_home, 5, "Profile", null)
-                        1 -> displayFragment(R.id.nav_home, 5, "Orders", null)
-                       // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
-                        2 -> displayFragment(R.id.nav_home, 5, "Product Add", null)
-                        3 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
-                    }
-                }
-                if (groupPosition == 2) {
+        expListView!!.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
+            if (groupPosition == 1) {
                 when (childPosition) {
                     0 -> displayFragment(R.id.nav_home, 1, "Electronics", null)
                     1 -> displayFragment(R.id.nav_home, 1, "Fashion", null)
@@ -145,6 +160,91 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             false
         }
         expListView!!.setSelectedGroup(0)
+    }
+    fun logout(){
+        val pref = applicationContext.getSharedPreferences("UserPref", 0)
+        if (pref != null) {
+            with(pref.edit()) {
+                remove("first_name")
+                remove("last_name")
+                remove("user_type")
+                remove("auth_token")
+                putBoolean("logged_in", false)
+                apply()
+            }
+        }
+        val intent = Intent(applicationContext, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    private fun setExpandableSideMenuVendor(){
+        expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
+        prepareListData()
+        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
+        expListView!!.setAdapter(listAdapter)
+        expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
+            if (groupPosition == 1) {
+                displayFragment(R.id.nav_home, 0, "", null)
+            }
+            else if (groupPosition == 3) {
+                displayContactAdminFragment()
+            }
+            else if (groupPosition == 4){
+                logout()
+            }
+            false
+        }
+        expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
+
+                if (groupPosition == 0) {
+                    when (childPosition) {
+                        0 -> displaySideMenuPages("Profile")
+                        1 -> displaySideMenuPages("Orders")
+                        // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
+                        2 -> displaySideMenuPages("Product Add")
+                        3 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+                    }
+                }
+                if (groupPosition == 2) {
+                when (childPosition) {
+                    0 -> displayFragment(R.id.nav_home, 1, "Electronics", null)
+                    1 -> displayFragment(R.id.nav_home, 1, "Fashion", null)
+                    2 -> displayFragment(R.id.nav_home, 1, "Home", null)
+                    3 -> displayFragment(R.id.nav_home, 1, "Cosmetics", null)
+                    4 -> displayFragment(R.id.nav_home, 1, "Sports", null)
+                }
+
+            }
+
+
+            false
+        }
+        expListView!!.setSelectedGroup(0)
+    }
+    private fun displaySideMenuPages(fragmentName: String){
+        lateinit var fragment: Fragment
+        if(fragmentName == "Profile"){
+            fragment = ProfileFragment()
+        }
+        else if(fragmentName == "Orders"){
+            if(userType=="vendor"){
+                fragment = VendorOrderFragment()
+            }
+            else{
+                fragment = CustomerOrdersFragment()
+            }
+        }
+        else if(fragmentName == "Product Add"){
+            fragment = ProductAddFragment()
+        }
+        else if(fragmentName == "Products On Sale"){
+            fragment = VendorOrderFragment()
+        }
+
+        supportFragmentManager.beginTransaction().addToBackStack(null)
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
+        this.drawer.closeDrawer(GravityCompat.START)
     }
 
     private fun setSearchFunction(){
@@ -164,29 +264,35 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             lateinit var fragment: Fragment
             fragment = ShoppingCartFragment()
 
-            supportFragmentManager.beginTransaction()
+            supportFragmentManager.beginTransaction().addToBackStack(null)
                     .replace(R.id.nav_host_fragment, fragment)
                     .commit()
             this.drawer.closeDrawer(GravityCompat.START)
         }
 
     }
-    fun setMessageButton(){
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            lateinit var fragment: Fragment
-            fragment = MessageFlowFragment()
+    private fun setMessageButton(){
+        val fabButton = findViewById<FloatingActionButton>(R.id.fab)
+        if(!(userType=="customer" || userType=="vendor")){
+            fabButton.visibility = View.GONE
+        }
+        else {
+            fabButton.setOnClickListener {
+                lateinit var fragment: Fragment
+                fragment = MessageFlowFragment()
 
-            supportFragmentManager.beginTransaction().addToBackStack(null)
-                .replace(R.id.nav_host_fragment, fragment)
-                .commit()
-            this.drawer.closeDrawer(GravityCompat.START)
+                supportFragmentManager.beginTransaction().addToBackStack(null)
+                        .replace(R.id.nav_host_fragment, fragment)
+                        .commit()
+                this.drawer.closeDrawer(GravityCompat.START)
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val pref = getSharedPreferences("UserPref", 0)
-        userType = pref?.getString("user_type",null).toString()
+        userType = pref?.getString("user_type", null).toString()
         getAllBrands()
         getAllCategories()
         getAllVendors()
@@ -197,7 +303,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         setShoppingCart()
         setMessageButton()
     }
-    fun setShoppingCart(){
+    private fun setShoppingCart(){
         val sc = findViewById<CardView>(R.id.shopping_cart)
         if(userType=="customer"){
             sc.visibility = View.VISIBLE
@@ -206,12 +312,17 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             sc.visibility = View.GONE
         }
     }
-    fun setExpandableSideMenu(){
-        if(userType=="customer"){
-            setExpandableSideMenuCustomer()
-        }
-        else{
-            setExpandableSideMenuVendor()
+    private fun setExpandableSideMenu(){
+        when (userType) {
+            "customer" -> {
+                setExpandableSideMenuCustomer()
+            }
+            "vendor" -> {
+                setExpandableSideMenuVendor()
+            }
+            else -> {
+                setExpandableSideMenuGuest()
+            }
         }
     }
     private fun getAllVendors(){
@@ -273,13 +384,40 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         })
     }
     override fun onBackPressed() {
-        val count = fragmentManager.backStackEntryCount
+
+        val count = supportFragmentManager.backStackEntryCount
         if (count == 0) {
-            super.onBackPressed()
+            //super.onBackPressed()
+            AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Closing Activity")
+                    .setMessage("Are you sure you want to exit Tursu?")
+                    .setPositiveButton("Yes") { dialog, which -> super.onBackPressed() }
+                    .setNegativeButton("No", null)
+                    .show()
+
+
+//you can add your alertdialog code here and after pressing positive button of alertdialog you can call super.onBackPressed()
         } else {
-            fragmentManager.popBackStack()
+            supportFragmentManager.popBackStack()
+        }
+
+
+
+    }
+    fun setVendorCheckBoxes(view: View) {
+        linearVendors=view.findViewById(R.id.linear_vendors) as LinearLayout
+        checkboxVendors.clear()
+        for(vendor in allVendors){
+            if(vendor.isNotEmpty()) {
+                checkboxVendors.add(CheckBox(this))
+                checkboxVendors.last().text=vendor
+                checkboxVendors.last().isChecked=false
+                linearVendors.addView(checkboxVendors.last())
+            }
         }
     }
+    /*
     fun setVendorRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVendors)
         for(vendor in allVendors){
@@ -288,6 +426,20 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             radioGroup.addView(btn1)
         }
     }
+     */
+    fun setBrandCheckBoxes(view: View) {
+        linearBrands=view.findViewById(R.id.linear_brands) as LinearLayout
+        checkboxBrands.clear()
+        for(brand in allBrands){
+            if(brand.isNotEmpty()) {
+                checkboxBrands.add(CheckBox(this))
+                checkboxBrands.last().text=brand
+                checkboxBrands.last().isChecked=false
+                linearBrands.addView(checkboxBrands.last())
+            }
+        }
+    }
+    /*
     fun setBrandRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupBrands)
         for(brand in allBrands){
@@ -296,6 +448,20 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             radioGroup.addView(btn1)
         }
     }
+     */
+    fun setCategoryCheckBoxes(view: View) {
+        linearCategories=view.findViewById(R.id.linear_categories) as LinearLayout
+        checkboxCategories.clear()
+        for(category in allCategories){
+            if(category.isNotEmpty()) {
+                checkboxCategories.add(CheckBox(this))
+                checkboxCategories.last().text=category
+                checkboxCategories.last().isChecked=false
+                linearCategories.addView(checkboxCategories.last())
+            }
+        }
+    }
+    /*
     fun setCategoryRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
         for(cat in allCategories){
@@ -304,6 +470,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             radioGroup.addView(btn1)
         }
     }
+     */
     fun setRatingRadioButtons(view: View){
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupRating)
         val btn1 = RadioButton(this)
@@ -342,16 +509,34 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     /*
      * Preparing the list data
      */
+    fun displayContactAdminFragment(){
+        val fragment = VendorInitiateChatFragment()
+        supportFragmentManager.beginTransaction().addToBackStack(null)
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
+        this.drawer.closeDrawer(GravityCompat.START)
+    }
     private fun prepareListData() {
         listDataHeader = ArrayList()
         listDataChild = HashMap()
 
         // Adding child data
+
         (listDataHeader as ArrayList<String>).add("My Account")
+
 
         (listDataHeader as ArrayList<String>).add("Home")
 
         (listDataHeader as ArrayList<String>).add("Categories")
+
+        if(userType=="vendor"){
+            (listDataHeader as ArrayList<String>).add("Contact Admin")
+        }
+        if(userType!="vendor" && userType != "customer"){
+            (listDataHeader as ArrayList<String>).add("Log in")
+        }
+        (listDataHeader as ArrayList<String>).add("Log out")
+
 
         // Adding child data
         val categoryNames: MutableList<String> = ArrayList()
@@ -369,11 +554,28 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         else{
             accountSubItems = menuItemsForVendor()
         }
-        //listDataChild!![(listDataHeader as ArrayList<String>)[0]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[0]] = accountSubItems
         listDataChild!![(listDataHeader as ArrayList<String>)[1]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[2]] = categoryNames
-        //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
+        listDataChild!![(listDataHeader as ArrayList<String>)[3]] = ArrayList()
+        if(userType=="vendor"){
+            listDataChild!![(listDataHeader as ArrayList<String>)[4]] = ArrayList()
+        }
+        if (!(userType == "vendor" || userType == "customer")){
+            (listDataHeader as ArrayList<String>).remove("My Account")
+            (listDataHeader as ArrayList<String>).remove("Log out")
+        }
+    }
+    fun startLogin(){
+        val intent = Intent(applicationContext, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    fun switchContent(id: Int, fragment: Fragment) {
+        val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+        ft.replace(id, fragment, fragment.toString())
+        ft.addToBackStack(null)
+        ft.commit()
     }
     fun menuItemsForVendor():MutableList<String>{
         val accountSubItems: MutableList<String> = ArrayList()
@@ -389,7 +591,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         accountSubItems.add("Profile")
         accountSubItems.add("Orders")
         accountSubItems.add("Shopping Lists")
-        accountSubItems.add("Payment")
         return accountSubItems
     }
 }

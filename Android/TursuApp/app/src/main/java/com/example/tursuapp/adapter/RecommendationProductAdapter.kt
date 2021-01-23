@@ -25,6 +25,7 @@ class RecommendationProductAdapter(val products:ArrayList<ProductResponse>,val c
             Picasso
                 .get() // give it the context
                 .load(products[position].photo_url) // load the image
+                    .tag("resume_tag")
                 .into(holder.product_img)
         }
         else{

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_vendor_initiate_chat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="#FFFFFF">
+
+    <RadioGroup
+        android:id="@+id/radioButtonGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView14">
+
+        <RadioButton
+            android:id="@+id/radioButtonProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/TursuGreen"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="About Product"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+        <RadioButton
+            android:id="@+id/radioButtonOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/TursuGreen"
+            android:clickable="true"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="About Order"
+            app:layout_constraintStart_toStartOf="@+id/radioButtonProduct"
+            app:layout_constraintTop_toBottomOf="@+id/radioButtonProduct" />
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/poppins"
+        android:text="Please choose a conversation subject"
+        app:layout_constraintBottom_toTopOf="@+id/radioButtonGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/start_chat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="54dp"
+        android:background="@color/purple_700"
+        android:fontFamily="@font/poppins"
+        android:padding="10dp"
+        android:text="Start chat with admin"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButtonGroup"
+        app:layout_constraintVertical_bias="0.946" />
+
+    <ListView
+        android:id="@+id/object_id"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/start_chat_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButtonGroup" />
+</androidx.constraintlayout.widget.ConstraintLayout>

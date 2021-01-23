@@ -10,23 +10,21 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tursuapp.MainActivity
 import com.example.tursuapp.R
 import com.example.tursuapp.api.responses.ProductResponse
-import com.example.tursuapp.api.responses.VendorProductLists
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.squareup.picasso.Picasso
 
 
-class VendorProductAdapter(val mContext: Context, private val children: List<VendorProductLists>)
-    : RecyclerView.Adapter<VendorProductAdapter.ViewHolder>(){
+class SingleProductAdapter(val mContext: Context, private val children: List<ProductResponse>)
+    : RecyclerView.Adapter<SingleProductAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): ViewHolder {
 
         val v =  LayoutInflater.from(parent.context)
-            .inflate(R.layout.product_layout, parent, false)
+                .inflate(R.layout.product_layout, parent, false)
         return ViewHolder(v)
     }
 
@@ -43,15 +41,16 @@ class VendorProductAdapter(val mContext: Context, private val children: List<Ven
         holder.product_rating.rating = product.rating.toFloat()
         if(product.photo_url!="") {
             Picasso
-                .get() // give it the context
-                .load(product.photo_url) // load the image
-                .tag("resume_tag")
-                .into(holder.product_img)
+                    .get() // give it the context
+                    .load(product.photo_url) // load the image
+                    .tag("resume_tag")
+                    .into(holder.product_img)
         }
         else{
             holder.product_img.setImageResource(R.drawable.ic_menu_camera)
         }
         holder.itemView.setOnClickListener {
+
             fragmentJump(product);
             /*
             .activity?.supportFragmentManager?.beginTransaction()
@@ -61,7 +60,7 @@ class VendorProductAdapter(val mContext: Context, private val children: List<Ven
              */
         }
     }
-    private fun fragmentJump(mItemSelected: VendorProductLists) {
+    private fun fragmentJump(mItemSelected: ProductResponse) {
         val bundle = Bundle()
         bundle.putString("id", mItemSelected.id.toString())
         val newFragment = ProductPageFragment()
