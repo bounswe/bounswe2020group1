@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+/**
+ * @brief It is the box component that is used to show vendors after vendor search.
+ */
 export default function VendorBox(props) {
     const classes = useStyles()
     return(
@@ -45,7 +48,7 @@ export default function VendorBox(props) {
                                 </Grid>
                                 <Grid>
                                     <Typography variant="caption">
-                                        Istanbul/Turkey
+                                        {props.vendor.city}
                                     </Typography>
                                 </Grid>
                                 <Grid>
@@ -65,7 +68,6 @@ export default function VendorBox(props) {
                         ):(
                             <div></div>
                         )}
-
                     </Paper>
                 </Button>
             </Link>
