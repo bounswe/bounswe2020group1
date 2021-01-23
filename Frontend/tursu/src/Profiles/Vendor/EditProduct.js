@@ -96,44 +96,68 @@ class EditProduct extends React.Component{
     }
 
     submitHandler = (e) => {
-        if(this.state.price < 0){
-            alert("Please enter a valid price!")
-            return ;
-        }
-        if(this.state.stock < 0){
-            alert("Please enter a valid stock!")
-            return ;
-        }
-        const formData = new FormData();
-        e.preventDefault()
-        formData.append("id", this.props.id);
-        if(this.state.category !== '' ) formData.append("category", this.state.category);
-        if(this.state.name !== '' ) formData.append("name", this.state.name);
-        if(this.state.description !== '' ) formData.append("description", this.state.description);
-        if(this.state.brand !== '' ) formData.append("brand", this.state.brand);
-        if(this.state.stock !== 0 ) formData.append("stock", this.state.stock);
-        if(this.state.price !== 0 ) formData.append("price", this.state.price);
-        if(this.state.Image !== '' ) formData.append("photo", this.state.Image);
+        var legitPrice = this.checkPrice(this.state.price)
+        var legitStock = this.checkStock(this.state.stock)
 
-        axios
-            .post("http://3.232.20.250/product/edit/", formData, {
-                headers: {
-                    'Authorization': "Token " + token //the token is a variable which holds the token
-                },
-            }).then((response) => {
+        if (legitPrice==="ok" && legitStock==="ok"){
+            const formData = new FormData();
+            e.preventDefault()
+            formData.append("id", this.props.id);
+            if(this.state.category !== '' ) formData.append("category", this.state.category);
+            if(this.state.name !== '' ) formData.append("name", this.state.name);
+            if(this.state.description !== '' ) formData.append("description", this.state.description);
+            if(this.state.brand !== '' ) formData.append("brand", this.state.brand);
+            if(this.state.stock !== 0 ) formData.append("stock", this.state.stock);
+            if(this.state.price !== 0 ) formData.append("price", this.state.price);
+            if(this.state.Image !== '' ) formData.append("photo", this.state.Image);
 
-            if (response.status === 200) {
-                alert("Product edited!");
-                console.log(response)
-            }
-        })
-            .catch((err) => {
-                if (err.response.status === 400) {
-                    alert(err.response.data);
+            axios
+                .post("http://3.232.20.250/product/edit/", formData, {
+                    headers: {
+                        'Authorization': "Token " + token //the token is a variable which holds the token
+                    },
+                }).then((response) => {
+
+                if (response.status === 200) {
+                    alert("Product edited!");
+                    console.log(response)
                 }
+            })
+                .catch((err) => {
+                    if (err.response.status === 400) {
+                        alert(err.response.data);
+                    }
 
-            });
+                });
+        } else if(legitStock !== "ok") {
+            alert(legitStock)
+        } else {
+            alert(legitPrice)
+        }
+    }
 
+    checkPrice(price){
+        if(price < 0){
+            return "Price can not be less than 0!"
+        }
+        else if(price == 0){
+            return "Price can not be equal to 0!"
+        }
+        else{
+            return "ok"
+        }
+    }
+
+    checkStock(stock){
+        if(stock < 0){
+            return "Stock can not be less than 0!"
+        }
+        else if(stock == 0){
+            return "Stock can not be equal to 0!"
+        }
+        else{
+            return "ok"
+        }
     }
 
 
