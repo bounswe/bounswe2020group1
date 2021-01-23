@@ -96,8 +96,21 @@ class EditProduct extends React.Component{
     }
 
     submitHandler = (e) => {
-        var legitPrice = this.checkPrice(this.state.price)
-        var legitStock = this.checkStock(this.state.stock)
+        console.log(this.state.stock)
+        console.log(this.state.pStock)
+
+
+        if(this.state.price === "") {
+            var legitPrice = this.checkPrice(this.state.pPrice)
+        } else {
+            var legitPrice = this.checkPrice(this.state.price)
+        }
+
+        if(this.state.stock === "") {
+            var legitStock = this.checkStock(this.state.pStock)
+        } else {
+            var legitStock = this.checkStock(this.state.stock)
+        }
 
         if (legitPrice==="ok" && legitStock==="ok"){
             const formData = new FormData();
@@ -129,9 +142,9 @@ class EditProduct extends React.Component{
                     }
 
                 });
-        } else if(legitStock !== "ok") {
+        }  else if(legitStock !== "ok"){
             alert(legitStock)
-        } else {
+        }  else {
             alert(legitPrice)
         }
     }
