@@ -61,6 +61,7 @@ export default function FormDialog(props) {
           setOpen(false);
     };
     const classes = props.classes
+    // pop up window for taking information from the user
     return (
         <div>
         <Grid className={classes.marginInsideGrid}>

@@ -57,6 +57,7 @@ export default class Login extends Component {
                 if (error.response){
                     if (error.response.status == 401){
                         if(error.response.data.error === "Not Verified"){
+                            //Sends user to email verification page when email is not verified yet
                             this.props.setU(this.state.email)
                             this.props.setP(this.state.password)
                             this.props.setM("You have not verified your email yet. Please enter the verification code we have sent you to proceed.")
