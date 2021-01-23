@@ -3,6 +3,8 @@ import "./sign_components.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import GoogleLogin from "react-google-login";
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
 
 const clientId = '872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com';
 
@@ -123,22 +125,22 @@ export default class Customer extends Component {
                 <div>
 
                     <form onSubmit={this.handleSubmit}>
-                        <input className="tursu_input" type="text" name="name" id="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} required />
-                        <input className="tursu_input" type="text" name="surname" id="surname" placeholder="Surname" value={this.state.surname} onChange={this.handleChange} required />
+                        <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="text" name="name" id="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} required />
+                        <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="text" name="surname" id="surname" placeholder="Surname" value={this.state.surname} onChange={this.handleChange} required />
                         <br/>
 
-                        <input className="tursu_input" type="text" name="username" id="username" placeholder="Username" value={this.state.username} onChange={this.handleChange} required />
+                        <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="text" name="username" id="username" placeholder="Username" value={this.state.username} onChange={this.handleChange} required />
 
-                        <input className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
+                        <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
                         <br/>
 
-                        <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
+                        <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
 
 
-                        <input className="tursu_input" type="password" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation" value={this.state.password_confirmation} onChange={this.handleChange} required />
+                        <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="password" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation" value={this.state.password_confirmation} onChange={this.handleChange} required />
                         <br/>
 
-                        <button type="submit" className="tursu_button">Sign Up</button>
+                        <Button  style={{backgroundColor: "#3CBC8D", width:'100px'}} type="submit" className="tursu_button">Sign Up</Button>
                     </form>
                     <br/>
                     <div>

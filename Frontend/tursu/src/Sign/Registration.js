@@ -3,6 +3,9 @@ import "./sign_components.css";
 import logo from '../rsz_11logo.png';
 import Customer from "./customer_registration";
 import Vendor from "./vendor_registration";
+import Typography from "@material-ui/core/Typography";
+
+
 
 export default class Registration extends Component {
     constructor(props) {
@@ -38,7 +41,7 @@ export default class Registration extends Component {
         if (this.state.user_type === "customer"){
             return(
                 <div className="customerRegistration">
-                    <br></br>
+                    <br/>
 
                     <div className="radio">
                         <a>Please select your user type: </a>
@@ -50,7 +53,7 @@ export default class Registration extends Component {
                     <br/>
                     <div>
                     <img src={logo} alt="Tursu Logo"></img>
-                    <h1>Sign Up for Customers</h1>
+                    <Typography variant={"h4"}>Sign Up for Customers</Typography>
                     </div>
                     <Customer login={this.goToLogin} verif={this.goToVerif} setM={this.props.setM} setP={this.props.setP} setU={this.props.setU}/>
                     <button type="button" onClick={this.goToLogin} className="smallButton">Already have an account? Sign in.</button>
@@ -74,7 +77,7 @@ export default class Registration extends Component {
                     <br/>
                     <div>
                         <img src={logo} alt="Tursu Logo"></img>
-                        <h1>Sign Up for Vendors</h1>
+                        <Typography variant={"h4"}>Sign Up for Vendors</Typography>
                     </div>
                     <Vendor login={this.goToLogin} verif={this.goToVerif} setM={this.props.setM} setP={this.props.setP} setU={this.props.setU}/>
                     <button type="button" onClick={this.goToLogin} className="smallButton">Already have an account? Sign in.</button>

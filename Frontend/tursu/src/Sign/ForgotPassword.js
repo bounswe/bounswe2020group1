@@ -45,13 +45,13 @@ export default class ForgotPassword extends Component {
         return(
             <div className="login">
                 <img src={logo} alt="Tursu Logo"></img>
-                <h1>Reset Password</h1>
+                <Typography variant={"h4"}>Reset Password</Typography>
                 <form onSubmit={this.handleSubmit}>
 
-                    <input className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
+                    <Input style={{backgroundColor: "#b2fab4"}} className="tursu_input" type="email" name="email" id="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
                     <br/>
                     <br/>
-                    <button type="submit" className="tursu_button">Reset Password</button>
+                    <Button style={{backgroundColor: "#3CBC8D", width:'100px', height: '60px'}} type="submit" className="tursu_button">Reset Password</Button>
                 </form>
                     <button type="button" onClick={this.goToLogin} className="smallButton">Remembered the password? Sign in.</button>
             </div>
