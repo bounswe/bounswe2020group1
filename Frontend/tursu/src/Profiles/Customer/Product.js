@@ -30,10 +30,10 @@ const horizontalStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     paper:{
-        marginLeft: 100,
+        marginLeft: 10,
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
-        width: 800,
+        width: 1000,
         height: 90,
     },
     grid: {
