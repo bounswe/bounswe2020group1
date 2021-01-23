@@ -51,7 +51,7 @@ interface ApiService {
                      @Field("IBAN") iban: String,
                      @Field("latitude") latitude: String,
                      @Field("longitude") longitude: String,
-                     @Field("city") city: String): Call<LoginResponse>
+                     @Field("city") city: String): Call<Void>
 
     @GET("/")
     fun getProducts(): Call<List<ProductResponse>>
