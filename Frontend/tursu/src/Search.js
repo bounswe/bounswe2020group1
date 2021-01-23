@@ -64,6 +64,7 @@ class SearchPage extends React.Component{
         this.setState({search_types: childData})
     }
     handleCallbackSearch= (childData) =>{
+        console.log(childData)
         this.setState({searched: childData})
     }
     handleCallbackdataSwitchType= (childData) =>{
@@ -115,42 +116,39 @@ class SearchPage extends React.Component{
     componentDidUpdate(prevProps, prevState, snapshot) {
         const array = window.location.href.split("/")
 
-        console.log(this.state.search_types)
         if((this.state.search_types !== prevState.search_types)||(array[4] !== prevProps.match.params.search_string)||(this.state.range !== prevState.range)||(this.state.vendor !== prevState.vendor)|| (this.state.sort !== prevState.sort)||(this.state.category !== prevState.category)||(this.state.category_switch !== prevState.category_switch)||(this.state.vendor_switch !== prevState.vendor_switch)){
-            if(this.state.search_types.includes("vendor")){
-                Axios.get('http://3.232.20.250/search/',{
-                    params: {
-                        search_string : array[4],
-                        search_type : "vendor",
-                        fprice_lower: this.state.range[0],
-                        fprice_upper: this.state.range[1],
-                        ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
-                        ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
-                        sort_by:this.state.sort
-                    }
+            Axios.get('http://3.232.20.250/search/',{
+                params: {
+                    search_string : array[4],
+                    search_type : "vendor",
+                    fprice_lower: this.state.range[0],
+                    fprice_upper: this.state.range[1],
+                    ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
+                    ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
+                    sort_by:this.state.sort
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                    this.setState({vendors: res.data});
                 })
-                    .then(res => {
-                        console.log(res)
-                        this.setState({vendors: res.data});
-                    })
-            }
-            if(this.state.search_types.includes("product")){
-                Axios.get('http://3.232.20.250/search/',{
-                    params: {
-                        search_string : array[4],
-                        search_type : array[5],
-                        fprice_lower: this.state.range[0],
-                        fprice_upper: this.state.range[1],
-                        ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
-                        ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
-                        sort_by:this.state.sort
-                    }
+
+            Axios.get('http://3.232.20.250/search/',{
+                params: {
+                    search_string : array[4],
+                    search_type : array[5],
+                    fprice_lower: this.state.range[0],
+                    fprice_upper: this.state.range[1],
+                    ...( this.state.category_switch !== true ? { fcategory: null } : { fcategory: this.state.category }),
+                    ...( this.state.vendor_switch !== true ? { fvendor_name: null } : { fvendor_name: this.state.vendor }),
+                    sort_by:this.state.sort
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                    this.setState({products: res.data});
                 })
-                    .then(res => {
-                        console.log(res)
-                        this.setState({products: res.data});
-                    })
-            }
+
 
         }
     }

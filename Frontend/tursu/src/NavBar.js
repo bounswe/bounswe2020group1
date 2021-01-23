@@ -348,8 +348,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to={`/search/${search_str}/${search_type}`}>
-                                            <IconButton onClick={() => {handleSearch()
-                                            }}>
+                                            <IconButton type="submit" onClick={handleSearch}>
                                                 <SearchIcon/>
                                             </IconButton>
                                         </Link>
