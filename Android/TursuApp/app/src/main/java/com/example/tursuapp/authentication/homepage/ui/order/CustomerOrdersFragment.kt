@@ -144,8 +144,9 @@ class CustomerOrdersFragment : Fragment() {
                 statusSet.add(order.status)
             }
             var status = ""
+            //list all different status f products in an order
             for(temp in statusSet){
-                status+=temp+","
+                status+= "$temp,"
             }
             status.dropLast(1)
             newOrder = CustomerOrder(price.toString(), quantity, status)

@@ -62,6 +62,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    testImplementation 'com.google.truth:truth:1.0.1'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'

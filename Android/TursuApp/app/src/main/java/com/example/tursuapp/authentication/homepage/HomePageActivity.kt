@@ -2,6 +2,7 @@ package com.example.tursuapp.authentication.homepage
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -28,6 +29,7 @@ import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
 import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCartFragment
+import com.example.tursuapp.authentication.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
@@ -101,8 +103,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 displayFragment(R.id.nav_home, 0, "", null)
             }
             else if(groupPosition == 3){
-                displayFragment(R.id.nav_home, 6, "", null)
+                logout()
             }
+
             false
         }
         expListView!!.setOnChildClickListener { _, view, groupPosition, childPosition, _ ->
@@ -138,6 +141,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             if (groupPosition == 0) {
                 displayFragment(R.id.nav_home, 0, "", null)
             }
+            else if(groupPosition == 2){
+                startLogin()
+            }
             false
         }
         expListView!!.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
@@ -155,6 +161,22 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
         expListView!!.setSelectedGroup(0)
     }
+    fun logout(){
+        val pref = applicationContext.getSharedPreferences("UserPref", 0)
+        if (pref != null) {
+            with(pref.edit()) {
+                remove("first_name")
+                remove("last_name")
+                remove("user_type")
+                remove("auth_token")
+                putBoolean("logged_in", false)
+                apply()
+            }
+        }
+        val intent = Intent(applicationContext, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
     private fun setExpandableSideMenuVendor(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
@@ -166,6 +188,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
             else if (groupPosition == 3) {
                 displayContactAdminFragment()
+            }
+            else if (groupPosition == 4){
+                logout()
             }
             false
         }
@@ -188,7 +213,9 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                     3 -> displayFragment(R.id.nav_home, 1, "Cosmetics", null)
                     4 -> displayFragment(R.id.nav_home, 1, "Sports", null)
                 }
+
             }
+
 
             false
         }
@@ -505,6 +532,12 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         if(userType=="vendor"){
             (listDataHeader as ArrayList<String>).add("Contact Admin")
         }
+        if(userType!="vendor" && userType != "customer"){
+            (listDataHeader as ArrayList<String>).add("Log in")
+        }
+        (listDataHeader as ArrayList<String>).add("Log out")
+
+
         // Adding child data
         val categoryNames: MutableList<String> = ArrayList()
 
@@ -521,19 +554,23 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         else{
             accountSubItems = menuItemsForVendor()
         }
-        //listDataChild!![(listDataHeader as ArrayList<String>)[0]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[0]] = accountSubItems
         listDataChild!![(listDataHeader as ArrayList<String>)[1]] = ArrayList()
         listDataChild!![(listDataHeader as ArrayList<String>)[2]] = categoryNames
+        listDataChild!![(listDataHeader as ArrayList<String>)[3]] = ArrayList()
         if(userType=="vendor"){
-            listDataChild!![(listDataHeader as ArrayList<String>)[3]] = ArrayList()
+            listDataChild!![(listDataHeader as ArrayList<String>)[4]] = ArrayList()
         }
         if (!(userType == "vendor" || userType == "customer")){
             (listDataHeader as ArrayList<String>).remove("My Account")
+            (listDataHeader as ArrayList<String>).remove("Log out")
         }
-        //listDataChild!![(listDataHeader as ArrayList<String>).get(2)] = comingSoon
     }
-
+    fun startLogin(){
+        val intent = Intent(applicationContext, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
     fun switchContent(id: Int, fragment: Fragment) {
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
         ft.replace(id, fragment, fragment.toString())
