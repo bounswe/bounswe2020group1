@@ -59,6 +59,8 @@ class VendorProductPageFragment : Fragment() {
     var vendorProductList = ArrayList<VendorProductLists>()
     var commentList = ArrayList<Comments>()
     private lateinit var commentListView: ListView
+    private lateinit var reviewsText:TextView
+    private lateinit var noReviewsText:TextView
     private lateinit var auth_token:String
     private var image_uri : Uri? = Uri.EMPTY
     private lateinit var image_view : ImageView
@@ -280,11 +282,21 @@ class VendorProductPageFragment : Fragment() {
                     product = response.body()!!
                     displayProductInfo(view)
                     commentList = ArrayList(product.comments)
-                    val adapter = context?.let { CommentAdapter(it, commentList) }
+
+                    reviewsText=view.findViewById(R.id.Reviews)
+                    noReviewsText=view.findViewById(R.id.NoReviews)
                     commentListView = view.findViewById(R.id.commentListView)
-                    displayProductInfo(view)
-                    if (commentListView != null) {
+
+                    if(commentList.isEmpty()){
+                        noReviewsText.visibility = View.VISIBLE
+                        reviewsText.visibility = View.INVISIBLE
+                        commentListView.visibility = View.INVISIBLE
+                    }else {
+                        val adapter = context?.let { CommentAdapter(it, commentList) }
                         commentListView.adapter = adapter
+                        noReviewsText.visibility = View.INVISIBLE
+                        reviewsText.visibility = View.VISIBLE
+                        commentListView.visibility = View.VISIBLE
                     }
 
                 }
