@@ -112,6 +112,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             activity.currentFocus!!.windowToken, 0
         )
     }
+    //set a notifications as read
     fun readNotification(not_id:Int){
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.setNotificationRead(auth_token,not_id).enqueue(object :
@@ -132,6 +133,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
         })
     }
+    //get all current notifications
     fun getNotifications(){
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getNotifications(auth_token).enqueue(object :
@@ -153,6 +155,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
         })
     }
+    //to see if there is an unread notification in the list, then the red bubble will show up
     fun isAllRead():Boolean{
         val isRead= notificationList.map { it.read }
         if(isRead.contains(false)){
@@ -160,6 +163,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
         return true
     }
+
+    //call notifications in every 5 minutes
     @SuppressLint("UseCompatLoadingForDrawables", "UseCompatLoadingForColorStateLists")
     fun checkNotifications(){
 
