@@ -165,10 +165,10 @@ class VendorProductPageFragment : Fragment() {
         val stock = view.findViewById<EditText>(R.id.product_stock).text.toString()
         val price = view.findViewById<EditText>(R.id.product_price).text.toString()
         val id = product.id.toString()
-        if (price.toFloat() < 0) {
+        if (!priceInputCheck(price.toFloat())) {
             Toast.makeText(activity?.applicationContext, "Price must be bigger than zero", Toast.LENGTH_SHORT).show()
         } else {
-            if (stock.toInt() < 0) {
+            if (!stockInputCheck(stock.toInt())) {
                 Toast.makeText(activity?.applicationContext, "Stock must be bigger than zero", Toast.LENGTH_SHORT).show()
             } else {
                 if (!Uri.EMPTY.equals(image_uri)) {
@@ -263,6 +263,28 @@ class VendorProductPageFragment : Fragment() {
 
 
     }
+
+    fun priceInputCheck(price:Float):Boolean{
+        try {
+            if(price < 0){
+                return false
+            }
+            return true
+        }catch (e: Exception){
+            return false
+        }
+    }
+    fun stockInputCheck(stock:Int):Boolean{
+        try {
+            if (stock < 0) {
+                return false
+            }
+            return true
+        }catch (e: Exception){
+            return false
+        }
+    }
+
     fun getDetails(id: Int, view: View){
         val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getProductDetails(id).enqueue(object :
