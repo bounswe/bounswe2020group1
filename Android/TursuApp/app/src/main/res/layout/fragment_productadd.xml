@@ -165,6 +165,7 @@
                     android:hint="Stock"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
+                    android:inputType="number"
                     android:textColorHint="#7777" />
                 <TextView
                     android:id="@+id/textView21"
@@ -194,6 +195,7 @@
                     android:hint="Price"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
+                    android:inputType="numberDecimal"
                     android:textColorHint="#7777" />
 
                 <TextView
