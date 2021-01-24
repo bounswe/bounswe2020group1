@@ -101,6 +101,8 @@ def get_orders(request):
 
     if len(group) > 0:
         orders.append(group)
+
+    orders.sort(key=lambda x: x[0].get('id'))
     orders.reverse()
     return JsonResponse(orders, safe=False)
 

@@ -28,6 +28,7 @@ def get_notifications(request):
         notification_dict['type'] = notification.type
         notification_dict['read'] = notification.read
         notification_list.append(notification_dict)
+    notification_list.sort(key=lambda x: x.get('id'))
     notification_list.reverse()
     return JsonResponse(notification_list, safe=False)
 

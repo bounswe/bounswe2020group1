@@ -66,9 +66,10 @@ def verify_product(request):
         product = Product.objects.get(id=product_id)
     except Exception:
         return HttpResponse("There is no such product with the id", status=400)
+    if product.is_verified == False:
+        notif.insert_product_verified(product.vendor.user, product.name, product.id)
     product.is_verified = True
     product.save()
-    notif.insert_product_verified(product.vendor.user, product.name, product.id)
     return HttpResponse("Successfully verified product")
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
