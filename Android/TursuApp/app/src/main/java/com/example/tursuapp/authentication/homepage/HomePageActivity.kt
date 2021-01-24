@@ -3,6 +3,7 @@ package com.example.tursuapp.authentication.homepage
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -35,6 +36,7 @@ import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCar
 import com.example.tursuapp.authentication.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import java.util.*
@@ -110,6 +112,26 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             activity.currentFocus!!.windowToken, 0
         )
     }
+    fun readNotification(not_id:Int){
+        val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.setNotificationRead(auth_token,not_id).enqueue(object :
+                retrofit2.Callback<ResponseBody> {
+            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                Log.i("Vendor Product List: ", "error: " + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<ResponseBody>?,
+                    response: Response<ResponseBody>?
+            ) {
+                if (response != null) {
+                    if (response.code() != 200) {
+                        Log.i("NotificationFragment","Problem reading the notification")
+                    }
+                }
+            }
+        })
+    }
     fun getNotifications(){
         val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
         apiInterface.getNotifications(auth_token).enqueue(object :
@@ -125,26 +147,25 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 if (response != null) {
                     if (response.body() != null) {
                         Log.i("MainFragment", "inside onResponse")
-                        notificationList = response.body()!!
+                        notificationList = response.body()!!.reversed()
                     }
                 }
             }
         })
     }
-
+    fun isAllRead():Boolean{
+        val isRead= notificationList.map { it.read }
+        if(isRead.contains(false)){
+            return false
+        }
+        return true
+    }
     @SuppressLint("UseCompatLoadingForDrawables", "UseCompatLoadingForColorStateLists")
     fun checkNotifications(){
-        newNotifications = findViewById(R.id.new_notification)
-        notificationsFab = findViewById(R.id.notification_button)
-        notificationsFab.setOnClickListener{
-            newNotifications.visibility = View.GONE
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment, NotificationsFragment())
-                .commit()
-        }
+
         Timer().scheduleAtFixedRate(timerTask {
             getNotifications()
-            if (notificationList.isNotEmpty()) {
+            if (!isAllRead()) {
                 //set alert
                 runOnUiThread {
                     // Stuff that updates the UI
@@ -156,7 +177,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                     newNotifications.visibility = View.GONE
                 }
             }
-        }, 0, 10000)
+        }, 0, 5000)
     }
     private fun setExpandableSideMenuCustomer(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
@@ -366,6 +387,22 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
         }
     }
+    private fun setNotificationButton(){
+        notificationsFab = findViewById(R.id.notification_button)
+        newNotifications = findViewById(R.id.new_notification)
+        if(!(userType=="vendor" || userType == "customer")){
+            notificationsFab.visibility = View.GONE
+            newNotifications.visibility = View.GONE
+        }
+        else {
+            notificationsFab.setOnClickListener {
+                supportFragmentManager.beginTransaction().addToBackStack(null)
+                        .replace(R.id.nav_host_fragment, NotificationsFragment())
+                        .commit()
+            }
+            checkNotifications()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val pref = getSharedPreferences("UserPref", 0)
@@ -381,7 +418,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         setSearchFunction()
         setShoppingCart()
         setMessageButton()
-        checkNotifications()
+        setNotificationButton()
     }
     private fun setShoppingCart(){
         val sc = findViewById<CardView>(R.id.shopping_cart)

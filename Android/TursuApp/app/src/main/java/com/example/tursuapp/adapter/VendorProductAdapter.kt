@@ -40,7 +40,7 @@ class VendorProductAdapter(val mContext: Context, private val children: List<Ven
         val product = children[position]
         holder.product_id.text = product.id.toString()
         holder.product_name.text = product.name
-        holder.poduct_price.text = product.price
+        holder.poduct_price.text = product.price+" TL"
         holder.product_rating.rating = product.rating.toFloat()
         if(product.photo_url!="") {
             Picasso

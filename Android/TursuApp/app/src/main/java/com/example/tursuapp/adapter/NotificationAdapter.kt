@@ -13,6 +13,7 @@ import com.example.tursuapp.api.responses.NotificationResponse
 import com.example.tursuapp.api.responses.VendorResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
+import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
 import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.PublicVendorFragment
 import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
@@ -21,13 +22,22 @@ import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorP
 class NotificationAdapter(val userType:String,val mContext: Context, private var notificationListText: MutableList<String>, private var notifications:List<NotificationResponse>) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textView.text = notificationListText[position]
+        if(!notifications[position].read){
+            holder.itemView.setBackgroundResource(R.color.newNotification)
+        }
+        else{
+            holder.itemView.setBackgroundResource(R.color.white)
+        }
+
         holder.itemView.setOnClickListener {
+            (mContext as HomePageActivity).readNotification(notifications[position].id)
             if(notifications[position].type == 1){
                 fragmentJump(notifications[position],null);
             }
             else {
                 val bundle = Bundle()
                 bundle.putString("id",notifications[position].product_id.toString())
+                fragmentJump(notifications[position],bundle);
             }
 
         }
@@ -38,14 +48,14 @@ class NotificationAdapter(val userType:String,val mContext: Context, private var
     private fun fragmentJump(mItemSelected: NotificationResponse,bundle: Bundle?) {
         lateinit var newFragment:Fragment
         if(mItemSelected.type == 1){
+
             if(userType == "vendor"){
-                if(userType == "vendor"){
-                    newFragment = VendorProductPageFragment()
-                }
-                else{
-                    newFragment = ProductPageFragment()
-                }
+                newFragment = VendorOrderFragment()
             }
+            else{
+                newFragment = CustomerOrdersFragment()
+            }
+
         }
         else if(mItemSelected.type == 2){
             newFragment = VendorProductPageFragment()

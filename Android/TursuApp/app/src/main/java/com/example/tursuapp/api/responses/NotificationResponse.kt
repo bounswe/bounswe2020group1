@@ -20,5 +20,5 @@ class NotificationResponse (
     @SerializedName("product_id") val product_id: Int,
     @SerializedName("order_id") val order_id: Int,
     @SerializedName("status") val status: String,
-    @SerializedName("new_value") val new_value: Int
+    @SerializedName("new_value") val new_value: Double
 )

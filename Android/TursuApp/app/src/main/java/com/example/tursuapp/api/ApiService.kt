@@ -263,4 +263,7 @@ interface ApiService {
     @GET("/notifications/get_notifications")
     fun getNotifications(@Header("Authorization") token: String): Call<List<NotificationResponse>>
 
+    @FormUrlEncoded
+    @POST("/notifications/set_read")
+    fun setNotificationRead(@Header("Authorization") token: String, @Field("id") object_id: Int):Call<ResponseBody>
 }

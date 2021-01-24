@@ -1,11 +1,11 @@
 package com.example.tursuapp.authentication.homepage.ui.notification
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tursuapp.R
@@ -21,9 +21,9 @@ class NotificationsFragment :Fragment(){
     lateinit var listView:RecyclerView
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val pref = context?.getSharedPreferences("UserPref", 0)
         auth_token = pref?.getString("auth_token", null).toString()
@@ -36,6 +36,7 @@ class NotificationsFragment :Fragment(){
         (activity as HomePageActivity).getNotifications()
         notifications = (activity as HomePageActivity).notificationList
         listView = view.findViewById(R.id.notifications_list_view)
+        listView.addItemDecoration(DividerItemDecoration(listView.context, DividerItemDecoration.VERTICAL))
         prepareNotifications()
 
     }
@@ -50,10 +51,10 @@ class NotificationsFragment :Fragment(){
                     lastNotifications.add("Product ${notif.product_name} is verified (Product ID: ${notif.product_id})")
                 }
                 3 -> {//"PRICE_BELOW_ALERT"
-                    lastNotifications.add("The price for product ${notif.product_name} is dropped now. It is ${notif.new_value}")
+                    lastNotifications.add("The price for product ${notif.product_name} is dropped now. It is ${notif.new_value} TL")
                 }
                 4 -> {//"PRICE_CHANGE_ALERT"
-                    lastNotifications.add("The price for product ${notif.product_name} is changed now. It is ${notif.new_value}\"")
+                    lastNotifications.add("The price for product ${notif.product_name} is changed now. It is ${notif.new_value} TL")
                 }
                 else -> {//STOCK ABOVE ALERT
                     lastNotifications.add("The product ${notif.product_name} is in stock now!!")
@@ -63,10 +64,10 @@ class NotificationsFragment :Fragment(){
         val mLayoutManager = LinearLayoutManager(context)
         listView.setLayoutManager(mLayoutManager)
         val adapter = NotificationAdapter(
-            user_type,
-            requireContext(),
-            lastNotifications,
-            notifications
+                user_type,
+                requireContext(),
+                lastNotifications,
+                notifications
         )
         listView.adapter = adapter
         adapter.notifyDataSetChanged()
