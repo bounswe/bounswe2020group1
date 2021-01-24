@@ -38,6 +38,8 @@ class ProductPageFragment : Fragment() {
     lateinit var user_type :String
     var commentList = ArrayList<Comments>()
     private lateinit var commentListView: ListView
+    private lateinit var reviewsText:TextView
+    private lateinit var noReviewsText:TextView
     var allLists = listOf<String>()
 
     override fun onCreateView(
@@ -472,10 +474,22 @@ class ProductPageFragment : Fragment() {
                     product = response.body()!!
                     displayProductInfo(view)
                     commentList = ArrayList(product.comments)
-                    val adapter = context?.let { CommentAdapter(it, commentList) }
+
+                    reviewsText=view.findViewById(R.id.Reviews)
+                    noReviewsText=view.findViewById(R.id.NoReviews)
                     commentListView = view.findViewById(R.id.commentListView)
-                    displayProductInfo(view)
-                    commentListView.adapter = adapter
+
+                    if(commentList.isEmpty()){
+                        noReviewsText.visibility = View.VISIBLE
+                        reviewsText.visibility = View.INVISIBLE
+                        commentListView.visibility = View.INVISIBLE
+                    }else {
+                        val adapter = context?.let { CommentAdapter(it, commentList) }
+                        commentListView.adapter = adapter
+                        noReviewsText.visibility = View.INVISIBLE
+                        reviewsText.visibility = View.VISIBLE
+                        commentListView.visibility = View.VISIBLE
+                    }
 
                 }
 

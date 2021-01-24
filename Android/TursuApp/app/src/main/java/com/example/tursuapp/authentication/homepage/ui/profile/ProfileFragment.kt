@@ -62,12 +62,14 @@ class ProfileFragment : Fragment() {
         }
         val lastNameTitle: TextView = root!!.findViewById(R.id.lastName) as TextView
         val lastNameEditButton: ImageView = root!!.findViewById(R.id.surnameEdit) as ImageView
+        val lastNameView: TextView = root!!.findViewById(R.id.lastNameView) as TextView
 
         if(user_type=="customer"){
         }
         else{
             lastNameTitle.isVisible=false
             lastNameEditButton.isVisible=false
+            lastNameView.isVisible=false
         }
 
         return root

@@ -35,6 +35,7 @@ import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
+import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
 import com.example.tursuapp.authentication.homepage.ui.profile.ProfileFragment
 import com.squareup.picasso.Picasso
 import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageModel
@@ -59,6 +60,8 @@ class VendorProductPageFragment : Fragment() {
     var vendorProductList = ArrayList<VendorProductLists>()
     var commentList = ArrayList<Comments>()
     private lateinit var commentListView: ListView
+    private lateinit var reviewsText:TextView
+    private lateinit var noReviewsText:TextView
     private lateinit var auth_token:String
     private var image_uri : Uri? = Uri.EMPTY
     private lateinit var image_view : ImageView
@@ -138,10 +141,20 @@ class VendorProductPageFragment : Fragment() {
         pickImage.setOnClickListener(pickImageListener)
         popupView.findViewById<ImageView>(R.id.dismiss_pop_up).setOnClickListener {
             popupWindow.dismiss()
+            val clickedId = product.id
+            val bundle = Bundle()
+            bundle.putString("id", clickedId.toString())
+            val newFragment = VendorProductPageFragment()
+            newFragment.arguments = bundle
+            val fragmentManager: FragmentManager? = fragmentManager
+            val fragmentTransaction: FragmentTransaction =
+                    fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
+            fragmentTransaction.commit()
         }
         popupView.findViewById<Button>(R.id.update_button).setOnClickListener {
             updateProduct(popupView)
-            popupWindow.dismiss()
+           // popupWindow.dismiss()
 
         }
 
@@ -172,7 +185,7 @@ class VendorProductPageFragment : Fragment() {
                 Toast.makeText(activity?.applicationContext, "Stock must be bigger than zero", Toast.LENGTH_SHORT).show()
             } else {
                 if (!Uri.EMPTY.equals(image_uri)) {
-                    var filePath = activity?.applicationContext?.let { getPathFromURI(it, image_uri!!) }
+                    var filePath = getPathFromURI(requireContext(), image_uri!!)
                     var file = File(filePath)
                     Log.i("filePath: ", filePath.toString())
                     Log.i("file.name: ", file.name.toString())
@@ -212,7 +225,7 @@ class VendorProductPageFragment : Fragment() {
                         ) {
                             if (response != null) {
                                 if (response.code() == 200) {
-                                    Toast.makeText(activity?.applicationContext, "Product has been successfully updated", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Product has been successfully updated", Toast.LENGTH_SHORT).show()
                                     //showPopupWindow(view)
                                     Log.i("Status code", response.code().toString())
 
@@ -220,7 +233,7 @@ class VendorProductPageFragment : Fragment() {
                                 } else if (response.code() == 400) {
                                     Log.v("Error code 400", response?.errorBody()?.string());
                                 } else {
-                                    Toast.makeText(activity?.applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                                     Log.i("Status code", response.code().toString())
                                     Log.i("MainFragment", response?.message().toString())
                                     // Toast.makeText(applicationContext, p0?.message.toString(), Toast.LENGTH_SHORT).show()
@@ -243,7 +256,7 @@ class VendorProductPageFragment : Fragment() {
                             if (response != null) {
                                 if (response.code() == 200) {
                                     Toast.makeText(context, "Product has been successfully updated", Toast.LENGTH_SHORT).show()
-                                    (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+                                   // (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "Products On Sale", null)
                                     Log.i("Status code", response.code().toString())
 
                                 } else if (response.code() == 400) {
@@ -302,11 +315,21 @@ class VendorProductPageFragment : Fragment() {
                     product = response.body()!!
                     displayProductInfo(view)
                     commentList = ArrayList(product.comments)
-                    val adapter = context?.let { CommentAdapter(it, commentList) }
+
+                    reviewsText=view.findViewById(R.id.Reviews)
+                    noReviewsText=view.findViewById(R.id.NoReviews)
                     commentListView = view.findViewById(R.id.commentListView)
-                    displayProductInfo(view)
-                    if (commentListView != null) {
+
+                    if(commentList.isEmpty()){
+                        noReviewsText.visibility = View.VISIBLE
+                        reviewsText.visibility = View.INVISIBLE
+                        commentListView.visibility = View.INVISIBLE
+                    }else {
+                        val adapter = context?.let { CommentAdapter(it, commentList) }
                         commentListView.adapter = adapter
+                        noReviewsText.visibility = View.INVISIBLE
+                        reviewsText.visibility = View.VISIBLE
+                        commentListView.visibility = View.VISIBLE
                     }
 
                 }
