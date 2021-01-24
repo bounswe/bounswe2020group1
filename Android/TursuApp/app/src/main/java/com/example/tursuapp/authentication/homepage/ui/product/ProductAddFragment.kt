@@ -108,7 +108,7 @@ class ProductAddFragment: Fragment() {
             spinner.adapter = adapter
         }
         view.findViewById<ImageView>(R.id.back_img).setOnClickListener {
-            (activity as HomePageActivity).displayFragment(R.id.nav_home, 4, "", null)
+            (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "Products On Sale", null)
         }
     }
     fun productadd(view: View) {
@@ -142,16 +142,16 @@ class ProductAddFragment: Fragment() {
                 priceOfProduct.requestFocus()
             }
             if (name.isEmpty() || brand.isEmpty() || stock.isEmpty() || price.isEmpty() || description.isEmpty()) {
-                Toast.makeText(activity?.applicationContext, "Input all product details ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Input all product details ", Toast.LENGTH_SHORT).show()
             } else {
                 if (price.toFloat() < 0) {
-                    Toast.makeText(activity?.applicationContext, "Price must be bigger than zero", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Price must be bigger than zero", Toast.LENGTH_SHORT).show()
                 } else {
                     if (stock.toInt() < 0) {
-                        Toast.makeText(activity?.applicationContext, "Stock must be bigger than zero", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Stock must be bigger than zero", Toast.LENGTH_SHORT).show()
                     } else {
                         if (!Uri.EMPTY.equals(image_uri)) {
-                            var filePath = activity?.applicationContext?.let { getPathFromURI(it, image_uri!!) }
+                            var filePath = getPathFromURI(requireContext(), image_uri!!)
                             var file = File(filePath)
                             Log.i("filePath: ", filePath.toString())
                             Log.i("file.name: ", file.name.toString())
@@ -192,7 +192,7 @@ class ProductAddFragment: Fragment() {
                                     //   val applicationContext = getActivity()?.getApplicationContext()
                                     if (response != null) {
                                         if (response.code() == 200) {
-                                            Toast.makeText(activity?.applicationContext, "Product has been successfully added", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Product has been successfully added", Toast.LENGTH_SHORT).show()
                                             //showPopupWindow(view)
                                             Log.i("Status code", response.code().toString())
 
@@ -205,10 +205,10 @@ class ProductAddFragment: Fragment() {
                                         } else if (response.code() == 400) {
                                             Log.v("Error code 400", response?.errorBody()?.string());
                                         } else {
-                                            Toast.makeText(activity?.applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                                             Log.i("Status code", response.code().toString())
                                             Log.i("MainFragment", response?.message().toString())
-                                            // Toast.makeText(applicationContext, p0?.message.toString(), Toast.LENGTH_SHORT).show()
+                                            // Toast.makeText(context, p0?.message.toString(), Toast.LENGTH_SHORT).show()
                                         }
                                     }
                                 }
@@ -228,7 +228,7 @@ class ProductAddFragment: Fragment() {
                                     val applicationContext = getActivity()?.getApplicationContext()
                                     if (response != null) {
                                         if (response.code() == 200) {
-                                            Toast.makeText(activity?.applicationContext, "Product has been successfully added", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Product has been successfully added", Toast.LENGTH_SHORT).show()
                                             Log.i("Status code", response.code().toString())
 
                                             //clear textviews
@@ -240,10 +240,10 @@ class ProductAddFragment: Fragment() {
                                         } else if (response.code() == 400) {
                                             Log.v("Error code 400", response?.errorBody()?.string());
                                         } else {
-                                            Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                                             Log.i("Status code", response.code().toString())
                                             Log.i("MainFragment", response?.message().toString())
-                                            // Toast.makeText(applicationContext, p0?.message.toString(), Toast.LENGTH_SHORT).show()
+                                            // Toast.makeText(context, p0?.message.toString(), Toast.LENGTH_SHORT).show()
                                         }
                                     }
                                 }
@@ -253,7 +253,7 @@ class ProductAddFragment: Fragment() {
                 }
             }
         }else {
-            Toast.makeText(activity?.applicationContext, "Select a category", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Select a category", Toast.LENGTH_SHORT).show()
         }
     }
     private val pickImageListener = View.OnClickListener { view ->
