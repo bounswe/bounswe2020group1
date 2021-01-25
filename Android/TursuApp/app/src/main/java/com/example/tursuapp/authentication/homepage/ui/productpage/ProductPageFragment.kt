@@ -61,6 +61,9 @@ class ProductPageFragment : Fragment() {
             root.findViewById<CardView>(R.id.addAlert)?.setOnClickListener{
                 showPriceAlerts()
             }
+            root.findViewById<ImageView>(R.id.stockAlert)?.setOnClickListener{
+                addStockAlert()
+            }
         }
         root.findViewById<ImageView>(R.id.add_comment_image)?.setOnClickListener {
             showPopupAddComment(it)
@@ -87,6 +90,7 @@ class ProductPageFragment : Fragment() {
         val addToList = view.findViewById<CardView>(R.id.addFavorite)
         val addComment = view.findViewById<CardView>(R.id.cardView4)
         val addAlert = view.findViewById<CardView>(R.id.addAlert)
+        val stockAlert = view.findViewById<ImageView>(R.id.stockAlert)
         if(user_type=="customer"){
             addToCart.visibility = View.VISIBLE
             addToList.visibility = View.VISIBLE
@@ -98,12 +102,14 @@ class ProductPageFragment : Fragment() {
             addToList.visibility = View.INVISIBLE
             addComment.visibility = View.INVISIBLE
             addAlert.visibility = View.INVISIBLE
+            stockAlert.visibility=View.INVISIBLE
         }
         else{
             addComment.visibility = View.INVISIBLE
             addToCart.visibility = View.VISIBLE
             addToList.visibility = View.VISIBLE
             addAlert.visibility = View.VISIBLE
+            stockAlert.visibility=View.INVISIBLE
             addToCart.setOnClickListener {
                 Toast.makeText(context,"You need to login first",Toast.LENGTH_SHORT).show()
             }
@@ -193,6 +199,36 @@ class ProductPageFragment : Fragment() {
             deleteFromList(popupView, popupWindow)
 
         }
+    }
+
+    private fun addStockAlert() {
+        val productId=product.id
+        val type=3 //alert type
+        val value=0 //above stock
+        val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+
+        apiInterface.createStockAlert(auth_token, productId, type, value).enqueue(object :
+                retrofit2.Callback<ResponseBody> {
+            override fun onFailure(call: Call<ResponseBody>?, error: Throwable?) {
+                Log.i("StockAlertFailure", "error" + error?.message.toString())
+                Toast.makeText(context, "There was an error, please try again!", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+                Log.i("StockeAlertResponse", response.toString())
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(context, "Stock alert is created!", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        val errorMessage = response.errorBody()?.string()
+                        if (errorMessage != null) {
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                        }
+                        }
+                    }
+                }
+        })
     }
 
     @SuppressLint("InflateParams")
@@ -519,11 +555,21 @@ class ProductPageFragment : Fragment() {
         view.findViewById<TextView>(R.id.vendor).text = "Vendor: "+product.vendor_name
         view.findViewById<TextView>(R.id.brand).text = "Brand: "+product.brand
         val addToCart = view.findViewById<CardView>(R.id.addCart)
+        val stockAlert = view.findViewById<ImageView>(R.id.stockAlert)
+        val addAlert = view.findViewById<CardView>(R.id.addAlert)
+
         if(product.stock<=0) {
             view.findViewById<TextView>(R.id.stock).text="Out of Stock"
             addToCart.visibility = View.INVISIBLE
+            stockAlert.visibility=View.VISIBLE
+            addAlert.visibility=View.INVISIBLE
         }else if(product.stock<10){
             view.findViewById<TextView>(R.id.stock).text = "Only " + product.stock.toString() + " left in stock"
+            stockAlert.visibility = View.INVISIBLE
+            addAlert.visibility=View.VISIBLE
+        }else {
+            stockAlert.visibility = View.INVISIBLE
+            addAlert.visibility=View.VISIBLE
         }
         val image  = view.findViewById<ImageView>(R.id.productImage)
         if(product.photo_url!="") {

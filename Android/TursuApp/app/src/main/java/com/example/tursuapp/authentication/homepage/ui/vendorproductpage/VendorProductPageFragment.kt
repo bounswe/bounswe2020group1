@@ -3,7 +3,9 @@ package com.example.tursuapp.authentication.homepage.ui.vendorproductpage
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -88,7 +90,30 @@ class VendorProductPageFragment : Fragment() {
         }
         root.findViewById<ImageView>(R.id.delete_product_img)?.setOnClickListener {
             //Do delete operation
-            deleteProduct(it)
+            // Build AlertDialog
+            val dialogBuilder = AlertDialog.Builder(root.context)
+
+            // set message of alert dialog
+            dialogBuilder.setMessage("Do you want to delete the product?")
+                    // if the dialog is cancelable
+                    .setCancelable(false)
+                    // positive button text and action
+                    .setPositiveButton("Proceed", DialogInterface.OnClickListener { dialog, id ->
+                        deleteProduct(it)
+                    })
+                    // negative button text and action
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
+                        dialog.cancel()
+                    })
+
+            // create dialog box
+            val alert = dialogBuilder.create()
+            // set title for alert dialog box
+            alert.setTitle("Delete Product")
+            // show alert dialog
+            alert.show()
+            //
+
 
         }
         return root
