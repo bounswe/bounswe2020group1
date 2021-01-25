@@ -257,16 +257,30 @@ function SimpleDialog(props) {
             <DialogTitle id="simple-dialog-title">Your Notifications</DialogTitle>
             <List>
                 {rawNotifications.map((notification) => (
-                    <Link to={`/product/${notification.product_id}`} style={{ textDecoration: 'none'}}>
-                        <ListItem key={notification}>
-                            <ListItemAvatar>
-                                    <Avatar className={classes.avatar}>
-                                        <NotificationsActiveIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                            <ListItemText primary={getNotificationText(notification)} />
-                        </ListItem>
-                    </Link>
+                     (notification.type == 1) ?(
+                             <Link to={`/customerProfile`} style={{ textDecoration: 'none'}}>
+                                 <ListItem key={notification}>
+                                     <ListItemAvatar>
+                                         <Avatar className={classes.avatar}>
+                                             <NotificationsActiveIcon />
+                                         </Avatar>
+                                     </ListItemAvatar>
+                                     <ListItemText primary={getNotificationText(notification)} />
+                                 </ListItem>
+                             </Link>
+                         ):(
+                             <Link to={`/product/${notification.product_id}`} style={{ textDecoration: 'none'}}>
+                                 <ListItem key={notification}>
+                                     <ListItemAvatar>
+                                         <Avatar className={classes.avatar}>
+                                             <NotificationsActiveIcon />
+                                         </Avatar>
+                                     </ListItemAvatar>
+                                     <ListItemText primary={getNotificationText(notification)} />
+                                 </ListItem>
+                             </Link>
+                         )
+
                 ))}
                 <br/>
 
