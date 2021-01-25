@@ -261,4 +261,19 @@ interface ApiService {
                                @Part("price") price: RequestBody,
                                @Part photo: MultipartBody.Part) : Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("/notifications/create_alert")
+    fun createPriceChangeAlert(@Header("Authorization") token: String,
+                             @Field("product_id") productId: Int,
+                             @Field("type") type: Int,
+                             @Field("value") price: Int):Call<ResponseBody>
+
+    @GET("/notifications/get_alerts")
+    fun getPriceAlerts(@Header("Authorization") token: String,
+                               @Query("product_id") productId: Int):Call<List<PriceAlertResponse>>
+
+    @FormUrlEncoded
+    @POST("/notifications/delete_alert")
+    fun deletePriceChangeAlert(@Header("Authorization") token: String,
+                               @Field("id") alertId: Int): Call<ResponseBody>
 }

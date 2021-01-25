@@ -200,7 +200,6 @@
             android:id="@+id/linearLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -210,16 +209,17 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/addCart"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_marginRight="5dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
                 app:cardBackgroundColor="#E8E7E7"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="8dp">
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:background="#E8E7E7"
                     android:src="@drawable/shopping_cart"
@@ -230,16 +230,18 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView3"
-                android:layout_width="70dp"
+                android:id="@+id/addFavorite"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
                 app:cardBackgroundColor="#E8E7E7"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="8dp">
 
                 <ImageView
                     android:id="@+id/add_list_image"
-                    android:layout_width="30dp"
-                    android:layout_height="31dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="#E8E7E7"
                     android:src="@drawable/add_to_favorites"
@@ -247,6 +249,22 @@
                     />
 
 
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/addAlert"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#E8E7E7"
+                app:cardCornerRadius="8dp">
+
+                <ImageView
+                    android:id="@+id/bellImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bell" />
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
