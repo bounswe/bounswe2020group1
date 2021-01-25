@@ -24,7 +24,7 @@ import com.squareup.picasso.Picasso
 class VendorAdapter(val mContext: Context, private var vendorList: ArrayList<VendorResponse>) : RecyclerView.Adapter<VendorAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.vendor_name.text = vendorList[position].name
-        holder.location_product.text = vendorList[position].location
+        holder.location_product.text = vendorList[position].city
         holder.ratingBarVendor.rating = vendorList[position].rating.toFloat()
         holder.itemView.setOnClickListener {
             fragmentJump(vendorList[position]);
