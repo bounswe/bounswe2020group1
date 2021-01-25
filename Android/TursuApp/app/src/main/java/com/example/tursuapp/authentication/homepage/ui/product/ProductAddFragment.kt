@@ -193,7 +193,7 @@ class ProductAddFragment: Fragment() {
                                     //   val applicationContext = getActivity()?.getApplicationContext()
                                     if (response != null) {
                                         if (response.code() == 200) {
-                                            Toast.makeText(context, "Product has been successfully added", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Product has been successfully added. Contact ADMIN for the verification of your product", Toast.LENGTH_LONG).show()
                                             //showPopupWindow(view)
                                             Log.i("Status code", response.code().toString())
 

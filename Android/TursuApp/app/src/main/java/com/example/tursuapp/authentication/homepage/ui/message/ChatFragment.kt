@@ -24,6 +24,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.timerTask
 
 class ChatFragment: Fragment() {
     lateinit var auth_token :String
@@ -120,7 +121,13 @@ class ChatFragment: Fragment() {
         msgfabButton.visibility = View.VISIBLE
         notifFabButton.visibility = View.VISIBLE
         smallNotifButton.visibility = View.VISIBLE
+
+        //this.getFragmentManager()?.beginTransaction()?.addToBackStack(null)?.commit()
+
+
     }
+
+
     //display messages and texting area
     @SuppressLint("SimpleDateFormat")
     private fun displayChat(){
@@ -146,12 +153,12 @@ class ChatFragment: Fragment() {
 
                 }
             }
-            /*
-            Timer().scheduleAtFixedRate(timerTask {
-                checkLastCustomer()
-            },0,2000)
 
-             */
+            Timer().scheduleAtFixedRate(timerTask {
+                getCustomerMessages()
+            },0,5000)
+
+
         }
         else if(user_type=="vendor"){
             getVendorMessages()
@@ -180,12 +187,12 @@ class ChatFragment: Fragment() {
 
                 }
             }
-            /*
-            Timer().scheduleAtFixedRate(timerTask {
-                checkLastVendor()
-            },0,2000)
 
-             */
+            Timer().scheduleAtFixedRate(timerTask {
+                getVendorMessages()
+            },0,5000)
+
+
         }
     }
     //get customer message flow

@@ -132,7 +132,7 @@ class MessageFlowFragment: Fragment() {
                         val fragmentTransaction: FragmentTransaction =
                                 fragmentManager!!.beginTransaction()
                         fragmentTransaction.detach(this@MessageFlowFragment)
-                        fragmentTransaction.attach(this@MessageFlowFragment).replace(R.id.fragment_message_flow, newFragment).addToBackStack(null)
+                        fragmentTransaction.attach(this@MessageFlowFragment).replace(R.id.nav_host_fragment, newFragment).addToBackStack(null)
                         fragmentTransaction.commit()
                     }
 

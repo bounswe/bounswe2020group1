@@ -21,6 +21,7 @@
         android:id="@+id/editTextMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:capitalize="none"
         android:ems="10"
         android:hint="Type your message..."
         android:inputType="textPersonName"
