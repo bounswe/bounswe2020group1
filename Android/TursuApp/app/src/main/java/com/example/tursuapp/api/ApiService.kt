@@ -51,7 +51,7 @@ interface ApiService {
                      @Field("IBAN") iban: String,
                      @Field("latitude") latitude: String,
                      @Field("longitude") longitude: String,
-                     @Field("city") city: String): Call<LoginResponse>
+                     @Field("city") city: String): Call<Void>
 
     @GET("/")
     fun getProducts(): Call<List<ProductResponse>>
@@ -260,8 +260,11 @@ interface ApiService {
                                @Part("stock") stock: RequestBody,
                                @Part("price") price: RequestBody,
                                @Part photo: MultipartBody.Part) : Call<ResponseBody>
+    @GET("/notifications/get_notifications")
+    fun getNotifications(@Header("Authorization") token: String): Call<List<NotificationResponse>>
 
     @FormUrlEncoded
+
     @POST("/notifications/create_alert")
     fun createPriceChangeAlert(@Header("Authorization") token: String,
                              @Field("product_id") productId: Int,
@@ -276,4 +279,8 @@ interface ApiService {
     @POST("/notifications/delete_alert")
     fun deletePriceChangeAlert(@Header("Authorization") token: String,
                                @Field("id") alertId: Int): Call<ResponseBody>
+
+    @POST("/notifications/set_read")
+    fun setNotificationRead(@Header("Authorization") token: String, @Field("id") object_id: Int):Call<ResponseBody>
+
 }

@@ -1,7 +1,9 @@
 package com.example.tursuapp.authentication.homepage
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,9 +23,11 @@ import com.example.tursuapp.R
 import com.example.tursuapp.adapter.ExpandableListAdapter
 import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
+import com.example.tursuapp.api.responses.NotificationResponse
 import com.example.tursuapp.authentication.homepage.ui.home.HomeFragment
 import com.example.tursuapp.authentication.homepage.ui.message.MessageFlowFragment
 import com.example.tursuapp.authentication.homepage.ui.message.VendorInitiateChatFragment
+import com.example.tursuapp.authentication.homepage.ui.notification.NotificationsFragment
 import com.example.tursuapp.authentication.homepage.ui.order.CustomerOrdersFragment
 import com.example.tursuapp.authentication.homepage.ui.order.VendorOrderFragment
 import com.example.tursuapp.authentication.homepage.ui.product.ProductAddFragment
@@ -32,8 +36,13 @@ import com.example.tursuapp.authentication.homepage.ui.shopping_cart.ShoppingCar
 import com.example.tursuapp.authentication.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.concurrent.timerTask
 
 
 /*
@@ -58,12 +67,16 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     var allBrands = listOf<String>()
     var allCategories = listOf<String>()
     private lateinit var userType:String
+    lateinit var auth_token:String
+    lateinit var newNotifications: FloatingActionButton
+    lateinit var notificationsFab: FloatingActionButton
     private lateinit var linearVendors:LinearLayout
     private lateinit var linearCategories:LinearLayout
     private lateinit var linearBrands:LinearLayout
     var checkboxVendors: MutableList<CheckBox> = mutableListOf<CheckBox>()
     var checkboxBrands: MutableList<CheckBox> = mutableListOf<CheckBox>()
     var checkboxCategories: MutableList<CheckBox> = mutableListOf<CheckBox>()
+    var notificationList = listOf<NotificationResponse>()
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -77,7 +90,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
         drawer = findViewById(R.id.drawer_layout)
-        toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        toggle = ActionBarDrawerToggle(
+            this,
+            drawer,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -87,15 +106,92 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     }
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager: InputMethodManager = activity.getSystemService(
-                INPUT_METHOD_SERVICE) as InputMethodManager
+            INPUT_METHOD_SERVICE
+        ) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
-                activity.currentFocus!!.windowToken, 0)
+            activity.currentFocus!!.windowToken, 0
+        )
+    }
+    //set a notifications as read
+    fun readNotification(not_id:Int){
+        val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.setNotificationRead(auth_token,not_id).enqueue(object :
+                retrofit2.Callback<ResponseBody> {
+            override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                Log.i("Vendor Product List: ", "error: " + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                    p0: Call<ResponseBody>?,
+                    response: Response<ResponseBody>?
+            ) {
+                if (response != null) {
+                    if (response.code() != 200) {
+                        Log.i("NotificationFragment","Problem reading the notification")
+                    }
+                }
+            }
+        })
+    }
+    //get all current notifications
+    fun getNotifications(){
+        val apiInterface: ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+        apiInterface.getNotifications(auth_token).enqueue(object :
+            retrofit2.Callback<List<NotificationResponse>> {
+            override fun onFailure(p0: Call<List<NotificationResponse>>?, p1: Throwable?) {
+                Log.i("Vendor Product List: ", "error: " + p1?.message.toString())
+            }
+
+            override fun onResponse(
+                p0: Call<List<NotificationResponse>>?,
+                response: Response<List<NotificationResponse>>?
+            ) {
+                if (response != null) {
+                    if (response.body() != null) {
+                        Log.i("MainFragment", "inside onResponse")
+                        notificationList = response.body()!!.reversed()
+                    }
+                }
+            }
+        })
+    }
+    //to see if there is an unread notification in the list, then the red bubble will show up
+    fun isAllRead():Boolean{
+        val isRead= notificationList.map { it.read }
+        if(isRead.contains(false)){
+            return false
+        }
+        return true
     }
 
+    //call notifications in every 5 minutes
+    @SuppressLint("UseCompatLoadingForDrawables", "UseCompatLoadingForColorStateLists")
+    fun checkNotifications(){
+
+        Timer().scheduleAtFixedRate(timerTask {
+            getNotifications()
+            if (!isAllRead()) {
+                //set alert
+                runOnUiThread {
+                    // Stuff that updates the UI
+                    newNotifications.visibility = View.VISIBLE
+                }
+
+            } else {
+                runOnUiThread {
+                    newNotifications.visibility = View.GONE
+                }
+            }
+        }, 0, 5000)
+    }
     private fun setExpandableSideMenuCustomer(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
-        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
+        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(
+            this,
+            it,
+            it1
+        ) } }
         expListView!!.setAdapter(listAdapter)
 
         expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
@@ -135,7 +231,11 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private fun setExpandableSideMenuGuest(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
-        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
+        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(
+            this,
+            it,
+            it1
+        ) } }
         expListView!!.setAdapter(listAdapter)
         expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
             if (groupPosition == 0) {
@@ -180,7 +280,11 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private fun setExpandableSideMenuVendor(){
         expListView = findViewById<View>(R.id.lvExp) as ExpandableListView
         prepareListData()
-        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(this, it, it1) } }
+        listAdapter = listDataHeader?.let { listDataChild?.let { it1 -> ExpandableListAdapter(
+            this,
+            it,
+            it1
+        ) } }
         expListView!!.setAdapter(listAdapter)
         expListView!!.setOnGroupClickListener { _, _, groupPosition, _ ->
             if (groupPosition == 1) {
@@ -288,11 +392,28 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
         }
     }
-
+    private fun setNotificationButton(){
+        notificationsFab = findViewById(R.id.notification_button)
+        newNotifications = findViewById(R.id.new_notification)
+        if(!(userType=="vendor" || userType == "customer")){
+            notificationsFab.visibility = View.GONE
+            newNotifications.visibility = View.GONE
+        }
+        else {
+            notificationsFab.setOnClickListener {
+                supportFragmentManager.beginTransaction().addToBackStack(null)
+                        .replace(R.id.nav_host_fragment, NotificationsFragment())
+                        .commit()
+            }
+            checkNotifications()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val pref = getSharedPreferences("UserPref", 0)
         userType = pref?.getString("user_type", null).toString()
+        auth_token = pref?.getString("auth_token", null).toString()
+
         getAllBrands()
         getAllCategories()
         getAllVendors()
@@ -302,6 +423,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         setSearchFunction()
         setShoppingCart()
         setMessageButton()
+        setNotificationButton()
     }
     private fun setShoppingCart(){
         val sc = findViewById<CardView>(R.id.shopping_cart)
@@ -334,8 +456,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
 
             override fun onResponse(
-                    p0: Call<List<String>>?,
-                    response: Response<List<String>>?
+                p0: Call<List<String>>?,
+                response: Response<List<String>>?
             ) {
                 if (response != null) {
                     allVendors = response.body()!!
@@ -353,8 +475,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
 
             override fun onResponse(
-                    p0: Call<List<String>>?,
-                    response: Response<List<String>>?
+                p0: Call<List<String>>?,
+                response: Response<List<String>>?
             ) {
                 if (response != null) {
                     allBrands = response.body()!!
@@ -372,8 +494,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             }
 
             override fun onResponse(
-                    p0: Call<List<String>>?,
-                    response: Response<List<String>>?
+                p0: Call<List<String>>?,
+                response: Response<List<String>>?
             ) {
                 if (response != null) {
                     allCategories = response.body()!!

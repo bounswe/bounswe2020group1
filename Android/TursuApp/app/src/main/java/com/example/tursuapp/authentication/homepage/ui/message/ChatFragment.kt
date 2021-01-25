@@ -31,7 +31,9 @@ class ChatFragment: Fragment() {
     lateinit var chatRecyclerView:RecyclerView
     lateinit var sendButton: Button
     lateinit var msgText:EditText
-    lateinit var fabButton:FloatingActionButton
+    lateinit var msgfabButton:FloatingActionButton
+    lateinit var notifFabButton:FloatingActionButton
+    lateinit var smallNotifButton:FloatingActionButton
     var flow_id:Int = -1
     var messageLength:Int? = null
     var toScroll = true
@@ -59,8 +61,12 @@ class ChatFragment: Fragment() {
         chatRecyclerView = view.findViewById(R.id.chatRecyclerView)
         sendButton = view.findViewById(R.id.send_msg_button)
         msgText = view.findViewById(R.id.editTextMessage)
-        fabButton = activity?.findViewById(R.id.message_floating_button)!!
-        fabButton.visibility = View.GONE
+        msgfabButton = activity?.findViewById(R.id.message_floating_button)!!
+        notifFabButton = activity?.findViewById(R.id.notification_button)!!
+        smallNotifButton = activity?.findViewById(R.id.new_notification)!!
+        msgfabButton.visibility = View.GONE
+        notifFabButton.visibility = View.GONE
+        smallNotifButton.visibility = View.GONE
         displayChat()
     }
     //get vendor message flow
@@ -111,7 +117,9 @@ class ChatFragment: Fragment() {
     // when going back to previous fragment, make FAB visible
     override fun onDestroyView() {
         super.onDestroyView()
-        fabButton.visibility = View.VISIBLE
+        msgfabButton.visibility = View.VISIBLE
+        notifFabButton.visibility = View.VISIBLE
+        smallNotifButton.visibility = View.VISIBLE
     }
     //display messages and texting area
     @SuppressLint("SimpleDateFormat")

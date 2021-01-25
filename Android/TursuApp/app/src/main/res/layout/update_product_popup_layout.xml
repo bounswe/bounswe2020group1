@@ -154,6 +154,7 @@
                 android:layout_width="118dp"
                 android:layout_height="39dp"
                 android:layout_marginTop="10dp"
+                android:background="@color/white"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -166,9 +167,11 @@
                     android:background="@color/white"
                     android:ems="10"
                     android:hint="Stock"
+                    android:inputType="number"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
                     android:textColorHint="#7777" />
+
                 <TextView
                     android:id="@+id/textView21"
                     android:layout_width="wrap_content"
@@ -183,6 +186,7 @@
                 android:layout_width="118dp"
                 android:layout_height="39dp"
                 android:layout_marginTop="10dp"
+                android:background="#FFFFFF"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -195,6 +199,7 @@
                     android:background="@color/white"
                     android:ems="10"
                     android:hint="Price"
+                    android:inputType="numberDecimal"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
                     android:textColorHint="#7777" />
@@ -203,13 +208,14 @@
                     android:id="@+id/textView20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginBottom="2dp"
                     android:layout_weight="1"
                     android:text="TL"
-                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    android:textColor="@color/TursuGreen"
                     android:textColorHighlight="#EDEDED"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <Button
