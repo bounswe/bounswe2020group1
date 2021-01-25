@@ -121,7 +121,7 @@ class ChatFragment: Fragment() {
         super.onDestroyView()
         msgfabButton.visibility = View.VISIBLE
         notifFabButton.visibility = View.VISIBLE
-        smallNotifButton.visibility = View.VISIBLE
+        //smallNotifButton.visibility = View.VISIBLE
 
         //this.getFragmentManager()?.beginTransaction()?.addToBackStack(null)?.commit()
 
