@@ -260,5 +260,10 @@ interface ApiService {
                                @Part("stock") stock: RequestBody,
                                @Part("price") price: RequestBody,
                                @Part photo: MultipartBody.Part) : Call<ResponseBody>
+    @GET("/notifications/get_notifications")
+    fun getNotifications(@Header("Authorization") token: String): Call<List<NotificationResponse>>
 
+    @FormUrlEncoded
+    @POST("/notifications/set_read")
+    fun setNotificationRead(@Header("Authorization") token: String, @Field("id") object_id: Int):Call<ResponseBody>
 }
