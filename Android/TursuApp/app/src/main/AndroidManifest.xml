@@ -39,6 +39,7 @@
         <activity android:name=".authentication.signup.VendorSignupActivity" />
         <activity android:name=".authentication.forgotpassword.ForgotPasswordActivity" />
         <activity android:name=".authentication.verification.VerificationActivity"/>
+        <activity android:name=".authentication.homepage.ui.productpage.PriceAlertsActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"

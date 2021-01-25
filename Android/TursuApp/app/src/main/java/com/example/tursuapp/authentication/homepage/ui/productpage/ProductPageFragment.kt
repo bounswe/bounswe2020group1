@@ -1,9 +1,11 @@
 package com.example.tursuapp.authentication.homepage.ui.productpage
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -23,7 +25,6 @@ import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.Comments
 import com.example.tursuapp.api.responses.ProductDetailsResponse
 import com.example.tursuapp.api.responses.ProductResponse
-import com.example.tursuapp.authentication.homepage.HomePageActivity
 import com.example.tursuapp.authentication.homepage.ui.profile.PublicVendorFragment
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
@@ -57,6 +58,9 @@ class ProductPageFragment : Fragment() {
             root.findViewById<ImageView>(R.id.add_list_image)?.setOnClickListener {
                 showPopupWindow(it)
             }
+            root.findViewById<CardView>(R.id.addAlert)?.setOnClickListener{
+                showPriceAlerts()
+            }
         }
         root.findViewById<ImageView>(R.id.add_comment_image)?.setOnClickListener {
             showPopupAddComment(it)
@@ -80,27 +84,34 @@ class ProductPageFragment : Fragment() {
 
     fun setVisibilities(view: View){
         val addToCart = view.findViewById<CardView>(R.id.addCart)
-        val addToList = view.findViewById<CardView>(R.id.cardView3)
+        val addToList = view.findViewById<CardView>(R.id.addFavorite)
         val addComment = view.findViewById<CardView>(R.id.cardView4)
+        val addAlert = view.findViewById<CardView>(R.id.addAlert)
         if(user_type=="customer"){
             addToCart.visibility = View.VISIBLE
             addToList.visibility = View.VISIBLE
+            addAlert.visibility = View.VISIBLE
       //      addComment.visibility = View.VISIBLE
         }
         else if(user_type == "vendor"){
             addToCart.visibility = View.INVISIBLE
             addToList.visibility = View.INVISIBLE
             addComment.visibility = View.INVISIBLE
+            addAlert.visibility = View.INVISIBLE
         }
         else{
             addComment.visibility = View.INVISIBLE
             addToCart.visibility = View.VISIBLE
             addToList.visibility = View.VISIBLE
+            addAlert.visibility = View.VISIBLE
             addToCart.setOnClickListener {
                 Toast.makeText(context,"You need to login first",Toast.LENGTH_SHORT).show()
             }
             addToList.setOnClickListener {
                 Toast.makeText(context,"You need to login first",Toast.LENGTH_SHORT).show()
+            }
+            addAlert.setOnClickListener {
+                Toast.makeText(context, "You need to login first", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -525,6 +536,13 @@ class ProductPageFragment : Fragment() {
             image.setImageResource(R.drawable.ic_menu_camera)
         }
     }
+
+    private fun showPriceAlerts() {
+        val intent = Intent(context, PriceAlertsActivity::class.java)
+        intent.putExtra("productId", product.id)
+        startActivity(intent)
+    }
+
     class ProductAdapter : BaseAdapter {
         var productList = ArrayList<ProductResponse>()
         var productImages = ArrayList<ImageView>()
