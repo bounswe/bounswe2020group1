@@ -362,6 +362,7 @@ export function AlertMenu(props){
                     case 1:
                         setPriceBelowAlertId(alert.id)
                         setPriceBelowAlert(true)
+                        setPriceLevel(alert.value)
                         break;
                     case 2:
                         setPriceChangeAlertId(alert.id)
@@ -370,6 +371,7 @@ export function AlertMenu(props){
                     case 3:
                         setStockAlertId(alert.id)
                         setStockAlert(true)
+                        setStockLevel(alert.value)
                         break;
                     default:
                 }
@@ -522,7 +524,7 @@ export function AlertMenu(props){
                                 <Tooltip title={"To change, please uncheck first."} disableHoverListener={!priceBelowAlert}>
                                     <span>
                                         <Slider
-                                            value={typeof priceLevel === 'number' ? priceLevel : 0}
+                                            value={priceLevel}
                                             aria-labelledby="input-slider"
                                             onChange={handlePriceLevelSlider}
                                             valueLabelDisplay="on"
