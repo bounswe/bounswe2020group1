@@ -103,6 +103,7 @@ class ChatFragment: Fragment() {
                         if(toScroll){
                             layoutManager.stackFromEnd = true
                         }
+                        layoutManager.stackFromEnd = true
                         chatRecyclerView.layoutManager = layoutManager
                         chatRecyclerView.adapter = MessageAdapter(context, msgs)
 
