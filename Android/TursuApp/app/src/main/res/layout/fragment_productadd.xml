@@ -167,7 +167,6 @@
                     android:background="@color/white"
                     android:ems="10"
                     android:hint="Stock"
-                    android:inputType="number"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
                     android:inputType="number"
@@ -201,8 +200,6 @@
                     android:background="@color/white"
                     android:ems="10"
                     android:hint="Price"
-
-                    android:inputType="numberDecimal"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
                     android:inputType="numberDecimal"
