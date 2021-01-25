@@ -79,7 +79,7 @@ def insert_product_change(registered_user: RegisteredUser, product_name: str, pr
 def handle_stock_change(product: Product):
     items = Alert.objects.filter(Q(product=product, type=AlertType.STOCK_ABOVE_ALERT.value, value__lte=product.stock))
     for item in items:
-        insert_product_change(item.user, product.name, product.id, product.stock, AlertType.STOCK_ABOVE_ALERT)
+        insert_product_change(item.user, product.name, product.id, product.stock, AlertType.STOCK_ABOVE_ALERT.value)
     items.delete()
 
 
