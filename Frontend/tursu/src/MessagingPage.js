@@ -340,13 +340,14 @@ class MessagingPage extends React.Component{
                             <List>
                                 <ListItem key="1">
                                     <Grid style={{
-                                        minHeight: '300px'
+                                        minHeight: '300px',
+                                        display: 'initial'
                                     }} container>
 
                                         {(!this.state.to_admin) && this.state.message_info_list.map((message_info) => (
                                             (message_info.message!=="" && message_info.sender === "self" &&
                                                 <Box  bgcolor="#a5d6a7" style={{
-                                                    height:40,
+                                                    minHeight:40,
                                                     borderRadius: '10px',
                                                     margin: '5px',
                                                     marginLeft: '600px',
@@ -355,7 +356,8 @@ class MessagingPage extends React.Component{
                                                 </Box>) ||
                                             (message_info.message!=="" && message_info.sender === "other" &&
                                                 <Box  bgcolor="#aed581" style={{
-                                                    height:40,
+                                                    width: 300,
+                                                    minHeight:40,
                                                     borderRadius: '10px',
                                                     margin: '5px',
                                                     marginRight: '500px',
@@ -367,7 +369,7 @@ class MessagingPage extends React.Component{
                                         {(this.state.to_admin) && this.state.toadmin_message_info_list.map((message_info) => (
                                             (message_info.message!=="" && message_info.sender === "self" &&
                                                 <Box bgcolor="#a5d6a7" style={{
-                                                    height:40,
+                                                    minHeight:40,
                                                     borderRadius: '10px',
                                                     margin: '5px',
                                                     marginLeft: '600px',
@@ -376,7 +378,8 @@ class MessagingPage extends React.Component{
                                                 </Box>) ||
                                             (message_info.message!=="" && message_info.sender === "other" &&
                                                 <Box bgcolor="#aed581" style={{
-                                                    height:40,
+                                                    width: 300,
+                                                    minHeight:40,
                                                     borderRadius: '10px',
                                                     margin: '5px',
                                                     marginRight: '500px',
