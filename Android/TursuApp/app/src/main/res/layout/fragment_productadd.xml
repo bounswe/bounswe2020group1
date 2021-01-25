@@ -35,9 +35,10 @@
 
                     <ImageView
                         android:id="@+id/back_img"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@drawable/x" />
+                        android:layout_width="30dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/back_arrow" />
 
                     <TextView
                         android:id="@+id/textView122"

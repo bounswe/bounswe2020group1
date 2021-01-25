@@ -264,7 +264,6 @@ interface ApiService {
     fun getNotifications(@Header("Authorization") token: String): Call<List<NotificationResponse>>
 
     @FormUrlEncoded
-
     @POST("/notifications/create_alert")
     fun createPriceChangeAlert(@Header("Authorization") token: String,
                              @Field("product_id") productId: Int,
@@ -280,6 +279,7 @@ interface ApiService {
     fun deletePriceChangeAlert(@Header("Authorization") token: String,
                                @Field("id") alertId: Int): Call<ResponseBody>
 
+    @FormUrlEncoded
     @POST("/notifications/set_read")
     fun setNotificationRead(@Header("Authorization") token: String, @Field("id") object_id: Int):Call<ResponseBody>
 
