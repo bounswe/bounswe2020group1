@@ -170,6 +170,7 @@
                     android:inputType="number"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
+                    android:inputType="number"
                     android:textColorHint="#7777" />
 
                 <TextView
@@ -204,6 +205,7 @@
                     android:inputType="numberDecimal"
                     android:padding="10dp"
                     android:textColor="@color/tursu_green"
+                    android:inputType="numberDecimal"
                     android:textColorHint="#7777" />
 
                 <TextView

@@ -144,11 +144,12 @@ class ProductAddFragment: Fragment() {
             if (name.isEmpty() || brand.isEmpty() || stock.isEmpty() || price.isEmpty() || description.isEmpty()) {
                 Toast.makeText(context, "Input all product details ", Toast.LENGTH_SHORT).show()
             } else {
-                if (price.toFloat() < 0) {
-                    Toast.makeText(context, "Price must be bigger than zero", Toast.LENGTH_SHORT).show()
+                if (!priceInputCheck(price.toFloat())) {
+                    Toast.makeText(activity?.applicationContext, "Price must be bigger than zero", Toast.LENGTH_SHORT).show()
                 } else {
-                    if (stock.toInt() < 0) {
-                        Toast.makeText(context, "Stock must be bigger than zero", Toast.LENGTH_SHORT).show()
+                    if (!stockInputCheck(stock.toInt())) {
+                        Toast.makeText(activity?.applicationContext, "Stock must be bigger than zero", Toast.LENGTH_SHORT).show()
+
                     } else {
                         if (!Uri.EMPTY.equals(image_uri)) {
                             var filePath = getPathFromURI(requireContext(), image_uri!!)
@@ -254,6 +255,26 @@ class ProductAddFragment: Fragment() {
             }
         }else {
             Toast.makeText(context, "Select a category", Toast.LENGTH_SHORT).show()
+        }
+    }
+    fun priceInputCheck(price:Float):Boolean{
+        try {
+            if(price < 0){
+                return false
+            }
+            return true
+        }catch (e: Exception){
+            return false
+        }
+    }
+    fun stockInputCheck(stock:Int):Boolean{
+        try {
+            if (stock < 0) {
+                return false
+            }
+            return true
+        }catch (e: Exception){
+            return false
         }
     }
     private val pickImageListener = View.OnClickListener { view ->
