@@ -74,8 +74,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/const1"
         android:layout_width="0dp"
-        android:layout_height="317dp"
+        android:layout_height="302dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/Reviews"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_name">
@@ -86,8 +87,10 @@
             android:layout_height="165dp"
             app:layout_constraintBottom_toTopOf="@id/verifiedProduct"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.483"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
             app:srcCompat="@android:drawable/ic_menu_camera"
             tools:ignore="MissingConstraints" />
 
@@ -143,6 +146,7 @@
         android:id="@+id/ProductInfo"
         android:layout_width="0dp"
         android:layout_height="302dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="20dp"
         android:background="@color/TursuGreen"
         android:minWidth="150dp"
@@ -150,7 +154,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/const1"
         app:layout_constraintTop_toBottomOf="@+id/product_name"
-        app:layout_constraintVertical_bias="0.487"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_goneMarginLeft="20dp"
         app:layout_goneMarginRight="20dp"
         tools:ignore="MissingConstraints">
