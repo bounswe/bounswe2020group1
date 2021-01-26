@@ -49,6 +49,7 @@ const vendorProfileStyles = makeStyles((theme)=>({
 export default function VendorPublicProfile(props){
     const classes = vendorProfileStyles()
     const [vendorInfo, setVendorInfo] = React.useState([])
+    const [update, setUpdate] = React.useState(false)
 
     /**
      * It is used for centralizing text in the AccordionSummary.
@@ -66,52 +67,59 @@ export default function VendorPublicProfile(props){
             }
         }).then(res =>{
             setVendorInfo(res.data)
+            console.log(res.data.rating)
+            setUpdate(true)
         })
     }, [])
 
     return(
-        <div className={classes.root}>
-            <Navbar/>
-            <Grid container className={classes.mostOuterGrid}>
-                <Grid container item className={classes.innerGrid}>
-                    <Grid item>
-                        <Typography variant="h4">
-                            {vendorInfo.username}
-                        </Typography>
-                        <Tooltip title={"Verified Vendor"}>
-                            <VerifiedUserIcon style={{color: "#388e3c"}}/>
-                        </Tooltip>
-                        <Typography>
-                            {vendorInfo.city}<br/><br/>
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Rating
-                            value = {vendorInfo.rating}
-                            readOnly
-                        />
-                    </Grid>
-                </Grid>
-                <Grid container item style={{marginTop:"30px"}}>
-                    <Accordion style={{width:"1000px", margin: "0 auto"}} elevation={3} defaultExpanded={true}>
-                        <AccordionSummary
-                            expandIcon = {<ExpandMoreIcon/>}
-                        >
-                            <Typography className={classes.typography.productListing}>Products of the Vendor</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Grid container item>
-                            { vendorInfo.length === 0 ? <div></div>:
-                                vendorInfo.products.map((product) => (
-                                    <ListedProduct product = {product}/>
-                                    ))
-                            }
+        (update) ? (
+                <div className={classes.root}>
+                    <Navbar/>
+                    <Grid container className={classes.mostOuterGrid}>
+                        <Grid container item className={classes.innerGrid}>
+                            <Grid item>
+                                <Typography variant="h4">
+                                    {vendorInfo.username}
+                                </Typography>
+                                <Tooltip title={"Verified Vendor"}>
+                                    <VerifiedUserIcon style={{color: "#388e3c"}}/>
+                                </Tooltip>
+                                <Typography>
+                                    {vendorInfo.city}<br/><br/>
+                                </Typography>
                             </Grid>
-                        </AccordionDetails>
-                    </Accordion>
-                </Grid>
-            </Grid>
-        </div>
+                            <Grid item>
+                                <Rating
+                                    value = {vendorInfo.rating}
+                                    readOnly
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container item style={{marginTop:"30px"}}>
+                            <Accordion style={{width:"1000px", margin: "0 auto"}} elevation={3} defaultExpanded={true}>
+                                <AccordionSummary
+                                    expandIcon = {<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.typography.productListing}>Products of the Vendor</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Grid container item>
+                                        { vendorInfo.length === 0 ? <div></div>:
+                                            vendorInfo.products.map((product) => (
+                                                <ListedProduct product = {product}/>
+                                            ))
+                                        }
+                                    </Grid>
+                                </AccordionDetails>
+                            </Accordion>
+                        </Grid>
+                    </Grid>
+                </div>
+            ):(
+                <div></div>
+            )
+
     );
 }
 
