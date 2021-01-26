@@ -40,6 +40,7 @@ def index(request):
                 "comment": comment
             }
         my_orders.append(order_info)
+    my_orders.sort(key=lambda x: x.get('id'))
     my_orders.reverse()
     
     lists = [product_list.name for product_list in ProductLists.objects.filter(customer=customer)]

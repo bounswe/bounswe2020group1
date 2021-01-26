@@ -18,6 +18,24 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=2)
     date_added = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
+    def __str__(self):
+        import json
+        product = {
+            "@context": "TURSU.PRODUCT",
+            "vendor": self.vendor,
+            "category": self.category.name,
+            "username": self.vendor.user.user.username,
+            "name": self.name,
+            "brand": self.brand,
+            "description": self.description,
+            "rating": float(self.rating),
+            "number_of_raters": self.number_of_raters,
+            "stock": self.stock,
+            "price": float(self.price),
+            "date_added": str(self.date_added),
+            "is_verified": self.is_verified
+        }
+        return str(product)
 
 
 class Image(models.Model):

@@ -1,0 +1,24 @@
+language: python
+
+python:
+- '3.8'
+
+before_install:
+- openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv -in deploy_key.enc -out ./deploy_key -d
+- chmod 600 ./deploy_key
+
+
+install:
+- echo "skipping tests"
+script:
+- echo "skipping tests"
+
+addons:
+  ssh_known_hosts: ec2-3-232-20-250.compute-1.amazonaws.com
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ssh -i ./deploy_key ubuntu@ec2-3-232-20-250.compute-1.amazonaws.com "bash bounswe2020group1/cd-backend.sh"
+  on:
+    branch: backend

@@ -14,6 +14,7 @@ class LoginTest(TestCase):
                                              first_name="first_name", last_name="last_name")
         self.registered_user = self.user.registereduser
         self.registered_user.email = self.user.email
+        self.registered_user.is_verified = True
         self.customer = Customer(user=self.registered_user, money_spent=0)
         self.customer.save()
         self.user.save()
@@ -51,6 +52,7 @@ class LoginViewTest(TestCase):
                                                          first_name="first_name", last_name="last_name")
         self.registered_user = self.user.registereduser
         self.registered_user.email = self.user.email
+        self.registered_user.is_verified = True
         self.customer = Customer(user=self.registered_user, money_spent=0)
         self.customer.save()
         self.user.save()
@@ -133,6 +135,7 @@ class SignupTest(TestCase):
                                              first_name=first_name, last_name=self.last_name)
             self.registered_user = self.user.registereduser
             self.registered_user.email = self.email
+            self.registered_user.is_verified = True
             self.registered_user.save()
             self.customer = Customer(user=self.registered_user, money_spent=0)
             self.customer.save()
@@ -158,6 +161,7 @@ class SignupTest(TestCase):
                                              last_name=self.last_name, password=self.password)
             self.registered_user = self.user.registereduser
             self.registered_user.email = self.email
+            self.registered_user.is_verified = True
             self.registered_user.save()
 
             self.location = Location(latitude=self.latitude, longitude=self.longitude, city=self.city)

@@ -8,7 +8,8 @@ class RegisteredUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(unique=True)
     is_banned = models.BooleanField(default=False)
-
+    is_verified = models.BooleanField(default=False)
+    
 
 class Location(models.Model):
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
@@ -22,11 +23,32 @@ class Vendor(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
     iban = models.CharField(max_length=60, null=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
-
+    def __str__(self):
+        import json
+        this = Vendor.objects.get(id=self.id)
+        user = this.user
+        vend = {
+            "@context": "TURSU.VENDOR",
+            "name": user.user.first_name,
+            "username": user.user.username,
+            "email": user.user.username,
+            "is_verified": self.is_verified,
+            "iban": self.iban,
+            "latitude": float(self.location.latitude),
+            "longitude": float(self.location.longitude),
+            "city": self.location.city,
+            "rating": float(self.rating)
+        }
+        return str(vend)
 
 class Customer(models.Model):
     user = models.OneToOneField(RegisteredUser, on_delete=models.CASCADE)
     money_spent = models.DecimalField(max_digits=15, decimal_places=2)
+
+
+class VerificationCode(models.Model):
+    registered_user = models.ForeignKey(RegisteredUser, on_delete=models.CASCADE)
+    verification_code = models.CharField(max_length=16, null=True)
 
 
 @receiver(post_save, sender=User)
@@ -38,6 +60,7 @@ def create_registered_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_registered_user(sender, instance, **kwargs):
     instance.registereduser.save()
+
 
 def get_vendor_from_request(request):
     """Returns vendor from the request"""
@@ -52,6 +75,7 @@ def get_vendor_from_request(request):
         vendor = None
     return vendor
 
+
 def get_customer_from_request(request):
     """Returns customer from the request"""
     if(str(request.user) == "AnonymousUser"):
@@ -65,6 +89,15 @@ def get_customer_from_request(request):
         customer = None
     return customer
 
+
+def get_registered_user_from_request(request):
+    """Returns registered user from the request"""
+    if(str(request.user) == "AnonymousUser"):
+        return None
+    ruser = RegisteredUser.objects.get(user=request.user)
+    return ruser
+
+
 def get_admin_from_request(request):
     """Returns admin from the request"""
     if(str(request.user) == "AnonymousUser"):
@@ -73,6 +106,7 @@ def get_admin_from_request(request):
         return request.user
     else:
         return None
+
 
 def get_admin():
     """Returns admin"""

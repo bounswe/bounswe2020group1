@@ -1,20 +1,19 @@
 """Views related to order"""
-import os
 import datetime
-from django.shortcuts import render
+
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
-from django import forms
+from django.utils import timezone
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from product.models import Product, Category, Image
+
+from product.models import Image
 from shopping_cart.models import ShoppingCarts
 from order.models import Order
 from registered_user.models import get_vendor_from_request, get_customer_from_request
-from django.utils import timezone
-import datetime
 
+import notifications.utils as notif
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes((IsAuthenticated,))
@@ -49,9 +48,10 @@ def create_orders(request):
         customer.money_spent += quantity * product.price
         product.save()
         order.save()
+        notif.insert_order_status_change(vendor.user, product.name, order.id, "new")
 
     ShoppingCarts.objects.filter(Q(customer=customer)).delete()
-    
+
     return JsonResponse({}, safe=False)
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -73,7 +73,6 @@ def get_orders(request):
             orders.append(group)
             group = []
         item = items[index]
-        print(item.created)
         images = Image.objects.filter(product=item.product)
         if len(images) > 0:
             photo_url = f"{static_url}{images[0].photo}"
@@ -102,6 +101,8 @@ def get_orders(request):
 
     if len(group) > 0:
         orders.append(group)
+
+    orders.sort(key=lambda x: x[0].get('id'))
     orders.reverse()
     return JsonResponse(orders, safe=False)
 
@@ -126,7 +127,10 @@ def set_delivered(request):
     order.status = "delivered"
     order.arrivalDate = datetime.date.today()
     order.save()
-
+    
+    # add notification for vendor
+    notif.insert_order_status_change(order.vendor.user, order.product.name, order.id, "delivered")
+    
     return JsonResponse({}, safe=False)
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -152,6 +156,9 @@ def set_delivery(request):
     order.estimatedArrivalDate = datetime.date.today() + datetime.timedelta(days=days)
     order.status = "in delivery"
     order.save()
+
+    # add notification for customer
+    notif.insert_order_status_change(order.customer.user, order.product.name, order.id, "in delivery")
     
     return JsonResponse({}, safe=False)
 
@@ -186,4 +193,11 @@ def cancel_order(request):
     order.product.save()
     order.save()
     order.customer.save()
+
+    # add notification
+    if vendor is None:
+        notif.insert_order_status_change(order.vendor.user, order.product.name, order.id, "cancelled")
+    if customer is None:
+        notif.insert_order_status_change(order.customer.user, order.product.name, order.id, "cancelled")
+
     return JsonResponse({}, safe=False)
