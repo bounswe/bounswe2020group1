@@ -144,7 +144,7 @@ class NotificationsViewTest(TestCase):
         self.assertEqual(len(response4.json()), 3)
 
     def test_delete_alerts(self):
-        """Test case for creating and getting alerts"""
+        """Test case for deleting alerts"""
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token}')
         product = Product.objects.all()[0]
         product_id = product.id

@@ -103,7 +103,7 @@ def delete_alert(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def create_alert(request):
-    """Creates an alert"""
+    """Creates an alert and returns its id"""
     registered_user = get_registered_user_from_request(request)
     if registered_user is None:
         return HttpResponse("Non existing user", status=401)

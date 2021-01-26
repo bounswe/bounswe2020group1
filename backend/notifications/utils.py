@@ -11,10 +11,12 @@ from notifications.types import NotificationType, AlertType
 from registered_user.models import RegisteredUser
 
 def get_notification_data_dict(raw_data: str):
+    # Creates a dictionary object from given string
     return json.loads(raw_data)
 
 
 def get_notification_raw_data(notification_dict: dict):
+    # Converts given dictionary to raw string
     return json.dumps(notification_dict)
 
 def insert_notification(registered_user: RegisteredUser, type: int, raw_data: str):
@@ -26,6 +28,7 @@ def insert_notification(registered_user: RegisteredUser, type: int, raw_data: st
 
 
 def set_notification_read(registered_user: RegisteredUser, type: int, raw_data: str):
+    # Set's a notification as read
     item = Notification.objects.filter(Q(user=registered_user,
                                           type=type,
                                           raw_data=raw_data)).first()
@@ -45,6 +48,7 @@ def set_notification_read_with_id(id: int):
 
 
 def insert_order_status_change(registered_user: RegisteredUser, product_name: str, order_id: int, status: str):
+    # Inserts notification when an order's status is changed
     notification_data = {'product_name': product_name,
                          'order_id': order_id,
                          'status': status }   
@@ -53,6 +57,7 @@ def insert_order_status_change(registered_user: RegisteredUser, product_name: st
 
 
 def insert_product_verified(registered_user: RegisteredUser, product_name: str, product_id: int):
+    # Inserts notification when a product is verified
     notification_data = {
                          'product_name': product_name,
                          'product_id': product_id,
@@ -62,6 +67,7 @@ def insert_product_verified(registered_user: RegisteredUser, product_name: str, 
 
 
 def insert_product_change(registered_user: RegisteredUser, product_name: str, product_id: int, value: int, alert_type: int):
+    # For given parametes creates the related notification
     notification_data = {
                          'product_name': product_name,
                          'product_id': product_id,
@@ -77,6 +83,7 @@ def insert_product_change(registered_user: RegisteredUser, product_name: str, pr
 
 
 def handle_stock_change(product: Product):
+    # For given product handles all of the stock alarms set for that product.
     items = Alert.objects.filter(Q(product=product, type=AlertType.STOCK_ABOVE_ALERT.value, value__lte=product.stock))
     for item in items:
         insert_product_change(item.user, product.name, product.id, product.stock, AlertType.STOCK_ABOVE_ALERT.value)
@@ -84,6 +91,7 @@ def handle_stock_change(product: Product):
 
 
 def handle_price_change(product: Product):
+    # For given product handles all of the price alarms set for that product.
     items = Alert.objects.filter(Q(product=product, type=AlertType.PRICE_CHANGE_ALERT.value))
     for item in items:
         insert_product_change(item.user, product.name, product.id, product.price, AlertType.PRICE_CHANGE_ALERT.value)
