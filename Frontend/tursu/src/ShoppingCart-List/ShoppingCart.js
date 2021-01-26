@@ -122,7 +122,7 @@ export default function ShoppingCart(props){
     );
 }
 
-function calculateTotalSum(products){
+export function calculateTotalSum(products){
     var total_sum = 0;
 
     for(let i=0; i<products.length; i++){
@@ -131,5 +131,3 @@ function calculateTotalSum(products){
 
     return total_sum;
 }
-
-module.exports = calculateTotalSum()
