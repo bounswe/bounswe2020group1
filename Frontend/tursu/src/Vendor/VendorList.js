@@ -1,7 +1,7 @@
 import React from 'react';
-import './HomePage.css'
+import '../MainPage/HomePage.css'
 import { makeStyles } from '@material-ui/core/styles';
-import VendorBox from "./VendorBox";
+import VendorBox from "../MainPage/VendorBox";
 import Grid from "@material-ui/core/Grid";
 
 

@@ -6,7 +6,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Button from '@material-ui/core/Button';
 import Avatar from "@material-ui/core/Avatar";
 import {ThemeProvider, createMuiTheme, makeStyles} from "@material-ui/core/styles";
-import Navbar from "./NavBar";
+import Navbar from "../NavigationBar/NavBar";
 import axios from 'axios'
 import { green } from '@material-ui/core/colors';
 import {Alert} from "@material-ui/lab";
@@ -17,7 +17,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import {ListsDialog} from "./ProductBox"
-import Footer from "./Footer";
+import Footer from "../Footer/Footer";
 import {IconButton} from "@material-ui/core";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';

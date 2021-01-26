@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import "./sign_components.css";
-import logo from '../rsz_11logo.png';
+import logo from '../NavigationBar/rsz_11logo.png';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';

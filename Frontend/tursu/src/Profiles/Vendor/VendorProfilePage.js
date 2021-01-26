@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Navbar from "../../NavBar";
+import Navbar from "../../NavigationBar/NavBar";
 import "./profile.css";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -12,7 +12,7 @@ import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import {Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import Footer from "../../Footer";
+import Footer from "../../Footer/Footer";
 import MyNotifications from "./MyNotifications";
 
 

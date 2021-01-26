@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import myInfo from "./MyInfo";
 import myProducts from "./MyProducts";
 import myOrders from "./MyOrders";
-import Navbar from "../../NavBar";
+import Navbar from "../../NavigationBar/NavBar";
 import "./profile.css";
 import {makeStyles} from '@material-ui/core/styles';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';

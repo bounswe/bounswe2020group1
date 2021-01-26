@@ -10,9 +10,9 @@ import {IconButton} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 import Axios from "axios";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import ProductListNonverified from "./NonverifiedProductList"
+import ProductListNonverified from "../MainPage/NonverifiedProductList"
 import Grid from "@material-ui/core/Grid";
-import NavBar from "./NavBar";
+import NavBar from "../NavigationBar/NavBar";
 import Paper from '@material-ui/core/Paper';
 
 

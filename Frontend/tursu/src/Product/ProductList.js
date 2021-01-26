@@ -1,5 +1,5 @@
 import React from 'react';
-import './HomePage.css'
+import '../MainPage/HomePage.css'
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import ProductBox, {ProductBoxHorizontal} from "./ProductBox";
