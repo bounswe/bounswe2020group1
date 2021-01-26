@@ -281,7 +281,7 @@ class VendorProductPageFragment : Fragment() {
                             if (response != null) {
                                 if (response.code() == 200) {
                                     Toast.makeText(context, "Product has been successfully updated", Toast.LENGTH_SHORT).show()
-                                   // (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+                                   // (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "My Products", null)
                                     Log.i("Status code", response.code().toString())
 
                                 } else if (response.code() == 400) {
@@ -400,7 +400,7 @@ class VendorProductPageFragment : Fragment() {
                         Log.i("Status code", response.code().toString())
                         if (response.code() == 200) {
                             Toast.makeText(context, "Product has been successfully deleted", Toast.LENGTH_SHORT).show()
-                            (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
+                            (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"My Products",null)
                         } else {
                             Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                         }
