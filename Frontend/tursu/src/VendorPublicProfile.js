@@ -67,7 +67,7 @@ export default function VendorPublicProfile(props){
             }
         }).then(res =>{
             setVendorInfo(res.data)
-            console.log(res.data.rating)
+            console.log(res.data)
             setUpdate(true)
         })
     }, [])
@@ -80,7 +80,7 @@ export default function VendorPublicProfile(props){
                         <Grid container item className={classes.innerGrid}>
                             <Grid item>
                                 <Typography variant="h4">
-                                    {vendorInfo.username}
+                                    {vendorInfo.first_name}
                                 </Typography>
                                 <Tooltip title={"Verified Vendor"}>
                                     <VerifiedUserIcon style={{color: "#388e3c"}}/>
