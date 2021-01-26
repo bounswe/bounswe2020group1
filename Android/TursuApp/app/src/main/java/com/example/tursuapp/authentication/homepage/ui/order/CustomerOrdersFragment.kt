@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -28,7 +31,7 @@ import retrofit2.Response
 
 
 data class CustomerOrder(val price: String, val quantity: Int, val status: String)
-data class Product(val name:String,val vendorName:String,val photoUrl:String,val quantity:Int,val status:String,val estimatedArrivalDate:String,val productID:Int)
+data class Product(val id:Int,val name:String,val vendorName:String,val photoUrl:String,val quantity:Int,val status:String,val estimatedArrivalDate:String,val productID:Int)
 class CustomerOrdersFragment : Fragment() {
 
     lateinit var auth_token :String
@@ -102,8 +105,8 @@ class CustomerOrdersFragment : Fragment() {
         }
         else if(id == R.id.nav_customer_orders){
             fragment = CustomerOrdersFragment()
-            activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.nav_host_fragment, fragment)
+            activity?.supportFragmentManager?.beginTransaction()?.addToBackStack(null)
+                    ?.replace(R.id.nav_customer_orders, fragment)
                     ?.commit()
             (activity as HomePageActivity).drawer.closeDrawer(GravityCompat.START)
         }
@@ -114,7 +117,8 @@ class CustomerOrdersFragment : Fragment() {
         var productList = mutableListOf<Product>()
 
         for(product in orderResponsesList[position]){
-            val newProduct = Product(product.product.name,
+            val newProduct = Product(product.product.id,
+                    product.product.name,
                     product.product.vendor_name,
                     product.product.photo_url,
                     product.quantity,
@@ -140,8 +144,9 @@ class CustomerOrdersFragment : Fragment() {
                 statusSet.add(order.status)
             }
             var status = ""
+            //list all different status f products in an order
             for(temp in statusSet){
-                status+=temp+","
+                status+= "$temp,"
             }
             status.dropLast(1)
             newOrder = CustomerOrder(price.toString(), quantity, status)
@@ -172,13 +177,20 @@ class CustomerOrdersFragment : Fragment() {
             val productView = inflator.inflate(R.layout.product_order_layout, null)
             val cancelOrderButton = productView.findViewById<TextView>(R.id.cancel_order_button)
             val setDeliveredButton = productView.findViewById<TextView>(R.id.set_delivered_button)
+            val addCommentCView = productView.findViewById<CardView>(R.id.cardView_addComment)
+            val addCommentImage = productView.findViewById<ImageView>(R.id.o_add_comment_image)
             if(productList[position].status=="in delivery"){
                 cancelOrderButton.visibility = View.INVISIBLE
                 setDeliveredButton.visibility = View.VISIBLE
                 setDeliveredButton.setOnClickListener {
                     setDelivered(productView,productList[position].productID,auth_token)
                     setDeliveredButton.visibility = View.INVISIBLE
+                    addCommentCView.visibility=View.VISIBLE
                 }
+                addCommentImage.setOnClickListener {
+                    ShowAddCommentPopup(productView,productList[position].id,productList[position].name,productList[position].photoUrl,auth_token)
+                }
+
             }
             else if(productList[position].status=="processing"){
                 cancelOrderButton.visibility = View.VISIBLE
@@ -187,6 +199,15 @@ class CustomerOrdersFragment : Fragment() {
                     cancelOrder(productView,productList[position].productID,auth_token)
                     cancelOrderButton.visibility = View.INVISIBLE
                 }
+            }
+            else if(productList[position].status=="delivered"){
+                addCommentCView.visibility=View.VISIBLE
+                cancelOrderButton.visibility = View.INVISIBLE
+                setDeliveredButton.visibility = View.INVISIBLE
+                addCommentImage.setOnClickListener {
+                    ShowAddCommentPopup(productView,productList[position].id,productList[position].name,productList[position].photoUrl,auth_token)
+                }
+
             }
             else{
                 cancelOrderButton.visibility = View.INVISIBLE
@@ -208,6 +229,81 @@ class CustomerOrdersFragment : Fragment() {
             }
             //foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
             return productView
+        }
+        @SuppressLint("InflateParams")
+        private fun ShowAddCommentPopup(view:View,orderID:Int,name: String,photoUrl: String,auth_token: String) {
+            //Create a View object yourself through inflater
+            val inflater = view.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val popupView: View = inflater.inflate(R.layout.comment_add_popup_layout, null)
+            //Specify the length and width through constants
+            val width = LinearLayout.LayoutParams.MATCH_PARENT
+            val height = LinearLayout.LayoutParams.MATCH_PARENT
+            //val width = LinearLayout.LayoutParams.WRAP_CONTENT
+            //val height = LinearLayout.LayoutParams.WRAP_CONTENT
+            //Make Inactive Items Outside Of PopupWindow
+            val focusable = true
+            //Create a window with our parameters
+            val popupWindow = PopupWindow(popupView, width, height, focusable)
+            //Set the location of the window on the screen
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+            //load product name and photo to the popup
+            popupView.findViewById<TextView>(R.id.addComment_product_name).text=name
+            val image  = popupView.findViewById<ImageView>(R.id.addComment_productImage)
+            if(photoUrl!="") {
+                Picasso
+                        .get() // give it the context
+                        .load(photoUrl) // load the image
+                        .into(image)
+            }
+            else{
+                image.setImageResource(R.drawable.ic_menu_camera)
+            }
+
+            popupView.findViewById<ImageView>(R.id.addComment_cancel_btn).setOnClickListener {
+                popupWindow.dismiss()
+            }
+            popupView.findViewById<Button>(R.id.addComment_button).setOnClickListener {
+                Log.i("orderID: ", orderID.toString())
+                if(popupView.findViewById<TextView>(R.id.addComment_text).text.isEmpty() || popupView.findViewById<RatingBar>(R.id.addComment_ratingBar).rating == 0.0f || popupView.findViewById<RatingBar>(R.id.addComment_ratingBarVendor).rating == 0.0f){
+                    Toast.makeText(context, "Please input your comment and rating", Toast.LENGTH_SHORT).show()
+                }else {
+                    val productRating = popupView.findViewById<RatingBar>(R.id.addComment_ratingBar).rating
+                    val vendorRating = popupView.findViewById<RatingBar>(R.id.addComment_ratingBarVendor).rating
+                    val commentText = popupView.findViewById<TextView>(R.id.addComment_text).text
+                    val apiInterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
+                    apiInterface.addComment(auth_token, orderID, commentText.toString(), productRating.toInt(),vendorRating.toInt()).enqueue(object :
+                            retrofit2.Callback<ResponseBody> {
+                        override fun onFailure(p0: Call<ResponseBody>?, p1: Throwable?) {
+                            Log.i("MainFragment", "error" + p1?.message.toString())
+                        }
+
+                        override fun onResponse(
+                                p0: Call<ResponseBody>?,
+                                response: Response<ResponseBody>?
+                        ) {
+
+                            if (response != null) {
+                                Log.i("Status code", response.code().toString())
+                                if (response.code() == 200) {
+                                    Toast.makeText(context, "Comment has been successfully added", Toast.LENGTH_SHORT).show()
+                                    popupWindow.dismiss()
+
+                                } else if (response.code() == 401) {
+                                    Toast.makeText(context, "Comment already is added", Toast.LENGTH_SHORT).show()
+
+                                } else {
+                                    Toast.makeText(context, response.code(), Toast.LENGTH_SHORT).show()
+                                }
+
+                            }
+
+                        }
+
+
+                    })
+                }
+            }
+
         }
         fun cancelOrder(view:View,orderID:Int,auth_token: String){
             val apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)

@@ -85,12 +85,46 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/message_floating_button"
+        style="@style/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:backgroundTint="@color/purple_500"
+        app:borderWidth="0dp"
+        app:srcCompat="@android:drawable/ic_dialog_email"
+        app:tint="#FFFFFF" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/notification_button"
+        style="@style/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginBottom="85dp"
+        android:backgroundTint="@color/purple_500"
+        android:scaleType="centerCrop"
+        android:theme="@style/floating_action_button"
+        app:borderWidth="0dp"
+        app:layout_anchor="@id/message_floating_button"
+        app:layout_anchorGravity="top"
+        app:srcCompat="@android:drawable/ic_popup_reminder"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/new_notification"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="#fff"
+        android:elevation="12dp"
+        app:backgroundTint="#FF0000"
+        app:elevation="8dp"
+        app:layout_anchor="@id/notification_button"
+        app:pressedTranslationZ="12dp" />
 
     <include layout="@layout/content_main" />
 

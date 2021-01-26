@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="383dp"
-        android:layout_height="91dp"
-        android:layout_margin="20dp"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
         android:background="@drawable/product1"
         android:orientation="vertical"
         android:padding="5dp"
@@ -23,15 +22,6 @@
             android:orientation="vertical">
 
 
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/divider_line" />
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,8 +29,9 @@
 
                 <TextView
                     android:id="@+id/comment_customer_name"
-                    android:layout_width="285dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:fontFamily="@font/poppins_semibold"
                     android:padding="5dp"
                     android:text="Customer"
@@ -52,9 +43,16 @@
                     style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:theme="@style/RatingBar"/>
+                    android:theme="@style/RatingBar" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/divider_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,10 +61,11 @@
 
                 <TextView
                     android:id="@+id/comment_text"
-                    android:layout_width="423dp"
-                    android:layout_height="45dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins"
+                    android:maxLines="4"
                     android:paddingLeft="5dp"
                     android:text="Text"
                     android:textSize="12sp" />

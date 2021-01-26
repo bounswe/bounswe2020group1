@@ -1,58 +1,89 @@
 package com.example.tursuapp.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import com.example.tursuapp.MainActivity
 import com.example.tursuapp.R
 import com.example.tursuapp.api.responses.ProductResponse
 import com.example.tursuapp.api.responses.VendorProductLists
+import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.homepage.ui.productpage.ProductPageFragment
+import com.example.tursuapp.authentication.homepage.ui.vendorproductpage.VendorProductPageFragment
 import com.squareup.picasso.Picasso
 
-//For products in grid view
 
-class VendorProductAdapter(context: Context, private var productList: ArrayList<VendorProductLists>) : BaseAdapter() {
-    var context: Context? = context
+class VendorProductAdapter(val mContext: Context, private val children: List<VendorProductLists>)
+    : RecyclerView.Adapter<VendorProductAdapter.ViewHolder>(){
 
-    override fun getCount(): Int {
-        return productList.size
+    override fun onCreateViewHolder(parent: ViewGroup,
+                                    viewType: Int): ViewHolder {
+
+        val v =  LayoutInflater.from(parent.context)
+            .inflate(R.layout.product_layout, parent, false)
+        return ViewHolder(v)
     }
 
-    override fun getItem(position: Int): Any {
-        return productList[position]
+    override fun getItemCount(): Int {
+        return children.size
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    @SuppressLint("SetTextI18n", "ViewHolder", "InflateParams")
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        //val food = this.productList[position]
-
-        val inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val productView = inflator.inflate(R.layout.product_layout, null)
-        //foodView.findViewById<ImageView>(R.id.img_product).setImageResource(R.drawable.tursu_logo)
-        productView.findViewById<TextView>(R.id.product_id).text = this.productList[position].id.toString()
-        productView.findViewById<TextView>(R.id.price_product).text = this.productList[position].price + " TL"
-        productView.findViewById<TextView>(R.id.text_product).text = this.productList[position].name
-        val image  = productView.findViewById<ImageView>(R.id.img_product)
-        if(productList[position].photo_url!="") {
+    override fun onBindViewHolder(holder: ViewHolder,
+                                  position: Int) {
+        val product = children[position]
+        holder.product_id.text = product.id.toString()
+        holder.product_name.text = product.name
+        holder.poduct_price.text = product.price+" TL"
+        holder.product_rating.rating = product.rating.toFloat()
+        if(product.photo_url!="") {
             Picasso
-                    .get() // give it the context
-                    .load(productList[position].photo_url) // load the image
-                    .into(image)
+                .get() // give it the context
+                .load(product.photo_url) // load the image
+                .tag("resume_tag")
+                .into(holder.product_img)
         }
         else{
-            image.setImageResource(R.drawable.ic_menu_camera)
+            holder.product_img.setImageResource(R.drawable.ic_menu_camera)
         }
-        //val url = URL(productList[position].photo_url)
-        //val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-        //productView.findViewById<ImageView>(R.id.img_product).setImageBitmap(bmp)
-        return productView
+        holder.itemView.setOnClickListener {
+            fragmentJump(product);
+            /*
+            .activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.nav_host_fragment, newFragment)?.addToBackStack(null)
+                    ?.commit()
+
+             */
+        }
+    }
+    private fun fragmentJump(mItemSelected: VendorProductLists) {
+        val bundle = Bundle()
+        bundle.putString("id", mItemSelected.id.toString())
+        val newFragment = VendorProductPageFragment()
+        newFragment.arguments = bundle
+        switchContent(R.id.nav_host_fragment, newFragment)
+    }
+    fun switchContent(id: Int, fragment: Fragment) {
+        if (mContext == null) return
+        if (mContext is HomePageActivity) {
+            val mainActivity = mContext as HomePageActivity
+            val frag: Fragment = fragment
+            mainActivity.switchContent(id, frag)
+        }
+    }
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
+        var product_id = itemView.findViewById<TextView>(R.id.product_id)
+        var product_name = itemView.findViewById<TextView>(R.id.text_product)
+        var poduct_price = itemView.findViewById<TextView>(R.id.price_product)
+        var product_img = itemView.findViewById<ImageView>(R.id.img_product)
+        var product_rating = itemView.findViewById<RatingBar>(R.id.product_rating_bar)
+
     }
 }

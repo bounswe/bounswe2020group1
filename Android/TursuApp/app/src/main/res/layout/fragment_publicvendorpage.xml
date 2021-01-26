@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_profile_detail_vendor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:clickable="true"
+    android:focusable="true">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayoutBack"
+        android:layout_width="408dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/public_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:foregroundGravity="left"
+            android:paddingTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/back_arrow" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/public_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/poppins"
+        android:gravity="right"
+        android:text="Name :"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/public_name_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutBack" />
+
+    <TextView
+        android:id="@+id/msg_to_vendor"
+        style="@android:style/Widget.DeviceDefault.Light.TextView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@color/purple_500"
+        android:drawableLeft="@android:drawable/stat_notify_chat"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="msg to vendor"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/public_rating" />
+
+    <TextView
+        android:id="@+id/public_name_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/poppins_semibold"
+        android:paddingLeft="10dp"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/public_name"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutBack" />
+
+    <TextView
+        android:id="@+id/public_city"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/poppins"
+        android:gravity="right"
+        android:text="City :"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/public_city_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/public_name" />
+
+    <TextView
+        android:id="@+id/public_city_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/poppins_semibold"
+        android:paddingLeft="10dp"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/public_city"
+        app:layout_constraintTop_toBottomOf="@+id/public_name_view" />
+
+    <TextView
+        android:id="@+id/public_rating"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/poppins"
+        android:gravity="right"
+        android:text="Rating :"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/public_city"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/public_city" />
+
+    <RatingBar
+        android:id="@+id/public_ratingBar"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:numStars="5"
+        android:theme="@style/RatingBar"
+        app:layout_constraintStart_toEndOf="@+id/public_rating"
+        app:layout_constraintTop_toBottomOf="@+id/public_city_view" />
+
+    <GridView
+        android:id="@+id/public_gridView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:background="#FFFFFF"
+        android:clickable="true"
+        android:horizontalSpacing="15dp"
+        android:numColumns="2"
+        android:verticalSpacing="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/msg_to_vendor">
+
+    </GridView>
+
+    <ImageView
+        android:id="@+id/is_verified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/public_ratingBar"
+        app:layout_constraintTop_toBottomOf="@+id/public_city_view"
+        app:srcCompat="@drawable/ic_baseline_verified_user_24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

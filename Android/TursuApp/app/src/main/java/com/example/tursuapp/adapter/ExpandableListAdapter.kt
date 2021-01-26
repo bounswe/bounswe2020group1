@@ -44,8 +44,13 @@ class ExpandableListAdapter(context: Context, listDataHeader: List<String>,
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        return _listDataChild[_listDataHeader[groupPosition]]
-                ?.size!!
+        if(_listDataChild[_listDataHeader[groupPosition]]!=null){
+            return _listDataChild[_listDataHeader[groupPosition]]
+                    ?.size!!
+        }
+
+        return 0
+
     }
 
     override fun getGroup(groupPosition: Int): Any {

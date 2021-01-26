@@ -13,11 +13,12 @@ import com.example.tursuapp.api.ApiService
 import com.example.tursuapp.api.RetrofitClient
 import com.example.tursuapp.api.responses.LoginResponse
 import com.example.tursuapp.authentication.homepage.HomePageActivity
+import com.example.tursuapp.authentication.verification.VerificationActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class VendorSignUpActivity : AppCompatActivity() {
+class VendorSignupActivity : AppCompatActivity() {
     private lateinit var userName : EditText
     private lateinit var name : EditText
     private lateinit var surname : EditText
@@ -51,7 +52,7 @@ class VendorSignUpActivity : AppCompatActivity() {
                 val username = userName.text.toString()
                 val email = eMail.text.toString()
                 val iban_no = iban.text.toString()
-                val city_name = iban.text.toString()
+                val city_name = city.text.toString()
                 val password1 = password.text.toString()
                 val password2 = passwordConfirmation.text.toString()
 
@@ -71,8 +72,18 @@ class VendorSignUpActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        signUp(this, first_name, last_name, username, email, password1,
-                            iban_no, latitude.toString(), longitude.toString(), city_name)
+                        val strongPasswordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}\$".toRegex()
+                        if(password1.matches(strongPasswordPattern)) {
+                            signUp(this, first_name, last_name, username, email, password1,
+                                iban_no, latitude.toString(), longitude.toString(), city_name)
+                        }
+                        else {
+                            Toast.makeText(applicationContext,
+                                "Your password is not strong enough! It should have minimum " +
+                                        "8 characters, at least one uppercase letter, one lowercase " +
+                                        "letter and one number!", Toast.LENGTH_LONG).show()
+                        }
+
                     }
                 }
 
@@ -81,7 +92,7 @@ class VendorSignUpActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.signup_vendor_text).let { view ->
             view.setOnClickListener {
-                startActivity(Intent(this, VendorSignUpActivity::class.java))
+                startActivity(Intent(this, VendorSignupActivity::class.java))
             }
         }
 
@@ -106,28 +117,20 @@ class VendorSignUpActivity : AppCompatActivity() {
                        username: String, email: String, password: String,
                        iban: String, latitude: String, longitude: String, city: String){
         var apiinterface : ApiService = RetrofitClient().getClient().create(ApiService::class.java)
-        val call: Call<LoginResponse> = apiinterface.vendorSignup(first_name, last_name,
+        val call: Call<Void> = apiinterface.vendorSignup(first_name, last_name,
             username, email, password, "True", iban, latitude, longitude, city)
 
         Log.w("request", call.request().toString())
 
-        call.enqueue(object : Callback<LoginResponse?> {
-            override fun onResponse(call: Call<LoginResponse?>, response: Response<LoginResponse?>) {
-                val userResponse: LoginResponse? = response.body()
+        call.enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                val userResponse: Void? = response.body()
                 Log.i("Status code",response.code().toString())
 
-                if (userResponse != null) {
-                    val pref = applicationContext.getSharedPreferences("UserPref", 0)
-                    with (pref.edit()) {
-                        putString("first_name", userResponse.first_name)
-                        putString("last_name", userResponse.last_name)
-                        putString("user_type", userResponse.user_type)
-                        putString("auth_token", "Token "+userResponse.auth_token)
-                        putBoolean("logged_in", true)
-                        apply()
-                    }
-
-                    val intent = Intent(applicationContext, HomePageActivity::class.java)
+                if (userResponse == null) {
+                    val intent = Intent(applicationContext, VerificationActivity::class.java)
+                    intent.putExtra("email", email)
+                    intent.putExtra("password", password)
                     startActivity(intent)
                     finish()
 
@@ -137,7 +140,7 @@ class VendorSignUpActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
                 Log.i("Failure",t.message)
             }
 
