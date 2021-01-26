@@ -3,6 +3,7 @@ import string
 import random
 from collections import Counter
 from django.db.models import Count
+from django.conf import settings
 from nltk.corpus import stopwords
 from nltk import word_tokenize
 from order.models import Order
@@ -62,7 +63,7 @@ def newest_arrival_products():
 def product_list_serializer(product_data):
     """Serializes the products for card views"""
     products = []
-    static_url = "http://3.232.20.250/static/images/"
+    static_url = settings.TURSU_STATIC_URL
     for product in product_data:
         images = Image.objects.filter(product=product)
         if(len(images) > 0):

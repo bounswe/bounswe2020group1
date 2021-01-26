@@ -1,5 +1,6 @@
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
+from django.conf import settings
 from django import forms
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -122,7 +123,7 @@ def all(request):
         return HttpResponse("Customer authentication failed", status=401)
         
     items = ShoppingCarts.objects.filter(Q(customer=customer))
-    static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
+    static_url = settings.TURSU_STATIC_URL
     cart = []
 
     for item in items:
