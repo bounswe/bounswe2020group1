@@ -83,7 +83,7 @@ class SignUpActivity : AppCompatActivity() {
                             Toast.makeText(applicationContext,
                                     "Your password is not strong enough! It should have minimum " +
                                             "8 characters, at least one uppercase letter, one lowercase " +
-                                            "letter and one number!", Toast.LENGTH_SHORT).show()
+                                            "letter and one number!", Toast.LENGTH_LONG).show()
                         }
 
                     }
