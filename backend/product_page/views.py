@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
+from django.conf import settings
 from product.models import Product, Image
 from comment.models import Comment
 
@@ -16,7 +17,7 @@ def index(request):
     else:
         product = product[0]
     
-    static_url = "http://3.232.20.250/static/images/"
+    static_url = settings.TURSU_STATIC_URL
     images = Image.objects.filter(product=product)
     all_photos = [f"{static_url}{image.photo}" for image in images]
     if(len(images) > 0):

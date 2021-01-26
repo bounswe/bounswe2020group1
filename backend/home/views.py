@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.conf import settings
 from rest_framework.decorators import api_view
 from product.models import Product, Image
 from registered_user.models import get_customer_from_request
@@ -27,7 +28,7 @@ def index(request):
     """
     product_data = Product.objects.all()
     products = []
-    static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
+    static_url = settings.TURSU_STATIC_URL # TODO Move this to conf
     for product in product_data:
         images = Image.objects.filter(product=product)
         if(len(images) > 0):

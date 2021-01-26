@@ -1,5 +1,6 @@
 """Views related to shopping list"""
 from django.http import JsonResponse, HttpResponse
+from django.conf import settings
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -142,7 +143,7 @@ def get_products_from_shopping_list(request):
     list_products =[listing.product for listing in
                      ListedProducts.objects.filter(product_list=product_list)]
     products = []
-    static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
+    static_url = settings.TURSU_STATIC_URL
     for product in list_products:
         images = Image.objects.filter(product=product)
         if len(images) > 0:

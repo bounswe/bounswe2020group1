@@ -3,6 +3,7 @@ import string
 import requests
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
+from django.conf import settings
 import nltk
 from nltk.corpus import stopwords
 from nltk import word_tokenize
@@ -58,7 +59,7 @@ class SearchHelper:
     def prepare_products(data):
         """ Function to prepare the response for product search """
         products = []
-        static_url = "http://3.232.20.250/static/images/" # TODO Move this to conf
+        static_url = settings.TURSU_STATIC_URL
         for product in data:
             images = Image.objects.filter(product=product)
             if len(images) > 0:

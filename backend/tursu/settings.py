@@ -30,6 +30,11 @@ DEBUG = int(os.environ.get("DEBUG", default=1))
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1").split(" ")
 
+# CHANGE THE TURSU_HOST_URL VARIABLE BEFORE DEPLOYING TO ANOTHER HOST
+TURSU_HOST_URL = "http://3.232.20.250"
+
+
+TURSU_STATIC_URL = TURSU_HOST_URL+"/static/images/"
 
 # Application definition
 
