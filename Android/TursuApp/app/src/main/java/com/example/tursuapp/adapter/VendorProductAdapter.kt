@@ -47,6 +47,8 @@ class VendorProductAdapter(val mContext: Context, private val children: List<Ven
                 .get() // give it the context
                 .load(product.photo_url) // load the image
                 .tag("resume_tag")
+                    .resize(800, 1000)
+                .onlyScaleDown()
                 .into(holder.product_img)
         }
         else{

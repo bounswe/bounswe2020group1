@@ -155,6 +155,8 @@ class VendorProductPageFragment : Fragment() {
             Picasso
                     .get() // give it the context
                     .load(product.photo_url) // load the image
+                    .resize(800, 1000)
+                    .onlyScaleDown()
                     .into(image)
         }
         else{
@@ -375,6 +377,8 @@ class VendorProductPageFragment : Fragment() {
             Picasso
                     .get() // give it the context
                     .load(product.photo_url) // load the image
+                    .resize(800, 1000)
+                    .onlyScaleDown()
                     .into(image)
         }
         else{
@@ -579,6 +583,8 @@ class VendorProductPageFragment : Fragment() {
             Picasso
                     .get() // give it the context
                     .load(productList[position].photo_url) // load the image
+                    .resize(800, 1000)
+                    .onlyScaleDown()
                     .into(image)
             //val url = URL(productList[position].photo_url)
             //val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())

@@ -47,6 +47,8 @@ class ProductAdapter(context: Context, private var productList: ArrayList<Produc
             Picasso
                     .get() // give it the context
                     .load(productList[position].photo_url) // load the image
+                    .resize(800, 1000)
+                    .onlyScaleDown()
                     .into(image)
         }
         else{
