@@ -25,7 +25,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "jest": "^26.6.3",
     "react-google-login": "^5.2.1"
   }
 }
