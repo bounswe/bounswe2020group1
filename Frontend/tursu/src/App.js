@@ -8,8 +8,8 @@ import ProductDetailPage from "./ProductDetailPage";
 import SearchPage from "./Search";
 import VendorProfilePage from "./Profiles/Vendor/VendorProfilePage";
 import CustomerProfilePage from "./Profiles/Customer/CustomerProfilePage";
-import ShoppingCart from "./ShoppingCart"
-import ShoppingList from "./ShoppingList";
+import ShoppingCart from "./ShoppingCart-List/ShoppingCart"
+import ShoppingList from "./ShoppingCart-List/ShoppingList";
 import AddProduct from "./Profiles/Vendor/AddProduct";
 import Checkout from "./Checkout";
 import EditProduct from "./Profiles/Vendor/EditProduct";
