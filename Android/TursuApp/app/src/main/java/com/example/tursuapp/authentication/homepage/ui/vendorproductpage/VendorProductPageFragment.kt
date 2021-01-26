@@ -3,7 +3,9 @@ package com.example.tursuapp.authentication.homepage.ui.vendorproductpage
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -88,7 +90,30 @@ class VendorProductPageFragment : Fragment() {
         }
         root.findViewById<ImageView>(R.id.delete_product_img)?.setOnClickListener {
             //Do delete operation
-            deleteProduct(it)
+            // Build AlertDialog
+            val dialogBuilder = AlertDialog.Builder(root.context)
+
+            // set message of alert dialog
+            dialogBuilder.setMessage("Do you want to delete the product?")
+                    // if the dialog is cancelable
+                    .setCancelable(false)
+                    // positive button text and action
+                    .setPositiveButton("Proceed", DialogInterface.OnClickListener { dialog, id ->
+                        deleteProduct(it)
+                    })
+                    // negative button text and action
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
+                        dialog.cancel()
+                    })
+
+            // create dialog box
+            val alert = dialogBuilder.create()
+            // set title for alert dialog box
+            alert.setTitle("Delete Product")
+            // show alert dialog
+            alert.show()
+            //
+
 
         }
         return root
@@ -256,7 +281,7 @@ class VendorProductPageFragment : Fragment() {
                             if (response != null) {
                                 if (response.code() == 200) {
                                     Toast.makeText(context, "Product has been successfully updated", Toast.LENGTH_SHORT).show()
-                                   // (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+                                   // (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "My Products", null)
                                     Log.i("Status code", response.code().toString())
 
                                 } else if (response.code() == 400) {
@@ -375,7 +400,7 @@ class VendorProductPageFragment : Fragment() {
                         Log.i("Status code", response.code().toString())
                         if (response.code() == 200) {
                             Toast.makeText(context, "Product has been successfully deleted", Toast.LENGTH_SHORT).show()
-                            (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"Products On Sale",null)
+                            (activity as HomePageActivity).displayFragment(R.id.nav_home,5,"My Products",null)
                         } else {
                             Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                         }

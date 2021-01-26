@@ -108,7 +108,7 @@ class ProductAddFragment: Fragment() {
             spinner.adapter = adapter
         }
         view.findViewById<ImageView>(R.id.back_img).setOnClickListener {
-            (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+            (activity as HomePageActivity).displayFragment(R.id.nav_home, 5, "My Products", null)
         }
     }
     fun productadd(view: View) {

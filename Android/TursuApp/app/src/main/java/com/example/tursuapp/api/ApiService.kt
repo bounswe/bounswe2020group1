@@ -283,4 +283,11 @@ interface ApiService {
     @POST("/notifications/set_read")
     fun setNotificationRead(@Header("Authorization") token: String, @Field("id") object_id: Int):Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("/notifications/create_alert")
+    fun createStockAlert(@Header("Authorization") token: String,
+                               @Field("product_id") productId: Int,
+                               @Field("type") type: Int,
+                               @Field("value") price: Int):Call<ResponseBody>
+
 }

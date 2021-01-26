@@ -306,7 +306,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                         1 -> displaySideMenuPages("Orders")
                         // 2 -> displayFragment(R.id.nav_home, 5, "Shopping Lists", null)
                         2 -> displaySideMenuPages("Product Add")
-                        3 -> displayFragment(R.id.nav_home, 5, "Products On Sale", null)
+                        3 -> displayFragment(R.id.nav_home, 5, "My Products", null)
                     }
                 }
                 if (groupPosition == 2) {
@@ -341,7 +341,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         else if(fragmentName == "Product Add"){
             fragment = ProductAddFragment()
         }
-        else if(fragmentName == "Products On Sale"){
+        else if(fragmentName == "My Products"){
             fragment = VendorOrderFragment()
         }
 
@@ -705,7 +705,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         accountSubItems.add("Orders")
         //accountSubItems.add("Shopping Lists")
         accountSubItems.add("Product Add")
-        accountSubItems.add("Products On Sale")
+        accountSubItems.add("My Products")
         return accountSubItems
     }
     fun menuItemsForCustomer():MutableList<String>{

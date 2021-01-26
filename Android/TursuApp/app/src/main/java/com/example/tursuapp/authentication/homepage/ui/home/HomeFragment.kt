@@ -122,9 +122,9 @@ class HomeFragment : Fragment() {
             }
             //category screen
             1 -> {
-                filterImage!!.visibility = View.GONE
-                searchBar!!.visibility = View.INVISIBLE
-                searchButton!!.visibility = View.INVISIBLE
+                filterImage!!.visibility = View.INVISIBLE
+                searchBar!!.visibility = View.VISIBLE
+                searchButton!!.visibility = View.VISIBLE
             }
             //search screen
             2 -> {
@@ -576,7 +576,7 @@ class HomeFragment : Fragment() {
                 displayFragment(R.id.nav_vendor_order)
             }
 
-        }else if (type == "Products On Sale") {
+        }else if (type == "My Products") {
             listVendorProducts()
         }else if (type == "Product Add") {
             displayFragment(R.id.nav_product_add)
