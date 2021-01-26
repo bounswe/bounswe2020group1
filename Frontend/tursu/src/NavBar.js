@@ -43,6 +43,7 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import axios from "axios";
 import DnsIcon from '@material-ui/icons/Dns';
 import Axios from "axios";
+import Badge from "@material-ui/core/Badge";
 
 
 /**
@@ -256,16 +257,30 @@ function SimpleDialog(props) {
             <DialogTitle id="simple-dialog-title">Your Notifications</DialogTitle>
             <List>
                 {rawNotifications.map((notification) => (
-                    <Link to={`/product/${notification.product_id}`} style={{ textDecoration: 'none'}}>
-                        <ListItem key={notification}>
-                            <ListItemAvatar>
-                                    <Avatar className={classes.avatar}>
-                                        <NotificationsActiveIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                            <ListItemText primary={getNotificationText(notification)} />
-                        </ListItem>
-                    </Link>
+                     (notification.type == 1) ?(
+                             <Link to={`/customerProfile`} style={{ textDecoration: 'none'}}>
+                                 <ListItem key={notification}>
+                                     <ListItemAvatar>
+                                         <Avatar className={classes.avatar}>
+                                             <NotificationsActiveIcon />
+                                         </Avatar>
+                                     </ListItemAvatar>
+                                     <ListItemText primary={getNotificationText(notification)} />
+                                 </ListItem>
+                             </Link>
+                         ):(
+                             <Link to={`/product/${notification.product_id}`} style={{ textDecoration: 'none'}}>
+                                 <ListItem key={notification}>
+                                     <ListItemAvatar>
+                                         <Avatar className={classes.avatar}>
+                                             <NotificationsActiveIcon />
+                                         </Avatar>
+                                     </ListItemAvatar>
+                                     <ListItemText primary={getNotificationText(notification)} />
+                                 </ListItem>
+                             </Link>
+                         )
+
                 ))}
                 <br/>
 
@@ -294,12 +309,30 @@ export default function Navbar(props){
     const [update, setUpdate] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState(notifications[1]);
+    const [numberOfNewNotifications, setNumberOfNewNotifications] = React.useState(0)
+
+    useEffect(() => {
+        axios.get("http://3.232.20.250/notifications/get_notifications",{
+            headers: {
+                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            }
+        }).then(res =>{
+            let counter = 0;
+            for(const item of res.data)
+            {
+                if(!item.read) counter++;
+            }
+            setNumberOfNewNotifications(counter);
+        })
+    }, [])
+
     const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = (value) => {
         setOpen(false);
         setSelectedValue(value);
+        setNumberOfNewNotifications(0);
     };
     const handleSearch = () => {
         const array = window.location.href.split("/")
@@ -358,9 +391,17 @@ export default function Navbar(props){
                                     <Grid item>
                                         {window.sessionStorage.getItem("isLogged")?(
                                             <Grid item>
-                                                <IconButton onClick={handleClickOpen}>
-                                                    <NotificationsIcon className={classes.notificationIcon} />
-                                                </IconButton>
+                                                <StyledBadge badgeContent={numberOfNewNotifications}
+                                                             color="secondary"
+                                                             anchorOrigin={{
+                                                                vertical: 'top',
+                                                                horizontal: 'left',
+                                                             }}
+                                                >
+                                                    <IconButton onClick={handleClickOpen}>
+                                                        <NotificationsIcon className={classes.notificationIcon}/>
+                                                    </IconButton>
+                                                </StyledBadge>
                                                 <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
                                             </Grid>
                                         ):(
@@ -483,6 +524,19 @@ export default function Navbar(props){
         </ThemeProvider>
     );
 }
+
+/**
+ * It is adopted and adjusted from the official documentation of Material UI.
+ */
+const StyledBadge = withStyles((theme) => ({
+    badge: {
+        // right: ,
+        left: 10,
+        top:10,
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: '0 4px',
+    },
+}))(Badge);
 
 function UserDropDown(){
     const [anchorEl, setAnchorEl] = React.useState(null);

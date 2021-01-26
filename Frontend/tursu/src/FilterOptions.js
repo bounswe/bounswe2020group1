@@ -159,7 +159,7 @@ export default function RadioButtons(props) {
 
     return (
 
-        <div align={"left"}>
+        <div align={"left"} style={{marginTop:20}}>
             {!props.inCategory &&
             <Switch
                 checked={state.SearchType}
@@ -172,7 +172,8 @@ export default function RadioButtons(props) {
             <br/>}
 
             {state.SearchType &&
-            <FormControl component="fieldset" onChange={handleChangeFilterSearchType}>
+            <FormControl component="fieldset" onChange={handleChangeFilterSearchType}
+                         style={{marginLeft:15}}>
                 <FormGroup  >
                     <FormControlLabel
                         control={<GreenCheckbox checked={vendor} onChange={handleChange} name="vendor" />}
@@ -198,7 +199,10 @@ export default function RadioButtons(props) {
             ></Switch>Sort By
 
             {state.SortBy &&
-            <RadioGroup aria-label="anonymous" name="anonymous" onChange={handleChangeSortBy} row>
+            <RadioGroup aria-label="anonymous"
+                        name="anonymous"
+                        onChange={handleChangeSortBy}
+                        style={{marginLeft:15}}>
                 <FormControlLabel name={"bestseller"} value="bestseller" control={<GreenRadio checked={res3.includes("bestseller")} onChange={handleChange2} />} label="Bestseller" />
                 <FormControlLabel name={"newest"} value="newest" control={<GreenRadio checked={res3.includes("newest")} onChange={handleChange2}/>} label="Latest" />
                 <FormControlLabel name={"priceDesc"} value="priceDesc" control={<GreenRadio checked={res3.includes("priceDesc")} onChange={handleChange2} />} label="Highest price" />
@@ -218,7 +222,9 @@ export default function RadioButtons(props) {
         }
             {!props.inCategory && <br/>}
             {!props.inCategory && state.FilterCategory &&
-            <FormControl component="fieldset" onChange={handleChangeFilterCategory}>
+            <FormControl component="fieldset"
+                         onChange={handleChangeFilterCategory}
+                         style={{marginLeft:15}}>
                 <FormGroup  >
                     <FormControlLabel
                         control={<GreenCheckbox checked={Electronics} onChange={handleChange} name="Electronics" />}
@@ -265,12 +271,13 @@ export default function RadioButtons(props) {
 
             {state.FilterVendors &&
             <FormControl component="fieldset" onChange={handleChangeFilterVendor}>
-                <FormGroup  >
-
-                {props.vendorList.map((vendor) => (
-                    <FormControlLabel value= {vendor} control={<GreenCheckbox checked={res2.includes(vendor)}/>} label= {vendor}/>
-                ))}
-                    </FormGroup>
+                <FormGroup  style={{marginLeft:15}}>
+                    {props.vendorList.map((vendor) => (
+                        <FormControlLabel value= {vendor}
+                                          control={<GreenCheckbox checked={res2.includes(vendor)}/>}
+                                          label= {vendor}/>
+                    ))}
+                </FormGroup>
             </FormControl>
             }
 
