@@ -30,10 +30,10 @@ const horizontalStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     paper:{
-        marginLeft: 100,
+        marginLeft: 10,
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
-        width: 800,
+        width: 1000,
         height: 90,
     },
     grid: {
@@ -98,6 +98,7 @@ export default function Product(props) {
 
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(5);
+    const [vendorValue, setvendorValue] = React.useState(5);
     const [comment, setComment] = React.useState("");
     const [status, setStatus] = React.useState(props.product.status);
 
@@ -119,13 +120,18 @@ export default function Product(props) {
 
     const handleSubmit = (e) => {
         const formData = new FormData();
+        const newToken = window.sessionStorage.getItem("authToken")
         formData.append("product_id", props.product.product.id)
         formData.append("text", comment)
-        formData.append("rating", value)
+        formData.append("product_rating", value)
+        formData.append("vendor_rating", vendorValue)
+        console.log(formData)
+        console.log(token)
+
         axios
             .post("http://3.232.20.250/comment/", formData, {
                 headers: {
-                    'Authorization': "Token " + token //the token is a variable which holds the token
+                    'Authorization': "Token " + newToken //the token is a variable which holds the token
                 },
             }).then((response) => {
 
@@ -245,16 +251,31 @@ export default function Product(props) {
                                         onChange={event => handleComment(event)}
                                     />
                                 </DialogContent>
+
                                 <br/>
                                 <DialogContent >
                                     <Box style={{ justifyContent: 'center', display: 'flex' }} component="fieldset" mb={3} borderColor="transparent">
-                                        <Typography style={{ marginBottom: '20px' }} variant="h5" align="center" component="legend">Your Rating</Typography>
+                                        <Typography style={{ marginBottom: '20px' }} variant="h5" align="center" component="legend">Product Rating</Typography>
                                         <Rating
                                             size="large"
                                             name="simple-controlled"
                                             value={value}
                                             onChange={(event, newValue) => {
                                                 setValue(newValue);
+                                            }}
+                                        />
+                                    </Box>
+                                </DialogContent>
+                                <br/>
+                                <DialogContent >
+                                    <Box style={{ justifyContent: 'center', display: 'flex' }} component="fieldset" mb={3} borderColor="transparent">
+                                        <Typography style={{ marginBottom: '20px' }} variant="h5" align="center" component="legend">Vendor Rating</Typography>
+                                        <Rating
+                                            size="large"
+                                            name="unique-rating"
+                                            value={vendorValue}
+                                            onChange={(event, newValue2) => {
+                                                setvendorValue(newValue2);
                                             }}
                                         />
                                     </Box>

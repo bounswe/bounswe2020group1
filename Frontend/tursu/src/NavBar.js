@@ -1,5 +1,5 @@
 // import and use AppBar.js here, can be changed tho
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar";
 import {Button, ButtonGroup, fade, IconButton} from "@material-ui/core";
@@ -29,6 +29,22 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import Menu from "@material-ui/core/Menu";
 import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewSharpIcon from '@material-ui/icons/PowerSettingsNewSharp';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import SmsIcon from '@material-ui/icons/Sms';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import axios from "axios";
+import DnsIcon from '@material-ui/icons/Dns';
+import Axios from "axios";
+import Badge from "@material-ui/core/Badge";
+
 
 /**
  * It is used for enabling Navbar to disappear/appear
@@ -117,8 +133,24 @@ const useStyles = makeStyles((theme)=> ({
         left: "85%"
     },
     cart:{
-        position: "absolute",
+        //position: "absolute",
         right: "180px",
+    },
+    avatar: {
+        backgroundColor: "#81c784",
+        color: "#388e3c",
+    },
+    notificationButton: {
+        marginLeft: "120px"
+    },
+    notificationIcon: {
+        color: 'white'
+    },
+    dialog: { // TODO: check for different resolutions
+        position: 'absolute',
+        right: '18%', // not sure how it displays in different resolutions
+        top: 50,
+        width: 400
     },
 }))
 
@@ -133,20 +165,187 @@ const theme = createMuiTheme({
     }
 })
 
-// TODO: implement search functionality
+// TODO: I couldn't find why it is global.
+let notifications = [];
+
+/*
+ * - It is the dialog that pops up when notification icon is clicked.
+ * - Maps the notification variable and displays them depending on the user type.
+ * - Redirect address of the link is different
+ */
+function SimpleDialog(props) {
+    const classes = useStyles();
+    const { onClose, selectedValue, open } = props;
+    const [updated, setUpdated] = React.useState(false);
+    const [rawNotifications, setRawNotifications] = React.useState([])
+
+    useEffect(() => {
+        axios.get("http://3.232.20.250/notifications/get_notifications",{
+            headers: {
+                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            }
+        }).then(res =>{
+            console.log("NOTIFICATIONS")
+            console.log(res.data)
+            let temp = []
+            for(const item of res.data)
+            {
+                if(!item.read)
+                {
+                    temp.push(item)
+                }
+            }
+            setRawNotifications(temp)
+            console.log("raw: ", rawNotifications.length)
+        })
+    }, [])
+
+    function getNotificationText(item)
+    {
+        let text = "";
+        switch (item.type) {
+            case 1:
+                text += "Your order " + item.product_name + " is in delivery now."
+                return text;
+                break;
+            case 2:
+                text += "Your product " + item.product_name + " is verified now."
+                return text;
+                break;
+            case 3:
+                text += "Price Drop: " + item.product_name + " is " + item.new_value + "₺ now."
+                return text;
+                break;
+            case 4:
+                text += "Price Change: " + item.product_name + " is " + item.new_value + "₺ now."
+                return text;
+                break;
+            case 5:
+                text += "Stock Change: " + item.product_name + " has " + item.new_value + "products in the stock now."
+                return text;
+                break;
+            default:
+                console.log(item.type)
+                break;
+        }
+        return text;
+    }
+
+    function handleClose(){
+        for(let notification of rawNotifications)
+        {
+            const formData = new FormData();
+            formData.append("id", notification.id);
+            Axios.post('http://3.232.20.250/notifications/set_read',
+                formData,{
+                headers: {
+                    'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
+                }
+            })
+            .then(res => {
+                console.log(res.status)
+                console.log("Notification: ", notification.id, " is set as read.")
+            })
+        }
+        setRawNotifications([]);
+        onClose(selectedValue);
+    };
+
+    const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
+    return (
+        <Dialog classes={{paper: classes.dialog}} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+            <DialogTitle id="simple-dialog-title">Your Notifications</DialogTitle>
+            <List>
+                {rawNotifications.map((notification) => (
+                     (notification.type == 1) ?(
+                             <Link to={`/customerProfile`} style={{ textDecoration: 'none'}}>
+                                 <ListItem key={notification}>
+                                     <ListItemAvatar>
+                                         <Avatar className={classes.avatar}>
+                                             <NotificationsActiveIcon />
+                                         </Avatar>
+                                     </ListItemAvatar>
+                                     <ListItemText primary={getNotificationText(notification)} />
+                                 </ListItem>
+                             </Link>
+                         ):(
+                             <Link to={`/product/${notification.product_id}`} style={{ textDecoration: 'none'}}>
+                                 <ListItem key={notification}>
+                                     <ListItemAvatar>
+                                         <Avatar className={classes.avatar}>
+                                             <NotificationsActiveIcon />
+                                         </Avatar>
+                                     </ListItemAvatar>
+                                     <ListItemText primary={getNotificationText(notification)} />
+                                 </ListItem>
+                             </Link>
+                         )
+
+                ))}
+                <br/>
+
+                <Link to={linkAddress}>
+                    <Button className={classes.notificationButton} variant="contained" color="secondary">
+                        All Notifications
+                    </Button>
+                </Link>
+
+            </List>
+        </Dialog>
+    );
+}
+
+// no idea what this is lol
+SimpleDialog.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selectedValue: PropTypes.string.isRequired,
+};
+
+
 export default function Navbar(props){
     const [search_type, setType] = React.useState('product');
     const [search_str, setStr] = React.useState();
+    const [update, setUpdate] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(notifications[1]);
+    const [numberOfNewNotifications, setNumberOfNewNotifications] = React.useState(0)
 
+    useEffect(() => {
+        axios.get("http://3.232.20.250/notifications/get_notifications",{
+            headers: {
+                'Authorization': "Token " + window.sessionStorage.getItem("authToken")
+            }
+        }).then(res =>{
+            let counter = 0;
+            for(const item of res.data)
+            {
+                if(!item.read) counter++;
+            }
+            setNumberOfNewNotifications(counter);
+        })
+    }, [])
 
-    const handleChange = (event) => {
-        setType(event.target.value);
+    const handleClickOpen = () => {
+        setOpen(true);
     };
-
+    const handleClose = (value) => {
+        setOpen(false);
+        setSelectedValue(value);
+        setNumberOfNewNotifications(0);
+    };
+    const handleSearch = () => {
+        const array = window.location.href.split("/")
+        window.sessionStorage.setItem("searched", document.getElementById("search").value)
+        window.sessionStorage.setItem("search_type", "product")
+        setUpdate(!update)
+        if(array[3] === "search"){
+            props.callbackSearched(update)
+        }
+    };
     const handleChangeStr = (event) => {
         setStr(event.target.value);
     };
-
     const classes = useStyles();
     var option;
     if (window.sessionStorage.getItem("isLogged") === "true" ){
@@ -155,7 +354,6 @@ export default function Navbar(props){
     else {
         option = "Sign In | Sign Up"
     }
-
     return(
         <ThemeProvider theme={theme} >
             <div className={classes.root}>
@@ -177,28 +375,47 @@ export default function Navbar(props){
 
                                 <Grid item xs sm className={classes.upperLeft} container direction="row" >
 
-                                    <Select className={classes.searchType}
-                                        id="search-type-id"
-                                        value={search_type}
-                                        onChange={handleChange}
-                                        IconComponent={FindReplaceIcon}
-                                    >
-                                        <MenuItem value={"product"}>Products</MenuItem>
-                                        <MenuItem value={"vendor"}>Vendors</MenuItem>
-                                    </Select>
                                     <Grid item className={classes.searchGrid}>
                                         <InputBase placeholder="Search" id="search" className={classes.search} onChange={handleChangeStr}/>
                                     </Grid>
+
                                     <Grid item>
                                         <Link to={`/search/${search_str}/${search_type}`}>
-                                            <IconButton onClick={() => {window.sessionStorage.setItem("searched", document.getElementById("search").value);
-                                                window.sessionStorage.setItem("search_type", search_type)
-                                            }}>
+                                            <IconButton type="submit" onClick={handleSearch}>
                                                 <SearchIcon/>
                                             </IconButton>
                                         </Link>
-
                                     </Grid>
+
+
+                                    <Grid item>
+                                        {window.sessionStorage.getItem("isLogged")?(
+                                            <Grid item>
+                                                <StyledBadge badgeContent={numberOfNewNotifications}
+                                                             color="secondary"
+                                                             anchorOrigin={{
+                                                                vertical: 'top',
+                                                                horizontal: 'left',
+                                                             }}
+                                                >
+                                                    <IconButton onClick={handleClickOpen}>
+                                                        <NotificationsIcon className={classes.notificationIcon}/>
+                                                    </IconButton>
+                                                </StyledBadge>
+                                                <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
+                                            </Grid>
+                                        ):(
+                                            <Tooltip title={"You need to login to see your notifications."} placement={"top-start"}>
+                                                <span>
+                                                    <IconButton disabled={true}>
+                                                        <NotificationsIcon/>
+                                                    </IconButton>
+                                                </span>
+                                            </Tooltip>
+                                        )}
+                                    </Grid>
+
+
                                     <Grid item className={classes.cart}>
                                         {window.sessionStorage.getItem("isLogged") && (window.sessionStorage.getItem("user_type")!=="vendor")?(
                                             <Link to='/shoppingCart'>
@@ -220,8 +437,8 @@ export default function Navbar(props){
                                                 </span>
                                             </Tooltip>
                                         )}
-
                                     </Grid>
+
                                     <Grid item className={classes.sign}>
                                         <Paper variant="outlined" elevation={3}  className={classes.sign_paper}
                                                style={{
@@ -260,7 +477,7 @@ export default function Navbar(props){
                                 <Grid container spacing={2} className={classes.category}  >
                                     <Grid item>
                                         <Link to='/categories/Electronics'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Electronics
                                             </Button>
                                         </Link>
@@ -268,7 +485,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to='/categories/Fashion'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Fashion
                                             </Button>
                                         </Link>
@@ -276,7 +493,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to='/categories/Home'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Home
                                             </Button>
                                         </Link>
@@ -284,7 +501,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to='/categories/Sports'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Sports&Outdoors
                                             </Button>
                                         </Link>
@@ -292,7 +509,7 @@ export default function Navbar(props){
 
                                     <Grid item>
                                         <Link to='/categories/Cosmetics'>
-                                            <Button variant="contained" color="secondary">
+                                            <Button variant="contained" style={{ backgroundColor: '#84c484' }}>
                                                 Cosmetics
                                             </Button>
                                         </Link>
@@ -307,6 +524,19 @@ export default function Navbar(props){
         </ThemeProvider>
     );
 }
+
+/**
+ * It is adopted and adjusted from the official documentation of Material UI.
+ */
+const StyledBadge = withStyles((theme) => ({
+    badge: {
+        // right: ,
+        left: 10,
+        top:10,
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: '0 4px',
+    },
+}))(Badge);
 
 function UserDropDown(){
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -323,7 +553,14 @@ function UserDropDown(){
         setAnchorEl(null);
     };
 
+    const handleSignOut = () => {
+        var temp_type = window.sessionStorage.getItem("user_type")
+        window.sessionStorage.clear()
+        window.sessionStorage.setItem("user_type",  temp_type)
+    };
+
     const linkAddress = "/" + window.sessionStorage.getItem("user_type") + "Profile"
+    const messageAddress = "/message"
     return(
         <div>
             <IconButton
@@ -347,20 +584,40 @@ function UserDropDown(){
                 }}
             >
                 {/*TODO: Convert this linkto structure to redirecting structure.*/}
-                <Link to={linkAddress}>
+                {window.sessionStorage.getItem("user_type") !=="admin" && <Link to={linkAddress}>
                     <MenuItem>
                         <ListItemIcon>
                            <PersonIcon></PersonIcon>
                         </ListItemIcon>
                         <Typography>My Profile</Typography>
                     </MenuItem>
+                </Link>}
+                <Link to={messageAddress}>
+                    <MenuItem>
+                        <ListItemIcon>
+                           <SmsIcon></SmsIcon>
+                        </ListItemIcon>
+                        <Typography>Messages</Typography>
+                    </MenuItem>
                 </Link>
+                {window.sessionStorage.getItem("user_type")==="admin" && <Link to={"/admin"}>
+                    <MenuItem >
+                        <ListItemIcon>
+                            <SupervisorAccountIcon/>
+                        </ListItemIcon>
+                        <Typography>Admin Panel</Typography>
+                    </MenuItem>
+                </Link>}
+                {window.sessionStorage.getItem("user_type")==="admin" && <Link to={"/activityStream"}>
+                    <MenuItem >
+                        <ListItemIcon>
+                            <DnsIcon/>
+                        </ListItemIcon>
+                        <Typography>Act. Stream</Typography>
+                    </MenuItem>
+                </Link>}
                 <Link to={"/"}>
-                    <MenuItem onClick={
-                        ()=>{
-                            window.sessionStorage.clear()
-                        }
-                    }>
+                    <MenuItem onClick={handleSignOut}>
                         <ListItemIcon>
                             <PowerSettingsNewSharpIcon/>
                         </ListItemIcon>

@@ -12,7 +12,8 @@ import Axios from "axios";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import ProductListNonverified from "./NonverifiedProductList"
 import Grid from "@material-ui/core/Grid";
-
+import NavBar from "./NavBar";
+import Paper from '@material-ui/core/Paper';
 
 
 
@@ -79,10 +80,8 @@ class AdminPanel extends React.Component{
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log(this.state.update)
-        console.log(prevState.update)
 
-        if(this.state.update!==prevState.update){
+        if((this.state.update!==prevState.update) || (this.state.nonverified_list.length !== prevState.nonverified_list.length)){
             Axios.get('http://3.232.20.250/admin/verificationpending/products/',{
                 headers: {
                     'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
@@ -92,6 +91,9 @@ class AdminPanel extends React.Component{
                     console.log(res)
                     this.setState({nonverified_list: res.data})
                 })
+        }
+        else{
+
         }
 
     }
@@ -107,7 +109,7 @@ class AdminPanel extends React.Component{
             comment_id: null,
             username:null,
             nonverified_list: [],
-            update : null
+            update : 0
         };
 
     }
@@ -142,10 +144,8 @@ class AdminPanel extends React.Component{
     };
 
     handleBanUser = () => {
-        console.log(this.state.username)
-
         const formData = new FormData();
-        formData.append("username", "bilibili");
+        formData.append("username", this.state.username);
         Axios.post('http://3.232.20.250/admin/banuser/',formData,{
             headers: {
                 'Authorization' : "Token " + window.sessionStorage.getItem("authToken")
@@ -168,48 +168,53 @@ class AdminPanel extends React.Component{
         this.setState({update:childData})
     };
     render(){
-        console.log(this.state.update)
 
         return(
 
             <ThemeProvider theme={theme} >
                 <div >
-                    <AppBar position="center">
-                        <Tabs value={this.state.value} onChange={this.handleChange} aria-label="simple tabs example">
-                            <Tab label="Verify Vendor" {...a11yProps(0)} />
-                            <Tab label="Verify Product" {...a11yProps(1)} />
-                            <Tab label="Ban User" {...a11yProps(2)} />
-                            <Tab label="Delete Comment" {...a11yProps(3)} />
-                        </Tabs>
-                    </AppBar>
-                    <TabPanel value={this.state.value} index={0}>
-                        Item One
-                    </TabPanel>
-                    <TabPanel value={this.state.value} index={1}>
-                        <ProductListNonverified products={this.state.nonverified_list} callbackUpdate={this.handleUpdateList}/>
-                    </TabPanel>
-                    <TabPanel value={this.state.value} index={2}>
-                        <br/><br/>
-                        <form noValidate autoComplete="off">
-                            Enter username of the user that you wished to comment<br/><br/>
-                            <TextField id="outlined-basic" label="Username" variant="outlined" value={this.state.username}  onChange={this.handleValueBanUser}/>
-                            <IconButton onClick={this.handleBanUser}>
-                                <DeleteOutlinedIcon/>
-                            </IconButton>
-                        </form>
-                    </TabPanel>
-                    <TabPanel value={this.state.value} index={3}>
-                        <br/><br/>
-                        <form noValidate autoComplete="off">
-                            Enter ID of the comment that you wished to delete<br/><br/>
-                            <TextField id="outlined-basic" label="Comment ID" variant="outlined" value={this.state.comment_id}  onChange={this.handleValueDeleteComment}/>
-                            <IconButton onClick={this.handleDeleteComment}>
-                                <DeleteOutlinedIcon/>
-                            </IconButton>
-                        </form>
-                    </TabPanel>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <NavBar/>
+                        </Grid>
+                        <Grid item xs={12} style={{marginTop: '111px'}}>
+
+                            <Tabs style={{backgroundColor : "#388e3c"}} value={this.state.value} onChange={this.handleChange} aria-label="simple tabs example">
+                                <Tab label="Verify Product" {...a11yProps(0)} />
+                                <Tab label="Ban User" {...a11yProps(1)} />
+                                <Tab label="Delete Comment" {...a11yProps(2)} />
+                            </Tabs>
+                            <TabPanel value={this.state.value} index={0}>
+                                <ProductListNonverified products={this.state.nonverified_list} callbackUpdate={this.handleUpdateList}/>
+                            </TabPanel>
+                            <TabPanel value={this.state.value} index={1}>
+                                <br/><br/>
+                                <form noValidate autoComplete="off">
+                                    Enter username of the user that you wished to ban<br/><br/>
+                                    <TextField id="outlined-basic" label="Username" variant="outlined" value={this.state.username}  onChange={this.handleValueBanUser}/>
+                                    <IconButton onClick={this.handleBanUser}>
+                                        <DeleteOutlinedIcon/>
+                                    </IconButton>
+                                </form>
+                            </TabPanel>
+                            <TabPanel value={this.state.value} index={2}>
+                                <br/><br/>
+                                <form noValidate autoComplete="off">
+                                    Enter ID of the comment that you wished to delete<br/><br/>
+                                    <TextField id="outlined-basic" label="Comment ID" variant="outlined" value={this.state.comment_id}  onChange={this.handleValueDeleteComment}/>
+                                    <IconButton onClick={this.handleDeleteComment}>
+                                        <DeleteOutlinedIcon/>
+                                    </IconButton>
+                                </form>
+                            </TabPanel>
+
+                        </Grid>
+
+
+                    </Grid>
                 </div>
-            </ThemeProvider>
+    </ThemeProvider>
+
 
     );
     }

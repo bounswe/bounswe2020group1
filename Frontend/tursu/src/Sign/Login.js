@@ -4,6 +4,10 @@ import logo from '../rsz_11logo.png';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 import GoogleLogin from "react-google-login";
+import Input from '@material-ui/core/Input';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+
 
 const clientId = '872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com';
 
@@ -46,17 +50,28 @@ export default class Login extends Component {
                 window.sessionStorage.setItem("first_name", res.data.first_name);
                 window.sessionStorage.setItem("last_name", res.data.last_name);
                 window.sessionStorage.setItem("user_type", res.data.user_type);
-
+                if(res.data.user_type === "admin"){
+                    window.sessionStorage.setItem("first_name", "Admin");
+                }
 
                 this.setState({ redirect: "True" });
 
-                
+
 
             })
             .catch(error =>{
                 if (error.response){
                     if (error.response.status == 401){
-                        alert ("The email or password you have entered is incorrect. Please try again.");
+                        if(error.response.data.error === "Not Verified"){
+                            //Sends user to email verification page when email is not verified yet
+                            this.props.setU(this.state.email)
+                            this.props.setP(this.state.password)
+                            this.props.setM("You have not verified your email yet. Please enter the verification code we have sent you to proceed.")
+                            this.props.onVerifChange()
+                        }
+                        else{
+                            alert ("The email or password you have entered is incorrect. Please try again.");
+                        }
                     }
                     else{
                         console.log(error.response.message);
@@ -82,32 +97,63 @@ export default class Login extends Component {
         this.props.onForgotPChange();
     }
     responseGoogleSuccess = response => {
+        console.log("here i come")
         console.log(response)
-        this.setState({ redirect: "True" });
+        console.log(response.tokenId)
+        const formData = new FormData();
+        formData.append("tokenId", response.tokenId)
+
+        axios.post('http://3.232.20.250/user/login/google', formData)
+            .then(res =>{
+                console.log(res);
+                console.log(res.data);
+
+                window.sessionStorage.setItem("authToken", res.data.auth_token);
+                window.sessionStorage.setItem("first_name", res.data.first_name);
+                window.sessionStorage.setItem("last_name", res.data.last_name);
+                window.sessionStorage.setItem("user_type", res.data.user_type);
+
+
+                this.setState({ redirect: "True" });
+
+            })
+            .catch(error =>{
+                if (error.response){
+                    if (error.response.status == 401){
+                        alert ("Please sign up with Google before signing in!");
+                    }
+                    else{
+                        alert ("There has been an error. Please try again.");
+                    }
+                }
+            })
+
+
     }
     render() {
         if(this.state.redirect === "False"){
             return(
                 <div className="login">
                     <img src={logo} alt="Tursu Logo"></img>
-                    <h1>Sign In</h1>
+
+                    <Typography variant={"h4"}>Sign In</Typography>
                     <form onSubmit={this.handleSubmit}>
 
-                        <input className="tursu_input" type="text" name="email" id="email" placeholder="Email or Username" value={this.state.email} onChange={this.handleChange} required />
+                        <Input style={{borderRadius: '10px',backgroundColor: "#b2fab4"}} className="tursu_input" type="text" name="email" id="email" placeholder="  Email or Username" value={this.state.email} onChange={this.handleChange} required />
 
                         <br/>
 
-                        <input className="tursu_input" type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
+                        <Input style={{borderRadius: '10px',backgroundColor: "#b2fab4"}} className="tursu_input" type="password" name="password" id="password" placeholder="  Password" value={this.state.password} onChange={this.handleChange} required />
 
                         <br/>
-                        <button type="submit" className="tursu_button">Sign In</button>
+                        <Button  variant="contained" style={{backgroundColor: "#3CBC8D", width:'100px'}} type="submit" className="tursu_button">Sign In</Button>
                     </form>
-                    <button type="button" onClick={this.goToRegistration} className="smallButton">New to Turşu? Sign up.</button>
-                    <button type="button" onClick={this.goToForgotP} className="smallButton">I forgot my password.</button>
+                    <Button variant="contained"  style={{backgroundColor: "#3CBC8D"}} type="button" onClick={this.goToRegistration} className="smallButton">New to Turşu? Sign up</Button>
+                    <Button variant="contained" style={{backgroundColor: "#3CBC8D"}} type="button" onClick={this.goToForgotP} className="smallButton">I forgot my password</Button>
                     <div>
                         <GoogleLogin
                             clientId='872287604811-526a3ojjpf2ugpn2bsq0ov3ho952cg39.apps.googleusercontent.com'
-                            buttonText='Login'
+                            buttonText='Sign In with Google'
                             onSuccess={this.responseGoogleSuccess}
                             onFailure={responseGoogleFailure}
                             cookiePolicy={'single_host_origin'}
@@ -118,10 +164,6 @@ export default class Login extends Component {
         }
 
         else if (this.state.redirect === "True"){
-            if(this.state.user_type=="admin"){
-                return (<Redirect to={"admin/"} />)
-
-            }
             window.sessionStorage.setItem("isLogged", "true");
             return (<Redirect to={".."} />)
         }

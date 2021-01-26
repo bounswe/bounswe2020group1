@@ -61,6 +61,7 @@ export default function FormDialog(props) {
           setOpen(false);
     };
     const classes = props.classes
+    // pop up window for taking information from the user
     return (
         <div>
         <Grid className={classes.marginInsideGrid}>
@@ -90,7 +91,7 @@ export default function FormDialog(props) {
                   autoFocus
                   margin="dense"
                   id="name"
-                  label="Expected numnber days until delivery"
+                  label="Expected number days until delivery"
                   type="text"
                   fullWidth
                   days={days}

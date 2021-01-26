@@ -34,7 +34,7 @@ export default class EditInfoBox extends Component {
         this.props.change(this.state.key,this.state.value)
     }
     render() {
-
+        //editable text field
         return(
         <div style={{flexGrow: 1,}}>
         <Paper style={{marginLeft: 100,marginBottom: 30,width: 350,height: 60,}} elevation={5}>

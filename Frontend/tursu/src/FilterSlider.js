@@ -22,14 +22,19 @@ export default function RangeSlider( props ) {
         props.parentCallback(newValue);
     };
 
+    const handleChangeValue = (event, newValue) => {
+        setValue(newValue);
+    };
+
 
     return (
         <div className={classes.root}>
             <Typography id="range-slider" gutterBottom>
-                Price range(₺)
+                Price range &nbsp;&nbsp; {value[0]}₺ - {value[1]}₺
             </Typography>
             <Slider
                 value={value}
+                onChange={handleChangeValue}
                 onChangeCommitted={handleChange}
                 valueLabelDisplay="auto"
                 aria-labelledby="range-slider"

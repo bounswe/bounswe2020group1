@@ -9,6 +9,7 @@ import ProductBox from "./ProductBox";
 import Axios from "axios";
 import {Typography} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
+import Footer from "./Footer";
 
 
 
@@ -56,11 +57,8 @@ class HomePage extends React.Component{
 
     render(){
         return(
-
             <ThemeProvider theme={theme} >
-
                 <Grid container direction="column" className="HomePage" spacing={4}>
-
                     <Grid item xs={12}>
                         <Paper>
                             <Navbar />
@@ -89,6 +87,7 @@ class HomePage extends React.Component{
                         {this.state.products.map((product) => ( <ProductBox product={product}/>))}
                     </Grid>
                 </Grid>
+                <Footer/>
             </ThemeProvider>
         );
     }
