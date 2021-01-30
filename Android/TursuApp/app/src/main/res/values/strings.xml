@@ -1,7 +1,7 @@
 <resources>
     <string name="sign_up">Sign Up</string>
     <string name="add_product">Add Product</string>
-    <string name="app_name">Tursu App</string>
+    <string name="app_name">Tursu</string>
     <string name="title_activity_home_page">HomePageActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
