@@ -6,7 +6,7 @@ test('checks if delete user memetc works', () => {
     expect(handleBanUser()).toBe("user banned");
 });
 
-test('checks if delete user memetc works', () => {
-    this.setState({comment_id: "memetc"})
+test('checks if remove a comment works', () => {
+    this.setState({comment_id: 1})
     expect(handleDeleteComment()).toBe("comment deleted?");
 });
