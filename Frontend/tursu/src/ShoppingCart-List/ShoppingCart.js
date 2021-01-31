@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Navbar from "./NavBar";
+import Navbar from "../NavigationBar/NavBar";
 import { Link } from "react-router-dom";
-import ProductList, {ProductListHorizontal} from "./ProductList";
+import ProductList, {ProductListHorizontal} from "../Product/ProductList";
 import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import Box from "@material-ui/core/Box";
-import Footer from "./Footer";
+import Footer from "../Footer/Footer";
 
 const theme = createMuiTheme({
     palette:{
@@ -122,7 +122,7 @@ export default function ShoppingCart(props){
     );
 }
 
-function calculateTotalSum(products){
+export function calculateTotalSum(products){
     var total_sum = 0;
 
     for(let i=0; i<products.length; i++){

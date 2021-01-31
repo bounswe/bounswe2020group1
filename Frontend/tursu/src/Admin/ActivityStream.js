@@ -1,15 +1,15 @@
 import React from 'react';
-import './HomePage.css'
+import '../MainPage/HomePage.css'
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Stepper from './Stepper'
-import Navbar from "./NavBar";
+import Stepper from '../MainPage/Stepper'
+import Navbar from "../NavigationBar/NavBar";
 import {ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import ProductBox from "./ProductBox";
+import ProductBox from "../Product/ProductBox";
 import Axios from "axios";
 import {Typography} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
-import Footer from "./Footer";
+import Footer from "../Footer/Footer";
 import axios from "axios";
 
 import { makeStyles } from '@material-ui/core/styles';

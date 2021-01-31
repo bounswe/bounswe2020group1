@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Navbar from "../../NavBar";
+import Navbar from "../../NavigationBar/NavBar";
 import "./profile.css";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -11,7 +11,7 @@ import MyOrders from "./MyOrders";
 import MyNotifications from "./MyNotifications";
 import {Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import Footer from "../../Footer";
+import Footer from "../../Footer/Footer";
 
 
 export default class CustomerProfilePage extends Component {

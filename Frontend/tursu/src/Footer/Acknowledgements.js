@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
-import logo from './rsz_11logo.png';
-import "./Sign/sign_components.css";
+import logo from '../NavigationBar/rsz_11logo.png';
+import "../Sign/sign_components.css";
 
 export default class Acknowledgements extends Component {
     constructor(props) {

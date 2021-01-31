@@ -4,11 +4,11 @@ import Grid from '@material-ui/core/Grid';
 import Navbar from "./NavBar";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import Axios from "axios";
-import Filter from "./FilterBar";
+import Filter from "../Filter/FilterBar";
 import {Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import Footer from "./Footer";
-import ProductBox from "./ProductBox";
+import Footer from "../Footer/Footer";
+import ProductBox from "../Product/ProductBox";
 
 const theme = createMuiTheme({
     palette:{

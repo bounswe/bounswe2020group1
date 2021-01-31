@@ -1,7 +1,7 @@
 import React, {useEffect} from "react"
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
-import Navbar from "./NavBar";
+import Navbar from "../NavigationBar/NavBar";
 import {Tooltip, Typography} from "@material-ui/core";
 import axios from "axios";
 import Accordion from "@material-ui/core/Accordion";

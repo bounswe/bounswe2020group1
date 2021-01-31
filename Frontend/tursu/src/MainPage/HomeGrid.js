@@ -6,7 +6,7 @@ import Navbar from './HomePage';
 import Product from './HomePage';
 import Stepper from "./Stepper";
 
-//const { Navbar, Product } = require('./HomePage');
+//const { Navbar, Product } = require('./MainPage');
 
 const useStyles = makeStyles((theme) => ({
     root: {

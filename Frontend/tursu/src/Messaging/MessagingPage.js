@@ -14,10 +14,10 @@ import SendIcon from '@material-ui/icons/Send';
 import Axios from "axios";
 import FormDialog from "./NewChatPopUp"
 import VendorFormDialog from "./VendorNewChatPopUp"
-import NonverifiedProductBox from "./NonverifiedProductBox";
+import NonverifiedProductBox from "../MainPage/NonverifiedProductBox";
 import InputBase from "@material-ui/core/InputBase";
-import Navbar from "./NavBar";
-import "./NavBar.css";
+import Navbar from "../NavigationBar/NavBar";
+import "../NavigationBar/NavBar.css";
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 import { GridList } from '@material-ui/core';

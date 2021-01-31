@@ -1,24 +1,24 @@
 import './App.css';
-import HomePage from "./HomePage";
+import HomePage from "./MainPage/HomePage";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Category from "./Category";
+import Category from "./NavigationBar/Category";
 import Sign from "./Sign/Sign";
-import ProductDetailPage from "./ProductDetailPage";
-import SearchPage from "./Search";
+import ProductDetailPage from "./Product/ProductDetailPage";
+import SearchPage from "./NavigationBar/Search";
 import VendorProfilePage from "./Profiles/Vendor/VendorProfilePage";
 import CustomerProfilePage from "./Profiles/Customer/CustomerProfilePage";
-import ShoppingCart from "./ShoppingCart"
-import ShoppingList from "./ShoppingList";
+import ShoppingCart from "./ShoppingCart-List/ShoppingCart"
+import ShoppingList from "./ShoppingCart-List/ShoppingList";
 import AddProduct from "./Profiles/Vendor/AddProduct";
-import Checkout from "./Checkout";
+import Checkout from "./Order/Checkout";
 import EditProduct from "./Profiles/Vendor/EditProduct";
 import DeleteProduct from "./Profiles/Vendor/DeleteProduct";
-import AdminPanel from "./AdminPanel"
-import VendorPublicProfile from "./VendorPublicProfile";
-import MessagingPage from "./MessagingPage";
-import ActivityStream from "./ActivityStream"
-import Acknowledgements from "./Acknowledgements";
+import AdminPanel from "./Admin/AdminPanel"
+import VendorPublicProfile from "./Vendor/VendorPublicProfile";
+import MessagingPage from "./Messaging/MessagingPage";
+import ActivityStream from "./Admin/ActivityStream"
+import Acknowledgements from "./Footer/Acknowledgements";
 
 
 
