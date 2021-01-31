@@ -222,6 +222,8 @@ class CustomerOrdersFragment : Fragment() {
                 Picasso
                         .get() // give it the context
                         .load(productList[position].photoUrl) // load the image
+                        .resize(800, 1000)
+                        .onlyScaleDown()
                         .into(image)
             }
             else{
@@ -253,6 +255,8 @@ class CustomerOrdersFragment : Fragment() {
                 Picasso
                         .get() // give it the context
                         .load(photoUrl) // load the image
+                        .resize(800, 1000)
+                        .onlyScaleDown()
                         .into(image)
             }
             else{

@@ -48,6 +48,8 @@ class PublicVendorInfoAdapter(context: Context, private var productList: ArrayLi
             Picasso
                     .get() // give it the context
                     .load(productList[position].photo_url) // load the image
+                    .resize(800, 1000)
+                    .onlyScaleDown()
                     .into(image)
         }
         else{

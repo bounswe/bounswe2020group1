@@ -69,6 +69,8 @@ class ShoppingCartAdapter(context: Context, private var shoppingCartProducts: Ar
             Picasso
                     .get() // give it the context
                     .load(shoppingCartProducts[position].product.photo_url) // load the image
+                    .resize(800, 1000)
+                    .onlyScaleDown()
                     .into(image)
         }
         else{

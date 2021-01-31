@@ -43,6 +43,8 @@ class SingleProductAdapter(val mContext: Context, private val children: List<Pro
             Picasso
                     .get() // give it the context
                     .load(product.photo_url) // load the image
+                    .resize(800, 1000)
+                    .onlyScaleDown()
                     .tag("resume_tag")
                     .into(holder.product_img)
         }
