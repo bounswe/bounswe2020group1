@@ -277,7 +277,7 @@ class MessagingPage extends React.Component{
                     {(window.sessionStorage.getItem("user_type")==="customer") ?(
                         <FormDialog onSubmit={this.createFlow}/>
                         ):(
-                        (window.sessionStorage.getItem("user_type")==="customer") ? (
+                        (window.sessionStorage.getItem("user_type")==="vendor") ? (
                             <VendorFormDialog onSubmit={this.createFlow}/>
                         ) : (
                             <div></div>
